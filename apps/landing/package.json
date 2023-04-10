@@ -1,0 +1,17 @@
+{
+  "name": "landing",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next dev -p 3200",
+    "lint": "next lint",
+    "start": "next start"
+  },
+  "ct3aMetadata": {
+    "initVersion": "7.10.3"
+  },
+  "dependencies": {
+    "sharp": "latest"
+  }
+}

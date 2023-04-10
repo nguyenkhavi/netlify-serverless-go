@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  landing:
+    restart: always
+    image: fleamint:landing-dev
+    ports:
+      - '2040:3000'
+    working_dir: /app
+  api:
+    restart: always
+    image: fleamint:api-dev
+    ports:
+      - '2042:3002'

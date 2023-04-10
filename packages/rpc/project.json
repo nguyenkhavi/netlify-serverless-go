@@ -1,0 +1,24 @@
+{
+  "name": "rpc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/rpc/src",
+  "projectType": "library",
+  "tags": ["scope:library"],
+  "targets": {
+    "test": {
+      "executor": "@nrwl/vite:test",
+      "outputs": ["coverage/packages/rpc"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/rpc"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/rpc/**/*.{ts,js}"]
+      }
+    }
+  }
+}
