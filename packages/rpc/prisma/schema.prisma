@@ -48,6 +48,7 @@ model User {
   emailVerifiedAt DateTime?
   email2FAEnabled Boolean   @default(false)
   phone2FAEnabled Boolean   @default(false)
+  wallet          String    @unique
 
   userProfile         UserProfile?
   notificationSetting NotificationSetting?
@@ -55,6 +56,7 @@ model User {
   activity            Activity[]
   userAnswers         UserAnswer[]
   suggestions         Suggestion[]
+  addresses           Address[]
 
   @@map("users")
 }
@@ -68,18 +70,10 @@ model UserProfile {
   personaInquiryId String?
   instagramUid     String?
   twitterUid       String?
-
-  country             String?
-  state               String?
-  bio                 String?
-  streetAddress       String?
-  secondStreetAddress String?
-  cover               String?
-  avatar              String?
-  apartmentNumber     String?
-  postCode            String?
-  contactNumber       String?
-  additionalInfo      String?
+  cover            String?
+  avatar           String?
+  bio              String?
+  additionalInfo   String?
 
   @@map("user-profiles")
 }
@@ -106,8 +100,29 @@ model NotificationSetting {
   @@map("notification-settings")
 }
 
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  country             String?
+  state               String?
+  streetAddress       String?
+  secondStreetAddress String?
+  apartmentNumber     String?
+  postCode            String?
+  contactNumber       String?
+
+  isDefault Boolean @default(false)
+
+  @@map("addresses")
+}
+
 model Session {
-  userId    String   @id @unique
+  id        String   @id @default(cuid())
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -121,7 +136,8 @@ model Session {
 }
 
 model Activity {
-  userId    String   @id @unique
+  id        String   @id @default(cuid())
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
