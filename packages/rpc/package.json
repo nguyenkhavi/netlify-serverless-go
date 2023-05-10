@@ -2,5 +2,8 @@
   "name": "rpc",
   "version": "0.1.0",
   "private": true,
-  "scripts": {}
+  "scripts": {},
+  "dependencies": {
+    "api": "^5.0.8"
+  }
 }
