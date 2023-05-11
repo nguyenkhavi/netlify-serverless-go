@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "migrate": "env-cmd -f apps/api/.env prisma migrate dev --name",
-    "generate": "prisma generate",
+    "migrate": "prisma format && env-cmd -f apps/api/.env prisma migrate dev --name",
+    "generate": "prisma format && prisma generate",
     "seed": "npx ts-node prisma/seeds/seed.ts"
   },
   "private": true,
