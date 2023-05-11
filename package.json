@@ -3,13 +3,12 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "migrate": "prisma format && prisma migrate dev --name",
+    "migrate": "env-cmd -f apps/api/.env prisma migrate dev --name",
     "generate": "prisma generate",
     "seed": "npx ts-node prisma/seeds/seed.ts"
   },
   "private": true,
   "dependencies": {
-    "@clerk/nextjs": "^4.15.0",
     "@headlessui/react": "^1.7.13",
     "@nrwl/eslint-plugin-nx": "^15.9.2",
     "@prisma/client": "^4.12.0",

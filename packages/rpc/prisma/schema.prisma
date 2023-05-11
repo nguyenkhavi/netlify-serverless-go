@@ -6,17 +6,194 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
+enum EGender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum ESessionStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum ESuggestionType {
+  SUGGESTION
+  REPORT
+}
+
+enum EActivityAction {
+  CHANGE_PASSWORD
+  LOG_IN
+  SIGN_UP
+}
+
 model User {
-  id                    String                    @id @default(cuid())
-  email                 String?
-  firstName             String?
-  lastName              String?
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email           String    @unique
+  username        String    @unique
+  firstName       String
+  lastName        String
+  dob             DateTime
+  gender          EGender
+  password        String
+  emailVerifiedAt DateTime?
+  email2FAEnabled Boolean   @default(false)
+  phone2FAEnabled Boolean   @default(false)
+
+  userProfile         UserProfile?
+  notificationSetting NotificationSetting?
+  sessions            Session[]
+  activity            Activity[]
+  userAnswers         UserAnswer[]
+  suggestions         Suggestion[]
 
   @@map("users")
 }
 
+model UserProfile {
+  userId    String   @id @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  personaInquiryId String?
+  instagramUid     String?
+  twitterUid       String?
+
+  country             String?
+  state               String?
+  bio                 String?
+  streetAddress       String?
+  secondStreetAddress String?
+  cover               String?
+  avatar              String?
+  apartmentNumber     String?
+  postCode            String?
+  contactNumber       String?
+  additionalInfo      String?
+
+  @@map("user-profiles")
+}
+
+model NotificationSetting {
+  userId    String   @id @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  itemSold           Boolean @default(true)
+  bidActivity        Boolean @default(true)
+  priceChange        Boolean @default(false)
+  auctionExpiration  Boolean @default(false)
+  outBid             Boolean @default(false)
+  ownedItemUpdates   Boolean @default(false)
+  successfulPurchase Boolean @default(false)
+  fleamintNewsletter Boolean @default(false)
+  mentions           Boolean @default(false)
+  replies            Boolean @default(false)
+  messages           Boolean @default(false)
+  suggestedItems     Boolean @default(false)
+
+  @@map("notification-settings")
+}
+
+model Session {
+  userId    String   @id @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  browser   String
+  ipAddress String
+  location  String
+  status    ESessionStatus
+
+  @@map("sessions")
+}
+
+model Activity {
+  userId    String   @id @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  browser   String
+  ipAddress String
+  location  String
+  action    EActivityAction
+
+  @@map("activities")
+}
+
+model SecurityQuestion {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question    String
+  userAnswers UserAnswer[]
+
+  @@map("security-questions")
+}
+
+model UserAnswer {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  question   SecurityQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  memorableAnswer String
+
+  @@unique([userId, questionId])
+  @@map("user-answers")
+}
+
+model Suggestion {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  type   ESuggestionType
+  detail String
+
+  @@map("suggestions")
+}
+
+model Achievement {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  totalVolume    Int
+  projects       Int
+  globalPartners Int
+  totalUser      Int
+
+  @@map("achievements")
+}
+
+model Subscriber {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+
+  @@map("subscribers")
+}
