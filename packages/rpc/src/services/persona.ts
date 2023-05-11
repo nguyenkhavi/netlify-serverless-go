@@ -1,18 +1,14 @@
-import api from 'api';
-const personaSDK = api('@personaidentities/v2023-01-05#17kgj53elcjlwfsp');
-personaSDK.auth(`Bearer test ${process.env.PERSONA_API_KEY}`);
+import axios from 'axios';
+import { verifyInquirySchema } from '../routers/users/user.schemas';
 
+const personaClient = axios.create({
+  baseURL: 'https://withpersona.com/api/v1',
+  headers: {
+    Authorization: `Bearer ${process.env.PERSONA_API_KEY}`,
+  },
+});
 export const verifyInquiryId = (inquiryId: string) => {
-  return (
-    personaSDK
-      .apiv1inquiriesinquiryId({
-        inquiryid: inquiryId,
-        'persona-version': '2023-01-05',
-      })
-      //TODO: Check the response later
-      .then(() => true)
-      .catch(() => false)
-  );
+  return personaClient
+    .get(`inquiries/${inquiryId}`)
+    .then((resp) => verifyInquirySchema.parseAsync(resp.data));
 };
-
-export default personaSDK;

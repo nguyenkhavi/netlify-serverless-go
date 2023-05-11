@@ -52,6 +52,7 @@ model User {
 
   userProfile         UserProfile?
   notificationSetting NotificationSetting?
+  kycInfo KYCInfo?
   sessions            Session[]
   activity            Activity[]
   userAnswers         UserAnswer[]
@@ -212,4 +213,26 @@ model Subscriber {
   email String @unique
 
   @@map("subscribers")
+}
+
+
+model KYCInfo {
+  userId    String   @id @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  personaInquiryId String @unique
+
+  completedAt DateTime
+  firstName String?
+  lastName String?
+  birthDate DateTime?
+  addressStreet1 String?
+  addressStreet2 String?
+  addressCity String?
+  addressPostalCode String?
+  identificationNumber String?
+  phoneNumber String?
+
+  @@map("kyc-information")
 }
