@@ -12,6 +12,7 @@
     "initVersion": "7.10.3"
   },
   "dependencies": {
+    "@amraneze/react-instagram-login": "^3.0.3",
     "persona": "4.8.0-alpha",
     "react": "18.2.0",
     "sharp": "latest",

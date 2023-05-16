@@ -34,3 +34,27 @@ export const verifyInquirySchema = z
   });
 
 export type TVerifyInquiryRes = z.infer<typeof verifyInquirySchema>;
+
+export const exchangeCodeForTokenSchema = z
+  .object({
+    access_token: z.string(),
+    user_id: z.string(),
+  })
+  .transform((data) => ({
+    accessToken: data.access_token,
+    instagramUid: data.user_id,
+  }));
+
+export type TExchangeCodeForToken = z.infer<typeof exchangeCodeForTokenSchema>;
+
+export const connectIGSchema = z.object({
+  code: z.string(),
+});
+
+export type TConnectIG = z.infer<typeof connectIGSchema>;
+
+export const setKYCSchema = z.object({
+  inquiryId: z.string(),
+});
+
+export type TSetKYC = z.infer<typeof setKYCSchema>;

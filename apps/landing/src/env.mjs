@@ -25,6 +25,7 @@ const client = z.object({
   NEXT_PUBLIC_TRPC_URL: z.string(),
   NEXT_PUBLIC_PERSONA_TEMPLATE_ID: z.string(),
   NEXT_PUBLIC_PERSONA_ENVIRONMENT_ID: z.string(),
+  NEXT_PUBLIC_INSTAGRAM_CLIENT_ID: z.string(),
 })
 
 /**
@@ -40,6 +41,7 @@ const processEnv = {
   NEXT_PUBLIC_TRPC_URL: process.env.NEXT_PUBLIC_TRPC_URL,
   NEXT_PUBLIC_PERSONA_TEMPLATE_ID: process.env.NEXT_PUBLIC_PERSONA_TEMPLATE_ID,
   NEXT_PUBLIC_PERSONA_ENVIRONMENT_ID: process.env.NEXT_PUBLIC_PERSONA_ENVIRONMENT_ID,
+  NEXT_PUBLIC_INSTAGRAM_CLIENT_ID: process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID,
 }
 
 // Don't touch the part below
@@ -55,7 +57,6 @@ let env = /** @type {MergedOutput} */ (process.env)
 
 if (!!process.env.SKIP_ENV_VALIDATION == false) {
   const isServer = typeof window === 'undefined'
-  console.log({ processEnv })
   const parsed = /** @type {MergedSafeParseReturn} */ (
     isServer
       ? merged.safeParse(processEnv) // on server we can validate all env vars
