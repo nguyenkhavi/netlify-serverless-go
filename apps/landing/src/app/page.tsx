@@ -5,6 +5,8 @@ import KYCButton from '_@landing/components/provider/KYCButton'
 
 import { useUser, useSession } from '@clerk/nextjs'
 
+import InstagramConnectButton from '_@landing/components/provider/InstagramConnectButton'
+import KYCButton from '_@landing/components/provider/KYCButton'
 export default function Home() {
   const { user } = useUser()
   const { session } = useSession()
