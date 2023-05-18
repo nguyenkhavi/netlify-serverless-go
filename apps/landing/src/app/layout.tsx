@@ -1,4 +1,5 @@
 import '_@landing/styles/globals.css'
+import { ClerkProvider } from '@clerk/nextjs'
 import ClientProvider from './provider/ClientProvider'
 import { Kanit } from 'next/font/google'
 import Header from '_@landing/layouts/header/Header'
@@ -20,9 +21,11 @@ function RootLayout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ClientProvider>
-          <Header />
-          {children}
-          <Footer />
+          <ClerkProvider>
+            <Header />
+            {children}
+            <Footer />
+          </ClerkProvider>
         </ClientProvider>
       </body>
     </html>

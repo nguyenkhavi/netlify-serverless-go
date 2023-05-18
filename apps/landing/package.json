@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@amraneze/react-instagram-login": "^3.0.3",
+    "@clerk/nextjs": "^4.18.0",
     "persona": "4.8.0-alpha",
     "react": "18.2.0",
     "sharp": "latest",
