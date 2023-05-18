@@ -1,8 +1,8 @@
-"use client";
+'use client';
 //THIRD PARTY MODULES
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { api } from '_@landing/utils/api';
 //SHARED
-import { api } from "_@landing/utils/api";
 
 const queryClient = new QueryClient({
   defaultOptions: {

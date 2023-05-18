@@ -1,5 +1,5 @@
-import React from 'react'
-import SignInPage from '_@landing/app/connect-twitter/SignInPage'
+import SignInPage from '_@landing/app/connect-twitter/SignInPage';
+import React from 'react';
 
 const ConnectTwitter = () => {
   return (
@@ -7,7 +7,7 @@ const ConnectTwitter = () => {
       <div>ConnectTwitter</div>
       <SignInPage />
     </>
-  )
-}
+  );
+};
 
-export default ConnectTwitter
+export default ConnectTwitter;

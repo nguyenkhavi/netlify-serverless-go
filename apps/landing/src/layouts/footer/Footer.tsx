@@ -1,11 +1,16 @@
-'use client'
-import Logo from '_@landing/components/icons/Logo'
-import { Discord, Facebook, Instagram, Twitter } from '_@landing/components/icons/Social'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+'use client';
+import Logo from '_@landing/components/icons/Logo';
+import {
+  Discord,
+  Facebook,
+  Instagram,
+  Twitter,
+} from '_@landing/components/icons/Social';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <footer
@@ -18,7 +23,9 @@ export default function Footer() {
       <div className="flex flex-col items-center justify-between lg:flex-row">
         <Logo width={84} color="#000000" />
         <div>
-          <p className="mb-4 text-center text-14 text-foundation-black-100">Follow us</p>
+          <p className="mb-4 text-center text-14 text-foundation-black-100">
+            Follow us
+          </p>
           <div className="flex items-center justify-center [&>*:not(:last-of-type)]:mr-4">
             <Link
               href="https://www.instagram.com/sznonenft"
@@ -36,11 +43,19 @@ export default function Footer() {
               <span className="sr-only">Open our facebook in new tab</span>
               <Facebook />
             </Link>
-            <Link href="https://discord.gg/Br55aPPPqp" target="_blank" rel="noopener noreferrer">
+            <Link
+              href="https://discord.gg/Br55aPPPqp"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span className="sr-only">Open our discord in new tab</span>
               <Discord />
             </Link>
-            <Link href="https://twitter.com/sznonenft" target="_blank" rel="noopener noreferrer">
+            <Link
+              href="https://twitter.com/sznonenft"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <span className="sr-only">Open our twitter in new tab</span>
               <Twitter />
             </Link>
@@ -59,5 +74,5 @@ export default function Footer() {
         </Link>
       </div>
     </footer>
-  )
+  );
 }

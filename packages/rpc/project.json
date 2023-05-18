@@ -6,7 +6,7 @@
   "tags": ["scope:library"],
   "targets": {
     "test": {
-      "executor": "@nrwl/vite:test",
+      "executor": "@nx/vite:test",
       "outputs": ["coverage/packages/rpc"],
       "options": {
         "passWithNoTests": true,

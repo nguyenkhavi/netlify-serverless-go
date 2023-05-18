@@ -11,17 +11,6 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-enum EGender {
-  MALE
-  FEMALE
-  OTHER
-}
-
-enum ESessionStatus {
-  ACTIVE
-  INACTIVE
-}
-
 enum ESuggestionType {
   SUGGESTION
   REPORT
@@ -33,55 +22,8 @@ enum EActivityAction {
   SIGN_UP
 }
 
-model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  email           String    @unique
-  username        String    @unique
-  firstName       String
-  lastName        String
-  dob             DateTime
-  gender          EGender
-  password        String
-  emailVerifiedAt DateTime?
-  email2FAEnabled Boolean   @default(false)
-  phone2FAEnabled Boolean   @default(false)
-  wallet          String    @unique
-
-  userProfile         UserProfile?
-  notificationSetting NotificationSetting?
-  kycInfo             KYCInfo?
-  sessions            Session[]
-  activity            Activity[]
-  userAnswers         UserAnswer[]
-  suggestions         Suggestion[]
-  addresses           Address[]
-
-  @@map("users")
-}
-
-model UserProfile {
-  userId    String   @id @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  personaInquiryId String?
-  instagramUid     String?
-  twitterUid       String?
-  cover            String?
-  avatar           String?
-  bio              String?
-  additionalInfo   String?
-
-  @@map("user-profiles")
-}
-
 model NotificationSetting {
   userId    String   @id @unique
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -104,7 +46,6 @@ model NotificationSetting {
 model Address {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -121,25 +62,9 @@ model Address {
   @@map("addresses")
 }
 
-model Session {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  browser   String
-  ipAddress String
-  location  String
-  status    ESessionStatus
-
-  @@map("sessions")
-}
-
 model Activity {
   id        String   @id @default(cuid())
   userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -168,7 +93,6 @@ model UserAnswer {
   updatedAt DateTime @updatedAt
 
   userId     String
-  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   questionId String
   question   SecurityQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
@@ -184,7 +108,6 @@ model Suggestion {
   updatedAt DateTime @updatedAt
 
   userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   type   ESuggestionType
   detail String
@@ -217,7 +140,6 @@ model Subscriber {
 
 model KYCInfo {
   userId           String   @id @unique
-  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   personaInquiryId String   @unique

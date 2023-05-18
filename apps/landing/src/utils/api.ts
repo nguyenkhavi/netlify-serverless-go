@@ -4,16 +4,15 @@
  *
  * We also create a few inference helpers for input and output types.
  */
-import { httpBatchLink, loggerLink } from "@trpc/client";
-import { createTRPCNext } from "@trpc/next";
-import SuperJSON from "superjson";
-import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
+import { httpBatchLink, loggerLink } from '@trpc/client';
+import { createTRPCNext } from '@trpc/next';
+import SuperJSON from 'superjson';
+import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
-import { type AppRouter } from "_@rpc/app.router";
-import { env } from "_@landing/env.mjs";
+import { type AppRouter } from '_@rpc/app.router';
 
 const getBaseUrl = () => {
-  if (env.NEXT_PUBLIC_TRPC_URL) return env.NEXT_PUBLIC_TRPC_URL; // SSR should use vercel url
+  if (process.env.NEXT_PUBLIC_TRPC_URL) return process.env.NEXT_PUBLIC_TRPC_URL; // SSR should use vercel url
   return `http://localhost:3000`; // dev SSR should use localhost
 };
 
@@ -30,8 +29,8 @@ export const api = createTRPCNext<AppRouter>({
       links: [
         loggerLink({
           enabled: (opts) =>
-            process.env.NODE_ENV === "development" ||
-            (opts.direction === "down" && opts.result instanceof Error),
+            process.env.NODE_ENV === 'development' ||
+            (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({
           url: `${getBaseUrl()}`,

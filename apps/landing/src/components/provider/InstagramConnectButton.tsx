@@ -1,15 +1,16 @@
-'use client'
-import React from 'react'
-import { InstagramLogin } from '@amraneze/react-instagram-login'
-import { api } from '_@landing/utils/api'
+'use client';
+import React from 'react';
+import { InstagramLogin } from '@amraneze/react-instagram-login';
+import { api } from '_@landing/utils/api';
 
 function InstagramConnectButton() {
-  const { mutateAsync: connectInstagram } = api.user.connectInstagram.useMutation()
+  const { mutateAsync: connectInstagram } =
+    api.user.connectInstagram.useMutation();
   const _handleSuccess = (code: string) => {
     connectInstagram({
       code,
-    })
-  }
+    });
+  };
 
   return (
     <InstagramLogin
@@ -17,7 +18,7 @@ function InstagramConnectButton() {
       buttonText="Connect"
       onSuccess={_handleSuccess}
     />
-  )
+  );
 }
 
-export default InstagramConnectButton
+export default InstagramConnectButton;

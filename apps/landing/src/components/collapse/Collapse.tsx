@@ -1,9 +1,9 @@
-import ChevronIcon from '_@landing/components/icons/Chevron'
+import ChevronIcon from '_@landing/components/icons/Chevron';
 
 export interface ICollapseProps {
-  label?: string
-  title: string
-  content: string | string[]
+  label?: string;
+  title: string;
+  content: string | string[];
 }
 
 export default function Collapse({ label, title, content }: ICollapseProps) {
@@ -26,14 +26,16 @@ export default function Collapse({ label, title, content }: ICollapseProps) {
       </summary>
 
       <div
-        className={`mt-6 text-14 text-foundation-black-300 transition-all ${label ? 'ml-10' : ''}`}
+        className={`mt-6 text-14 text-foundation-black-300 transition-all ${
+          label ? 'ml-10' : ''
+        }`}
       >
         {typeof content === 'string'
           ? content
           : content.map((item, index) => <p key={index}>{item}</p>)}
       </div>
     </details>
-  )
+  );
 }
 
 // export default function Collapse({ label, title, content }: ICollapseProps) {

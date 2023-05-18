@@ -1,8 +1,17 @@
-import { type Config } from 'tailwindcss'
-import plugin from 'tailwindcss/plugin'
+const { createGlobPatternsForDependencies } = require('@nx/react/tailwind');
+const { join } = require('path');
+const plugin = require('tailwindcss/plugin');
 
-export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    join(
+      __dirname,
+      '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
+    ),
+    ...createGlobPatternsForDependencies(__dirname),
+  ],
+
   theme: {
     fontFamily: {
       sans: ['Kanit', 'sans-serif'],
@@ -175,21 +184,28 @@ export default {
         12: '3rem',
       },
       dropShadow: {
-        card: ['0px 5px 10px rgba(0, 255, 206, 0.2)', '0px 15px 40px rgba(0, 255, 206, 0.4)'],
+        card: [
+          '0px 5px 10px rgba(0, 255, 206, 0.2)',
+          '0px 15px 40px rgba(0, 255, 206, 0.4)',
+        ],
       },
       keyframes: {
         'holo-card': {
           '0%, 100%': {
-            transform: 'rotateZ(0deg) rotateX(0deg) rotateY(0deg) translate(-50%, -50%)',
+            transform:
+              'rotateZ(0deg) rotateX(0deg) rotateY(0deg) translate(-50%, -50%)',
           },
           '13%, 16%': {
-            transform: 'rotateZ(0deg) rotateX(-9deg) rotateY(32deg) translate(-50%, -50%)',
+            transform:
+              'rotateZ(0deg) rotateX(-9deg) rotateY(32deg) translate(-50%, -50%)',
           },
           '35%, 38%': {
-            transform: 'rotateZ(3deg) rotateX(12deg) rotateY(20deg) translate(-50%, -50%)',
+            transform:
+              'rotateZ(3deg) rotateX(12deg) rotateY(20deg) translate(-50%, -50%)',
           },
           '55%': {
-            transform: 'rotateZ(-3deg) rotateX(-12deg) rotateY(-27deg) translate(-50%, -50%)',
+            transform:
+              'rotateZ(-3deg) rotateX(-12deg) rotateY(-27deg) translate(-50%, -50%)',
           },
         },
       },
@@ -201,10 +217,12 @@ export default {
           radial-gradient(circle, #F17B28, #00FFCE 23%, #00FFCE 48%, #F17B28 68%, #00FFCE 86%, #F17B28)`,
         'fan-pass': "url('/images/membership/fan-pass-background.webp')",
         'fan-pass-img': "url('/images/membership/fan-pass.webp')",
-        'fan-pass-img-desktop': "url('/images/membership/fan-pass-desktop.webp')",
+        'fan-pass-img-desktop':
+          "url('/images/membership/fan-pass-desktop.webp')",
         'access-pass': "url('/images/membership/access-pass-background.webp')",
         'access-pass-img': "url('/images/membership/access-pass.webp')",
-        'access-pass-img-desktop': "url('/images/membership/access-pass-desktop.webp')",
+        'access-pass-img-desktop':
+          "url('/images/membership/access-pass-desktop.webp')",
         'pre-szn': "url('/images/pre-szn/background.jpg')",
       },
     },
@@ -215,7 +233,7 @@ export default {
         rotateY: (value) => ({
           transform: `rotateY(${value}deg)`,
         }),
-      })
+      });
     }),
   ],
-} satisfies Config
+};

@@ -50,3 +50,5 @@ typechain-types
 cache
 artifacts
 
+# Next.js
+.next

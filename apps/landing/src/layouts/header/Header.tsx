@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Logo from '_@landing/components/icons/Logo'
+import Logo from '_@landing/components/icons/Logo';
+import { useEffect, useState } from 'react';
 
 export default function Header() {
-  const [isStickyHeader, setIsStickyHeader] = useState(false)
+  const [isStickyHeader, setIsStickyHeader] = useState(false);
   useEffect(() => {
     window.onscroll = () => {
       if (window.scrollY > 150) {
-        setIsStickyHeader(true)
+        setIsStickyHeader(true);
       }
       if (window.scrollY <= 1) {
-        setIsStickyHeader(false)
+        setIsStickyHeader(false);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <header
@@ -28,5 +28,5 @@ export default function Header() {
         Get Started
       </button>
     </header>
-  )
+  );
 }
