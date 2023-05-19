@@ -5,6 +5,7 @@ import cors from '@fastify/cors';
 // import { clerkPlugin } from '@clerk/fastify';
 import { appRouter } from '_@rpc/app.router';
 import { createTRPCContext } from '_@rpc/config/context';
+import { Server } from 'socket.io';
 
 const server = fastify({ maxParamLength: 5000, logger: false });
 server.register(cors, { origin: true, credentials: true });
@@ -13,6 +14,12 @@ server.register(cors, { origin: true, credentials: true });
 server.register(fastifyTRPCPlugin, {
   prefix: '',
   trpcOptions: { router: appRouter, createContext: createTRPCContext },
+});
+
+const io = new Server(3000);
+
+io.on('connection', (socket) => {
+  console.log('socket id', socket.id);
 });
 
 const initialize = async () => {

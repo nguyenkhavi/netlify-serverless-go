@@ -1,3 +1,5 @@
+// 'use client'
+
 import '_@landing/styles/globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
 import ClientProvider from './provider/ClientProvider';
