@@ -1,21 +1,74 @@
 {
-  "extends": ["plugin:@nx/react", "../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
-  "rules": {
-    "@typescript-eslint/no-empty-function": "off"
-  },
+  "extends": [
+    "plugin:@nx/react-typescript",
+    "next",
+    // "next/core-web-vitals"
+    "../../.eslintrc.json"
+  ],
+  "plugins": ["classify-imports"],
+  "ignorePatterns": ["!**/*", ".next/**/*"],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {}
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "classify-imports/classify-imports": [
+          "warn",
+          {
+            "importOrder": [
+              "<THIRD_PARTY_MODULES> --comment THIRD PARTY MODULES",
+              //regex start
+              "(layout)|(components) --comment LAYOUT, COMPONENTS",
+              "(shared) --comment SHARED",
+              "(server)|(/hook) --comment HOOK",
+              "(config) --comment CONFIG",
+              //regex end
+              "<RELATIVE_MODULES> --comment RELATIVE MODULES",
+              "<TYPES_MODULES> --comment TYPES MODULES"
+            ],
+            "importOrderSeparation": false,
+            "importOrderSortByLength": true,
+            "importOrderSplitType": true,
+            "importOrderAddComments": true
+            // "importWithSemicolon": true,
+          }
+        ]
+      }
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
+      "extends": ["plugin:tailwindcss/recommended"],
+      "rules": {
+        "tailwindcss/no-custom-classname": "off",
+        "tailwindcss/no-contradicting-classname": "warn"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],
       "rules": {}
     }
-  ]
+  ],
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off",
+    "react/no-unescaped-entities": "off"
+  },
+  "env": {
+    "jest": true
+  },
+  "settings": {
+    "tailwindcss": {
+      "config": "./packages/shared/tailwind.config.js",
+      "callees": ["classcat"]
+    }
+  }
 }

@@ -1,5 +1,6 @@
 //THIRD PARTY MODULES
 import { Metadata } from 'next';
+import classcat from 'classcat';
 import { Archivo } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
 //LAYOUT, COMPONENTS
@@ -24,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <ClientProvider>
       <ClerkProvider>
-        <html lang="en" className={archivo.variable}>
+        <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
           <body>
             <Header />
             {children}

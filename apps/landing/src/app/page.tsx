@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <main>
-      <div className="tab-1">Button Text Small</div>
+      <div>Main Page</div>
     </main>
   );
 }

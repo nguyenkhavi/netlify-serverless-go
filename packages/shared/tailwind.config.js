@@ -3,6 +3,7 @@ const componentsPlugin = require('./tailwind-plugins/components');
 const utilitiesPlugin = require('./tailwind-plugins/utilities');
 const variantsPlugin = require('./tailwind-plugins/variants');
 const spacingPlugin = require('./tailwind-plugins/spacing');
+const buttonPlugin = require('./tailwind-plugins/button');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -21,6 +22,10 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['var(--font-archivo, "Archivo")', 'sans-serif'],
+      },
+      boxShadow: {
+        'btn-default-contained': '0px 8px 16px rgba(145, 158, 171, 0.16)',
+        'btn-primary-contained': '0px 8px 16px rgba(0, 171, 85, 0.24)',
       },
       fontSize: {
         h1: [
@@ -136,6 +141,8 @@ module.exports = {
           200: '#0E9A76',
           300: '#04634B',
           400: '#012622',
+          500: '#007B55',
+          600: '#00AB55',
         },
         secondary: {
           DEFAULT: '#0A0A0E',
@@ -192,5 +199,6 @@ module.exports = {
     utilitiesPlugin,
     variantsPlugin,
     spacingPlugin({ spacing: 100 }),
+    buttonPlugin,
   ],
 };

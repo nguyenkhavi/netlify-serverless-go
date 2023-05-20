@@ -2,10 +2,10 @@ const plugin = require('tailwindcss/plugin');
 
 module.exports = plugin(({ addComponents }) => {
   addComponents({
-    '.scrollbar-hide::-webkit-scrollbar': {
+    '.hidden-scrollbar::-webkit-scrollbar': {
       display: 'none',
     },
-    '.scrollbar-hide': {
+    '.hidden-scrollbar': {
       scrollbarWidth: 'none',
       MsOverflowStyle: 'none',
     },
