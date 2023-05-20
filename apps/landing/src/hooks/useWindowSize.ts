@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+//THIRD PARTY MODULES
+import { useEffect, useState } from "react"
 
 export default function useWindowSize() {
   const [windowSize, setWindowSize] = useState({

@@ -1,8 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { api } from '_@landing/utils/api';
-//SHARED
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,12 +13,10 @@ const queryClient = new QueryClient({
 });
 
 const UseClientProvider = api.withTRPC(({ children }: { children: any }) => {
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 });
 
-// Create this Wrapper becase of TS error
+// Create this Wrapper because of TS error
 export default function Wrapper({ children }: { children: any }) {
   // @ts-ignore
   return <UseClientProvider>{children}</UseClientProvider>;

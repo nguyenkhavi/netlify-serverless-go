@@ -1,32 +1,29 @@
 'use client';
-
-import { useUser, useSession } from '@clerk/nextjs';
-import InstagramConnectButton from '_@landing/components/provider/InstagramConnectButton';
-import KYCButton from '_@landing/components/provider/KYCButton';
-import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
+//THIRD PARTY MODULES
 import { useEffect } from 'react';
+import { useSession, useUser } from '@clerk/nextjs';
+//SHARED
+import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
 
 export default function Home() {
-  const { disconnectSocket, initiateSocket } = useSocketStore();
+  // const { disconnectSocket, initiateSocket } = useSocketStore();
 
-  const { user } = useUser();
-  const { session } = useSession();
-  session?.user.getSessions().then((data) => {
-    console.log({ session: data });
-  });
+  // const { user } = useUser();
+  // const { session } = useSession();
+  // session?.user.getSessions().then((data) => {
+  //   console.log({ session: data });
+  // });
 
-  useEffect(() => {
-    initiateSocket();
+  // useEffect(() => {
+  //   initiateSocket();
+  //   return () => disconnectSocket();
+  // }, [disconnectSocket, initiateSocket]);
 
-    return () => disconnectSocket();
-  }, [disconnectSocket, initiateSocket]);
-
-  if (!user) return 'Opps!!!';
+  // if (!user) return 'Oops!!!';
 
   return (
-    <main className="relative before:pointer-events-none before:absolute before:left-0 before:top-0 before:h-full before:w-full before:bg-[url('/images/background-footer-light.png')] before:bg-top before:bg-repeat before:opacity-20 before:mix-blend-overlay">
-      <KYCButton />
-      <InstagramConnectButton />
+    <main>
+      <div className="tab-1">Button Text Small</div>
     </main>
   );
 }

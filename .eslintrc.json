@@ -6,6 +6,7 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
+        "@next/next/no-img-element": "off",
         "@nx/enforce-module-boundaries": [
           "off",
           {

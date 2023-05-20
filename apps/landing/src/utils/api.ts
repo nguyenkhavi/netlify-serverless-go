@@ -1,15 +1,16 @@
+//THIRD PARTY MODULES
+import SuperJSON from 'superjson'
+import { createTRPCNext } from '@trpc/next'
+import { type AppRouter } from '_@rpc/app.router'
 /**
  * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
  * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
  *
  * We also create a few inference helpers for input and output types.
  */
-import { httpBatchLink, loggerLink } from '@trpc/client';
-import { createTRPCNext } from '@trpc/next';
-import SuperJSON from 'superjson';
-import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
-
-import { type AppRouter } from '_@rpc/app.router';
+import { httpBatchLink, loggerLink } from '@trpc/client'
+//HOOK
+import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server'
 
 const getBaseUrl = () => {
   if (process.env.NEXT_PUBLIC_TRPC_URL) return process.env.NEXT_PUBLIC_TRPC_URL; // SSR should use vercel url

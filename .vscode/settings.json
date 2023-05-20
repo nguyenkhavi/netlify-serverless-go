@@ -1,3 +1,30 @@
 {
-  "cSpell.words": ["classcat", "kanit", "Roadmap"]
+  "cSpell.words": [
+    "amraneze",
+    "archivo",
+    "btnlg",
+    "btnmd",
+    "btnsm",
+    "Buildable",
+    "callees",
+    "classcat",
+    "classname",
+    "devkit",
+    "fastify",
+    "fleamint",
+    "headlessui",
+    "kanit",
+    "nextjs",
+    "Parens",
+    "Roadmap",
+    "superjson",
+    "SVGR",
+    "svix",
+    "tanstack",
+    "TRPC",
+    "zustand"
+  ],
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
 }
