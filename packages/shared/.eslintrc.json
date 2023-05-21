@@ -1,10 +1,5 @@
 {
-  "extends": [
-    "plugin:@nx/react-typescript",
-    "next",
-    // "next/core-web-vitals"
-    "../../.eslintrc.json"
-  ],
+  "extends": ["plugin:@nx/react-typescript", "next", "../../.eslintrc.json"],
   "plugins": ["classify-imports"],
   "ignorePatterns": ["!**/*", ".next/**/*"],
   "overrides": [
@@ -27,12 +22,10 @@
           {
             "importOrder": [
               "<THIRD_PARTY_MODULES> --comment THIRD PARTY MODULES",
-              //regex start
               "(layout)|(components) --comment LAYOUT, COMPONENTS",
               "(shared) --comment SHARED",
               "(server)|(/hook) --comment HOOK",
               "(config) --comment CONFIG",
-              //regex end
               "<RELATIVE_MODULES> --comment RELATIVE MODULES",
               "<TYPES_MODULES> --comment TYPES MODULES"
             ],
@@ -40,7 +33,6 @@
             "importOrderSortByLength": true,
             "importOrderSplitType": true,
             "importOrderAddComments": true
-            // "importWithSemicolon": true,
           }
         ]
       }
