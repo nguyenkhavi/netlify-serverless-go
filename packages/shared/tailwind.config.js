@@ -8,13 +8,16 @@ const { join } = require('path');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [join(__dirname, 'src/lib/**/*!(*.stories|*.spec).{ts,tsx,html}')],
+  content: [join(__dirname, 'src/**/*!(*.stories|*.spec).{ts,tsx,html}')],
   theme: {
     screens: {
       xs: '375px',
       xsm: '576px',
       sm: '640px',
       md: '768px',
+      's-924': '924px',
+      's-1036': '1036px',
+      's-1117': '1117px',
       xlg: '992px',
       lg: '1024px',
       xl: '1280px',
@@ -28,6 +31,13 @@ module.exports = {
       boxShadow: {
         'btn-default-contained': '0px 8px 16px rgba(145, 158, 171, 0.16)',
         'btn-primary-contained': '0px 8px 16px rgba(0, 171, 85, 0.24)',
+      },
+      dropShadow: {
+        'social-icon': '0px 0px 10px #19CA9B',
+      },
+      backgroundImage: {
+        'footer-mobile': 'linear-gradient(180deg, #0A1512 0%, #000000 100%)',
+        'footer-desktop': 'linear-gradient(180deg, #000000 0%, #0D1B17 99.18%)',
       },
       fontSize: {
         h1: [
@@ -191,6 +201,9 @@ module.exports = {
           700: '#454F5B',
           800: '#212B36',
           900: '#161C24',
+        },
+        header: {
+          bg: '#121212',
         },
       },
     },

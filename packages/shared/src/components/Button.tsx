@@ -93,7 +93,7 @@ type Props = TagProps & BaseProps;
 export default function Button({
   as,
   type,
-  color = 'default',
+  color = 'primary',
   variant = 'contained',
   shape = 'rounded',
   leadingIcon,

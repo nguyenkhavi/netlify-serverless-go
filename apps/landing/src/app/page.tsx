@@ -22,7 +22,7 @@ export default function Home() {
   // if (!user) return 'Oops!!!';
 
   return (
-    <main>
+    <main className="px-[--px]">
       <div>Main Page</div>
     </main>
   );

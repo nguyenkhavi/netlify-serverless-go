@@ -1,47 +1,34 @@
+//THIRD PARTY MODULES
+import classcat from 'classcat';
 //SHARED
-import { Icons } from '_@shared/icons/Imports'
+import { Icons } from '_@shared/icons/Imports';
 //TYPES MODULES
-import type { Meta } from '@storybook/react'
+import type { Meta } from '@storybook/react';
 
 const IconsDoc: Meta = {
   title: 'Atoms/Icons',
-}
-export default IconsDoc
+};
+export default IconsDoc;
 
 export const Docs = () => {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '20px',
-        backgroundColor: 'rgba(194, 194, 194, 0.1)',
-        padding: '20px',
-        borderRadius: '5px',
-      }}
-    >
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(240px,1fr))] gap-5">
       {Object.keys(Icons).map((key) => {
-        const Icon = Icons[key as keyof typeof Icons].icon
+        const Icon = Icons[key as keyof typeof Icons].icon;
 
         return (
           <div
             key={key}
-            style={{
-              padding: '20px',
-              borderRadius: '5px',
-              textAlign: 'center',
-              boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.3)',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
+            className={classcat([
+              'grid justify-items-center gap-3',
+              'rounded-lg bg-[#121212] p-5 shadow-md shadow-white/50',
+            ])}
           >
-            <div style={{ fontSize: '24px', marginBottom: '10px', color: '#333', flex: 1 }}>
-              <Icon style={{ width: 'auto', height: 40, color: '#333' }} />
-            </div>
-            <div style={{ fontSize: '16px', color: '#64748b' }}>{key}</div>
+            <Icon className="h-10 w-auto" />
+            <div className="text-center">{key}</div>
           </div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};

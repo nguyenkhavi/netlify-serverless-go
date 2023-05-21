@@ -7,27 +7,35 @@ export default function Page() {
   return (
     <main className="grid gap-4 px-20 py-10">
       <div className={classcat(['grid auto-cols-max grid-flow-col gap-4'])}>
-        <Button>Small</Button>
-        <Button className="btnmd">Medium</Button>
-        <Button className="btnlg">Large</Button>
-      </div>
-
-      <div className={classcat(['grid auto-cols-max grid-flow-col gap-4'])}>
-        <Button disabled>Small</Button>
-        <Button disabled className="btnmd">
+        <Button color="default">Small</Button>
+        <Button color="default" className="btnmd">
           Medium
         </Button>
-        <Button disabled className="btnlg">
+        <Button color="default" className="btnlg">
           Large
         </Button>
       </div>
 
       <div className={classcat(['grid auto-cols-max grid-flow-col gap-4'])}>
-        <Button isLoading>Small</Button>
-        <Button isLoading className="btnmd">
+        <Button color="default" disabled>
+          Small
+        </Button>
+        <Button color="default" disabled className="btnmd">
           Medium
         </Button>
-        <Button isLoading className="btnlg">
+        <Button color="default" disabled className="btnlg">
+          Large
+        </Button>
+      </div>
+
+      <div className={classcat(['grid auto-cols-max grid-flow-col gap-4'])}>
+        <Button color="default" isLoading>
+          Small
+        </Button>
+        <Button color="default" isLoading className="btnmd">
+          Medium
+        </Button>
+        <Button color="default" isLoading className="btnlg">
           Large
         </Button>
       </div>
