@@ -10,7 +10,6 @@ import { generateSignedMessage } from '_@rpc/config/utils';
 export function ConnectWalletButton() {
   const sdk = useSDK();
   const { user, isLoaded } = useUser();
-  console.log({ user });
 
   const address = useAddress();
   const { mutate: connectWallet } = api.user.connectWallet.useMutation();

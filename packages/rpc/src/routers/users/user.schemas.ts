@@ -72,3 +72,30 @@ export const createUserActivitySchema = z.object({
 });
 
 export type TCreateUserActivity = z.infer<typeof createUserActivitySchema>;
+export const userIdSchema = z.object({
+  userId: z.string(),
+});
+
+export type UserId = z.infer<typeof userIdSchema>;
+
+export const closeSessionSchema = z.object({
+  socketId: z.string(),
+  sessionId: z.string(),
+});
+
+export type CloseSession = z.infer<typeof closeSessionSchema>;
+
+export const closeAllSessionSchema = z.object({
+  userId: z.string(),
+  currentSessionId: z.string(),
+});
+
+export type CloseAllSession = z.infer<typeof closeAllSessionSchema>;
+
+export const logoutSchema = z.object({
+  userId: z.string(),
+  currentSessionId: z.string(),
+  socketId: z.string(),
+});
+
+export type Logout = z.infer<typeof logoutSchema>;

@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import classcat from 'classcat';
 import { Archivo } from 'next/font/google';
 import { ClerkProvider } from '@clerk/nextjs';
+import SessionProvider from '_@landing/app/provider/SessionProvider';
 //LAYOUT, COMPONENTS
 import Header from '_@landing/layouts/Header';
 import Footer from '_@landing/layouts/footer/Footer';
@@ -22,16 +23,16 @@ const archivo = Archivo({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <ClientProvider>
-      <ClerkProvider>
+    <ClerkProvider>
+      <ClientProvider>
         <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
           <body>
             <Header />
-            {children}
+            <SessionProvider>{children}</SessionProvider>
             <Footer />
           </body>
         </html>
-      </ClerkProvider>
-    </ClientProvider>
+      </ClientProvider>
+    </ClerkProvider>
   );
 }

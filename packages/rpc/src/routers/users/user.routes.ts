@@ -1,11 +1,15 @@
 import { router, protectedRouter } from '../../config/router';
 import { paginationSchema } from '../../config/schemas';
+import { logout } from './user.services';
 import {
   connectIGSchema,
   connectWalletSchema,
   createUserActivitySchema,
   setKYCSchema,
-} from './user.schemas';
+  closeSessionSchema,
+  closeAllSessionSchema,
+  logoutSchema,
+} from '_@rpc/routers/users/user.schemas';
 import {
   connectInstagram,
   connectWeb3Wallet,
@@ -16,6 +20,7 @@ import {
 } from './user.services';
 
 import { requestToken } from '_@rpc/services/twitter';
+import { closeSession, closeAllSession } from '_@rpc/routers/users/user.services';
 
 export const userRouters = router({
   connectInstagram: protectedRouter
@@ -47,6 +52,15 @@ export const userRouters = router({
       ctx.auth.userId,
     );
   }),
+
+  closeSession: protectedRouter
+    .input(closeSessionSchema)
+    .mutation(({ input }) => closeSession(input)),
+  closeSessionAll: protectedRouter
+    .input(closeAllSessionSchema)
+    .mutation(({ input }) => closeAllSession(input)),
+
+  logout: protectedRouter.input(logoutSchema).mutation(({ input }) => logout(input)),
 });
 
 export type UserRouter = typeof userRouters;

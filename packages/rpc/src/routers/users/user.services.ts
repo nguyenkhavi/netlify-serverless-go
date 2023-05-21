@@ -1,15 +1,25 @@
-import { TConnectIG, TConnectWallet, TCreateUserActivity, TSetKYC } from './user.schemas';
+import {
+  TConnectIG,
+  TConnectWallet,
+  TCreateUserActivity,
+  TSetKYC,
+  CloseAllSession,
+  CloseSession,
+  Logout,
+} from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 import { verifyInquiryId } from '../../services/persona';
 import { updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
 import { generateSignedMessage } from '../../config/utils';
+import {} from './user.schemas';
+import { getIO } from '_@rpc/services/socket/socket';
+import { clerkClient } from '@clerk/fastify';
 import { ethers } from 'ethers';
-import { prisma } from '../../config/prisma';
 import { Context } from '../../config/context';
 import { TPaginationInput } from '../../config/schemas';
 import { Prisma } from '@prisma/client';
-import { clerkClient } from '@clerk/fastify';
+import { prisma } from '_@rpc/config/prisma';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -90,4 +100,40 @@ export const twitterObtainOauthAccessToken = async (
       twitterScreenName: res.screen_name,
     },
   });
+};
+export const closeSession = async (input: CloseSession) => {
+  const io = getIO();
+  const socket = io.sockets.sockets.get(input.socketId);
+
+  const closedSession = await clerkClient.sessions.revokeSession(input.sessionId);
+
+  socket?.emit('closeSession');
+
+  return closedSession.id;
+};
+
+export const closeAllSession = async (input: CloseAllSession) => {
+  const io = getIO();
+
+  const socketSessionUsers = await io.in(input.userId).fetchSockets();
+
+  const restSessionUser = socketSessionUsers.filter(
+    (ssu) => ssu.data.sessionId !== input.currentSessionId,
+  );
+
+  const closedSessions = await Promise.all(
+    restSessionUser.map((item) => clerkClient.sessions.revokeSession(item.data.sessionId)),
+  );
+
+  restSessionUser.forEach((item) => item.emit('closeSession'));
+
+  return closedSessions;
+};
+
+export const logout = async (input: Logout) => {
+  const io = getIO();
+  const socket = io.sockets.sockets.get(input.socketId);
+  await socket?.leave(input.userId);
+
+  io.to(input.userId).emit('removeUserSession', input.currentSessionId);
 };

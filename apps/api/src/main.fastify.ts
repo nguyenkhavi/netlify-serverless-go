@@ -5,8 +5,8 @@ import cors from '@fastify/cors';
 import { clerkPlugin } from '@clerk/fastify';
 import { appRouter } from '_@rpc/app.router';
 import { createTRPCContext } from '_@rpc/config/context';
-import { Server } from 'socket.io';
 import { redisClient } from '_@rpc/services/redis';
+import { initSocket } from '_@rpc/services/socket/socket';
 
 const server = fastify({ maxParamLength: 5000, logger: false });
 server.register(cors, { origin: true, credentials: true });
@@ -15,19 +15,14 @@ server.register(fastifyTRPCPlugin, {
   prefix: '',
   trpcOptions: { router: appRouter, createContext: createTRPCContext },
 });
-
 // server.register(clerkPlugin);
 
-// const io = new Server(3000);
-
-// io.on('connection', (socket) => {
-//   console.log('socket id', socket.id);
-// });
+initSocket(server.server);
 
 const initialize = async () => {
   await server.after();
   await server.ready();
-  // await redisClient.connect();
+  await redisClient.connect();
   server.listen({ port: Number(process.env.PORT), host: '0.0.0.0' }, (err, address) => {
     if (err) {
       console.log('listen error: ', err);

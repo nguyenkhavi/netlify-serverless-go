@@ -1,32 +1,29 @@
 'use client';
 //THIRD PARTY MODULES
 import { useState } from 'react';
+import { api } from '_@landing/utils/api';
+import { useRouter } from 'next/navigation';
 import { EGender } from '_@rpc/routers/clerk/clerk.validators';
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  useSignIn,
-  useClerk,
-  useSignUp,
-  SignUp,
-} from '@clerk/nextjs';
+import { useSignIn, useClerk, useSignUp, useSession } from '@clerk/nextjs';
 //LAYOUT, COMPONENTS
 import { ConnectWalletButton } from '_@landing/components/provider/ConnectWalletButton';
-//HOOK
-import { OAuthStrategy } from '@clerk/nextjs/dist/server';
+//SHARED
+import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
 
 const SignInPage = () => {
+  const { push } = useRouter();
   const { signOut } = useClerk();
   const { signUp } = useSignUp();
+  const { socket } = useSocketStore((state) => state);
   const [code, setCode] = useState('');
   const { isLoaded, signIn, setActive } = useSignIn();
-
+  const { session } = useSession();
+  const { mutate: logout } = api.user.logout.useMutation();
   async function handleSignIn() {
     signIn
       ?.create({
-        identifier: 'vi.nguyen@sens-vn.com',
-        password: 'Pass@1233',
+        identifier: 'vi.nguyen@mailinator.com',
+        password: 'NkviDev@1233',
       })
       .then((result) => {
         if (result.status === 'complete') {
@@ -58,7 +55,8 @@ const SignInPage = () => {
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
     }
   }
-  const onPressVerify = async (e) => {
+
+  const onPressVerify = async (e: any) => {
     e.preventDefault();
     if (!isLoaded) {
       return;
@@ -86,7 +84,16 @@ const SignInPage = () => {
   return (
     // <SignIn  path="/sign-in" routing="path" signUpUrl="/sign-up" />
     <>
-      <button onClick={() => signOut()}>Sign out</button>
+      <button
+        onClick={() => {
+          if (!session || !socket) return;
+          signOut();
+          push('/');
+          logout({ currentSessionId: session?.id, userId: session?.user.id, socketId: socket?.id });
+        }}
+      >
+        Sign out
+      </button>
       <br />
       <button onClick={() => handleSignUp()}>Sign up</button>
       <br />
@@ -100,25 +107,3 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
-
-function SignInOAuthButtons() {
-  const { signIn } = useSignIn();
-
-  const signInWith = (strategy: OAuthStrategy) => {
-    console.log({ strategy });
-    return signIn?.authenticateWithRedirect({
-      continueSignUp: true,
-      strategy: 'oauth_twitter',
-      redirectUrl: '/sso-callback',
-      redirectUrlComplete: '/',
-    });
-  };
-
-  // Render a button for each supported OAuth provider
-  // you want to add to your app
-  return (
-    <div>
-      <button onClick={() => signInWith('oauth_twitter')}>Sign in with Twitter</button>
-    </div>
-  );
-}
