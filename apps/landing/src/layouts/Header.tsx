@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <header
       className={classcat([
-        'sticky top-0',
+        'z-sticky sticky top-0',
         'h-[--header-height] bg-header-bg px-[--site-padding]',
         'grid auto-cols-max grid-flow-col items-center justify-between',
       ])}

@@ -1,9 +1,13 @@
 'use client';
 //THIRD PARTY MODULES
-import { useEffect } from 'react';
-import { useSession, useUser } from '@clerk/nextjs';
+// import classcat from 'classcat';
+// import { useEffect } from 'react';
+// import { useSession, useUser } from '@clerk/nextjs';
 //SHARED
-import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
+// import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
+//RELATIVE MODULES
+import Ellipse from './comps/Ellipse';
+import WelcomeSection from './comps/WelcomeSection';
 
 export default function Home() {
   // const { disconnectSocket, initiateSocket } = useSocketStore();
@@ -22,8 +26,9 @@ export default function Home() {
   // if (!user) return 'Oops!!!';
 
   return (
-    <main className="px-[--px]">
-      <div>Main Page</div>
+    <main className="relative px-[--px] pb-7.5 pt-10">
+      <Ellipse />
+      <WelcomeSection />
     </main>
   );
 }

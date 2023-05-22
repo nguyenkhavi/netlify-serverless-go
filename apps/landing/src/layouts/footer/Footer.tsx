@@ -11,7 +11,7 @@ export default function Footer() {
       id="footer"
       className={classcat([
         'bg-footer-mobile px-[--px] pb-[13px] pt-[47px]',
-        'sm:bg-footer-desktop 2xl:shadow-[inset_0_1px] 2xl:shadow-white/[.14]',
+        'sm:bg-footer-desktop sm:shadow-[inset_0_1px] sm:shadow-white/[.14]',
       ])}
     >
       <Info />

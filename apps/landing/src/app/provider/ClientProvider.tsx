@@ -9,7 +9,6 @@ import {
   walletConnectV1,
   safeWallet,
 } from '@thirdweb-dev/react';
-//SHARED
 
 const queryClient = new QueryClient({
   defaultOptions: {

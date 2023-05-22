@@ -28,6 +28,13 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-archivo, "Archivo")', 'sans-serif'],
       },
+      zIndex: {
+        sticky: 10,
+        dropdown: 20,
+        overlay: 100,
+        toast: 1000,
+        tooltip: 1000,
+      },
       boxShadow: {
         'btn-default-contained': '0px 8px 16px rgba(145, 158, 171, 0.16)',
         'btn-primary-contained': '0px 8px 16px rgba(0, 171, 85, 0.24)',
@@ -38,6 +45,8 @@ module.exports = {
       backgroundImage: {
         'footer-mobile': 'linear-gradient(180deg, #0A1512 0%, #000000 100%)',
         'footer-desktop': 'linear-gradient(180deg, #000000 0%, #0D1B17 99.18%)',
+        'welcome-mobile': "url('/images/home/welcome-mobile.webp')",
+        'welcome-desktop': "url('/images/home/welcome-desktop.webp')",
       },
       fontSize: {
         h1: [
