@@ -10,7 +10,7 @@ export default function WelcomeSection() {
         'rounded-[20px] border border-[#2E2E2E]',
         'bg-welcome-mobile bg-cover bg-center bg-no-repeat',
         'xlg:h-[793px] xlg:px-10 xlg:py-0',
-        'xlg:bg-welcome-desktop xlg:grid xlg:place-items-center',
+        'xlg:grid xlg:place-items-center xlg:bg-welcome-desktop',
       ])}
     >
       <div className="grid gap-2.5 xlg:max-w-[1049px] xlg:gap-1">
