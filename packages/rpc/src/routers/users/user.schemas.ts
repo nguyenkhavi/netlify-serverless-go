@@ -58,3 +58,9 @@ export const setKYCSchema = z.object({
 });
 
 export type TSetKYC = z.infer<typeof setKYCSchema>;
+
+export const connectWalletSchema = z.object({
+  signature: z.string(),
+});
+
+export type TConnectWallet = z.infer<typeof connectWalletSchema>;

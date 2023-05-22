@@ -2,19 +2,20 @@ import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
 import fastify from 'fastify';
 
 import cors from '@fastify/cors';
-// import { clerkPlugin } from '@clerk/fastify';
+import { clerkPlugin } from '@clerk/fastify';
 import { appRouter } from '_@rpc/app.router';
 import { createTRPCContext } from '_@rpc/config/context';
 import { Server } from 'socket.io';
 
 const server = fastify({ maxParamLength: 5000, logger: false });
 server.register(cors, { origin: true, credentials: true });
-// server.register(clerkPlugin);
 
 server.register(fastifyTRPCPlugin, {
   prefix: '',
   trpcOptions: { router: appRouter, createContext: createTRPCContext },
 });
+
+server.register(clerkPlugin);
 
 const io = new Server(3000);
 

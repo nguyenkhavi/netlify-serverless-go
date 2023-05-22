@@ -22,6 +22,16 @@ enum EActivityAction {
   SIGN_UP
 }
 
+model UserWallet {
+  userId  String
+  wallet  String
+  chainId String
+  chain   Chain  @relation(fields: [chainId], references: [chainId])
+
+  @@unique([userId, wallet, chainId])
+  @@map("user-wallets")
+}
+
 model NotificationSetting {
   userId    String   @id @unique
   createdAt DateTime @default(now())
@@ -62,7 +72,7 @@ model Address {
   @@map("addresses")
 }
 
-model Activity {
+model UserActivity {
   id        String   @id @default(cuid())
   userId    String
   createdAt DateTime @default(now())
@@ -73,7 +83,7 @@ model Activity {
   location  String
   action    EActivityAction
 
-  @@map("activities")
+  @@map("user-activities")
 }
 
 model SecurityQuestion {
@@ -156,4 +166,184 @@ model KYCInfo {
   phoneNumber          String?
 
   @@map("kyc-information")
+}
+
+model Chain {
+  chainId String @id
+
+  name String
+  code String
+
+  collections Collection[]
+  tokens      Token[]
+  userWallet  UserWallet[]
+}
+
+enum ETokenStandard {
+  ERC_721
+  ERC_1155
+}
+
+model Collection {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creatorId            String
+  metadata             String
+  name                 String
+  contractAddress      String
+  tokenStandard        ETokenStandard @default(ERC_721)
+  image                String
+  royaltyFeePercentage Float
+
+  chainId String
+  chain   Chain  @relation(fields: [chainId], references: [chainId])
+
+  items          Item[]
+  marketListings MarketListing[]
+  activities     Activity[]
+
+  @@map("collections")
+}
+
+model Item {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id])
+
+  // userId: user own this item
+  userId          String
+  tokenId         String
+  contractAddress String
+
+  image    String
+  metadata String
+  name     String
+
+  marketListings MarketListing[]
+  activities     Activity[]
+
+  @@map("items")
+}
+
+enum EMarketType {
+  AUCTION
+  DIRECT_LISTING
+}
+
+enum EMarketStatus {
+  AVAILABLE
+  CANCELLED
+  EXPIRED
+  SUCCESS
+}
+
+model Token {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tokenContract String
+  tokenSymbol   String
+  tokenName     String
+  tokenDecimal  Int
+
+  chainId String
+  chain   Chain  @relation(fields: [chainId], references: [chainId])
+
+  marketListings MarketListing[]
+  activities     Activity[]
+
+  @@map("tokens")
+}
+
+model MarketListing {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+
+  itemId String
+  item   Item   @relation(fields: [itemId], references: [id])
+
+  collectionId String
+  collection   Collection @relation(fields: [collectionId], references: [id])
+
+  tokenId String
+  token   Token  @relation(fields: [tokenId], references: [id])
+
+  marketType EMarketType
+  price      Float
+  quantity   Int         @default(1)
+
+  // only for auction
+  expiredAt    DateTime?
+  buyoutPrice  Float?
+  reservePrice Float?
+
+  //royaltyFeePercentage: Maybe use for solana
+  royaltyFeePercentage Float
+  transactionHash      String
+
+  bids Bid[]
+
+  @@map("market-listings")
+}
+
+model Bid {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  marketId String
+  market   MarketListing @relation(fields: [marketId], references: [id])
+
+  userId          String
+  price           Float
+  transactionHash String
+
+  @@map("bids")
+}
+
+enum EActivityType {
+  TRANSFER
+  MINT
+  BURN
+  SELL
+  BUY
+  BID
+  ACCEPT_BID
+  UPDATE_LISTING
+  CANCEL_LISTING
+  CANCEL_BID
+}
+
+model Activity {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  type       EActivityType
+  fromUserId String
+  toUserId   String?
+  price      Float?
+
+  tokenId String?
+  token   Token?  @relation(fields: [tokenId], references: [id])
+
+  collectionId String?
+  collection   Collection? @relation(fields: [collectionId], references: [id])
+
+  transactionHash String?
+
+  itemId   String
+  item     Item   @relation(fields: [itemId], references: [id])
+  quantity Int?
+
+  @@map("activities")
 }

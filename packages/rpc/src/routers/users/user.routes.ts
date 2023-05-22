@@ -1,13 +1,24 @@
-import { router, publicProcedure } from '../../config/router';
-import { connectIGSchema, setKYCSchema } from './user.schemas';
-import { connectInstagram, setKYCInfo } from './user.services';
+import { router, protectedRouter } from '../../config/router';
+import {
+  connectIGSchema,
+  connectWalletSchema,
+  setKYCSchema,
+} from './user.schemas';
+import {
+  connectInstagram,
+  connectWeb3Wallet,
+  setKYCInfo,
+} from './user.services';
 export const userRouters = router({
-  connectInstagram: publicProcedure
+  connectInstagram: protectedRouter
     .input(connectIGSchema)
-    .mutation(({ input }) => connectInstagram(input)),
-  setKYC: publicProcedure
+    .mutation(({ input, ctx }) => connectInstagram(input, ctx.auth.userId)),
+  setKYC: protectedRouter
     .input(setKYCSchema)
-    .mutation(({ input }) => setKYCInfo(input)),
+    .mutation(({ input, ctx }) => setKYCInfo(input, ctx.auth.userId)),
+  connectWallet: protectedRouter
+    .input(connectWalletSchema)
+    .mutation(({ input, ctx }) => connectWeb3Wallet(input, ctx.auth.userId)),
 });
 
 export type UserRouter = typeof userRouters;

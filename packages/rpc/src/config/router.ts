@@ -3,7 +3,7 @@ import SuperJSON from 'superjson';
 import { Webhook, WebhookRequiredHeaders } from 'svix';
 import { userCreatedWebhookSchema } from '../routers/clerk/clerk.validators';
 import { createTRPCContext } from '_@rpc/config/context';
-import { getAuth } from '@clerk/fastify';
+import { clerkClient } from '@clerk/fastify';
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: SuperJSON,
@@ -19,8 +19,18 @@ export const mergeRouter = t.mergeRouters;
 
 export const protectedRouter = t.procedure.use(
   t.middleware(async ({ ctx, next }) => {
-    const auth = getAuth(ctx.req);
-    if (!auth.userId) {
+    const token = ctx.req.headers.cookie?.split('__session=')[1];
+    const request = await clerkClient.authenticateRequest({
+      headerToken: token,
+      cookieToken: token,
+      apiKey: process.env.CLERK_PUBLISHABLE_KEY || '',
+      secretKey: process.env.CLERK_SECRET_KEY || '',
+      publishableKey: process.env.CLERK_PUBLISHABLE_KEY || '',
+      host: '',
+      frontendApi: '',
+    });
+    const auth = request.toAuth();
+    if (!auth || !auth.userId) {
       throw new TRPCError({ code: 'UNAUTHORIZED' });
     }
 

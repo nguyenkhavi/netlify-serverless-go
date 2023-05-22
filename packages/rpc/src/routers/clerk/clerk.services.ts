@@ -12,10 +12,21 @@ export function updateClerkUser(data: UserCreatedWebhookInput['data']) {
   });
 }
 
-export function connectInstagram(uid: string, instagramUid: string) {
+export function updateInstagramUid(uid: string, instagramUid: string) {
   return clerkClient.users.updateUserMetadata(uid, {
     publicMetadata: {
       instagramUid,
+    },
+  });
+}
+
+export function updatePersonaInquiryUid(
+  uid: string,
+  personaInquiryUid: string
+) {
+  return clerkClient.users.updateUserMetadata(uid, {
+    publicMetadata: {
+      personaInquiryUid,
     },
   });
 }
