@@ -34,7 +34,7 @@ Build details: <${env.BUILD_URL}/display/redirect|See in web console>
                                 ]) {
                                     sh '''
                                     scripts/get-env.sh $VAULT_TOKEN $VAULT_URL $BRANCH &&
-                                    pnpm i && pnpm run generate &&
+                                    pnpm i --frozen-lockfile && pnpm run generate &&
                                     pnpm nx affected:build --base=origin/$BRANCH~1 --head=origin/$BRANCH
                                     '''
                                     docker.build("$PROJECT_NAME:api-$BRANCH", "-f apps/api/Dockerfile .")
