@@ -7,8 +7,19 @@ services:
     ports:
       - '2040:3000'
     working_dir: /app
+  redis:
+    image: redis:7-alpine
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PW}
+    volumes:
+      - fleamint_redis:/data
+    ports:
+      - '2041:6379'
   api:
     restart: always
     image: fleamint:api-dev
     ports:
       - '2042:3002'
+
+volumes:
+  fleamint_redis:
+    driver: local
