@@ -1,7 +1,7 @@
 pipeline {
     agent { node { label 'master' } }
     environment {
-        PROJECT_NAME='szn'
+        PROJECT_NAME='fleamint'
         VAULT_URL="https://vault.spiritlabs.co"
         master_docker_server = 'unix:///var/run/docker.sock'
     }
@@ -39,7 +39,6 @@ Build details: <${env.BUILD_URL}/display/redirect|See in web console>
                                     '''
                                     docker.build("$PROJECT_NAME:api-$BRANCH", "-f apps/api/Dockerfile .")
                                     docker.build("$PROJECT_NAME:landing-$BRANCH", "-f apps/landing/Dockerfile .")
-                                    docker.build("$PROJECT_NAME:backoffice-$BRANCH", "-f apps/backoffice/Dockerfile .")
                                 }
 
                             }
@@ -59,7 +58,7 @@ Build details: <${env.BUILD_URL}/display/redirect|See in web console>
                                 string(credentialsId: 'vault-token', variable: 'VAULT_TOKEN')
                             ]) {
                                 sh '''
-                                ssh -i $identity dong@localhost \"cd /home/dong/code/szn-one && docker compose up --force-recreate -d backoffice landing api\"
+                                ssh -i $identity dong@localhost \"cd /home/dong/code/fleamint && docker compose up --force-recreate -d landing api\"
                                 '''
                             }
                         }
