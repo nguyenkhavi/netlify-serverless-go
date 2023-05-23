@@ -16,7 +16,7 @@ server.register(fastifyTRPCPlugin, {
   trpcOptions: { router: appRouter, createContext: createTRPCContext },
 });
 
-server.register(clerkPlugin);
+// server.register(clerkPlugin);
 
 const io = new Server(3000);
 
