@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for repo in 'landing' 'backoffice' 'api'
+for repo in 'landing' 'api'
 do 
     echo "Get env repo: $repo"
     curl \
