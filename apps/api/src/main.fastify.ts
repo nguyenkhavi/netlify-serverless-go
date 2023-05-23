@@ -6,6 +6,7 @@ import { clerkPlugin } from '@clerk/fastify';
 import { appRouter } from '_@rpc/app.router';
 import { createTRPCContext } from '_@rpc/config/context';
 import { Server } from 'socket.io';
+import { redisClient } from '_@rpc/services/redis';
 
 const server = fastify({ maxParamLength: 5000, logger: false });
 server.register(cors, { origin: true, credentials: true });
@@ -26,18 +27,16 @@ io.on('connection', (socket) => {
 const initialize = async () => {
   await server.after();
   await server.ready();
-  server.listen(
-    { port: Number(process.env.PORT), host: '0.0.0.0' },
-    (err, address) => {
-      if (err) {
-        console.log('listen error: ', err);
-        server.log.error(err);
-        process.exit(1);
-      }
-
-      console.log(`Server is now listening on ${address}`);
+  await redisClient.connect();
+  server.listen({ port: Number(process.env.PORT), host: '0.0.0.0' }, (err, address) => {
+    if (err) {
+      console.log('listen error: ', err);
+      server.log.error(err);
+      process.exit(1);
     }
-  );
+
+    console.log(`Server is now listening on ${address}`);
+  });
 };
 
 initialize();

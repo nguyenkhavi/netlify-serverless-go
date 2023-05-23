@@ -23,12 +23,9 @@ enum EActivityAction {
 }
 
 model UserWallet {
-  userId  String
-  wallet  String
-  chainId String
-  chain   Chain  @relation(fields: [chainId], references: [chainId])
+  userId String
+  wallet String @id
 
-  @@unique([userId, wallet, chainId])
   @@map("user-wallets")
 }
 
@@ -176,7 +173,8 @@ model Chain {
 
   collections Collection[]
   tokens      Token[]
-  userWallet  UserWallet[]
+
+  @@map("chains")
 }
 
 enum ETokenStandard {

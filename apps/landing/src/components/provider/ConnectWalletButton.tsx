@@ -1,10 +1,12 @@
 'use client';
 
+//THIRD PARTY MODULES
 import { useUser } from '@clerk/nextjs';
-import { ConnectWallet, useAddress, useSDK } from '@thirdweb-dev/react';
 import { api } from '_@landing/utils/api';
-import { generateSignedMessage } from '_@rpc/config/utils';
 import { useCallback, useEffect } from 'react';
+import { ConnectWallet, useAddress, useSDK } from '@thirdweb-dev/react';
+//CONFIG
+import { generateSignedMessage } from '_@rpc/config/utils';
 export function ConnectWalletButton() {
   const sdk = useSDK();
   const { user, isLoaded } = useUser();

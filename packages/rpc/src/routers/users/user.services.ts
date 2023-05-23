@@ -1,10 +1,7 @@
 import { TConnectIG, TConnectWallet, TSetKYC } from './user.schemas';
 import { queryIGUserNode } from '../../services/instagram';
 import { verifyInquiryId } from '../../services/persona';
-import {
-  updateInstagramUid,
-  updatePersonaInquiryUid,
-} from '_@rpc/routers/clerk/clerk.services';
+import { updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
 import { generateSignedMessage } from '../../config/utils';
 import { ethers } from 'ethers';
 import { prisma } from '../../config/prisma';
@@ -25,7 +22,6 @@ export const connectWeb3Wallet = (input: TConnectWallet, uid: string) => {
     data: {
       wallet,
       userId: uid,
-      chainId: 'chain-id',
     },
   });
 };

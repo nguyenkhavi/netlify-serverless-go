@@ -42,3 +42,32 @@ export const userCreatedWebhookSchema = z.object({
   type: z.nativeEnum(EWebhookEventType),
 });
 export type UserCreatedWebhookInput = z.infer<typeof userCreatedWebhookSchema>;
+
+export enum ESessionEventType {
+  SESSION_CREATED = 'session.created',
+  SESSION_REVOKED = 'session.revoked',
+  SESSION_REMOVE = 'session.removed',
+  SESSION_ENDED = 'session.ended',
+}
+
+export const dataSessionSchema = z
+  .object({
+    abandon_at: z.number(),
+    client_id: z.string(),
+    created_at: z.number(),
+    expire_at: z.number(),
+    id: z.string(),
+    last_active_at: z.number(),
+    updated_at: z.number(),
+    user_id: z.string(),
+  })
+  .transform((data) => ({
+    id: data.id,
+    expiredAt: data.expire_at,
+    userId: data.user_id,
+  }));
+export const sessionWebhookSchema = z.object({
+  data: dataSessionSchema,
+  type: z.nativeEnum(ESessionEventType),
+});
+export type SessionWebhookInput = z.infer<typeof sessionWebhookSchema>;

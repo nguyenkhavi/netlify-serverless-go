@@ -11,6 +11,8 @@ import {
   useSignUp,
   SignUp,
 } from '@clerk/nextjs';
+//LAYOUT, COMPONENTS
+import { ConnectWalletButton } from '_@landing/components/provider/ConnectWalletButton';
 //HOOK
 import { OAuthStrategy } from '@clerk/nextjs/dist/server';
 
@@ -48,7 +50,7 @@ const SignInPage = () => {
         gender: 'male',
         username: 'vidzai',
         password: 'NkviDev@1233',
-        emailAddress: 'vi.nguyen@sens-vn.com',
+        emailAddress: 'vi.nguyen@mailinator.com',
         firstName: 'KhaVi',
         lastName: 'Nguyen',
       });
@@ -91,6 +93,7 @@ const SignInPage = () => {
       <button onClick={onPressVerify}>Verify</button>
       <br />
       <button onClick={() => handleSignIn()}>Sign In</button>
+      <ConnectWalletButton />
     </>
   );
 };
