@@ -16,6 +16,7 @@
     "headlessui",
     "kanit",
     "nextjs",
+    "onboarded",
     "Parens",
     "Roadmap",
     "superjson",
@@ -24,6 +25,7 @@
     "tanstack",
     "thirdweb",
     "TRPC",
+    "webp",
     "zustand"
   ],
   "editor.codeActionsOnSave": {

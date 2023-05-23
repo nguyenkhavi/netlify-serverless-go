@@ -6,7 +6,11 @@ import Button from '_@shared/components/Button';
 //SHARED
 import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 
-export default function HomeAdvHorizontal() {
+type Props = {
+  className?: string;
+};
+
+export default function HomeAdvHorizontal({ className }: Props) {
   return (
     <div
       className={classcat([
@@ -14,6 +18,7 @@ export default function HomeAdvHorizontal() {
         'sm:rounded-[10px] sm:px-6 sm:py-[24.5px]',
         'sm:border-[.5px] sm:border-white/25',
         'xlg:px-20',
+        className,
       ])}
     >
       <div

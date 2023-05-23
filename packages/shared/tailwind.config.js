@@ -16,10 +16,10 @@ module.exports = {
       sm: '640px',
       md: '768px',
       's-924': '924px',
-      's-1036': '1036px',
-      's-1117': '1117px',
       xlg: '992px',
       lg: '1024px',
+      's-1036': '1036px',
+      's-1117': '1117px',
       xl: '1280px',
       '2xl': '1440px',
       '3xl': '1536px',
@@ -45,8 +45,28 @@ module.exports = {
       backgroundImage: {
         'footer-mobile': 'linear-gradient(180deg, #0A1512 0%, #000000 100%)',
         'footer-desktop': 'linear-gradient(180deg, #000000 0%, #0D1B17 99.18%)',
+        achievement: 'linear-gradient(90.3deg, #000000 1.9%, #081A15 99.83%)',
         'welcome-mobile': "url('/images/home/welcome-mobile.webp')",
         'welcome-desktop': "url('/images/home/welcome-desktop.webp')",
+      },
+      keyframes: {
+        'slide-left': {
+          '100%': {
+            transform: 'translateX(-100%)',
+          },
+        },
+        'slide-right': {
+          '0%': {
+            transform: 'translateX(-100%)',
+          },
+          '100%': {
+            transform: 'translateX(0)',
+          },
+        },
+      },
+      animation: {
+        'slide-left': 'slide-left 10s linear infinite',
+        'slide-right': 'slide-right 10s linear infinite',
       },
       fontSize: {
         h1: [
