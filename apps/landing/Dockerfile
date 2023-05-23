@@ -1,15 +1,12 @@
-FROM node:18-alpine AS builder
+FROM node:18-alpine AS runner
 WORKDIR /app
-RUN apk add --no-cache libc6-compat
-RUN apk update
-RUN corepack enable
-COPY package.json ./
-COPY **/package.json ./
-COPY pnpm-lock.yaml pnpm-lock.yaml
-RUN pnpm i --prod
-RUN pnpm add sharp
-COPY . .
-RUN pnpm run generate
-RUN rm -rf apps && mkdir apps
-COPY ./apps/landing ./apps/landing
-CMD cd apps/landing && pnpm run start
+RUN yarn global add pnpm
+COPY dist/apps/landing/package.json package.json
+COPY dist/apps/landing/pnpm-lock.yaml pnpm-lock.yaml
+RUN pnpm i
+COPY dist/apps/landing/ ./
+COPY apps/landing/.env .env
+CMD pnpm run start
+
+
+

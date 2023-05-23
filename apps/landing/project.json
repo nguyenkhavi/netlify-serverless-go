@@ -10,7 +10,8 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "apps/landing",
-        "outputPath": "dist/apps/landing"
+        "outputPath": "dist/apps/landing",
+        "generateLockfile": true
       },
       "configurations": {
         "development": {
