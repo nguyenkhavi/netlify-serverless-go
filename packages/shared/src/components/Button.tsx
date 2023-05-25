@@ -16,13 +16,36 @@ const baseClasses = [
 ];
 
 const colorClasses = {
+  primary: {
+    filled: [
+      'focus-visible:ring-orange-600',
+      'text-secondary-100 bg-primary border-primary',
+      'hover:drop-shadow-btn',
+      'disabled:hover:drop-shadow-none',
+      'disabled:text-text-30 disabled:bg-primary disabled:bg-btn disabled:border-transparent',
+    ],
+    outlined: [
+      'focus-visible:ring-orange-600',
+      'text-primary border-primary',
+      'hover:text-secondary-100 hover:bg-primary hover:border-primary',
+      'hover:drop-shadow-btn',
+      'disabled:hover:drop-shadow-none',
+      'disabled:text-text-30 disabled:bg-primary disabled:bg-btn disabled:border-transparent',
+    ],
+    text: [
+      'focus-visible:ring-orange-600',
+      'text-primary border-none',
+      'hover:bg-primary-600/[.08]',
+      'disabled:text-primary-500/80 disabled:bg-transparent',
+    ],
+  },
   default: {
-    contained: [
+    filled: [
       'focus-visible:ring-orange-600',
       'text-secondary-400 bg-grey-300 border-grey-300',
       'hover:text-secondary-400 hover:bg-grey-300 hover:border-grey-300',
       'disabled:text-grey-500/80 disabled:bg-grey-500/[.24] disabled:border-grey-500/[.24]',
-      'shadow-btn-default-contained',
+      'shadow-btn-default-filled',
     ],
     outlined: [
       'focus-visible:ring-orange-600',
@@ -35,27 +58,6 @@ const colorClasses = {
       'text-white border-none',
       'hover:bg-white/[.08]',
       'disabled:text-grey-500/80 disabled:bg-transparent',
-    ],
-  },
-  primary: {
-    contained: [
-      'focus-visible:ring-orange-600',
-      'text-secondary-400 bg-primary border-primary',
-      'hover:bg-primary-500 hover:border-primary-500',
-      'disabled:text-grey-500/80 disabled:bg-grey-500/[.24] disabled:border-grey-500/[.24]',
-      'shadow-btn-primary-contained',
-    ],
-    outlined: [
-      'focus-visible:ring-orange-600',
-      'text-primary border-primary-600/[.48]',
-      'hover:bg-primary-600/[.08] hover:border-primary',
-      'disabled:text-grey-500/80 disabled:border-grey-500/[.24]',
-    ],
-    text: [
-      'focus-visible:ring-orange-600',
-      'text-primary border-none',
-      'hover:bg-primary-600/[.08]',
-      'disabled:text-primary-500/80 disabled:bg-transparent',
     ],
   },
 } as const;
@@ -94,7 +96,7 @@ export default function Button({
   as,
   type,
   color = 'primary',
-  variant = 'contained',
+  variant = 'filled',
   shape = 'rounded',
   leadingIcon,
   children,

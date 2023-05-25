@@ -35,14 +35,11 @@ module.exports = {
         toast: 1000,
         tooltip: 1000,
       },
-      boxShadow: {
-        'btn-default-contained': '0px 8px 16px rgba(145, 158, 171, 0.16)',
-        'btn-primary-contained': '0px 8px 16px rgba(0, 171, 85, 0.24)',
-      },
       dropShadow: {
-        'social-icon': '0px 0px 10px #19CA9B',
+        btn: '0px 0px 10px #19CA9B',
       },
       backgroundImage: {
+        btn: 'linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6))',
         'footer-mobile': 'linear-gradient(180deg, #0A1512 0%, #000000 100%)',
         'footer-desktop': 'linear-gradient(180deg, #000000 0%, #0D1B17 99.18%)',
         achievement: 'linear-gradient(90.3deg, #000000 1.9%, #081A15 99.83%)',
@@ -220,16 +217,17 @@ module.exports = {
           500: '#B1FDE9',
           600: '#E0FBF4',
           700: '#FFFFFF',
-        },
-        'primary-shade': {
-          DEFAULT: '#19CFA0',
-          100: '#04A87D',
-          200: '#028F6A',
-          300: '#026E51',
-          400: '#0E5542',
-          500: '#023528',
-          600: '#0D1B17',
-          700: '#050B0A',
+
+          shade: {
+            DEFAULT: '#19CFA0',
+            100: '#04A87D',
+            200: '#028F6A',
+            300: '#026E51',
+            400: '#0E5542',
+            500: '#023528',
+            600: '#0D1B17',
+            700: '#050B0A',
+          },
         },
         secondary: {
           DEFAULT: '#000000',
