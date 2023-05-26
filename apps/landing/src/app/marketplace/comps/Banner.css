@@ -1,0 +1,15 @@
+.dot-live::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #ff0000;
+  @screen xlg {
+    width: 10px;
+    height: 10px;
+    right: -15px;
+  }
+}

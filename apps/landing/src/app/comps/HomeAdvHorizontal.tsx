@@ -8,9 +8,10 @@ import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 
 type Props = {
   className?: string;
+  isHome?: boolean;
 };
 
-export default function HomeAdvHorizontal({ className }: Props) {
+export default function HomeAdvHorizontal({ className, isHome = false }: Props) {
   return (
     <div
       className={classcat([
@@ -24,10 +25,15 @@ export default function HomeAdvHorizontal({ className }: Props) {
         className={classcat([
           'grid grid-flow-col items-center justify-center',
           'sm:mx-auto sm:justify-between',
-          'xl:justify-start',
+          isHome ? 'xl:justify-start' : '',
         ])}
       >
-        <HeaderLogoIcon className="h-[28px] w-[23px] sm:h-[40px] sm:w-[34px] xl:mr-[307px]" />
+        <HeaderLogoIcon
+          className={classcat([
+            'h-[28px] w-[23px] sm:h-[40px] sm:w-[34px] ',
+            isHome ? 'xl:mr-[307px]' : '',
+          ])}
+        />
         <span className="ml-3 mr-2 text-center text-subtitle2 sm:text-h4 xl:mx-0">
           “<span className="text-bold mr-1 text-primary">50%</span>
           Off Through This Saturday”
@@ -37,7 +43,7 @@ export default function HomeAdvHorizontal({ className }: Props) {
           href="https://www.google.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="sm:btnmd ow:w-29 sm:w-34.5 xl:ml-18"
+          className={classcat(['sm:btnmd ow:w-29 sm:w-34.5', isHome ? 'xl:ml-18' : ''])}
         >
           Click Here
         </Button>

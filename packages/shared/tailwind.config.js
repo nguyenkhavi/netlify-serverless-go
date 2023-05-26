@@ -46,6 +46,7 @@ module.exports = {
         achievement: 'linear-gradient(90.3deg, #000000 1.9%, #081A15 99.83%)',
         'welcome-mobile': "url('/images/home/welcome-mobile.webp')",
         'welcome-desktop': "url('/images/home/welcome-desktop.webp')",
+        'banner-bg': "url('/images/marketplace/banner-bg.png')",
       },
       keyframes: {
         'slide-left': {

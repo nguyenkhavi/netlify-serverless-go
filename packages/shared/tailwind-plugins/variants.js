@@ -12,7 +12,7 @@ module.exports = plugin(({ addVariant, e, matchVariant }) => {
   matchVariant(
     'nth',
     (value) => {
-      return `&:nth-child(${value})`;
+      return `&>*:nth-child(${value})`;
     },
     {
       values: {

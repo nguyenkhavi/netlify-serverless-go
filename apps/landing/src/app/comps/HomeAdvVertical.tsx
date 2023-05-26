@@ -8,9 +8,10 @@ import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 
 type Props = {
   className?: string;
+  btnClasses?: string;
 };
 
-export default function HomeAdvVertical({ className }: Props) {
+export default function HomeAdvVertical({ className, btnClasses }: Props) {
   return (
     <div
       className={classcat([
@@ -32,7 +33,10 @@ export default function HomeAdvVertical({ className }: Props) {
         href="https://www.google.com/"
         target="_blank"
         rel="noopener noreferrer"
-        className="absolute bottom-[123px] left-[21px] ow:h-[45px] ow:w-[117px]"
+        className={classcat([
+          'absolute bottom-[123px] left-[21px] ow:h-[45px] ow:w-[117px]',
+          btnClasses,
+        ])}
       >
         Click Here
       </Button>
