@@ -12,6 +12,9 @@
 - [Radix-primitive](https://www.radix-ui.com/)
 - [Playwrite](https://playwright.dev/)
 
+## Animate on scroll
+- [Sal.js](https://github.com/mciastek/sal)
+
 ## Core Ideas
 
 ### About typesafe

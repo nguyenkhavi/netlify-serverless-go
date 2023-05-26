@@ -15,13 +15,20 @@ export default function FinanceVenturesSection() {
         'xlg:px-20 xl:relative xl:justify-items-start xl:py-[34px]',
       ])}
     >
-      <DecentralizedFinanceVenturesIcon
+      <div
         className={classcat([
           'h-auto w-[200px]',
           'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
           'xl:left-0 xl:w-[327px] 2xl:left-[145px]',
         ])}
-      />
+      >
+        <DecentralizedFinanceVenturesIcon
+          data-sal="zoom-in"
+          data-sal-duration="800"
+          data-sal-delay="300"
+          className="h-full w-full"
+        />
+      </div>
 
       <div
         className={classcat([
@@ -29,11 +36,19 @@ export default function FinanceVenturesSection() {
           'xl:ml-auto xl:mt-0 xl:max-w-[548px] xl:justify-items-start',
         ])}
       >
-        <div className="text-center text-h4 xl:text-left xl:text-h2">
+        <div
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="500"
+          className="text-center text-h4 xl:text-left xl:text-h2"
+        >
           Transform your financial future with our Web3-era Decentralized Finance Ventures.
         </div>
 
         <div
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="300"
           className={classcat([
             'mt-5 text-center text-body1 text-text-60',
             'xl:text-left xl:text-h5',
@@ -47,6 +62,9 @@ export default function FinanceVenturesSection() {
         </div>
 
         <Button
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="100"
           as={Link}
           href="/finance-ventures"
           className="btnlg mt-7.5 ow:w-62.5 xl:mt-10"

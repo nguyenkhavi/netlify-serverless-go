@@ -15,6 +15,9 @@ export default function WelcomeSection() {
     >
       <div className="grid gap-2.5 xlg:max-w-[1049px] xlg:gap-1">
         <div
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="100"
           className={classcat([
             'grid justify-items-center text-h2 xlg:text-h1',
             'sm:auto-cols-max sm:grid-flow-col sm:justify-center sm:justify-items-start sm:gap-2',
@@ -24,7 +27,12 @@ export default function WelcomeSection() {
           <span className="text-primary">Fleamint!</span>
         </div>
 
-        <div className="text-center text-h6 text-text-80 xlg:text-h5">
+        <div
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="500"
+          className="text-center text-h6 text-text-80 xlg:text-h5"
+        >
           Join Fleamint's dynamic NFT ecosystem! Explore our DEX for seamless swapping, Ventures for
           lucrative project staking, our thriving community for social interactions, and an NFT
           marketplace to buy and sell unique digital and real-world assets. Revolutionize your

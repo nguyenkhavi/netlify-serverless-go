@@ -15,13 +15,20 @@ export default function SocialNetworkSection() {
         'xlg:px-20 xl:relative xl:justify-items-start xl:py-[51px]',
       ])}
     >
-      <DecentralizedSocialNetworkIcon
+      <div
         className={classcat([
           'h-auto w-[200px]',
           'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
           'xl:right-0 xl:w-[392px] 2xl:right-[189px]',
         ])}
-      />
+      >
+        <DecentralizedSocialNetworkIcon
+          data-sal="zoom-in"
+          data-sal-duration="800"
+          data-sal-delay="300"
+          className='h-full w-full'
+        />
+      </div>
 
       <div
         className={classcat([
@@ -29,11 +36,19 @@ export default function SocialNetworkSection() {
           'xl:mt-0 xl:max-w-[585px] xl:justify-items-start',
         ])}
       >
-        <div className="text-center text-h4 xl:text-left xl:text-h2">
+        <div
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="500"
+          className="text-center text-h4 xl:text-left xl:text-h2"
+        >
           Connect and Communicate in Our Decentralized Social Network
         </div>
 
         <div
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="300"
           className={classcat([
             'mt-5 text-center text-body1 text-text-60',
             'xl:text-left xl:text-h5',
@@ -46,6 +61,9 @@ export default function SocialNetworkSection() {
         </div>
 
         <Button
+          data-sal="slide-up"
+          data-sal-duration="800"
+          data-sal-delay="100"
           as={Link}
           href="/social-network"
           className="btnlg mt-7.5 ow:w-62.5 xl:mt-10 [&>span]:tracking-[-.1px]"
