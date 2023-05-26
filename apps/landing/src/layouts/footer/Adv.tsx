@@ -10,34 +10,30 @@ export default function Adv() {
   return (
     <div
       className={classcat([
-        'mt-7.5 rounded-[5px] bg-header-bg px-2.5 py-7.5',
+        'mt-7.5 rounded-[5px] bg-header-bg py-5.5 pl-8.5 pr-3.5',
         'sm:mt-9 sm:rounded-[10px] sm:bg-[#040908] sm:px-6 sm:py-[24.5px]',
-        'sm:border-[.5px] sm:border-white/25',
-        '2xl:mx-2.5 2xl:mt-20.5',
+        'border-[.5px] border-white/25',
+        'xlg:px-20 2xl:mx-2.5 2xl:mt-20.5',
       ])}
     >
       <div
         className={classcat([
           'sm:mx-auto sm:max-w-[1088px]',
-          'grid auto-cols-max grid-flow-col items-center justify-center gap-3',
+          'grid grid-flow-col items-center justify-center gap-3',
           'sm:justify-between',
         ])}
       >
         <HeaderLogoIcon className="h-[28px] w-[23px] sm:h-[40px] sm:w-[34px]" />
-        <span className="text-[14px] font-semibold leading-[26px] sm:text-[24px]">
-          <span>“</span>
-          <span className="text-bold mr-1 text-primary">50%</span>
-          <span>Off Through This Saturday”</span>
+        <span className="ml-3 mr-2 text-center text-subtitle2 sm:text-h4 xl:mx-0">
+          “<span className="text-bold mr-1 text-primary">50%</span>
+          Off Through This Saturday”
         </span>
         <Button
           as={Link}
           href="https://www.google.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className={classcat([
-            'h-[25px] w-[72px] ow:rounded [&>span]:text-[10px] [&>span]:leading-[13px]',
-            'sm:h-[40px] sm:w-[119px] sm:ow:rounded-lg sm:[&>span]:text-[15px] sm:[&>span]:leading-[26px]',
-          ])}
+          className="sm:btnmd ow:w-29 sm:w-34.5"
         >
           Click Here
         </Button>

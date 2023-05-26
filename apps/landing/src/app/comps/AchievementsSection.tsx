@@ -27,12 +27,12 @@ export default function AchievementsSection() {
       className={classcat([
         'rounded-[10px] border-[.5px] border-white/[.22] bg-achievement',
         'px-[27.5px] py-[43px]',
-        'xlg:px-[53px] xlg:pb-[58px] xlg:pt-[28px]',
+        'xlg:px-13.25 xlg:pb-14.5 xlg:pt-7',
       ])}
     >
       <div
         className={classcat([
-          'grid justify-items-center gap-12.5',
+          'grid justify-items-center gap-10',
           'xlg:justify-items-stretch xlg:gap-11.5',
         ])}
       >
@@ -42,21 +42,8 @@ export default function AchievementsSection() {
             'xlg:justify-items-stretch xlg:gap-1',
           ])}
         >
-          <div
-            className={classcat([
-              'text-[24px] font-bold leading-[36px]',
-              'xl:text-[32px] xl:leading-[48px]',
-            ])}
-          >
-            Achievements
-          </div>
-          <div
-            className={classcat([
-              'text-center font-medium text-white/50',
-              'xlg:text-left',
-              'xl:text-[18px] xl:leading-[28px]',
-            ])}
-          >
+          <div className="xl:text-3 text-h4">Achievements</div>
+          <div className="text-center text-body2 text-text-50 xlg:text-left xl:text-h6">
             We onboarded over $500 million worth of goods onto our marketplaces
           </div>
         </div>
@@ -64,7 +51,7 @@ export default function AchievementsSection() {
         <div
           className={classcat([
             'grid justify-items-center gap-10',
-            'xlg:auto-cols-max xlg:grid-flow-col xlg:gap-32.5',
+            'xlg:auto-cols-max xlg:grid-flow-col xlg:gap-37.5',
           ])}
         >
           {ACHIEVEMENT_LIST.map(({ title, value }) => (
@@ -75,22 +62,8 @@ export default function AchievementsSection() {
                 'xlg:justify-items-stretch xlg:gap-3.75',
               ])}
             >
-              <div
-                className={classcat([
-                  'text-[24px] font-bold leading-[36px]',
-                  'xl:text-[32px] xl:leading-[48px]',
-                ])}
-              >
-                {value}
-              </div>
-              <div
-                className={classcat([
-                  'font-semibold text-white/50',
-                  'xl:text-[15px] xl:leading-[20px]',
-                ])}
-              >
-                {title}
-              </div>
+              <div className="xl:text-3 text-h4">{value}</div>
+              <div className="text-subtitle2 text-text-50 xl:text-subtitle1">{title}</div>
             </div>
           ))}
         </div>

@@ -29,19 +29,14 @@ export default function ExchangeSection() {
           'xl:ml-auto xl:mt-0 xl:max-w-[590px] xl:justify-items-start',
         ])}
       >
-        <div
-          className={classcat([
-            'text-center text-[24px] font-semibold leading-[36px]',
-            'xl:text-left xl:text-[40px] xl:leading-[50px]',
-          ])}
-        >
+        <div className="text-center text-h4 xl:text-left xl:text-h2">
           Trade Crypto Assets with Trust and Security in Our Decentralized Exchange
         </div>
 
         <div
           className={classcat([
-            'mt-5 text-center text-[18px] font-light leading-[36px] text-white/60',
-            'xl:text-left xl:text-[20px] xl:leading-[40px]',
+            'mt-5 text-center text-body1 text-text-60',
+            'xl:text-left xl:text-h5',
           ])}
         >
           Effortlessly trade a wide range of crypto assets with trust and security using our
@@ -53,11 +48,7 @@ export default function ExchangeSection() {
         <Button
           as={Link}
           href="/exchange"
-          className={classcat([
-            '[&>span]:text-[18px] [&>span]:font-semibold [&>span]:leading-[19.58px]',
-            'mt-[18px] h-[70px] ow:w-[260px]',
-            'xl:mt-[38px]',
-          ])}
+          className="btnlg mt-7 ow:w-62.5 xl:mt-10"
         >
           Try Dex
         </Button>

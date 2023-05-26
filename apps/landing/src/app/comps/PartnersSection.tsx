@@ -50,10 +50,10 @@ export default function PartnersSection() {
       <div className="grid justify-items-center">
         <div
           className={classcat([
-            'relative text-[24px] font-bold leading-[36px]',
+            'relative text-h4',
             'before:absolute before:left-0 before:top-[calc(100%-2px)]',
             'before:h-0.5 before:w-full before:rounded-full before:bg-primary',
-            'xlg:text-[32px] xlg:leading-[48px] xlg:before:top-[calc(100%-4px)] xlg:before:h-1',
+            'xlg:text-h3 xlg:before:top-[calc(100%-4px)] xlg:before:h-1',
           ])}
         >
           Our Partners

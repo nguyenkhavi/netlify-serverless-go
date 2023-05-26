@@ -14,36 +14,30 @@ export default function HomeAdvHorizontal({ className }: Props) {
   return (
     <div
       className={classcat([
-        'rounded-[5px] bg-header-bg px-2.5 py-7.75',
-        'sm:rounded-[10px] sm:px-6 sm:py-[24.5px]',
-        'sm:border-[.5px] sm:border-white/25',
+        'rounded-[10px] bg-header-bg py-5.5 pl-3.5 pr-4.5',
+        'border-[.5px] border-text-20 sm:px-6 sm:py-[24.5px]',
         'xlg:px-20',
         className,
       ])}
     >
       <div
         className={classcat([
-          'grid auto-cols-max grid-flow-col items-center justify-center gap-3',
+          'grid grid-flow-col items-center justify-center',
           'sm:mx-auto sm:justify-between',
-          'xl:justify-start xl:gap-0',
+          'xl:justify-start',
         ])}
       >
         <HeaderLogoIcon className="h-[28px] w-[23px] sm:h-[40px] sm:w-[34px] xl:mr-[307px]" />
-        <span className="text-[14px] font-semibold leading-[26px] sm:text-[24px]">
-          <span>“</span>
-          <span className="text-bold mr-1 text-primary">50%</span>
-          <span>Off Through This Saturday”</span>
+        <span className="ml-3 mr-2 text-center text-subtitle2 sm:text-h4 xl:mx-0">
+          “<span className="text-bold mr-1 text-primary">50%</span>
+          Off Through This Saturday”
         </span>
         <Button
           as={Link}
           href="https://www.google.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className={classcat([
-            'h-[25px] w-[72px] ow:rounded [&>span]:text-[10px] [&>span]:leading-[13px]',
-            'sm:h-[40px] sm:w-[119px] sm:ow:rounded-lg sm:[&>span]:text-[15px] sm:[&>span]:leading-[26px]',
-            'xl:ml-[17.5px]',
-          ])}
+          className="sm:btnmd ow:w-29 sm:w-34.5 xl:ml-18"
         >
           Click Here
         </Button>

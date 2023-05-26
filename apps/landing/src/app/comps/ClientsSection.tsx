@@ -41,10 +41,10 @@ export default function ClientsSection() {
       <div className="grid justify-items-center">
         <div
           className={classcat([
-            'relative text-[24px] font-bold leading-[36px]',
+            'relative text-h4',
             'before:absolute before:left-0 before:top-[calc(100%-2px)]',
             'before:h-0.5 before:w-full before:rounded-full before:bg-primary',
-            'xlg:text-[32px] xlg:leading-[48px] xlg:before:top-[calc(100%-4px)] xlg:before:h-1',
+            'xlg:text-h3 xlg:before:top-[calc(100%-4px)] xlg:before:h-1',
           ])}
         >
           Our Clients
@@ -54,8 +54,8 @@ export default function ClientsSection() {
       <div
         className={classcat([
           'hidden',
-          'xsm:mx-auto xsm:mt-7.5 xsm:grid xsm:w-fit xsm:auto-cols-max xsm:grid-flow-col xsm:gap-7',
-          'xlg:mt-[66px] xlg:gap-10 xl:gap-25',
+          'xsm:mx-auto xsm:mt-7.5 xsm:grid xsm:w-fit xsm:auto-cols-max xsm:grid-flow-col xsm:gap-5.5',
+          'xlg:mt-15 xlg:gap-10 xl:gap-25',
         ])}
       >
         {CLIENT_LIST.map((client) => (
@@ -73,7 +73,7 @@ export default function ClientsSection() {
               key={i}
               className={classcat([
                 'grid w-fit auto-cols-max grid-flow-col',
-                'animate-slide-left gap-7 pr-7',
+                'animate-slide-left gap-5.5 pr-5.5',
               ])}
             >
               {CLIENT_LIST.map((client) => (

@@ -123,7 +123,7 @@ export default function Info() {
             key={linkList.title}
             className={classcat(['grid justify-items-center gap-[10px]', 'md:justify-items-start'])}
           >
-            <div className="text-[16px] font-medium leading-[26px]">{linkList.title}</div>
+            <div className="text-subtitle2 md:text-subtitle1">{linkList.title}</div>
             <div
               className={classcat(['grid justify-items-center gap-2', 'md:justify-items-start'])}
             >
@@ -131,7 +131,7 @@ export default function Info() {
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="text-[14px] leading-[26px] text-[color:#A6A6A6] hover:underline"
+                  className="text-body3 text-[color:#A6A6A6] hover:underline"
                 >
                   {link.title}
                 </Link>
@@ -166,7 +166,7 @@ export default function Info() {
           '2xl:mr-[55px]',
         ])}
       >
-        <div className="text-[16px] font-medium leading-[26px]">Follow Us</div>
+        <div className="text-subtitle2 md:text-subtitle1">Follow Us</div>
         <div className="grid grid-cols-[repeat(5,30px)] gap-2">
           {SOCIAL_LIST.map((social) => {
             const Icon = social.Icon;

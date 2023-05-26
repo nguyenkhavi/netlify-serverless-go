@@ -11,8 +11,8 @@ export default function MarketplaceSection() {
     <section
       id="marketplace"
       className={classcat([
-        'grid justify-items-center',
-        'xlg:px-20 xl:relative xl:justify-items-start xl:py-[76px]',
+        'grid justify-items-center py-3',
+        'xlg:px-20 xl:relative xl:justify-items-start xl:py-16',
       ])}
     >
       <DecentralizedCartIcon
@@ -29,20 +29,14 @@ export default function MarketplaceSection() {
           'xl:mt-0 xl:max-w-[623px] xl:justify-items-start',
         ])}
       >
-        <div
-          className={classcat([
-            'max-w-[296px] sm:max-w-none',
-            'text-center text-[24px] font-semibold leading-[36px]',
-            'xl:text-left xl:text-[40px] xl:leading-[50px]',
-          ])}
-        >
+        <div className="text-center text-h4 xl:text-left xl:text-h2">
           Buy and Sell Digital Assets in Our Decentralized Marketplace
         </div>
 
         <div
           className={classcat([
-            'mt-5 text-center text-[18px] font-light leading-[36px] text-white/60',
-            'xl:text-left xl:text-[20px] xl:leading-[40px]',
+            'mt-5 text-center text-body1 text-text-60',
+            'xl:text-left xl:text-h5',
           ])}
         >
           Experience the power of NFTs like never before and empower yourself with our peer-to-peer,
@@ -54,11 +48,7 @@ export default function MarketplaceSection() {
         <Button
           as={Link}
           href="/marketplace"
-          className={classcat([
-            '[&>span]:text-[18px] [&>span]:font-semibold [&>span]:leading-[19.58px]',
-            'mt-[18px] h-[70px] ow:w-[260px]',
-            'xl:mt-[38px]',
-          ])}
+          className="btnlg mt-7.5 ow:w-62.5 xl:mt-10"
         >
           Enter Marketplace
         </Button>
