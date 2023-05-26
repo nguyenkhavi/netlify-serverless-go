@@ -1,8 +1,15 @@
 import { inferAsyncReturnType } from '@trpc/server';
 import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
+import { FastifyRequest } from 'fastify';
+import UAParser from 'ua-parser-js';
 
-const createInnerTRPCContext = () => {
-  return {};
+const getRequestClient = (req: FastifyRequest) => {
+  const headers = req.headers;
+  const browserString = headers['user-agent'];
+  const parser = new UAParser(browserString); // you need to pass the user-agent for nodejs
+  const userAgent = parser.getResult();
+  const ipAddress = req['ip'];
+  return { userAgent, ipAddress };
 };
 
 export const createTRPCContext = async (opts: CreateFastifyContextOptions) => {
@@ -11,8 +18,7 @@ export const createTRPCContext = async (opts: CreateFastifyContextOptions) => {
   return {
     req,
     res,
-    ...createInnerTRPCContext(),
-    session: {} as any,
+    requestClient: getRequestClient(req),
   };
 };
 

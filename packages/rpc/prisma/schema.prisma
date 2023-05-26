@@ -75,9 +75,9 @@ model UserActivity {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  browser   String
-  ipAddress String
-  location  String
+  browser   String?
+  ipAddress String?
+  location  String?
   action    EActivityAction
 
   @@map("user-activities")

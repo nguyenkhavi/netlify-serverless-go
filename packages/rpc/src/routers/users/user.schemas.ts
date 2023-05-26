@@ -1,4 +1,5 @@
 import z from 'zod';
+import { EActivityAction } from '@prisma/client';
 
 export const verifyInquirySchema = z
   .object({
@@ -64,3 +65,10 @@ export const connectWalletSchema = z.object({
 });
 
 export type TConnectWallet = z.infer<typeof connectWalletSchema>;
+
+export const createUserActivitySchema = z.object({
+  location: z.string().nullable(),
+  action: z.nativeEnum(EActivityAction),
+});
+
+export type TCreateUserActivity = z.infer<typeof createUserActivitySchema>;
