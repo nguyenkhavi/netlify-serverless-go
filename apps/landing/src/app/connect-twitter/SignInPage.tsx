@@ -40,6 +40,7 @@ const SignInPage = () => {
   }
 
   async function handleSignUp() {
+    console.log({ signUp });
     if (signUp) {
       await signUp.create({
         unsafeMetadata: {

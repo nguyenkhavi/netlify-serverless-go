@@ -18,16 +18,16 @@ server.register(fastifyTRPCPlugin, {
 
 // server.register(clerkPlugin);
 
-const io = new Server(3000);
+// const io = new Server(3000);
 
-io.on('connection', (socket) => {
-  console.log('socket id', socket.id);
-});
+// io.on('connection', (socket) => {
+//   console.log('socket id', socket.id);
+// });
 
 const initialize = async () => {
   await server.after();
   await server.ready();
-  await redisClient.connect();
+  // await redisClient.connect();
   server.listen({ port: Number(process.env.PORT), host: '0.0.0.0' }, (err, address) => {
     if (err) {
       console.log('listen error: ', err);

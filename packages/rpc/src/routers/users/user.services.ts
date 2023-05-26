@@ -1,4 +1,5 @@
 import { TConnectIG, TConnectWallet, TCreateUserActivity, TSetKYC } from './user.schemas';
+import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 import { verifyInquiryId } from '../../services/persona';
 import { updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
@@ -8,6 +9,8 @@ import { prisma } from '../../config/prisma';
 import { Context } from '../../config/context';
 import { TPaginationInput } from '../../config/schemas';
 import { Prisma } from '@prisma/client';
+import { clerkClient } from '@clerk/fastify';
+
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
   return updateInstagramUid(uid, instagramUser.instagramUid);
@@ -69,4 +72,22 @@ export const getUserActivities = async (input: TPaginationInput, userId: string)
       size,
     },
   };
+};
+
+export const twitterObtainOauthAccessToken = async (
+  oauthVerifier: string,
+  oauthToken: string,
+  userId: string,
+) => {
+  const res = await obtainOauthAccessToken({
+    oauthVerifier,
+    oauthToken,
+  });
+
+  return clerkClient.users.updateUserMetadata(userId, {
+    publicMetadata: {
+      twitterId: res.user_id,
+      twitterScreenName: res.screen_name,
+    },
+  });
 };
