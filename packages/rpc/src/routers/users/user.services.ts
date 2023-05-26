@@ -6,11 +6,13 @@ import {
   CloseAllSession,
   CloseSession,
   Logout,
+  TForgotPassword,
+  TVerifyForgotPasswordToken,
 } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 import { verifyInquiryId } from '../../services/persona';
-import { updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
+import { getValidUser, updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
 import { generateSignedMessage } from '../../config/utils';
 import {} from './user.schemas';
 import { getIO } from '_@rpc/services/socket/socket';
@@ -18,8 +20,12 @@ import { clerkClient } from '@clerk/fastify';
 import { ethers } from 'ethers';
 import { Context } from '../../config/context';
 import { TPaginationInput } from '../../config/schemas';
-import { Prisma } from '@prisma/client';
+import { EActivityAction, Prisma } from '@prisma/client';
 import { prisma } from '_@rpc/config/prisma';
+import { generateResetPasswordToken, verifyResetPasswordToken } from '_@rpc/services/jwt';
+import { TRPCError } from '@trpc/server';
+import { redisClient } from '_@rpc/services/redis';
+import { _30_SECONDS_ } from '_@rpc/constants/time';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -136,4 +142,67 @@ export const logout = async (input: Logout) => {
   await socket?.leave(input.userId);
 
   io.to(input.userId).emit('removeUserSession', input.currentSessionId);
+};
+
+const generateForgotPasswordUrl = (origin: string, token: string) => {
+  return `${origin}/mail-handler/verify-email?token=${token}`;
+};
+const generateForgotPasswordRedisKey = (userId: string, token: string) => {
+  return `forgot-password:${userId}:${token}`;
+};
+export const forgotPassword = async (
+  input: TForgotPassword,
+  requestClient: Context['requestClient'],
+) => {
+  const user = await getValidUser(input);
+  const token = generateResetPasswordToken({ userId: user.id });
+  const redisKey = generateForgotPasswordRedisKey(user.id, token);
+  await redisClient.set(redisKey, input.newPassword, {
+    EX: _30_SECONDS_,
+  });
+  const forgotPasswordUrl = generateForgotPasswordUrl(requestClient.origin, token);
+  const sent = await clerkClient.emails.createEmail({
+    emailAddressId: user.primaryEmailAddressId || '',
+    fromEmailName: 'notifications@accounts.dev',
+    body: `Forgot password link: ${forgotPasswordUrl}`,
+    subject: `Forgot password link: ${forgotPasswordUrl}`,
+  });
+  return sent;
+};
+
+export const verifyForgotPasswordToken = async (
+  input: TVerifyForgotPasswordToken,
+  requestClient: Context['requestClient'],
+) => {
+  const { payload, valid } = verifyResetPasswordToken(input.token);
+  if (!valid || !payload) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Token invalid',
+    });
+  }
+  const redisKey = generateForgotPasswordRedisKey(payload.userId, input.token);
+
+  const newPassword = await redisClient.get(redisKey);
+  if (!newPassword) {
+    throw new TRPCError({
+      code: 'BAD_REQUEST',
+      message: 'Token invalid',
+    });
+  }
+  await Promise.all([
+    clerkClient.users.updateUser(payload.userId, {
+      password: newPassword,
+    }),
+    createUserActivity(
+      {
+        action: EActivityAction.CHANGE_PASSWORD,
+        location: null,
+      },
+      payload.userId,
+      requestClient,
+    ),
+    redisClient.del(redisKey),
+  ]);
+  return true;
 };

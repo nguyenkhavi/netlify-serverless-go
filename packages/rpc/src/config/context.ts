@@ -9,7 +9,8 @@ const getRequestClient = (req: FastifyRequest) => {
   const parser = new UAParser(browserString); // you need to pass the user-agent for nodejs
   const userAgent = parser.getResult();
   const ipAddress = req['ip'];
-  return { userAgent, ipAddress };
+  const origin = headers.origin as string;
+  return { userAgent, ipAddress, origin };
 };
 
 export const createTRPCContext = async (opts: CreateFastifyContextOptions) => {

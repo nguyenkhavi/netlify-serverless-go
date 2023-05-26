@@ -1,5 +1,6 @@
 import z from 'zod';
 import { EActivityAction } from '@prisma/client';
+import { ZPassword, ZPhoneSchema } from '_@rpc/config/schemas';
 
 export const verifyInquirySchema = z
   .object({
@@ -99,3 +100,19 @@ export const logoutSchema = z.object({
 });
 
 export type Logout = z.infer<typeof logoutSchema>;
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+  username: z.string(),
+  phone: ZPhoneSchema,
+  dob: z.string().datetime(),
+  newPassword: ZPassword,
+});
+
+export type TForgotPassword = z.infer<typeof forgotPasswordSchema>;
+
+export const verifyForgotPasswordTokenSchema = z.object({
+  token: z.string(),
+});
+
+export type TVerifyForgotPasswordToken = z.infer<typeof verifyForgotPasswordTokenSchema>;

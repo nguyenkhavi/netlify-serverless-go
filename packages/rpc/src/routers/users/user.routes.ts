@@ -1,19 +1,22 @@
-import { router, protectedRouter } from '../../config/router';
+import { router, protectedRouter, publicProcedure } from '../../config/router';
 import { paginationSchema } from '../../config/schemas';
-import { logout } from './user.services';
+import { logout, verifyForgotPasswordToken } from './user.services';
 import {
   connectIGSchema,
   connectWalletSchema,
   createUserActivitySchema,
+  forgotPasswordSchema,
   setKYCSchema,
   closeSessionSchema,
   closeAllSessionSchema,
   logoutSchema,
+  verifyForgotPasswordTokenSchema,
 } from '_@rpc/routers/users/user.schemas';
 import {
   connectInstagram,
   connectWeb3Wallet,
   createUserActivity,
+  forgotPassword,
   getUserActivities,
   setKYCInfo,
   twitterObtainOauthAccessToken,
@@ -61,6 +64,12 @@ export const userRouters = router({
     .mutation(({ input }) => closeAllSession(input)),
 
   logout: protectedRouter.input(logoutSchema).mutation(({ input }) => logout(input)),
+  forgotPassword: publicProcedure
+    .input(forgotPasswordSchema)
+    .mutation(({ input, ctx }) => forgotPassword(input, ctx.requestClient)),
+  verifyForgotPasswordToken: publicProcedure
+    .input(verifyForgotPasswordTokenSchema)
+    .mutation(({ input, ctx }) => verifyForgotPasswordToken(input, ctx.requestClient)),
 });
 
 export type UserRouter = typeof userRouters;
