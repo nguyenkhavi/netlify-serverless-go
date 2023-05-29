@@ -4,6 +4,7 @@ const utilitiesPlugin = require('./tailwind-plugins/utilities');
 const variantsPlugin = require('./tailwind-plugins/variants');
 const spacingPlugin = require('./tailwind-plugins/spacing');
 const buttonPlugin = require('./tailwind-plugins/button');
+const inputPlugin = require('./tailwind-plugins/input');
 const { join } = require('path');
 
 /** @type {import('tailwindcss').Config} */
@@ -281,5 +282,6 @@ module.exports = {
     variantsPlugin,
     spacingPlugin({ spacing: 100 }),
     buttonPlugin,
+    inputPlugin,
   ],
 };
