@@ -1,6 +1,15 @@
+import { updateUserInformationSchema } from './user.schemas';
 import { router, protectedRouter, publicProcedure } from '../../config/router';
 import { paginationSchema } from '../../config/schemas';
-import { logout, verifyForgotPasswordToken } from './user.services';
+import {
+  logout,
+  verifyForgotPasswordToken,
+  getUserShippingAddresses,
+  createUserShippingAddress,
+  updateUserShippingAddress,
+  updateUserInformation,
+  getDefaultUserShippingAddress,
+} from './user.services';
 import {
   connectIGSchema,
   connectWalletSchema,
@@ -11,6 +20,8 @@ import {
   closeAllSessionSchema,
   logoutSchema,
   verifyForgotPasswordTokenSchema,
+  createShippingAddressSchema,
+  updateShippingAddressSchema,
 } from '_@rpc/routers/users/user.schemas';
 import {
   connectInstagram,
@@ -70,6 +81,26 @@ export const userRouters = router({
   verifyForgotPasswordToken: publicProcedure
     .input(verifyForgotPasswordTokenSchema)
     .mutation(({ input, ctx }) => verifyForgotPasswordToken(input, ctx.requestClient)),
+
+  getUserShippingAddress: protectedRouter.query(({ ctx }) =>
+    getUserShippingAddresses(ctx.auth.userId),
+  ),
+
+  getDefaultUserShippingAddress: protectedRouter.query(({ ctx }) =>
+    getDefaultUserShippingAddress(ctx.auth.userId),
+  ),
+
+  createUserShippingAddress: protectedRouter
+    .input(createShippingAddressSchema)
+    .mutation(({ input, ctx }) => createUserShippingAddress(input, ctx.auth.userId)),
+
+  updateUserShippingAddress: protectedRouter
+    .input(updateShippingAddressSchema)
+    .mutation(({ input }) => updateUserShippingAddress(input)),
+
+  updateUserInformation: protectedRouter
+    .input(updateUserInformationSchema)
+    .mutation(({ input, ctx }) => updateUserInformation(input, ctx.auth.userId)),
 });
 
 export type UserRouter = typeof userRouters;

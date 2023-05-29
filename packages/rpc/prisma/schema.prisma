@@ -56,13 +56,15 @@ model Address {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  country             String?
-  state               String?
-  streetAddress       String?
-  secondStreetAddress String?
-  apartmentNumber     String?
-  postCode            String?
-  contactNumber       String?
+  country               String?
+  state                 String?
+  streetAddress         String?
+  secondStreetAddress   String?
+  apartmentNumber       String?
+  postCode              String?
+  phoneNumber           String?
+  phoneCode             String?
+  additionalInformation String?
 
   isDefault Boolean @default(false)
 

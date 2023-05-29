@@ -102,7 +102,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
         ) : null}
 
         <Show when={hint}>
-          <p className="mt-1.5 text-body3 text-text-50">{hint}</p>
+          <p className="text-body3 text-text-50 mt-1.5">{hint}</p>
         </Show>
       </div>
     );

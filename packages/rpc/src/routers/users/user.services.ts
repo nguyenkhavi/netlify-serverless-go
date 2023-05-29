@@ -8,13 +8,15 @@ import {
   Logout,
   TForgotPassword,
   TVerifyForgotPasswordToken,
+  CreateShippingAddress,
+  UpdateShippingAddress,
+  UpdateUserInformation,
 } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 import { verifyInquiryId } from '../../services/persona';
 import { getValidUser, updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
 import { generateSignedMessage } from '../../config/utils';
-import {} from './user.schemas';
 import { getIO } from '_@rpc/services/socket/socket';
 import { clerkClient } from '@clerk/fastify';
 import { ethers } from 'ethers';
@@ -205,4 +207,45 @@ export const verifyForgotPasswordToken = async (
     redisClient.del(redisKey),
   ]);
   return true;
+};
+export const createUserShippingAddress = async (address: CreateShippingAddress, userId: string) => {
+  return prisma.address.create({
+    data: { ...address, userId },
+  });
+};
+
+export const getUserShippingAddresses = async (userId: string) => {
+  return prisma.address.findMany({
+    where: {
+      userId: userId,
+    },
+  });
+};
+
+export const getDefaultUserShippingAddress = async (userId: string) => {
+  return prisma.address.findFirst({
+    where: {
+      userId: userId,
+      isDefault: true,
+    },
+  });
+};
+
+export const updateUserShippingAddress = async (address: UpdateShippingAddress) => {
+  const { id, ...data } = address;
+
+  return prisma.address.update({
+    where: {
+      id,
+    },
+    data,
+  });
+};
+
+export const updateUserInformation = async (userInfo: UpdateUserInformation, userId: string) => {
+  const publicData = await clerkClient.users.getUser(userId);
+
+  return clerkClient.users.updateUser(userId, {
+    publicMetadata: { ...publicData.publicMetadata, ...userInfo },
+  });
 };

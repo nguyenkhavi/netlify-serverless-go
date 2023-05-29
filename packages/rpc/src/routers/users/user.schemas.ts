@@ -116,3 +116,45 @@ export const verifyForgotPasswordTokenSchema = z.object({
 });
 
 export type TVerifyForgotPasswordToken = z.infer<typeof verifyForgotPasswordTokenSchema>;
+
+export const createShippingAddressSchema = z.object({
+  country: z.string().optional(),
+  state: z.string().optional(),
+  streetAddress: z.string().optional(),
+  secondStreetAddress: z.string().optional(),
+  apartmentNumber: z.string().optional(),
+  postCode: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  phoneCode: z.string().optional(),
+  additionalInformation: z.string().optional(),
+  isDefault: z.boolean().optional(),
+});
+
+export type CreateShippingAddress = z.infer<typeof createShippingAddressSchema>;
+
+export const updateShippingAddressSchema = z.object({
+  id: z.string(),
+  country: z.string().optional(),
+  state: z.string().optional(),
+  streetAddress: z.string().optional(),
+  secondStreetAddress: z.string().optional(),
+  apartmentNumber: z.string().optional(),
+  postCode: z.string().optional(),
+  phoneNumber: z.string().optional(),
+  phoneCode: z.string().optional(),
+  additionalInformation: z.string().optional(),
+  isDefault: z.boolean().optional(),
+});
+
+export type UpdateShippingAddress = z.infer<typeof updateShippingAddressSchema>;
+
+export const updateUserInformationSchema = z.object({
+  coverPicture: z.string().optional(),
+  avatar: z.string().optional(),
+  aboutMe: z.string().optional(),
+  description: z.string().optional(),
+  twitterId: z.string().optional(),
+  instagramId: z.string().optional(),
+});
+
+export type UpdateUserInformation = z.infer<typeof updateUserInformationSchema>;

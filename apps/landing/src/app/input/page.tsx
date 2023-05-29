@@ -29,7 +29,7 @@ export default function Page() {
     <FormProvider {...methods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-[15px] bg-secondary-200 px-[--px] py-30"
+        className="bg-secondary-200 py-30 grid gap-[15px] px-[--px]"
       >
         <FormItem label="Email" name="email">
           <FormInput
