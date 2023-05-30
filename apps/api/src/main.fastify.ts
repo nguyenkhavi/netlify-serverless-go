@@ -2,7 +2,6 @@ import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
 import fastify from 'fastify';
 
 import cors from '@fastify/cors';
-import { clerkPlugin } from '@clerk/fastify';
 import { appRouter } from '_@rpc/app.router';
 import { createTRPCContext } from '_@rpc/config/context';
 import { redisClient } from '_@rpc/services/redis';
@@ -15,7 +14,6 @@ server.register(fastifyTRPCPlugin, {
   prefix: '',
   trpcOptions: { router: appRouter, createContext: createTRPCContext },
 });
-// server.register(clerkPlugin);
 
 initSocket(server.server);
 

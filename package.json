@@ -5,7 +5,8 @@
   "scripts": {
     "migrate": "prisma format && env-cmd -f apps/api/.env prisma migrate dev --name",
     "generate": "prisma format && prisma generate",
-    "seed": "npx ts-node prisma/seeds/seed.ts"
+    "seed": "npx ts-node prisma/seeds/seed.ts",
+    "getstream:migrate": "env-cmd -f apps/api/.env node packages/rpc/src/services/getstream/migrate.mjs"
   },
   "private": true,
   "dependencies": {
@@ -50,6 +51,8 @@
     "sharp": "^0.32.1",
     "socket.io": "^4.6.1",
     "socket.io-client": "^4.6.1",
+    "stream-chat": "^8.8.0",
+    "stream-chat-react": "^10.8.1",
     "superjson": "^1.12.2",
     "svix": "^0.85.1",
     "tslib": "^2.5.0",

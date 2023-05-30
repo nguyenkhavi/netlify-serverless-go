@@ -6,7 +6,7 @@ const ConnectTwitter = () => {
   return (
     <>
       <div>ConnectTwitter</div>
-      <ConnectTwitterBtn />
+      {/* <ConnectTwitterBtn /> */}
       <SignInPage />
     </>
   );
