@@ -25,7 +25,7 @@ const baseClasses = [
   'border-[.5px] border-text-10',
   'bg-secondary/70 w-full',
   'text-text-50 placeholder:text-text-20',
-  'data-[invalid="true"]:shadow-[inset_0_1px] data-[invalid="true"]:shadow-error',
+  'data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error data-[valid="false"]:rounded-none',
 ];
 
 type TElement = HTMLInputElement | HTMLTextAreaElement;
@@ -37,12 +37,21 @@ export type BaseInputProps = Assign<
     type?: HTMLInputTypeAttribute;
     hint?: string;
     trailingComponent?: ReactNode;
+    isValid?: boolean;
   }
 >;
 
 const BaseInput = forwardRef<TElement, BaseInputProps>(
   (
-    { tag = 'input', type = 'text', hint, trailingComponent, className = '', ...props },
+    {
+      tag = 'input',
+      type = 'text',
+      hint,
+      trailingComponent,
+      isValid = true,
+      className = '',
+      ...props
+    },
     forwardedRef,
   ) => {
     const Tag = tag;
@@ -62,6 +71,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
           {...(props as any)}
           ref={inputRef}
           {...(tag === 'input' ? { type: innerType } : {})}
+          data-valid={isValid}
           className={classcat([
             baseClasses,
             tag === 'input' ? 'input-sm' : 'textarea-sm',
@@ -99,6 +109,5 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
   },
 );
 
-export default BaseInput;
-
 BaseInput.displayName = 'BaseInput';
+export default BaseInput;

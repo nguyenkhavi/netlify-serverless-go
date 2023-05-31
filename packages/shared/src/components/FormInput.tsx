@@ -4,7 +4,10 @@ import { useFormContext } from 'react-hook-form';
 import BaseInput, { BaseInputProps } from './BaseInput';
 
 export default function FormInput({ name = '', ...props }: BaseInputProps) {
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { isValid, submitCount },
+  } = useFormContext();
 
-  return <BaseInput {...props} {...register(name)} />;
+  return <BaseInput {...props} {...register(name)} isValid={Boolean(!submitCount || isValid)} />;
 }
