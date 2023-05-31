@@ -34,7 +34,7 @@ export default function FilterPrice() {
       <div className="mt-3.75 flex">
         <input type="text" className={classcat([inputClasses])} placeholder="$ Min" />
         <input type="text" className={classcat([inputClasses])} placeholder="$ Max" />
-        <Button className="btnmd h-7.5 w-14.75 px-0">Go</Button>
+        <Button className="btnmd h-7.5 px-0 ow:w-14.75 ow:rounded">Go</Button>
       </div>
       <button className="mx-auto mt-11 block cursor-pointer text-center text-underline underline">
         Clear filters

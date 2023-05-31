@@ -1,43 +1,21 @@
+'use client'
+//THIRD PARTY MODULES
+import { MOCK_DATA_ITEM_4 } from '_@landing/mock/Item'
 //LAYOUT, COMPONENTS
-import MainCard from '_@landing/components/card/MainCard';
+import MainCard from '_@landing/components/card/MainCard'
 //RELATIVE MODULES
-import ContentBox from './ContentBox';
-
-const MOCK_DATA = [
-  {
-    url: 'images/marketplace/trending.png',
-    name: 'Golden Hand',
-    prices: '0.08 BUSD',
-  },
-  {
-    url: 'images/marketplace/trending.png',
-    name: 'Golden Hand',
-    prices: '0.08 BUSD',
-  },
-  {
-    url: 'images/marketplace/trending.png',
-    name: 'Golden Hand',
-    prices: '0.08 BUSD',
-  },
-  {
-    url: 'images/marketplace/trending.png',
-    name: 'Golden Hand',
-    prices: '0.08 BUSD',
-  },
-];
+import ContentBox from './ContentBox'
 
 export default function TrendingInArts() {
   return (
     <ContentBox title="Trending in Arts" pathViewAll="#">
-      {MOCK_DATA.map((item, index) => (
+      {MOCK_DATA_ITEM_4.map((item, index) => (
         <MainCard
           data-sal="slide-up"
           data-sal-duration="800"
           data-sal-delay={index * 50}
           key={index}
-          url={item.url}
-          name={item.name}
-          prices={item.prices}
+          value={item}
         />
       ))}
     </ContentBox>

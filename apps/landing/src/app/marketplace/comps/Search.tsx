@@ -57,7 +57,7 @@ export default function Search() {
           <div className="mt-7.5 text-center text-underline text-text-80 underline">See all</div>
         }
       />
-      <Button className="btnsm ml-2 hidden p-0 ow:w-29.25 lg:block" onClick={_handleSearch}>
+      <Button className="ml-2 hidden p-0 ow:w-29.25 lg:block" onClick={_handleSearch}>
         Search
       </Button>
     </div>

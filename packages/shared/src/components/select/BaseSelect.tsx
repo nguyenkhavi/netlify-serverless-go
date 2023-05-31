@@ -5,7 +5,7 @@ import * as Select from '@radix-ui/react-select';
 //SHARED
 import ChevronBottomIcon from '_@shared/icons/ChevronBottomIcon';
 //TYPES MODULES
-import type { SelectProps } from '@radix-ui/react-select';
+import type { SelectProps, SelectContentProps } from '@radix-ui/react-select';
 
 const baseClasses = [
   'p-[5px] h-8.75 bg-black',
@@ -19,13 +19,16 @@ export type BaseSelectProps = {
   placeholder?: string;
   owStyles?: {
     triggerClasses?: string;
+    itemClasses?: string;
+    contentClasses?: string;
   };
   options: { label: string; value: string }[];
   seeMore?: React.ReactNode;
+  selectContentProps?: SelectContentProps;
 } & SelectProps;
 
 const BaseSelect = React.forwardRef<HTMLButtonElement, BaseSelectProps>(
-  ({ name, placeholder, owStyles, options, seeMore, ...props }, ref) => {
+  ({ name, placeholder, owStyles, options, seeMore, selectContentProps, ...props }, ref) => {
     return (
       <Select.Root {...props}>
         <Select.Trigger ref={ref} className={classcat([baseClasses, owStyles?.triggerClasses])}>
@@ -36,13 +39,23 @@ const BaseSelect = React.forwardRef<HTMLButtonElement, BaseSelectProps>(
           </Select.Icon>
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="z-dropdown overflow-hidden rounded-e rounded-s border border-text-30 bg-black pb-4 pt-7">
-            <Select.Viewport className="[&>[role~=option]:not(:last-child)]:mb-3.75">
+          <Select.Content
+            className={classcat([
+              'z-dropdown overflow-hidden rounded-e rounded-s border border-text-30 bg-black pb-4 pt-7',
+              owStyles?.contentClasses,
+            ])}
+            {...selectContentProps}
+          >
+            <Select.Viewport>
               {options.map((option, index) => (
                 <Select.Item
                   key={index}
                   value={option.value}
-                  className="data-[highlighted]:text-red flex h-[25px] select-none items-center px-4.5 text-text-80"
+                  className={classcat([
+                    'data-[highlighted]:text-red flex h-[25px] cursor-pointer select-none items-center px-4.5 text-text-80',
+                    'my-1.75 outline-none hover:text-primary',
+                    owStyles?.itemClasses,
+                  ])}
                 >
                   <Select.ItemText>{option.label}</Select.ItemText>
                 </Select.Item>
