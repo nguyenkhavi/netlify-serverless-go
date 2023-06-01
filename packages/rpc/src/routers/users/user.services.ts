@@ -17,8 +17,7 @@ import { queryIGUserNode } from '../../services/instagram';
 import { verifyInquiryId } from '../../services/persona';
 import { getValidUser, updateInstagramUid, updatePersonaInquiryUid } from '../clerk/clerk.services';
 import { generateSignedMessage } from '../../config/utils';
-import { getIO } from '_@rpc/services/socket/socket';
-import { clerkClient } from '@clerk/fastify';
+// import { getIO } from '_@rpc/services/socket/socket';
 import { ethers } from 'ethers';
 import { Context } from '../../config/context';
 import { TPaginationInput } from '../../config/schemas';
@@ -26,8 +25,10 @@ import { EActivityAction, Prisma } from '@prisma/client';
 import { prisma } from '_@rpc/config/prisma';
 import { generateResetPasswordToken, verifyResetPasswordToken } from '_@rpc/services/jwt';
 import { TRPCError } from '@trpc/server';
-import { redisClient } from '_@rpc/services/redis';
+// import { redisClient } from '_@rpc/services/redis';
 import { _30_SECONDS_ } from '_@rpc/constants/time';
+
+import { clerkClient } from '@clerk/nextjs';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -109,42 +110,42 @@ export const twitterObtainOauthAccessToken = async (
     },
   });
 };
-export const closeSession = async (input: CloseSession) => {
-  const io = getIO();
-  const socket = io.sockets.sockets.get(input.socketId);
+// export const closeSession = async (input: CloseSession) => {
+//   const io = getIO();
+//   const socket = io.sockets.sockets.get(input.socketId);
 
-  const closedSession = await clerkClient.sessions.revokeSession(input.sessionId);
+//   const closedSession = await clerkClient.sessions.revokeSession(input.sessionId);
 
-  socket?.emit('closeSession');
+//   socket?.emit('closeSession');
 
-  return closedSession.id;
-};
+//   return closedSession.id;
+// };
 
-export const closeAllSession = async (input: CloseAllSession) => {
-  const io = getIO();
+// export const closeAllSession = async (input: CloseAllSession) => {
+//   const io = getIO();
 
-  const socketSessionUsers = await io.in(input.userId).fetchSockets();
+//   const socketSessionUsers = await io.in(input.userId).fetchSockets();
 
-  const restSessionUser = socketSessionUsers.filter(
-    (ssu) => ssu.data.sessionId !== input.currentSessionId,
-  );
+//   const restSessionUser = socketSessionUsers.filter(
+//     (ssu) => ssu.data.sessionId !== input.currentSessionId,
+//   );
 
-  const closedSessions = await Promise.all(
-    restSessionUser.map((item) => clerkClient.sessions.revokeSession(item.data.sessionId)),
-  );
+//   const closedSessions = await Promise.all(
+//     restSessionUser.map((item) => clerkClient.sessions.revokeSession(item.data.sessionId)),
+//   );
 
-  restSessionUser.forEach((item) => item.emit('closeSession'));
+//   restSessionUser.forEach((item) => item.emit('closeSession'));
 
-  return closedSessions;
-};
+//   return closedSessions;
+// };
 
-export const logout = async (input: Logout) => {
-  const io = getIO();
-  const socket = io.sockets.sockets.get(input.socketId);
-  await socket?.leave(input.userId);
+// export const logout = async (input: Logout) => {
+//   const io = getIO();
+//   const socket = io.sockets.sockets.get(input.socketId);
+//   await socket?.leave(input.userId);
 
-  io.to(input.userId).emit('removeUserSession', input.currentSessionId);
-};
+//   io.to(input.userId).emit('removeUserSession', input.currentSessionId);
+// };
 
 const generateForgotPasswordUrl = (origin: string, token: string) => {
   return `${origin}/mail-handler/verify-email?token=${token}`;
@@ -158,10 +159,10 @@ export const forgotPassword = async (
 ) => {
   const user = await getValidUser(input);
   const token = generateResetPasswordToken({ userId: user.id });
-  const redisKey = generateForgotPasswordRedisKey(user.id, token);
-  await redisClient.set(redisKey, input.newPassword, {
-    EX: _30_SECONDS_,
-  });
+  // const redisKey = generateForgotPasswordRedisKey(user.id, token);
+  // await redisClient.set(redisKey, input.newPassword, {
+  //   EX: _30_SECONDS_,
+  // });
   const forgotPasswordUrl = generateForgotPasswordUrl(requestClient.origin, token);
   const sent = await clerkClient.emails.createEmail({
     emailAddressId: user.primaryEmailAddressId || '',
@@ -172,80 +173,39 @@ export const forgotPassword = async (
   return sent;
 };
 
-export const verifyForgotPasswordToken = async (
-  input: TVerifyForgotPasswordToken,
-  requestClient: Context['requestClient'],
-) => {
-  const { payload, valid } = verifyResetPasswordToken(input.token);
-  if (!valid || !payload) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Token invalid',
-    });
-  }
-  const redisKey = generateForgotPasswordRedisKey(payload.userId, input.token);
+// export const verifyForgotPasswordToken = async (
+//   input: TVerifyForgotPasswordToken,
+//   requestClient: Context['requestClient'],
+// ) => {
+//   const { payload, valid } = verifyResetPasswordToken(input.token);
+//   if (!valid || !payload) {
+//     throw new TRPCError({
+//       code: 'BAD_REQUEST',
+//       message: 'Token invalid',
+//     });
+//   }
+//   const redisKey = generateForgotPasswordRedisKey(payload.userId, input.token);
 
-  const newPassword = await redisClient.get(redisKey);
-  if (!newPassword) {
-    throw new TRPCError({
-      code: 'BAD_REQUEST',
-      message: 'Token invalid',
-    });
-  }
-  await Promise.all([
-    clerkClient.users.updateUser(payload.userId, {
-      password: newPassword,
-    }),
-    createUserActivity(
-      {
-        action: EActivityAction.CHANGE_PASSWORD,
-        location: null,
-      },
-      payload.userId,
-      requestClient,
-    ),
-    redisClient.del(redisKey),
-  ]);
-  return true;
-};
-export const createUserShippingAddress = async (address: CreateShippingAddress, userId: string) => {
-  return prisma.address.create({
-    data: { ...address, userId },
-  });
-};
-
-export const getUserShippingAddresses = async (userId: string) => {
-  return prisma.address.findMany({
-    where: {
-      userId: userId,
-    },
-  });
-};
-
-export const getDefaultUserShippingAddress = async (userId: string) => {
-  return prisma.address.findFirst({
-    where: {
-      userId: userId,
-      isDefault: true,
-    },
-  });
-};
-
-export const updateUserShippingAddress = async (address: UpdateShippingAddress) => {
-  const { id, ...data } = address;
-
-  return prisma.address.update({
-    where: {
-      id,
-    },
-    data,
-  });
-};
-
-export const updateUserInformation = async (userInfo: UpdateUserInformation, userId: string) => {
-  const publicData = await clerkClient.users.getUser(userId);
-
-  return clerkClient.users.updateUser(userId, {
-    publicMetadata: { ...publicData.publicMetadata, ...userInfo },
-  });
-};
+//   // const newPassword = await redisClient.get(redisKey);
+//   if (!newPassword) {
+//     throw new TRPCError({
+//       code: 'BAD_REQUEST',
+//       message: 'Token invalid',
+//     });
+//   }
+//   await Promise.all([
+//     clerkClient.users.updateUser(payload.userId, {
+//       password: newPassword,
+//     }),
+//     createUserActivity(
+//       {
+//         action: EActivityAction.CHANGE_PASSWORD,
+//         location: null,
+//       },
+//       payload.userId,
+//       requestClient,
+//     ),
+//     redisClient.del(redisKey),
+//   ]);
+//   return true;
+// };

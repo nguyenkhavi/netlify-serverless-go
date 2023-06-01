@@ -1,15 +1,15 @@
 import axios from 'axios';
 import { HmacSHA1, enc } from 'crypto-js';
 
-const consumerKey = process.env.TWITTER_CONSUMER_KEY as string;
-const consumerSecret = process.env.TWITTER_CONSUMER_SECRET as string;
-const twitterApiBaseUrl = process.env.TWITTER_API_BASE_URL as string;
+const consumerKey = process.env.TWITTER_CONSUMER_KEY || '';
+const consumerSecret = process.env.TWITTER_CONSUMER_SECRET || '';
+const twitterApiBaseUrl = process.env.TWITTER_API_BASE_URL || '';
 
 const twitterAxiosInstance = axios.create({
   baseURL: twitterApiBaseUrl,
 });
 
-interface RequestTokenResponse {
+export interface RequestTokenResponse {
   oauth_token: string;
   oauth_token_secret: string;
   oauth_callback_confirmed?: string;
@@ -92,7 +92,7 @@ const requestTokenSignature = ({
     oauth_nonce: Math.random()
       .toString(36)
       .replace(/[^a-z]/, '')
-      .substr(2),
+      .substring(2),
   };
 
   return makeSignature(params, method, apiUrl);
@@ -127,7 +127,7 @@ const makeSignature = (params: any, method: string, apiUrl: string) => {
     .reduce((prev: string, el: any) => {
       return (prev += `&${el}=${params[el]}`);
     }, '')
-    .substr(1);
+    .substring(1);
 
   const signatureBaseString = `${method.toUpperCase()}&${encodeURIComponent(
     apiUrl,
@@ -147,5 +147,5 @@ const makeSignature = (params: any, method: string, apiUrl: string) => {
     .reduce((prev: string, el: any) => {
       return (prev += `,${el}="${paramsWithSignature[el]}"`);
     }, '')
-    .substr(1);
+    .substring(1);
 };

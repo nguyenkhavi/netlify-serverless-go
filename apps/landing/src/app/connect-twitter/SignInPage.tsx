@@ -18,11 +18,11 @@ const SignInPage = () => {
   const [code, setCode] = useState('');
   const { isLoaded, signIn, setActive } = useSignIn();
   const { session } = useSession();
-  const { mutate: logout } = api.user.logout.useMutation();
+  const { mutate: logout } = api['user-logout'].useMutation();
   async function handleSignIn() {
     signIn
       ?.create({
-        identifier: 'vi.nguyen@mailinator.com',
+        identifier: 'minh1@mailinator.com',
         password: 'NkviDev@1233',
       })
       .then((result) => {
@@ -46,9 +46,9 @@ const SignInPage = () => {
         },
         birthday: new Date().toISOString(),
         gender: 'male',
-        username: 'vidzai',
+        username: 'minh2mai',
         password: 'NkviDev@1233',
-        emailAddress: 'vi.nguyen@mailinator.com',
+        emailAddress: 'minh2@mailinator.com',
         firstName: 'KhaVi',
         lastName: 'Nguyen',
       });

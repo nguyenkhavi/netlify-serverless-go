@@ -1,7 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server';
 import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify';
 import { FastifyRequest } from 'fastify';
-import UAParser from 'ua-parser-js';
+import * as UAParser from 'ua-parser-js';
 
 const getRequestClient = (req: FastifyRequest) => {
   const headers = req.headers;

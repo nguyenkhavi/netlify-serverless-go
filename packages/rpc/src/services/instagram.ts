@@ -1,5 +1,5 @@
 import axios from 'axios';
-import FormData from 'form-data';
+import * as FormData from 'form-data';
 import { exchangeCodeForTokenSchema } from '../routers/users/user.schemas';
 
 const instagramClient = axios.create({
@@ -8,7 +8,7 @@ const instagramClient = axios.create({
     Authorization: `Bearer ${process.env.PERSONA_API_KEY}`,
   },
 });
-const exchangeCodeForAccessToken = (code: string) => {
+const exchangeCodeForAccessToken = async (code: string) => {
   const formData = new FormData();
   formData.append('app_id', process.env.INSTAGRAM_APP_ID || '');
   formData.append('app_secret', process.env.INSTAGRAM_APP_SECRET || '');

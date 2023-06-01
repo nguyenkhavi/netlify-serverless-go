@@ -1,10 +1,15 @@
+import { clerkClient } from '@clerk/nextjs';
 import { TRPCError, initTRPC } from '@trpc/server';
-import SuperJSON from 'superjson';
-import { createTRPCContext } from '../config/context';
-import { decodeToken, isInWhiteList } from '../services/session';
+import type { NextRequest } from 'next/server';
+import { parse } from 'cookie';
+export interface Context {
+  auth?: {
+    userId: string;
+  };
+  req: NextRequest;
+}
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
-  transformer: SuperJSON,
+const t = initTRPC.context<Context>().create({
   errorFormatter({ shape }) {
     return shape;
   },
@@ -16,19 +21,32 @@ export const publicProcedure = t.procedure;
 export const mergeRouter = t.mergeRouters;
 
 export const protectedRouter = t.procedure.use(
-  t.middleware(async ({ ctx, next }) => {
-    const token = ctx.req.headers.cookie?.split('__session=')[1];
-    const decoded = decodeToken(token);
-    const userId = await isInWhiteList(decoded.sid);
+  t.middleware(async (opts) => {
+    const { ctx, next } = opts;
 
-    if (!userId) {
-      throw new TRPCError({ code: 'UNAUTHORIZED' });
-    }
+    const cookies = parse(ctx.req.headers.get('cookie') || '');
+    const cookieToken = cookies['__session'];
+
+    const authorization = ctx.req.headers.get('authorization');
+    const headerToken = authorization ? authorization.replace('Bearer ', '') : '';
+
+    const token = cookieToken || headerToken;
+    if (!token) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+    const request = await clerkClient.authenticateRequest({
+      headerToken: headerToken,
+      cookieToken: token,
+      apiKey: process.env.CLERK_PUBLISHABLE_KEY || '',
+      secretKey: process.env.CLERK_SECRET_KEY || '',
+      publishableKey: process.env.CLERK_PUBLISHABLE_KEY || '',
+      host: '',
+      frontendApi: '',
+    });
+    const auth = request.toAuth();
+    if (!auth?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
 
     return next({
-      ctx: {
-        auth: { userId },
-      },
+      ctx: { auth },
     });
   }),
 );

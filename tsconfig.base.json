@@ -16,10 +16,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "_@api/*": ["apps/api/src/*"],
+      "@fleamint/rpc": ["packages/rpc/src/index.ts"],
+      "@fleamint/share": ["packages/share/src/index.ts"],
+      "_@rpc/*": ["packages/rpc/src/*"],
       "_@backoffice/*": ["apps/backoffice/src/*"],
       "_@landing/*": ["apps/landing/src/*"],
-      "_@rpc/*": ["packages/rpc/src/*"],
       "_@shared/*": ["packages/shared/src/*"]
     }
   },

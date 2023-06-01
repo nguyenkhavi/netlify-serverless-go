@@ -1,4 +1,22 @@
-import { SessionWithActivitiesResource } from '_@shared/stores/global/type';
+export interface SessionActivity {
+  id: string;
+  browserName?: string;
+  browserVersion?: string;
+  deviceType?: string;
+  ipAddress?: string;
+  city?: string;
+  country?: string;
+  isMobile?: boolean;
+}
+
+export interface SessionWithActivitiesResource {
+  id: string;
+  status: string;
+  expireAt: Date;
+  abandonAt: Date;
+  lastActiveAt: Date;
+  latestActivity: SessionActivity;
+}
 export interface SocketData {
   userId: string;
   sessionId: string;

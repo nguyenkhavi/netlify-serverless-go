@@ -20,5 +20,10 @@ const migrateGetstream = async () => {
   });
   const { grants } = await getstreamClient.getChannelType('messaging');
   console.log(`[*]: GETSTREAM MESSAGING GRANTS:`, grants);
+  await getstreamClient.upsertUser({
+    id: 'minh1',
+    role: 'admin',
+  });
+  // user object is now {id: userID, role: 'admin', book: 'dune'}
 };
 migrateGetstream();

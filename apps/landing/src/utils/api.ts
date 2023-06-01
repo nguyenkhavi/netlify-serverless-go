@@ -1,5 +1,4 @@
 //THIRD PARTY MODULES
-import SuperJSON from 'superjson';
 import { createTRPCNext } from '@trpc/next';
 import { type AppRouter } from '_@rpc/app.router';
 /**
@@ -12,15 +11,11 @@ import { httpBatchLink, loggerLink } from '@trpc/client';
 //HOOK
 import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
 
-const getBaseUrl = () => {
-  return process.env.NEXT_PUBLIC_TRPC_URL;
-};
-
 /** A set of type-safe react-query hooks for your tRPC API. */
 export const api = createTRPCNext<AppRouter>({
   config() {
     return {
-      transformer: SuperJSON,
+      // transformer: SuperJSON,
       /**
        * Links used to determine request flow from client to server.
        *
@@ -33,7 +28,7 @@ export const api = createTRPCNext<AppRouter>({
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: `${getBaseUrl()}`,
+          url: `/api/trpc`,
           fetch(url, options) {
             return fetch(url, {
               ...options,

@@ -1,5 +1,5 @@
-import { clerkClient } from '@clerk/fastify';
-import dayjs from 'dayjs';
+import { clerkClient } from '@clerk/nextjs';
+import * as dayjs from 'dayjs';
 import {
   ESessionEventType,
   SessionWebhookInput,

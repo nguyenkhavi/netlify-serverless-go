@@ -34,10 +34,9 @@ Build details: <${env.BUILD_URL}/display/redirect|See in web console>
                                 ]) {
                                     sh '''
                                     scripts/get-env.sh $VAULT_TOKEN $VAULT_URL $BRANCH &&
-                                    pnpm i --frozen-lockfile && pnpm run generate &&
+                                    pnpm i && pnpm run generate &&
                                     pnpm nx affected:build --base=origin/$BRANCH~1 --head=origin/$BRANCH
                                     '''
-                                    docker.build("$PROJECT_NAME:api-$BRANCH", "-f apps/api/Dockerfile .")
                                     docker.build("$PROJECT_NAME:landing-$BRANCH", "-f apps/landing/Dockerfile .")
                                 }
 
@@ -58,7 +57,7 @@ Build details: <${env.BUILD_URL}/display/redirect|See in web console>
                                 string(credentialsId: 'vault-token', variable: 'VAULT_TOKEN')
                             ]) {
                                 sh '''
-                                ssh -i $identity dong@localhost \"cd /home/dong/code/fleamint && docker compose up --force-recreate -d landing api\"
+                                ssh -i $identity dong@localhost \"cd /home/dong/code/fleamint && docker compose up --force-recreate -d landing\"
                                 '''
                             }
                         }

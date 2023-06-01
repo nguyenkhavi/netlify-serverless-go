@@ -1,4 +1,4 @@
-import z from 'zod';
+import { z } from 'zod';
 import { EActivityAction } from '@prisma/client';
 import { ZPassword, ZPhoneSchema } from '_@rpc/config/schemas';
 

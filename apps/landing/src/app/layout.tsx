@@ -28,7 +28,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
           <body>
             <Header />
-            <SessionProvider>{children}</SessionProvider>
+            {/* <SessionProvider>{children}</SessionProvider> */}
+            {children}
             <Footer />
           </body>
         </html>

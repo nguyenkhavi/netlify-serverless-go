@@ -15,10 +15,10 @@ type Action = {
 
 if (!process.env.NEXT_PUBLIC_TRPC_URL) throw new Error('NEXT_PUBLIC_TRPC_URL need define in env');
 
-const socket = io(process.env.NEXT_PUBLIC_TRPC_URL);
+// const socket = io(process.env.NEXT_PUBLIC_TRPC_URL);
 
 export const useSocketStore = create<State & Action>((set) => ({
-  socket,
+  socket: {},
   isJoinedSession: false,
   disconnectSocket: () => {
     const { socket } = useSocketStore.getState();

@@ -1,8 +1,9 @@
-import { router, protectedRouter } from '../../config/router';
+import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
 import { generateGetstreamUserToken } from '../getstream/getstream.services';
+
 export const getstreamRouters = router({
-  generateGetstreamUserToken: protectedRouter.mutation(({ ctx }) =>
-    generateGetstreamUserToken(ctx.auth.userId),
+  'getstream-get-user-token': publicProcedure.mutation(({ ctx }) =>
+    generateGetstreamUserToken('minh1'),
   ),
 });
 
