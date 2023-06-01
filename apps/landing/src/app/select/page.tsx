@@ -7,7 +7,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Button from '_@shared/components/Button';
 import FormSelect from '_@shared/components/FormSelect';
 
-const options = [
+const OPTIONS = [
   { value: '1', label: 'January' },
   { value: '2', label: 'February' },
   { value: '3', label: 'March' },
@@ -52,7 +52,7 @@ export default function Page() {
             name="month"
             fieldLabel="Month"
             placeholder="Select a month"
-            options={options}
+            options={OPTIONS}
           />
 
           <Button type="submit" className="mt-5">
