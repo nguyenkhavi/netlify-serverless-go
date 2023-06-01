@@ -19,9 +19,9 @@ export type MainCardProps = {
   value: CardValue;
 };
 
-export default function MainCard({ view = 'grid', value }: MainCardProps) {
-  if (view === 'list') return <ListView value={value} />;
-  return <GridView value={value} />;
+export default function MainCard({ view = 'grid', value, ...props }: MainCardProps) {
+  if (view === 'list') return <ListView value={value} {...props} />;
+  return <GridView value={value} {...props} />;
 }
 
 function GridView({ value, ...props }: MainCardProps) {

@@ -1,22 +1,22 @@
 'use client';
 //THIRD PARTY MODULES
-import sal from 'sal.js'
-import 'sal.js/dist/sal.css'
-import classcat from 'classcat'
+import classcat from 'classcat';
+//HOOK
+import { useSalAnim } from '_@landing/hooks/useSalAnim';
 //RELATIVE MODULES
-import Ellipse from './comps/Ellipse'
-import ClientsSection from './comps/ClientsSection'
-import WelcomeSection from './comps/WelcomeSection'
-import ExchangeSection from './comps/ExchangeSection'
-import PartnersSection from './comps/PartnersSection'
-import HomeAdvHorizontal from './comps/HomeAdvHorizontal'
-import MarketplaceSection from './comps/MarketplaceSection'
-import AchievementsSection from './comps/AchievementsSection'
-import SocialNetworkSection from './comps/SocialNetworkSection'
-import FinanceVenturesSection from './comps/FinanceVenturesSection'
+import Ellipse from './comps/Ellipse';
+import ClientsSection from './comps/ClientsSection';
+import WelcomeSection from './comps/WelcomeSection';
+import ExchangeSection from './comps/ExchangeSection';
+import PartnersSection from './comps/PartnersSection';
+import HomeAdvHorizontal from './comps/HomeAdvHorizontal';
+import MarketplaceSection from './comps/MarketplaceSection';
+import AchievementsSection from './comps/AchievementsSection';
+import SocialNetworkSection from './comps/SocialNetworkSection';
+import FinanceVenturesSection from './comps/FinanceVenturesSection';
 
 export default function Home() {
-  sal();
+  useSalAnim();
   return (
     <main
       className={classcat([
