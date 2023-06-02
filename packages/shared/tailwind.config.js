@@ -5,11 +5,11 @@ const variantsPlugin = require('./tailwind-plugins/variants');
 const spacingPlugin = require('./tailwind-plugins/spacing');
 const buttonPlugin = require('./tailwind-plugins/button');
 const inputPlugin = require('./tailwind-plugins/input');
-const { join } = require('path');
+// const { join } = require('path');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [join(__dirname, 'src/**/*!(*.stories|*.spec).{ts,tsx,html}')],
+  // content: [join(__dirname, 'src/**/*!(*.stories|*.spec).{ts,tsx,html}')],
   theme: {
     screens: {
       xs: '375px',
