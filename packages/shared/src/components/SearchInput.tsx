@@ -6,10 +6,14 @@ import SearchIcon from '_@shared/icons/SearchIcon';
 //RELATIVE MODULES
 import BaseInput, { BaseInputProps } from './BaseInput';
 
-const SearchInput = React.forwardRef<HTMLInputElement, BaseInputProps>(
-  ({ name = '', className = '', ...props }, ref) => {
+type SearchInputProps = {
+  boxClasses?: string;
+} & BaseInputProps;
+
+const SearchInput = React.forwardRef<HTMLInputElement, SearchInputProps>(
+  ({ name = '', className = '', boxClasses = '', ...props }, ref) => {
     return (
-      <div className="relative">
+      <div className={classcat(['relative', boxClasses])}>
         <BaseInput
           ref={ref}
           {...props}

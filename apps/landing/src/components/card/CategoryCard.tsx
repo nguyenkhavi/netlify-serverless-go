@@ -5,7 +5,7 @@ export type CategoryCard = {
 
 export type CategoryCardProps = {
   value: CategoryCard;
-};
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export default function CategoryCard({ value, ...props }: CategoryCardProps) {
   return (

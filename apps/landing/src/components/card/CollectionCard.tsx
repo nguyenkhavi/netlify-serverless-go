@@ -1,7 +1,9 @@
 //THIRD PARTY MODULES
+import Link from 'next/link';
 import classcat from 'classcat';
 
 export type CollectionCard = {
+  id: number;
   url: string;
   name: string;
   prices: string;
@@ -20,7 +22,8 @@ export default function CollectionCard({ view, value }: CollectionCardProps) {
 
 function GridView({ value, ...props }: CollectionCardProps) {
   return (
-    <div
+    <Link
+      href={'/marketplace/collection/' + value.id}
       className="rounded-[10px] border border-[#303030] px-2.25 py-3.75 xlg:px-3.75 xlg:py-5"
       {...props}
     >
@@ -36,13 +39,14 @@ function GridView({ value, ...props }: CollectionCardProps) {
         <span>Volume</span>
         <span>{value.prices}</span>
       </div>
-    </div>
+    </Link>
   );
 }
 
 function ListView({ value, ...props }: CollectionCardProps) {
   return (
-    <div
+    <Link
+      href={'/marketplace/collection/' + value.id}
       className={classcat([
         'rounded-[10px] border border-[#303030] p-5 xlg:pb-5.5 xlg:pt-3.5',
         'md:flex',
@@ -71,6 +75,6 @@ function ListView({ value, ...props }: CollectionCardProps) {
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

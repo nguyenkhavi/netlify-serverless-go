@@ -3,6 +3,7 @@
 import FilterPrice from '_@landing/app/marketplace/comps/FilterPrice';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import MarketplaceBox from '_@landing/app/marketplace/comps/MarketplaceBox';
+import BrowseCategory from '_@landing/app/marketplace/comps/BrowseCategory';
 //LAYOUT, COMPONENTS
 import MarketplaceTab from '_@shared/components/tabs/MarketplaceTab';
 import BasePagination from '_@shared/components/pagination/BasePagination';
@@ -23,7 +24,14 @@ export default function FilterByCategory({ params }: { params: { category: strin
     router.push(`${pathname}?${newQuery.toString()}`);
   };
   return (
-    <MarketplaceBox leftContent={<FilterPrice />}>
+    <MarketplaceBox
+      leftContent={
+        <>
+          <BrowseCategory />
+          <FilterPrice />
+        </>
+      }
+    >
       <MarketplaceTab
         tabs={[
           { label: 'Arts Items', value: 'arts items', content: <TabContentArtItems view={view} /> },

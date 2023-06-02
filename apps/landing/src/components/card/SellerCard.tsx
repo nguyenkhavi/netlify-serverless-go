@@ -19,7 +19,7 @@ export default function SellerCard({ value, view, ...props }: SellerCardProps) {
 
 function ViewFull({ value, ...props }: SellerCardProps) {
   return (
-    <Link href={'/marketplace/seller/' + value.id} {...props}>
+    <Link href={'/marketplace/creator/' + value.id} {...props}>
       <div className="aspect-square overflow-hidden rounded-[10px]  border-[.5px] border-text-30">
         <img src={value.url} alt="image" className="h-full w-full object-cover" />
       </div>
@@ -31,7 +31,7 @@ function ViewFull({ value, ...props }: SellerCardProps) {
 function ViewBox({ value, ...props }: SellerCardProps) {
   return (
     <Link
-      href={'/marketplace/seller/' + value.id}
+      href={'/marketplace/creator/' + value.id}
       className="rounded-[10px] border border-[#303030] px-3 py-4 xlg:px-4 xlg:py-8"
       {...props}
     >

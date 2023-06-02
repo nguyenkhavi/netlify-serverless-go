@@ -15,12 +15,13 @@ const inputClasses = [
   'py-[3px] px-3 text-btnmd placeholder:text-text-30',
   'rounded mr-2.5',
 ];
-export default function FilterPrice() {
+export default function FilterPrice({ className = '' }: { className?: string }) {
   return (
     <div
       className={classcat([
         'bg-secondary-300 px-6.25 py-7.5',
         'mt-5.25 rounded-[15px] border-[.5px] border-text-20',
+        className,
       ])}
     >
       <h3 className="mb-1 text-h5 text-text-100">Price:</h3>

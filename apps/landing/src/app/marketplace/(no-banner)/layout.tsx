@@ -3,9 +3,9 @@ import Search from '../comps/Search';
 
 export default function WithoutBannerLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
+    <main>
       <Search />
       {children}
-    </div>
+    </main>
   );
 }

@@ -11,6 +11,8 @@ import TrendingInNature from '_@landing/app/marketplace/comps/TrendingInNature';
 import TrendingInWildlife from '_@landing/app/marketplace/comps/TrendingInWildlife';
 //HOOK
 import { useSalAnim } from '_@landing/hooks/useSalAnim';
+//RELATIVE MODULES
+import BrowseCategory from '../comps/BrowseCategory';
 
 export default function Marketplace() {
   useSalAnim();
@@ -18,10 +20,13 @@ export default function Marketplace() {
   return (
     <MarketplaceBox
       leftContent={
-        <HomeAdvVertical
-          className="relative h-auto w-full py-8 xl:grid"
-          btnClasses="ow:static mt-6.25"
-        />
+        <>
+          <BrowseCategory />
+          <HomeAdvVertical
+            className="relative h-auto w-full py-8 xl:grid"
+            btnClasses="ow:static mt-6.25"
+          />
+        </>
       }
     >
       <TopSellers />
