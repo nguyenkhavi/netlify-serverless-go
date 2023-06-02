@@ -2,6 +2,13 @@ const plugin = require('tailwindcss/plugin');
 
 module.exports = plugin(({ addComponents }) => {
   addComponents({
+    '.btn-link': {
+      '&:hover': {
+        boxShadow: 'inset 0 -1px',
+        backgroundColor: 'transparent',
+      },
+    },
+
     '.btnsm': {
       padding: '0 2.5625rem',
       height: '2.8125rem',

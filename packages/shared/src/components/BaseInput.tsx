@@ -33,6 +33,7 @@ type Tag = 'input' | 'textarea';
 export type BaseInputProps = Assign<
   ComponentPropsWithoutRef<Tag>,
   {
+    name: string;
     tag?: Tag;
     type?: HTMLInputTypeAttribute;
     hint?: string;

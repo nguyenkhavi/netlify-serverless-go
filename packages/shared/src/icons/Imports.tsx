@@ -5,6 +5,8 @@ import MenuIcon from './MenuIcon'
 import DecentralizedCartIcon from './DecentralizedCartIcon'
 import DecentralizedFinanceVenturesIcon from './DecentralizedFinanceVenturesIcon'
 import ArrowRightIcon from './ArrowRightIcon'
+import PhoneIcon from './PhoneIcon'
+import ChevronDownIcon from './ChevronDownIcon'
 import Client1Icon from './Client1Icon'
 import ListViewIcon from './ListViewIcon'
 import LoadingIcon from './LoadingIcon'
@@ -15,6 +17,7 @@ import Client2Icon from './Client2Icon'
 import ArrowRightCircleIcon from './ArrowRightCircleIcon'
 import DecentralizedSocialNetworkIcon from './DecentralizedSocialNetworkIcon'
 import EyeIcon from './EyeIcon'
+import ChevronUpIcon from './ChevronUpIcon'
 import FilterIcon from './FilterIcon'
 import FacebookIcon from './FacebookIcon'
 import UserIcon from './UserIcon'
@@ -34,6 +37,8 @@ export const Icons = {
   DecentralizedCartIcon: { icon: DecentralizedCartIcon },
   DecentralizedFinanceVenturesIcon: { icon: DecentralizedFinanceVenturesIcon },
   ArrowRightIcon: { icon: ArrowRightIcon },
+  PhoneIcon: { icon: PhoneIcon },
+  ChevronDownIcon: { icon: ChevronDownIcon },
   Client1Icon: { icon: Client1Icon },
   ListViewIcon: { icon: ListViewIcon },
   LoadingIcon: { icon: LoadingIcon },
@@ -44,6 +49,7 @@ export const Icons = {
   ArrowRightCircleIcon: { icon: ArrowRightCircleIcon },
   DecentralizedSocialNetworkIcon: { icon: DecentralizedSocialNetworkIcon },
   EyeIcon: { icon: EyeIcon },
+  ChevronUpIcon: { icon: ChevronUpIcon },
   FilterIcon: { icon: FilterIcon },
   FacebookIcon: { icon: FacebookIcon },
   UserIcon: { icon: UserIcon },

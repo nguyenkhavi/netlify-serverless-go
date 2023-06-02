@@ -283,7 +283,7 @@ module.exports = {
     componentsPlugin,
     utilitiesPlugin,
     variantsPlugin,
-    spacingPlugin({ spacing: 100 }),
+    spacingPlugin({ spacing: 200 }),
     buttonPlugin,
     inputPlugin,
   ],
