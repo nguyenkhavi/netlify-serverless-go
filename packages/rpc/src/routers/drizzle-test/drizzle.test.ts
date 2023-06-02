@@ -1,9 +1,8 @@
-import { db } from '_@rpc/services/drizzle';
-import { MySqlDatabase, mysqlTable, serial, text, varchar } from 'drizzle-orm/mysql-core';
-import { test, expect } from 'vitest';
-import { InferModel } from 'drizzle-orm';
-import { nanoid } from '_@rpc/services/nanoid';
 import { subscriber } from '_@rpc/drizzle/subscriber';
+import { db } from '_@rpc/services/drizzle';
+import { nanoid } from '_@rpc/services/nanoid';
+import { InferModel } from 'drizzle-orm';
+import { expect, test } from 'vitest';
 
 export type NewSubscriber = InferModel<typeof subscriber, 'insert'>; // insert type
 
