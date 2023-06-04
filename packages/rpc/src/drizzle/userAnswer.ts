@@ -10,8 +10,9 @@ export const userAnswer = mysqlTable(
     updatedAt: datetime('updated_at'),
 
     userId: varchar('user_id', { length: 32 }),
-    questionId: varchar('question_id', { length: 12 }), //.references(() => securityQuestion.id),
     memorableAnswer: varchar('memorable_answer', { length: 256 }),
+    //Reference to security_question table
+    questionId: varchar('question_id', { length: 12 }), //.references(() => securityQuestion.id),
   },
   (table) => ({
     pk: primaryKey(table.userId, table.questionId),

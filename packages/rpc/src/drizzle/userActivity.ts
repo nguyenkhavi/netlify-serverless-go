@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { datetime, mysqlTable, varchar, index } from 'drizzle-orm/mysql-core';
-import { activityActionValues } from './enum';
+import { ActivityActionValues } from './enum';
 
 export const userActivity = mysqlTable(
   'user_activity',
@@ -13,7 +13,7 @@ export const userActivity = mysqlTable(
     browser: varchar('browser', { length: 32 }),
     ipAddress: varchar('ip_address', { length: 32 }),
     location: varchar('location', { length: 128 }),
-    action: varchar('action', { length: 20, enum: activityActionValues }),
+    action: varchar('action', { length: 20, enum: ActivityActionValues }),
   },
   (table) => ({
     userIdIdx: index('activity_user_id_idx').on(table.userId),
