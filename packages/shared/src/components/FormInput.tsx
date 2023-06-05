@@ -10,7 +10,6 @@ export default function FormInput({ name = '', ...props }: BaseInputProps) {
     register,
     formState: { errors },
   } = useFormContext();
-
   const isValid = !getErrorMessage(name, errors);
 
   return <BaseInput {...props} {...register(name)} isValid={isValid} />;

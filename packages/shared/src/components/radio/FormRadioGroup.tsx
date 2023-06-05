@@ -10,8 +10,8 @@ export default function FormRadioGroup({ name = '', ...props }: BaseRadioGroupPr
     control,
     formState: { errors },
   } = useFormContext();
-
   const isValid = !getErrorMessage(name, errors);
+
   return (
     <Controller
       name={name}
