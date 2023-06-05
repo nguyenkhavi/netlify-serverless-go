@@ -33,7 +33,6 @@ type Tag = 'input' | 'textarea';
 export type BaseInputProps = Assign<
   ComponentPropsWithoutRef<Tag>,
   {
-    name: string;
     tag?: Tag;
     type?: HTMLInputTypeAttribute;
     hint?: string;
@@ -103,7 +102,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
         ) : null}
 
         <Show when={hint}>
-          <p className="text-body3 text-text-50 mt-1.5">{hint}</p>
+          <p className="mt-1.5 text-body3 text-text-50">{hint}</p>
         </Show>
       </div>
     );

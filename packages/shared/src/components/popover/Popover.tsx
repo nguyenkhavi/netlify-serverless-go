@@ -29,7 +29,7 @@ export default function Popover({
         <Content
           align={align}
           className={classcat([
-            'rounded border-[.5] border-text-20 bg-secondary-300 p-5.5',
+            'z-dropdown rounded border-[.5] border-text-20 bg-secondary-300 p-5.5',
             owStyles?.contentClasses,
           ])}
         >

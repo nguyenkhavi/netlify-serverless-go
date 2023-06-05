@@ -2,10 +2,10 @@ export default function SearchIcon(props: React.ComponentPropsWithoutRef<'svg'>)
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="12"
-      height="12"
+      width="24"
+      height="24"
       fill="none"
-      viewBox="0 0 12 12"
+      viewBox="0 0 14 14"
       color="#5D6165"
       {...props}
     >
