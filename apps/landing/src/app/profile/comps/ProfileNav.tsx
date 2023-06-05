@@ -13,7 +13,7 @@ import MyItemIcon from '_@shared/icons/MyItemIcon';
 import FolderIcon from '_@shared/icons/FolderIcon';
 import LogoutIcon from '_@shared/icons/LogoutIcon';
 import UserBarIcon from '_@shared/icons/UserBarIcon';
-import FeedBackIcon from '_@shared/icons/FeedBackIcon';
+import FeedbackIcon from '_@shared/icons/FeedbackIcon';
 import UserProfileIcon from '_@shared/icons/UserProfileIcon';
 
 export default function ProfileNav() {
@@ -64,7 +64,7 @@ export default function ProfileNav() {
         </p>
       </div>
       <button className="mt-16 flex items-center" onClick={() => setOpen(true)}>
-        <FeedBackIcon className="h-5" />
+        <FeedbackIcon className="h-5" />
         <span className="ml-2.5">Send us Feedback</span>
       </button>
       <Button

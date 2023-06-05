@@ -1,21 +1,21 @@
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { feedbackStore } from '_@landing/stores/feedbackStore'
+import Link from 'next/link';
+import classcat from 'classcat';
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { feedbackStore } from '_@landing/stores/feedbackStore';
 //LAYOUT, COMPONENTS
-import Button from '_@shared/components/Button'
-import Popover from '_@shared/components/popover/Popover'
+import Button from '_@shared/components/Button';
+import Popover from '_@shared/components/popover/Popover';
 //SHARED
-import MenuIcon from '_@shared/icons/MenuIcon'
-import LogoutIcon from '_@shared/icons/LogoutIcon'
-import VerifyIcon from '_@shared/icons/VerifyIcon'
-import FeedbackIcon from '_@shared/icons/FeedBackIcon'
-import ChevronDownIcon from '_@shared/icons/ChevronDownIcon'
-import QuestionCircleIcon from '_@shared/icons/QuestionCircleIcon'
+import MenuIcon from '_@shared/icons/MenuIcon';
+import LogoutIcon from '_@shared/icons/LogoutIcon';
+import VerifyIcon from '_@shared/icons/VerifyIcon';
+import FeedbackIcon from '_@shared/icons/FeedbackIcon';
+import ChevronDownIcon from '_@shared/icons/ChevronDownIcon';
+import QuestionCircleIcon from '_@shared/icons/QuestionCircleIcon';
 //RELATIVE MODULES
-import { PROFILE_NAV } from './ProfileNav'
+import { PROFILE_NAV } from './ProfileNav';
 
 type ProfileNavMobileProps = {
   title: string;
