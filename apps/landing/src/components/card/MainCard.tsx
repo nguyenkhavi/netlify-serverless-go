@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
 import CartIcon from '_@shared/icons/CartIcon';
@@ -14,17 +15,20 @@ export type CardValue = {
   owner?: string;
 };
 
+export type TViewMainCard = 'grid' | 'list' | 'grid-only';
+
 export type MainCardProps = {
-  view?: string;
+  view?: TViewMainCard;
   value: CardValue;
 };
 
 export default function MainCard({ view = 'grid', value, ...props }: MainCardProps) {
   if (view === 'list') return <ListView value={value} {...props} />;
-  return <GridView value={value} {...props} />;
+  if (view === 'grid-only') return <GridViewOnly value={value} {...props} />;
+  return <GridViewWithBuy value={value} {...props} />;
 }
 
-function GridView({ value, ...props }: MainCardProps) {
+function GridViewWithBuy({ value, ...props }: MainCardProps) {
   return (
     <div className="rounded-[10px] border border-[#303030] px-4 py-4.5 xlg:py-5" {...props}>
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
@@ -87,6 +91,28 @@ function ListView({ value, ...props }: MainCardProps) {
             <CartIcon className="h-5 w-5" />
           </Button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function GridViewOnly({ value, ...props }: MainCardProps) {
+  return (
+    <div
+      className="rounded-[10px] border border-[#303030] px-2.25 py-3.75 xlg:px-3.75 xlg:py-5"
+      {...props}
+    >
+      <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
+        <img src={value.url} alt="image" className="h-full w-full object-cover" />
+      </div>
+      <p className="body-3 mt-1.25 xlg:mt-4 xlg:text-body2">{value.name}</p>
+      <p className="text-caption text-text-50 xlg:text-body3">
+        Creator: <span className="text-text-80">@{value.owner}</span>
+      </p>
+      <hr className="my-1.25 h-[0.5px] border-none bg-text-10" />
+      <div className="flex items-center justify-between text-caption text-text-70 xlg:text-body3">
+        <span>Price</span>
+        <span>{value.prices}</span>
       </div>
     </div>
   );

@@ -3,11 +3,10 @@ import classcat from 'classcat';
 import { MOCK_DATA_ITEM } from '_@landing/mock/Item';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 //LAYOUT, COMPONENTS
-import MainCard from '_@landing/components/card/MainCard';
-import BasePagination from '_@shared/components/pagination/BasePagination';
+import MainCard, { type TViewMainCard } from '_@landing/components/card/MainCard';
 
 type IPropsComp = {
-  view: string;
+  view: TViewMainCard;
 };
 
 const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-3.25 gap-y-5 md:gap-7'];
