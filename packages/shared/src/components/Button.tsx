@@ -1,7 +1,13 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
-import { ReactNode, type ComponentPropsWithoutRef, cloneElement, ReactElement } from 'react';
+import {
+  ReactNode,
+  type ComponentPropsWithoutRef,
+  cloneElement,
+  ReactElement,
+  forwardRef,
+} from 'react';
 //SHARED
 import LoadingIcon from '_@shared/icons/LoadingIcon';
 
@@ -92,54 +98,66 @@ type Props = TagProps & BaseProps;
 /**
  * Component definition (with default variants)
  */
-export default function Button({
-  as,
-  type,
-  color = 'primary',
-  variant = 'filled',
-  shape = 'rounded',
-  leadingIcon,
-  children,
-  trailingIcon,
-  className = '',
-  isLoading = false,
-  disabled = false,
-  ...props
-}: Props) {
-  const Tag = as || 'button';
+const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, Props>(
+  (
+    {
+      as,
+      type,
+      color = 'primary',
+      variant = 'filled',
+      shape = 'rounded',
+      leadingIcon,
+      children,
+      trailingIcon,
+      className = '',
+      isLoading = false,
+      disabled = false,
+      ...props
+    },
+    forwardRef,
+  ) => {
+    const Tag = as || 'button';
 
-  return (
-    <Tag
-      {...(props as any)}
-      type={type || 'button'}
-      disabled={isLoading || disabled}
-      className={classcat([
-        baseClasses,
-        'btnsm',
-        colorClasses[color][variant],
-        shapeClasses[shape],
-        className,
-      ])}
-    >
-      {isLoading ? (
-        <LoadingIcon className={classcat([iconClasses])} />
-      ) : (
-        <>
-          {leadingIcon
-            ? cloneElement(leadingIcon as ReactElement, {
-                className: classcat([iconClasses, (leadingIcon as ReactElement).props.className]),
-              })
-            : null}
+    return (
+      <Tag
+        {...(props as any)}
+        ref={forwardRef}
+        type={type || 'button'}
+        disabled={isLoading || disabled}
+        className={classcat([
+          baseClasses,
+          'btnsm',
+          colorClasses[color][variant],
+          shapeClasses[shape],
+          className,
+        ])}
+      >
+        {isLoading ? (
+          <LoadingIcon className={classcat([iconClasses])} />
+        ) : (
+          <>
+            {leadingIcon
+              ? cloneElement(leadingIcon as ReactElement, {
+                  className: classcat([iconClasses, (leadingIcon as ReactElement).props.className]),
+                })
+              : null}
 
-          <span>{children}</span>
+            <span>{children}</span>
 
-          {trailingIcon
-            ? cloneElement(trailingIcon as ReactElement, {
-                className: classcat([iconClasses, (trailingIcon as ReactElement).props.className]),
-              })
-            : null}
-        </>
-      )}
-    </Tag>
-  );
-}
+            {trailingIcon
+              ? cloneElement(trailingIcon as ReactElement, {
+                  className: classcat([
+                    iconClasses,
+                    (trailingIcon as ReactElement).props.className,
+                  ]),
+                })
+              : null}
+          </>
+        )}
+      </Tag>
+    );
+  },
+);
+Button.displayName = 'Button';
+
+export default Button;
