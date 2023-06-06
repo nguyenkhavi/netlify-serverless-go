@@ -9,6 +9,7 @@ import { feedbackStore } from '_@landing/stores/feedbackStore';
 import Button from '_@shared/components/Button';
 //SHARED
 import LockIcon from '_@shared/icons/LockIcon';
+import BookIcon from '_@shared/icons/BookIcon';
 import MyItemIcon from '_@shared/icons/MyItemIcon';
 import FolderIcon from '_@shared/icons/FolderIcon';
 import LogoutIcon from '_@shared/icons/LogoutIcon';
@@ -95,6 +96,11 @@ export const PROFILE_NAV: TProfileNav[] = [
     label: 'My Items',
     path: '/my-item',
     icon: <MyItemIcon className="h-5" />,
+  },
+  {
+    label: 'Address Book',
+    path: '/profile/address',
+    icon: <BookIcon className="h-5" />,
   },
   {
     label: 'Account History',

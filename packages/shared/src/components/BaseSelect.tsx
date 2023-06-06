@@ -24,7 +24,7 @@ import Show from './Show';
 
 const triggerClasses = [
   'relative',
-  'h-15 w-full',
+  'h-15 w-full bg-secondary/70',
   'rounded-[5px] border-[.5px] border-white/20',
   'focus-visible:outline-none focus-visible:ring focus-visible:ring-orange-600',
   'data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error data-[valid="false"]:rounded-none',
@@ -48,6 +48,9 @@ export type BaseSelectProps = Assign<
     value?: string;
     onChange?: (newValue: string) => void;
     options: BaseSelectOption[];
+    owStyles?: {
+      triggerClasses?: string;
+    };
   }
 >;
 
@@ -63,6 +66,7 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
       value = '',
       onChange = () => {},
       options = [],
+      owStyles,
       ...props
     },
     forwardedRef,
@@ -82,7 +86,7 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
         <Trigger
           ref={forwardedRef}
           id={id}
-          className={classcat([triggerClasses])}
+          className={classcat([triggerClasses, owStyles?.triggerClasses])}
           data-valid={isValid}
         >
           <Show when={fieldLabel}>
@@ -93,8 +97,9 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
           <Value asChild>
             <span
               className={classcat([
-                'absolute bottom-1.5 left-3.25 text-subtitle2',
+                'absolute left-3.25 text-subtitle2',
                 currentValue ? 'text-text-50' : 'text-text-20',
+                fieldLabel ? 'bottom-1.5' : 'top-1/2 -translate-y-1/2',
               ])}
             >
               {valueLabel}

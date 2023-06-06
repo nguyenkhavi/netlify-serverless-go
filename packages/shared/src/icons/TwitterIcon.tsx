@@ -20,3 +20,22 @@ export default function TwitterIcon(props: React.ComponentPropsWithoutRef<'svg'>
     </svg>
   );
 }
+
+export function TwitterLightIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="21"
+      fill="none"
+      viewBox="0 0 24 21"
+      color="#D0D2D3"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M24 2.935a9.692 9.692 0 01-2.828.791 5.023 5.023 0 002.165-2.78 9.74 9.74 0 01-3.127 1.22A4.872 4.872 0 0016.616.577c-2.72 0-4.924 2.25-4.924 5.026 0 .394.044.777.128 1.145C7.727 6.54 4.1 4.54 1.67 1.5a5.083 5.083 0 00-.666 2.526c0 1.744.87 3.282 2.19 4.183a4.828 4.828 0 01-2.23-.629v.064c0 2.435 1.697 4.466 3.95 4.928a4.833 4.833 0 01-2.224.086c.627 1.997 2.445 3.45 4.6 3.49A9.754 9.754 0 010 18.23a13.731 13.731 0 007.548 2.258c9.057 0 14.01-7.659 14.01-14.3 0-.218-.005-.435-.015-.65A10.124 10.124 0 0024 2.935z"
+      ></path>
+    </svg>
+  );
+}

@@ -24,3 +24,22 @@ export default function InstagramIcon(props: React.ComponentPropsWithoutRef<'svg
     </svg>
   );
 }
+
+export function InstagramLightIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="19"
+      fill="none"
+      viewBox="0 0 20 19"
+      color="#D0D2D3"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M10 5a4.5 4.5 0 100 9 4.5 4.5 0 000-9zm0 7.5a3 3 0 113-3 3.01 3.01 0 01-3 3zM14.125.125h-8.25a5.25 5.25 0 00-5.25 5.25v8.25a5.25 5.25 0 005.25 5.25h8.25a5.25 5.25 0 005.25-5.25v-8.25a5.25 5.25 0 00-5.25-5.25zm3.75 13.5a3.75 3.75 0 01-3.75 3.75h-8.25a3.75 3.75 0 01-3.75-3.75v-8.25a3.75 3.75 0 013.75-3.75h8.25a3.75 3.75 0 013.75 3.75v8.25zm-1.875-9a1.125 1.125 0 11-2.25 0 1.125 1.125 0 012.25 0z"
+      ></path>
+    </svg>
+  );
+}

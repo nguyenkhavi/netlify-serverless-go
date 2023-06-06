@@ -31,3 +31,22 @@ export default function MailIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
     </svg>
   );
 }
+
+export function MailCheckIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="21"
+      height="18"
+      fill="none"
+      viewBox="0 0 21 18"
+      color="#19CA9B"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M10 15a6.995 6.995 0 0110-6.32V2c0-1.1-.9-2-2-2H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h8.08c-.05-.33-.08-.66-.08-1zM2 2l8 5 8-5v2l-8 5-8-5V2zm13.34 16l-3.54-3.54 1.41-1.41 2.12 2.12 4.24-4.24L21 12.34 15.34 18z"
+      ></path>
+    </svg>
+  );
+}

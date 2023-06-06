@@ -31,3 +31,22 @@ export default function PhoneIcon(props: React.ComponentPropsWithoutRef<'svg'>) 
     </svg>
   );
 }
+
+export function Phone2Icon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      height="24"
+      width="24"
+      fill="none"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      color="#19CFA0"
+      {...props}
+    >
+      <path
+        d="M10 20h4v-1h-4v1Zm-3 3c-.55 0-1.02-.2-1.41-.59-.4-.39-.6-.86-.59-1.41V3c0-.55.2-1.02.59-1.41.39-.4.86-.6 1.41-.59h10c.55 0 1.02.2 1.41.59.4.39.6.86.59 1.41v18c0 .55-.2 1.02-.59 1.41-.39.4-.86.6-1.41.59H7Zm0-7h10V6H7v10Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}

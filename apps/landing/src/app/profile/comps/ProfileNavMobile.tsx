@@ -93,7 +93,7 @@ function ProfileDropdown() {
           </li>
         ))}
       </ul>
-      <button className="mt-20 flex items-center text-body2" onClick={() => setOpen(true)}>
+      <button className="mt-7.5 flex items-center text-body2" onClick={() => setOpen(true)}>
         <FeedbackIcon className="h-5" />
         <span className="ml-2.5">Send us Feedback</span>
       </button>

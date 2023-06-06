@@ -1,15 +1,17 @@
 //THIRD PARTY MODULES
-import classcat from 'classcat';
+import Link from 'next/link'
+import classcat from 'classcat'
 //SHARED
-import MailIcon from '_@shared/icons/MailIcon';
-import PhoneIcon from '_@shared/icons/PhoneIcon';
+import PenIcon from '_@shared/icons/PenIcon'
+import MailIcon from '_@shared/icons/MailIcon'
+import MobilePhoneIcon from '_@shared/icons/MobilePhoneIcon'
 
 const boxClasses = ['px-4.5 py-7.5 md:py4.5 rounded-[10px] border border-text-10 bg-secondary-300'];
 const titleClasses = ['mb-2.5 text-body2'];
 const contentClasses = ['text-body3 text-text-50'];
 export function ProfileInfoDetail() {
   return (
-    <section className="grid gap-5 md:grid-cols-2">
+    <section className="grid gap-5 md:grid-cols-[1fr_316px]">
       <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses])}>About Me</h2>
         <p className={classcat([contentClasses])}>
@@ -21,7 +23,7 @@ export function ProfileInfoDetail() {
       <div className={classcat([boxClasses, 'px-7 py-8'])}>
         <h2 className={classcat([titleClasses])}>Contact Info</h2>
         <p className="text-gradient-pr flex items-center">
-          <PhoneIcon className="mr-1.25" /> +42543452344
+          <MobilePhoneIcon className="mr-1.25" /> +42543452344
         </p>
         <p className="text-gradient-pr mt-2.5 flex items-center">
           <MailIcon className="mr-1.25" /> Kevinsmith@gmail.com
@@ -36,7 +38,12 @@ export function ProfileInfoDetail() {
         </p>
       </div>
       <div className={classcat([boxClasses])}>
-        <h2 className={classcat([titleClasses])}>Shipping Information</h2>
+        <h2 className={classcat([titleClasses, 'flex items-center justify-between'])}>
+          Shipping Information{' '}
+          <Link href="/profile/address" className="flex items-center text-primary">
+            Edit <PenIcon className="ml-2" />
+          </Link>
+        </h2>
         <ul
           className={classcat([
             '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3  [&_span]:text-text-30',
