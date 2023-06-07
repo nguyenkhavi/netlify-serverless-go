@@ -126,28 +126,26 @@ const VERIFICATION_STEPS = [
     title: 'Level 2',
     isComplete: true,
     content: (
-      <>
-        <button
-          className={classcat(['flex items-center rounded', 'h-11.25 bg-secondary-200 px-6'])}
-        >
-          <UserCircleIcon className="mr-3" />
-          ID Verified
-        </button>
-      </>
+      <Link
+        href="/profile/verify"
+        className={classcat(['flex items-center rounded', 'h-11.25 bg-secondary-200 px-6'])}
+      >
+        <UserCircleIcon className="mr-3" />
+        ID Verified
+      </Link>
     ),
   },
   {
     title: 'Level 3',
     isComplete: false,
     content: (
-      <>
-        <button
-          className={classcat(['flex items-center rounded', 'h-11.25 bg-secondary-200 px-6'])}
-        >
-          <LocationIcon className="mr-3" />
-          Address Verification
-        </button>
-      </>
+      <Link
+        href="/profile/verify?t=address"
+        className={classcat(['flex items-center rounded', 'h-11.25 bg-secondary-200 px-6'])}
+      >
+        <LocationIcon className="mr-3" />
+        Address Verification
+      </Link>
     ),
   },
 ];

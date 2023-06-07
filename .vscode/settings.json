@@ -30,7 +30,8 @@
     "thirdweb",
     "TRPC",
     "webp",
-    "zustand"
+    "zustand",
+    "cmdk"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

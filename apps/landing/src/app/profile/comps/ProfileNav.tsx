@@ -49,7 +49,7 @@ export default function ProfileNav() {
             </li>
           ))}
         </ul>
-        <div className="mt-25 rounded-[5px] border border-text-10 bg-secondary-300 px-4.5 pb-8 pt-9.5">
+        <div className="mt-11.5 rounded-[5px] border border-text-10 bg-secondary-300 px-4.5 pb-8 pt-9.5">
           <div className="mb-1.5">
             <span
               className={classcat([
@@ -64,6 +64,10 @@ export default function ProfileNav() {
           <p className="text-['#7F7A7A] text-body3 text-text-60">
             Personalize your account by adding your details.
           </p>
+          <div className="flex items-center text-subtitle2">
+            <button className='mr-9'>Dismiss</button>
+            <button>Add Detail</button>
+          </div>
         </div>
         <button className="mt-16 flex items-center" onClick={() => setOpen(true)}>
           <FeedbackIcon className="h-5" />

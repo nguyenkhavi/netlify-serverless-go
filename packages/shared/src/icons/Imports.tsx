@@ -1,12 +1,13 @@
 //RELATIVE MODULES
-import EyeIcon from './EyeIcon';
 import PenIcon from './PenIcon';
+import EyeIcon from './EyeIcon';
 import MailIcon from './MailIcon';
 import MenuIcon from './MenuIcon';
 import GridIcon from './GridIcon';
+import BookIcon from './BookIcon';
+import UserIcon from './UserIcon';
 import CartIcon from './CartIcon';
 import LockIcon from './LockIcon';
-import BookIcon from './BookIcon';
 import CloseIcon from './CloseIcon';
 import ShareIcon from './ShareIcon';
 import PhoneIcon from './PhoneIcon';
@@ -31,7 +32,6 @@ import DiscordIcon from './DiscordIcon';
 import ListViewIcon from './ListViewIcon';
 import FeedbackIcon from './FeedbackIcon';
 import FacebookIcon from './FacebookIcon';
-import LocationIcon from './LocationIcon';
 import InstagramIcon from './InstagramIcon';
 import LogoWhiteIcon from './LogoWhiteIcon';
 import ChevronUpIcon from './ChevronUpIcon';
@@ -42,10 +42,11 @@ import ChevronDownIcon from './ChevronDownIcon';
 import UserProfileIcon from './UserProfileIcon';
 import ChevronBottomIcon from './ChevronBottomIcon';
 import QuestionCircleIcon from './QuestionCircleIcon';
-import UserIcon, { UserCircleIcon } from './UserIcon';
 import ArrowRightCircleIcon from './ArrowRightCircleIcon';
 import DecentralizedCartIcon from './DecentralizedCartIcon';
 import DecentralizedExchangeIcon from './DecentralizedExchangeIcon';
+import LocationIcon, { LocationCardShieldIcon } from './LocationIcon';
+import ContactCardIcon, { ContactCardShieldIcon } from './ContactCardIcon';
 import DecentralizedSocialNetworkIcon from './DecentralizedSocialNetworkIcon';
 import DecentralizedFinanceVenturesIcon from './DecentralizedFinanceVenturesIcon';
 
@@ -73,7 +74,9 @@ export const Icons = {
   LogoWhiteIcon: { icon: LogoWhiteIcon },
   GridIcon: { icon: GridIcon },
   Client2Icon: { icon: Client2Icon },
+  PenIcon: { icon: PenIcon },
   UserBarIcon: { icon: UserBarIcon },
+  BookIcon: { icon: BookIcon },
   FeedbackIcon: { icon: FeedbackIcon },
   ArrowRightCircleIcon: { icon: ArrowRightCircleIcon },
   CheckIcon: { icon: CheckIcon },
@@ -89,6 +92,7 @@ export const Icons = {
   CameraIcon: { icon: CameraIcon },
   Client4Icon: { icon: Client4Icon },
   LogoutIcon: { icon: LogoutIcon },
+  LocationIcon: { icon: LocationIcon },
   DiscordIcon: { icon: DiscordIcon },
   ChevronBottomIcon: { icon: ChevronBottomIcon },
   HeaderLogoIcon: { icon: HeaderLogoIcon },
@@ -96,8 +100,7 @@ export const Icons = {
   DecentralizedExchangeIcon: { icon: DecentralizedExchangeIcon },
   LockIcon: { icon: LockIcon },
   UserProfileIcon: { icon: UserProfileIcon },
-  UserCircleIcon: { icon: UserCircleIcon },
-  LocationIcon: { icon: LocationIcon },
-  BookIcon: { icon: BookIcon },
-  PenIcon: { icon: PenIcon },
+  ContactCardIcon: { icon: ContactCardIcon },
+  LocationCardShieldIcon: { icon: LocationCardShieldIcon },
+  ContactCardShieldIcon: { icon: ContactCardShieldIcon },
 };

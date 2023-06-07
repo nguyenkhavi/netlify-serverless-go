@@ -18,10 +18,12 @@ export default function ProfileBanner() {
       <img className="relative z-[1] h-51 w-full object-cover lg:h-57" src="/images/profile/cover.jpeg" alt="" />
       <div
         className={classcat([
-          'mx-auto mb-2 overflow-hidden rounded-full lg:mx-0',
+          'overflow-hidden rounded-full',
+          'mx-auto mb-2 lg:mx-0',
           'h-15 w-15 md:h-30 md:w-30 lg:h-42 lg:w-42',
           '-mt-7.5 md:-mt-15 lg:-mt-21 lg:ml-18.75',
-          'relative z-[2] border border-primary lg:absolute',
+          'relative z-[2] lg:absolute',
+          'border border-primary lg:border-[3px] lg:border-white',
         ])}
       >
         <img
