@@ -55,6 +55,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^4.28.0
         version: 4.28.0(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-table':
+        specifier: ^8.9.1
+        version: 8.9.1(react-dom@18.2.0)(react@18.2.0)
       '@thirdweb-dev/react':
         specifier: ^3.12.2
         version: 3.12.2(@ethersproject/abstract-provider@5.7.0)(@ethersproject/abstract-signer@5.7.0)(@ethersproject/bignumber@5.7.0)(@ethersproject/properties@5.7.0)(@thirdweb-dev/sdk@3.10.20)(@types/node@18.15.5)(@types/react-dom@18.0.11)(@types/react@18.0.28)(encoding@0.1.13)(ethers@5.7.2)(localforage@1.10.0)(lokijs@1.5.12)(react-dom@18.2.0)(react@18.2.0)(typescript@5.0.2)
@@ -85,6 +88,9 @@ importers:
       crypto-js:
         specifier: ^4.1.1
         version: 4.1.1
+      date-fns:
+        specifier: ^2.30.0
+        version: 2.30.0
       dayjs:
         specifier: ^1.11.7
         version: 1.11.7
@@ -127,6 +133,9 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
+      react-day-picker:
+        specifier: ^8.7.1
+        version: 8.7.1(date-fns@2.30.0)(react@18.2.0)
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
@@ -7531,6 +7540,23 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
+  /@tanstack/react-table@8.9.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-yHs2m6lk5J5RNcu2dNtsDGux66wNXZjEgzxos6MRCX8gL+nqxeW3ZglqP6eANN0bGElPnjvqiUHGQvdACOr3Cw==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
+    dependencies:
+      '@tanstack/table-core': 8.9.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@tanstack/table-core@8.9.1:
+    resolution: {integrity: sha512-2+R83n8vMZND0q3W1lSiF7co9nFbeWbjAErFf27xwbeA9E0wtUu5ZDfgj+TZ6JzdAEQAgfxkk/QNFAKiS8E4MA==}
+    engines: {node: '>=12'}
+    dev: false
+
   /@testing-library/dom@9.3.0:
     resolution: {integrity: sha512-Dffe68pGwI6WlLRYR2I0piIkyole9cSBH5jGQKCGMRpHW5RHCqAUaqc2Kv0tUyd4dU4DLPKhJIjyKOnjv4tuUw==}
     engines: {node: '>=14'}
@@ -11252,6 +11278,13 @@ packages:
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
     dev: true
+
+  /date-fns@2.30.0:
+    resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}
+    engines: {node: '>=0.11'}
+    dependencies:
+      '@babel/runtime': 7.22.3
+    dev: false
 
   /date-time@3.1.0:
     resolution: {integrity: sha512-uqCUKXE5q1PNBXjPqvwhwJf9SwMoAHBgWJ6DcrnS5o+W2JOiIILl0JEdVD8SGujrNS02GGxgwAg2PN2zONgtjg==}
@@ -17817,6 +17850,16 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
     dev: true
+
+  /react-day-picker@8.7.1(date-fns@2.30.0)(react@18.2.0):
+    resolution: {integrity: sha512-Gv426AW8b151CZfh3aP5RUGztLwHB/EyJgWZ5iMgtzbFBkjHfG6Y66CIQFMWGLnYjsQ9DYSJRmJ5S0Pg5HWKjA==}
+    peerDependencies:
+      date-fns: ^2.28.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      date-fns: 2.30.0
+      react: 18.2.0
+    dev: false
 
   /react-docgen-typescript@2.2.2(typescript@5.0.2):
     resolution: {integrity: sha512-tvg2ZtOpOi6QDwsb3GZhOjDkkX0h8Z2gipvTg6OVMUyoYoURhEiRNePT8NZItTVCDh39JJHnLdfCOkzoLbFnTg==}
