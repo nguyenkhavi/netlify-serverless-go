@@ -5,6 +5,7 @@ import MailIcon from './MailIcon';
 import MenuIcon from './MenuIcon';
 import GridIcon from './GridIcon';
 import BookIcon from './BookIcon';
+import InfoIcon from './InfoIcon';
 import UserIcon from './UserIcon';
 import CartIcon from './CartIcon';
 import LockIcon from './LockIcon';
@@ -29,24 +30,28 @@ import UserBarIcon from './UserBarIcon';
 import TwitterIcon from './TwitterIcon';
 import Client4Icon from './Client4Icon';
 import DiscordIcon from './DiscordIcon';
+import WarningIcon from './WarningIcon';
 import ListViewIcon from './ListViewIcon';
 import FeedbackIcon from './FeedbackIcon';
 import FacebookIcon from './FacebookIcon';
+import LocationIcon from './LocationIcon';
 import InstagramIcon from './InstagramIcon';
 import LogoWhiteIcon from './LogoWhiteIcon';
 import ChevronUpIcon from './ChevronUpIcon';
 import ArrowRightIcon from './ArrowRightIcon';
 import HeaderLogoIcon from './HeaderLogoIcon';
+import MailFilledIcon from './MailFilledIcon';
 import MobilePhoneIcon from './MobilePhoneIcon';
 import ChevronDownIcon from './ChevronDownIcon';
+import ContactCardIcon from './ContactCardIcon';
 import UserProfileIcon from './UserProfileIcon';
+import LockPasswordIcon from './LockPasswordIcon';
+import MobilePhone2Icon from './MobilePhone2Icon';
 import ChevronBottomIcon from './ChevronBottomIcon';
 import QuestionCircleIcon from './QuestionCircleIcon';
 import ArrowRightCircleIcon from './ArrowRightCircleIcon';
 import DecentralizedCartIcon from './DecentralizedCartIcon';
 import DecentralizedExchangeIcon from './DecentralizedExchangeIcon';
-import LocationIcon, { LocationCardShieldIcon } from './LocationIcon';
-import ContactCardIcon, { ContactCardShieldIcon } from './ContactCardIcon';
 import DecentralizedSocialNetworkIcon from './DecentralizedSocialNetworkIcon';
 import DecentralizedFinanceVenturesIcon from './DecentralizedFinanceVenturesIcon';
 
@@ -80,12 +85,15 @@ export const Icons = {
   FeedbackIcon: { icon: FeedbackIcon },
   ArrowRightCircleIcon: { icon: ArrowRightCircleIcon },
   CheckIcon: { icon: CheckIcon },
+  InfoIcon: { icon: InfoIcon },
   DecentralizedSocialNetworkIcon: { icon: DecentralizedSocialNetworkIcon },
   EyeIcon: { icon: EyeIcon },
+  LockPasswordIcon: { icon: LockPasswordIcon },
   ChevronUpIcon: { icon: ChevronUpIcon },
   FilterIcon: { icon: FilterIcon },
   FacebookIcon: { icon: FacebookIcon },
   UserIcon: { icon: UserIcon },
+  ContactCardIcon: { icon: ContactCardIcon },
   TwitterIcon: { icon: TwitterIcon },
   MyItemIcon: { icon: MyItemIcon },
   CartIcon: { icon: CartIcon },
@@ -94,13 +102,13 @@ export const Icons = {
   LogoutIcon: { icon: LogoutIcon },
   LocationIcon: { icon: LocationIcon },
   DiscordIcon: { icon: DiscordIcon },
+  MobilePhone2Icon: { icon: MobilePhone2Icon },
+  WarningIcon: { icon: WarningIcon },
   ChevronBottomIcon: { icon: ChevronBottomIcon },
   HeaderLogoIcon: { icon: HeaderLogoIcon },
+  MailFilledIcon: { icon: MailFilledIcon },
   GithubIcon: { icon: GithubIcon },
   DecentralizedExchangeIcon: { icon: DecentralizedExchangeIcon },
   LockIcon: { icon: LockIcon },
   UserProfileIcon: { icon: UserProfileIcon },
-  ContactCardIcon: { icon: ContactCardIcon },
-  LocationCardShieldIcon: { icon: LocationCardShieldIcon },
-  ContactCardShieldIcon: { icon: ContactCardShieldIcon },
 };

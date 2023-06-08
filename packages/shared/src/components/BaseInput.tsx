@@ -38,6 +38,7 @@ export type BaseInputProps = Assign<
     hint?: string;
     trailingComponent?: ReactNode;
     isValid?: boolean;
+    showEyeIcon?: boolean;
   }
 >;
 
@@ -50,6 +51,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
       trailingComponent,
       isValid = true,
       className = '',
+      showEyeIcon = true,
       ...props
     },
     forwardedRef,
@@ -88,7 +90,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
           }}
         />
 
-        {type === 'password' ? (
+        {type === 'password' && showEyeIcon ? (
           <EyeIcon
             onClick={() => {
               toggleInnerType();

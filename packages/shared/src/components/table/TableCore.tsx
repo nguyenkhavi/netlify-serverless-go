@@ -4,7 +4,7 @@ import { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, forwardRef } from '
 
 const Table = forwardRef<HTMLTableElement, HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
-    <div className="w-full overflow-auto">
+    <div className="w-full overflow-auto rounded-[10px] border border-text-10">
       <table
         ref={ref}
         className={classcat(['w-full caption-bottom text-sm', className])}
@@ -24,7 +24,11 @@ TableHeader.displayName = 'TableHeader';
 
 const TableBody = forwardRef<HTMLTableSectionElement, HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <tbody ref={ref} className={classcat(['[&_tr:last-child]:border-0', className])} {...props} />
+    <tbody
+      ref={ref}
+      className={classcat(['text-body3 text-text-70 [&_tr:last-child]:border-0', className])}
+      {...props}
+    />
   ),
 );
 TableBody.displayName = 'TableBody';
@@ -42,14 +46,7 @@ TableFooter.displayName = 'TableFooter';
 
 const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(
   ({ className, ...props }, ref) => (
-    <tr
-      ref={ref}
-      className={classcat([
-        'hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
-        className,
-      ])}
-      {...props}
-    />
+    <tr ref={ref} className={classcat(['border-b border-text-10', className])} {...props} />
   ),
 );
 TableRow.displayName = 'TableRow';
@@ -59,7 +56,7 @@ const TableHead = forwardRef<HTMLTableCellElement, ThHTMLAttributes<HTMLTableCel
     <th
       ref={ref}
       className={classcat([
-        'text-muted-foreground h-12 px-4 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0',
+        'h-16 px-4 text-left align-middle text-subtitle1 [&:has([role=checkbox])]:pr-0',
         className,
       ])}
       {...props}
@@ -90,4 +87,15 @@ const TableCaption = forwardRef<HTMLTableCaptionElement, HTMLAttributes<HTMLTabl
 );
 TableCaption.displayName = 'TableCaption';
 
-export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };
+const T = {
+  Table,
+  TableHeader,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableCaption,
+};
+
+export default T;

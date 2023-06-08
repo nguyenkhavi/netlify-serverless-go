@@ -120,7 +120,7 @@ export const PROFILE_NAV: TProfileNav[] = [
   },
   {
     label: 'Security',
-    path: '/security',
+    path: '/profile/security',
     icon: <LockIcon className="h-5" />,
   },
 ];

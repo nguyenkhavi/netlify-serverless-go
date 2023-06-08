@@ -11,19 +11,12 @@ import FormInput from '_@shared/components/FormInput';
 //SHARED
 import CameraIcon from '_@shared/icons/CameraIcon';
 import { TwitterLightIcon } from '_@shared/icons/TwitterIcon';
+import { toastStore } from '_@shared/stores/toast/toastStore';
 import { InstagramLightIcon } from '_@shared/icons/InstagramIcon';
 
 const schema = z.object({
   about: z.string(),
   description: z.string(),
-  street_address: z.string(),
-  country: z.string(),
-  state: z.string(),
-  street_address_2: z.string(),
-  apartment_number: z.string(),
-  postcode: z.string(),
-  contact_number: z.string(),
-  additional_info: z.string(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -33,6 +26,8 @@ type ProfileEditProps = {
 };
 
 export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
+  const { openToast } = toastStore();
+
   const [coverUrl, setCoverUrl] = useState('/images/profile/cover.jpeg');
   const [avatarUrl, setAvatarUrl] = useState(
     'https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
@@ -46,6 +41,7 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
 
   const onSubmit = (values: FormValues) => {
     console.log(values);
+    openToast('Incomplete KYC! Click here to complete');
   };
 
   const _handleUploadFileCover = (e: React.ChangeEvent<HTMLInputElement>) => {

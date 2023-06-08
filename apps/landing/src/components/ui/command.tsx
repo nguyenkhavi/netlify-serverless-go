@@ -5,7 +5,7 @@ import { Command as CommandPrimitive } from 'cmdk';
 import { DialogProps } from '@radix-ui/react-dialog';
 import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from 'react';
 //RELATIVE MODULES
-import { Dialog, DialogContent } from './dialog';
+import { Dialog, DialogContent } from '_@shared/components/dialog/BaseDialog';
 
 const Command = forwardRef<
   ElementRef<typeof CommandPrimitive>,

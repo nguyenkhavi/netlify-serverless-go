@@ -7,6 +7,7 @@ import SessionProvider from '_@landing/app/provider/SessionProvider';
 //LAYOUT, COMPONENTS
 import Header from '_@landing/layouts/Header';
 import Footer from '_@landing/layouts/footer/Footer';
+import BaseToast from '_@shared/components/toast/BaseToast';
 import ModalFeedback from '_@landing/components/modal/ModalFeedback';
 //RELATIVE MODULES
 import './globals.css';
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
             <Footer />
             <ModalFeedback />
+            <BaseToast />
           </body>
         </html>
       </ClientProvider>

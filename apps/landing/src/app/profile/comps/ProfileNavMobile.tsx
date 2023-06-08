@@ -1,3 +1,4 @@
+'use client';
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
@@ -28,7 +29,7 @@ export default function ProfileNavMobile({ title }: ProfileNavMobileProps) {
   return (
     <div
       className={classcat([
-        'flex items-center border-b border-text-10 pb-3.5',
+        'flex items-center border-b border-text-10 py-4',
         'mx-[calc(var(--px)*-1)] px-[--px]',
         'lg:hidden',
       ])}

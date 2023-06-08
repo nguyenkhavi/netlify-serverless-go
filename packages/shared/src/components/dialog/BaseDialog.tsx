@@ -5,6 +5,8 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { ComponentPropsWithoutRef, ElementRef, HTMLAttributes, forwardRef } from 'react';
 //SHARED
 import CloseIcon from '_@shared/icons/CloseIcon';
+//RELATIVE MODULES
+import Show from '../Show';
 
 const Dialog = DialogPrimitive.Root;
 
@@ -12,9 +14,7 @@ const DialogTrigger = DialogPrimitive.Trigger;
 
 const DialogPortal = ({ className, children, ...props }: DialogPrimitive.DialogPortalProps) => (
   <DialogPrimitive.Portal className={classcat(className)} {...props}>
-    <div className="fixed inset-0 z-50 flex items-start justify-center sm:items-center">
-      {children}
-    </div>
+    <div className="fixed inset-0 z-50">{children}</div>
   </DialogPrimitive.Portal>
 );
 DialogPortal.displayName = DialogPrimitive.Portal.displayName;
@@ -25,10 +25,7 @@ const DialogOverlay = forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={classcat([
-      'bg-background/80 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=open]:fade-in fixed inset-0 z-50 backdrop-blur-sm transition-all duration-100',
-      className,
-    ])}
+    className={classcat(['bg-background/80 fixed inset-0 z-[-1] backdrop-blur-sm', className])}
     {...props}
   />
 ));
@@ -36,24 +33,37 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 const DialogContent = forwardRef<
   ElementRef<typeof DialogPrimitive.Content>,
-  ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { showClose?: boolean }
+>(({ className, showClose = true, children, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={classcat([
-        'bg-background animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 sm:zoom-in-90 data-[state=open]:sm:slide-in-from-bottom-0 fixed z-50 grid w-full gap-4 rounded-b-lg border p-6 shadow-lg sm:max-w-lg sm:rounded-lg',
-        className,
-      ])}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none">
-        <CloseIcon className="h-4 w-4" />
-        <span className="sr-only">Close</span>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
+    <div className="mx-4 flex h-full items-center justify-center">
+      <DialogPrimitive.Content
+        ref={ref}
+        className={classcat([
+          'relative max-h-[calc(100%-32px)] px-9 py-8',
+          'w-full overflow-y-auto sm:max-w-lg',
+          'border border-text-10',
+          'rounded-b-lg bg-secondary-200 shadow-lg sm:rounded-lg',
+          className,
+        ])}
+        {...props}
+      >
+        {children}
+        <Show when={showClose}>
+          <DialogPrimitive.Close
+            className={classcat([
+              'absolute right-4 top-4 rounded-sm disabled:pointer-events-none',
+              'opacity-70 transition-opacity hover:opacity-100',
+              'focus:outline-none focus:ring-2 focus:ring-offset-2',
+            ])}
+          >
+            <CloseIcon className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </DialogPrimitive.Close>
+        </Show>
+      </DialogPrimitive.Content>
+    </div>
   </DialogPortal>
 ));
 DialogContent.displayName = DialogPrimitive.Content.displayName;

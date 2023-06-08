@@ -45,6 +45,11 @@ const colorClasses = {
       'disabled:text-primary-500/80 disabled:bg-transparent',
     ],
   },
+  error: {
+    filled: ['bg-error border-error'],
+    outlined: ['text-error border-error', 'hover:bg-error hover:text-secondary-100'],
+    text: ['text-error border-none'],
+  },
   default: {
     filled: [
       'focus-visible:ring-orange-600',
