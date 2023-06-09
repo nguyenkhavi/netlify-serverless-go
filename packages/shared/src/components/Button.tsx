@@ -60,7 +60,7 @@ const colorClasses = {
     ],
     outlined: [
       'focus-visible:ring-orange-600',
-      'text-white border-grey-500/[.32]',
+      'text-white border-text-50',
       'hover:text-white hover:border-grey-500/[.32]',
       'disabled:text-grey-500/80 disabled:border-grey-500/[.24]',
     ],

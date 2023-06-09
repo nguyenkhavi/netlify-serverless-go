@@ -29,11 +29,11 @@ const baseClasses = [
 ];
 
 type TElement = HTMLInputElement | HTMLTextAreaElement;
-type Tag = 'input' | 'textarea';
+export type TagInput = 'input' | 'textarea';
 export type BaseInputProps = Assign<
-  ComponentPropsWithoutRef<Tag>,
+  ComponentPropsWithoutRef<TagInput>,
   {
-    tag?: Tag;
+    tag?: TagInput;
     type?: HTMLInputTypeAttribute;
     hint?: string;
     trailingComponent?: ReactNode;

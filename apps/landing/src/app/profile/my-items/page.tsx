@@ -1,5 +1,6 @@
 'use client';
 //THIRD PARTY MODULES
+import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
@@ -35,7 +36,13 @@ export default function MyItems() {
             </Tab.Trigger>
           ))}
           {tabActive === '1' ? (
-            <Button className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5">Create Collection</Button>
+            <Button
+              as={Link}
+              href="/profile/create/collection"
+              className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5"
+            >
+              Create Collection
+            </Button>
           ) : (
             <Button className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5">Create NFT</Button>
           )}

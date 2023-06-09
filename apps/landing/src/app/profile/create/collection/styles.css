@@ -1,0 +1,9 @@
+.create-collection {
+  .title {
+    @apply text-h6 md:text-h5-bold text-primary-700;
+  }
+
+  .description {
+    @apply text-body1 md:text-body2 text-text-50;
+  }
+}

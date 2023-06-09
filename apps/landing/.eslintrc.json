@@ -49,7 +49,7 @@
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:tailwindcss/recommended"],
       "rules": {
-        "tailwindcss/no-custom-classname": "off",
+        // "tailwindcss/no-custom-classname": "off",
         "tailwindcss/no-contradicting-classname": "warn"
       }
     },

@@ -1,0 +1,14 @@
+.base-switch {
+  @apply h-6.5 w-12.5 cursor-pointer rounded-full bg-primary-100/50 relative;
+  span {
+    @apply absolute block h-5.5 w-5.5 rounded-full border-2 border-gray-200 bg-gray-200 transition-all duration-100 top-1/2 -translate-y-1/2 left-0.5;
+  }
+
+  &[data-state='checked'] {
+    @apply bg-primary;
+
+    span {
+      @apply left-[26px] border-white bg-white;
+    }
+  }
+}

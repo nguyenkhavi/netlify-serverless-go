@@ -4,8 +4,7 @@ module.exports = plugin(({ addComponents }) => {
   addComponents({
     '.btn-link': {
       '&:hover': {
-        boxShadow: 'inset 0 -1px',
-        backgroundColor: 'transparent',
+        boxShadow: 'inset 0 -1px currentColor',
       },
     },
 

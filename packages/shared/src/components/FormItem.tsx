@@ -5,13 +5,20 @@ import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
 type Props = {
-  label: string;
+  label: React.ReactNode;
   name: string;
   children: JSX.Element;
   className?: string;
+  labelClasses?: string;
 };
 
-export default function FormItem({ label, name, children, className = '' }: Props) {
+export default function FormItem({
+  label,
+  name,
+  children,
+  className = '',
+  labelClasses = '',
+}: Props) {
   const id = useId();
   const {
     formState: { errors },
@@ -19,7 +26,10 @@ export default function FormItem({ label, name, children, className = '' }: Prop
 
   return (
     <div className={classcat(['grid gap-2.5', className])}>
-      <label htmlFor={id} className="cursor-pointer text-body1 font-medium text-text-80">
+      <label
+        htmlFor={id}
+        className={classcat(['cursor-pointer text-body1 font-medium text-text-80', labelClasses])}
+      >
         {label}
       </label>
       {cloneElement(children, { id, name })}
