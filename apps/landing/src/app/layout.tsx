@@ -8,6 +8,7 @@ import Header from '_@landing/layouts/Header';
 import Footer from '_@landing/layouts/footer/Footer';
 import BaseToast from '_@shared/components/toast/BaseToast';
 import ModalFeedback from '_@landing/components/modal/ModalFeedback';
+import { DialogConfirm } from '_@landing/components/dialog/DialogConfirm';
 //RELATIVE MODULES
 import './globals.css';
 import ClientProvider from './provider/ClientProvider';
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
             <ModalFeedback />
             <BaseToast />
+            <DialogConfirm />
           </body>
         </html>
       </ClientProvider>
