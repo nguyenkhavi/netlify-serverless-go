@@ -1,41 +1,30 @@
+'use client';
 //THIRD PARTY MODULES
-import classcat from 'classcat'
-import { ReactNode } from 'react'
-import { Content, PopoverProps, Portal, Root, Trigger } from '@radix-ui/react-popover'
+import classcat from 'classcat';
+import * as PopoverPrimitive from '@radix-ui/react-popover';
+import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 
-export { Trigger };
+const Popover = PopoverPrimitive.Root;
 
-export type RadixPopoverProps = {
-  trigger: ReactNode;
-  popover: ReactNode;
-  align?: 'start' | 'center' | 'end';
-  owStyles?: {
-    contentClasses?: string;
-  };
-} & PopoverProps;
+const PopoverTrigger = PopoverPrimitive.Trigger;
 
-export default function Popover({
-  trigger,
-  popover,
-  align,
-  owStyles,
-  ...props
-}: RadixPopoverProps) {
-  return (
-    <Root {...props}>
-      <Trigger>{trigger}</Trigger>
+const PopoverContent = forwardRef<
+  ElementRef<typeof PopoverPrimitive.Content>,
+  ComponentPropsWithoutRef<typeof PopoverPrimitive.Content>
+>(({ className, align = 'center', sideOffset = 4, ...props }, ref) => (
+  <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Content
+      ref={ref}
+      align={align}
+      sideOffset={sideOffset}
+      className={classcat([
+        'z-under-sticky rounded border-[.5px] border-text-20 bg-secondary-300 p-5.5',
+        className,
+      ])}
+      {...props}
+    />
+  </PopoverPrimitive.Portal>
+));
+PopoverContent.displayName = PopoverPrimitive.Content.displayName;
 
-      <Portal>
-        <Content
-          align={align}
-          className={classcat([
-            'z-dropdown rounded border-[.5] border-text-20 bg-secondary-300 p-5.5',
-            owStyles?.contentClasses,
-          ])}
-        >
-          {popover}
-        </Content>
-      </Portal>
-    </Root>
-  );
-}
+export { Popover, PopoverTrigger, PopoverContent };

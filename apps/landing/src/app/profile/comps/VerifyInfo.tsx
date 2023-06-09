@@ -3,7 +3,7 @@ import Link from 'next/link';
 import classcat from 'classcat';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
-import Popover from '_@shared/components/popover/Popover';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import CheckIcon from '_@shared/icons/CheckIcon';
 import VerifyIcon from '_@shared/icons/VerifyIcon';
@@ -24,15 +24,17 @@ export default function VerifyInfo() {
         ])}
       >
         <p className="text-h6">Verification Level : 2</p>
-        <Popover
-          trigger={
+        <Popover>
+          <PopoverTrigger>
             <div className="grid place-items-center">
               <QuestionCircleIcon className="h-8 w-8" />
               <p className="text-subtitle2 text-primary">Upgrade</p>
             </div>
-          }
-          popover={<VerificationStepContent />}
-        />
+          </PopoverTrigger>
+          <PopoverContent>
+            <VerificationStepContent />
+          </PopoverContent>
+        </Popover>
       </div>
       <div
         className={classcat([

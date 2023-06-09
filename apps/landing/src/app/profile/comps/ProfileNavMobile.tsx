@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { feedbackStore } from '_@landing/stores/feedbackStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
-import Popover from '_@shared/components/popover/Popover';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import MenuIcon from '_@shared/icons/MenuIcon';
 import LogoutIcon from '_@shared/icons/LogoutIcon';
@@ -35,10 +35,8 @@ export default function ProfileNavMobile({ title }: ProfileNavMobileProps) {
       ])}
     >
       <h2 className="mr-auto text-subtitle1 text-text-80">{title}</h2>
-      <Popover
-        open={openStatus}
-        onOpenChange={(open) => setOpenStatus(open)}
-        trigger={
+      <Popover open={openStatus} onOpenChange={(open) => setOpenStatus(open)}>
+        <PopoverTrigger>
           <div
             className={classcat([
               'mr-2.5 flex h-10.5 items-center rounded-[5px] bg-secondary-200 p-2.5',
@@ -49,23 +47,24 @@ export default function ProfileNavMobile({ title }: ProfileNavMobileProps) {
             Account status
             <ChevronDownIcon className="text-current" />
           </div>
-        }
-        popover={<AccountStatusDropdown />}
-      />
-
-      <Popover
-        open={openProfileDropdown}
-        onOpenChange={(open) => setOpenProfileDropdown(open)}
-        trigger={
+        </PopoverTrigger>
+        <PopoverContent>
+          <AccountStatusDropdown />
+        </PopoverContent>
+      </Popover>
+      <Popover open={openProfileDropdown} onOpenChange={(open) => setOpenProfileDropdown(open)}>
+        <PopoverTrigger>
           <div
             className="grid h-10.5 w-10.5 place-items-center rounded-[5px] bg-secondary-200"
             onClick={() => setOpenProfileDropdown(!openProfileDropdown)}
           >
             <MenuIcon className="h-6 text-text-50" />
           </div>
-        }
-        popover={<ProfileDropdown />}
-      />
+        </PopoverTrigger>
+        <PopoverContent align='end'>
+          <ProfileDropdown />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

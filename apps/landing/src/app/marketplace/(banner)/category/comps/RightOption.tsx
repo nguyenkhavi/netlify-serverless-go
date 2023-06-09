@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
-import Popover from '_@shared/components/popover/Popover';
 import BaseSelect from '_@shared/components/select/BaseSelect';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import GridIcon from '_@shared/icons/GridIcon';
 import FilterIcon from '_@shared/icons/FilterIcon';
@@ -48,10 +48,8 @@ export default function RightOption({ view }: RightOptionProps) {
           contentClasses: 'ow:py-1',
         }}
       />
-      <Popover
-        open={openFilter}
-        onOpenChange={(open) => setOpenFilter(open)}
-        trigger={
+      <Popover open={openFilter} onOpenChange={(open) => setOpenFilter(open)}>
+        <PopoverTrigger>
           <div
             className="ml-2 flex h-6.25 items-center rounded bg-secondary-200 px-1 lg:ml-4 lg:hidden"
             onClick={() => setOpenFilter(true)}
@@ -59,9 +57,11 @@ export default function RightOption({ view }: RightOptionProps) {
             <FilterIcon className="h-5" />
             <span className="ml-1 text-body3 text-text-50">Filters</span>
           </div>
-        }
-        popover={<FilterContent setOpenFilter={setOpenFilter} />}
-      />
+        </PopoverTrigger>
+        <PopoverContent>
+          <FilterContent setOpenFilter={setOpenFilter} />
+        </PopoverContent>
+      </Popover>
       <div
         className={classcat([
           'flex h-6.25 w-16 items-center justify-between rounded bg-secondary-200 px-2.25',

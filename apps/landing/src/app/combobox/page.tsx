@@ -4,7 +4,7 @@ import classcat from 'classcat';
 import { useState } from 'react';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
-import { Popover, PopoverContent, PopoverTrigger } from '_@landing/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 import {
   Command,
   CommandEmpty,

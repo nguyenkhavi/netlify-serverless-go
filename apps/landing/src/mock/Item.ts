@@ -36,10 +36,12 @@ export const MOCK_DATA_COLLECTION: CollectionCard[] = Array(8)
   })
   .map((item, index) => ({ ...item, id: index + 1 }));
 
-export const MOCK_DATA_CATEGORY_ITEM: CategoryCard[] = Array(12).fill({
-  url: '/images/marketplace/collection.png',
-  name: 'Property',
-});
+export const MOCK_DATA_CATEGORY_ITEM: CategoryCard[] = Array(12)
+  .fill({
+    url: '/images/marketplace/collection.png',
+    name: 'Property',
+  })
+  .map((item, index) => ({ ...item, id: index + 1 }));
 
 export const MOCK_DATA_SELLER: TSellerCard[] = [
   {

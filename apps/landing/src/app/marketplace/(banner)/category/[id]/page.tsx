@@ -8,9 +8,10 @@ import BrowseCategory from '_@landing/app/marketplace/comps/BrowseCategory';
 import * as Tab from '_@shared/components/tabs/BaseTab';
 import BasePagination from '_@shared/components/pagination/BasePagination';
 //RELATIVE MODULES
-import RightOption from './comps/RightOption';
-import TabContentArtItems from './comps/TabContentArtItems';
-import TabContentCollection from './comps/TabContentCollection';
+import RightOption from '../comps/RightOption';
+import TabContentArtItems from '../comps/TabContentArtItems';
+import TabContentCollection from '../comps/TabContentCollection';
+//RELATIVE MODULES
 
 export default function FilterByCategory({ params }: { params: { category: string } }) {
   const router = useRouter();

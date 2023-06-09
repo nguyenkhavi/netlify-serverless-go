@@ -1,35 +1,30 @@
 'use client';
 
 //THIRD PARTY MODULES
-import { useMemo, useRef } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link';
+import classcat from 'classcat';
+import { useParams } from 'next/navigation';
+import { useMemo, useRef, useState } from 'react';
 //LAYOUT, COMPONENTS
-import Button from '_@shared/components/Button'
-import SearchInput from '_@shared/components/SearchInput'
-import BaseSelect from '_@shared/components/select/BaseSelect'
-
-const MOCK_OPTIONS = [
-  { value: '', label: 'All' },
-  { value: 'pfp', label: 'PFP' },
-  { value: 'wildlife ', label: 'Wildlife' },
-  { value: 'nature ', label: 'Nature' },
-  { value: 'gaming ', label: 'Gaming' },
-  { value: 'arts ', label: 'Arts' },
-];
+import Button from '_@shared/components/Button';
+import SearchInput from '_@shared/components/SearchInput';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
+//SHARED
+import ChevronBottomIcon from '_@shared/icons/ChevronBottomIcon';
+//RELATIVE MODULES
+import { MOCK_DATA } from './BrowseCategory';
 
 export default function Search() {
   const params = useParams();
-  const router = useRouter();
   const searchText = useRef<HTMLInputElement>(null);
 
-  const valueSelect = useMemo(() => {
-    if (!params.category) return '';
-    return params.category;
-  }, [params.category]);
+  const [open, setOpen] = useState(false);
 
-  const _handleChangeSelect = (value: string) => {
-    router.push(`/marketplace/${value}`);
-  };
+  const [categoryId, label] = useMemo(() => {
+    if (!params.id) return ['', ''];
+
+    return [params.id, MOCK_DATA.find((item) => item.id === params.id)?.label];
+  }, [params.id]);
 
   const _handleSearch = () => {
     console.log(searchText.current?.value);
@@ -46,18 +41,44 @@ export default function Search() {
           className=" md:text-body1 ow:md:h-11.25"
         />
       </div>
-      <BaseSelect
-        name="category"
-        placeholder="Category"
-        owStyles={{ triggerClasses: 'ml-1 w-25.5 flex-shrink-0 lg:hidden md:h-11.25 md:flex-grow' }}
-        options={MOCK_OPTIONS}
-        defaultValue={valueSelect}
-        onValueChange={_handleChangeSelect}
-        seeMore={
-          <div className="mt-7.5 text-center text-underline text-text-80 underline">See all</div>
-        }
-      />
-      <Button className="ml-2 hidden p-0 ow:w-29.25 lg:block" onClick={_handleSearch}>
+      <Popover open={open} onOpenChange={(value) => setOpen(value)}>
+        <PopoverTrigger>
+          <div
+            className={classcat([
+              'rounded-lg border border-text-10',
+              'flex items-center justify-center',
+              'ml-2 h-full w-26 xlg:hidden',
+            ])}
+          >
+            <span className="text-body3 text-primary">{label ? label : 'All'}</span>
+            <ChevronBottomIcon className="ml-1" />
+          </div>
+        </PopoverTrigger>
+        <PopoverContent className="min-w-[125px] ow:py-7" align="end">
+          <div className="grid gap-3">
+            {MOCK_DATA.map((category, i) => (
+              <Link
+                className={classcat([
+                  'text-body2 hover:text-primary',
+                  categoryId === category.id ? 'text-primary' : '',
+                ])}
+                href={`/marketplace${category.id === '' ? '' : '/category/' + category.id}`}
+                key={i}
+                onClick={() => setOpen(false)}
+              >
+                {category.label}
+              </Link>
+            ))}
+          </div>
+          <Link
+            href="/marketplace/category"
+            className="mx-auto mt-11 block cursor-pointer text-center text-underline underline"
+          >
+            See All
+          </Link>
+        </PopoverContent>
+      </Popover>
+      <Button className="ml-2 hidden p-0 ow:w-29.25 xlg:block" onClick={_handleSearch}>
         Search
       </Button>
     </div>

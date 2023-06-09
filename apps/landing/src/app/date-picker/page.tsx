@@ -8,7 +8,7 @@ import { DateRange } from 'react-day-picker';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import Calendar from '_@landing/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '_@landing/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import CalendarIcon from '_@shared/icons/CalendarIcon';
 

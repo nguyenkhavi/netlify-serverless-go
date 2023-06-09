@@ -30,6 +30,7 @@ module.exports = {
         sans: ['var(--font-archivo, "Archivo")', 'sans-serif'],
       },
       zIndex: {
+        'under-sticky': 9,
         sticky: 10,
         dropdown: 20,
         overlay: 100,

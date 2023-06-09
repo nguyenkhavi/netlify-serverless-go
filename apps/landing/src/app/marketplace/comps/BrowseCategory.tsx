@@ -1,25 +1,25 @@
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
-import { useMemo } from 'react'
-import { useParams } from 'next/navigation'
+import Link from 'next/link';
+import classcat from 'classcat';
+import { useMemo } from 'react';
+import { useParams } from 'next/navigation';
 
-const MOCK_DATA = [
-  { label: 'All', path: '' },
-  { label: 'PFP', path: 'pfp' },
-  { label: 'Wildlife', path: 'wildlife' },
-  { label: 'Nature', path: 'nature' },
-  { label: 'Gaming', path: 'gaming' },
-  { label: 'Art', path: 'art' },
+export const MOCK_DATA = [
+  { label: 'All', id: '' },
+  { label: 'PFP', id: '1' },
+  { label: 'Wildlife', id: '2' },
+  { label: 'Nature', id: '3' },
+  { label: 'Gaming', id: '4' },
+  { label: 'Art', id: '5' },
 ];
 
 export default function BrowseCategory() {
   const params = useParams();
 
-  const navActive = useMemo(() => {
-    if (params.category === undefined) return '';
-    return params.category;
-  }, [params.category]);
+  const categoryId = useMemo(() => {
+    if (params.id === undefined) return '';
+    return params.id;
+  }, [params.id]);
 
   return (
     <div
@@ -34,16 +34,21 @@ export default function BrowseCategory() {
           <Link
             className={classcat([
               'text-body2 hover:text-primary',
-              navActive === category.path ? 'text-primary' : '',
+              categoryId === category.id ? 'text-primary' : '',
             ])}
-            href={'/marketplace/' + category.path}
+            href={`/marketplace${category.id === '' ? '' : '/category/' + category.id}`}
             key={i}
           >
             {category.label}
           </Link>
         ))}
       </div>
-      <button className="mx-auto mt-11 block cursor-pointer text-center text-underline underline">See All</button>
+      <Link
+        href="/marketplace/category"
+        className="mx-auto mt-11 block cursor-pointer text-center text-underline underline"
+      >
+        See All
+      </Link>
     </div>
   );
 }

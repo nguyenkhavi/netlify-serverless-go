@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
-import * as Popover from '_@landing/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import ArrowRightIcon from '_@shared/icons/ArrowRightIcon';
 import ChevronDownIcon from '_@shared/icons/ChevronDownIcon';
@@ -25,7 +25,7 @@ const btnClasses = [
 ];
 const itemSelectClasses = [
   'hover:text-primary data-[active=true]:text-primary text-text-50',
-  'px-6 h-6 text-body2',
+  'h-6 text-body2',
   'flex items-center',
 ];
 
@@ -101,8 +101,8 @@ export default function VerifyPage() {
           </div>
         </div>
         <div className="py-5 md:hidden">
-          <Popover.Popover open={open} onOpenChange={(value) => setOpen(value)}>
-            <Popover.PopoverTrigger
+          <Popover open={open} onOpenChange={(value) => setOpen(value)}>
+            <PopoverTrigger
               className={classcat([
                 'h-15 w-full pl-3 pr-6',
                 'flex items-center',
@@ -112,8 +112,8 @@ export default function VerifyPage() {
             >
               {selectedValue === 'id' ? 'ID Verification' : 'Address Verification'}
               <ChevronDownIcon className="ml-auto" />
-            </Popover.PopoverTrigger>
-            <Popover.PopoverContent className="w-[--content-width] border-none bg-secondary-300">
+            </PopoverTrigger>
+            <PopoverContent className="w-[--content-width] border-none bg-secondary-300">
               <button
                 className={classcat([itemSelectClasses, 'mb-5'])}
                 data-active={selectedValue === 'id'}
@@ -130,8 +130,8 @@ export default function VerifyPage() {
                 <LocationIcon className="mr-3 text-current" />
                 Address Verification
               </button>
-            </Popover.PopoverContent>
-          </Popover.Popover>
+            </PopoverContent>
+          </Popover>
         </div>
         <Show when={selectedValue === 'id'}>
           <div className="rounded-[10px] bg-secondary-200 px-9.5 pb-10 pt-14 md:w-89">

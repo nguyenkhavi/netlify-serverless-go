@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 import SearchInput from '_@shared/components/SearchInput';
-import Popover from '_@shared/components/popover/Popover';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import MenuIcon from '_@shared/icons/MenuIcon';
 import FilterIcon from '_@shared/icons/FilterIcon';
@@ -103,10 +103,8 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           ])}
           boxClasses="w-[146px] max-w-[324px] md:w-full"
         />
-        <Popover
-          open={openFilter}
-          onOpenChange={(open) => setOpenFilter(open)}
-          trigger={
+        <Popover open={openFilter} onOpenChange={(open) => setOpenFilter(open)}>
+          <PopoverTrigger>
             <div
               className={classcat([buttonFilterClasses, ' md:hidden'])}
               onClick={() => setOpenFilter(true)}
@@ -114,13 +112,13 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
               <FilterIcon className="h-5" />
               <span className="ml-1 whitespace-nowrap text-body3 text-text-50">Filter search</span>
             </div>
-          }
-          popover={<FilterPrice setOpenFilter={setOpenFilter} />}
-        />
-        <Popover
-          open={openFilterItems}
-          onOpenChange={(open) => setOpenFilterItems(open)}
-          trigger={
+          </PopoverTrigger>
+          <PopoverContent>
+            <FilterPrice setOpenFilter={setOpenFilter} />
+          </PopoverContent>
+        </Popover>
+        <Popover open={openFilterItems} onOpenChange={(open) => setOpenFilterItems(open)}>
+          <PopoverTrigger>
             <div
               className={classcat([buttonFilterClasses, 'hidden md:flex'])}
               onClick={() => setOpenFilterItems(true)}
@@ -128,10 +126,11 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
               <FilterIcon className="h-5" />
               <span className="ml-1 whitespace-nowrap text-body3 text-text-50">Filter items</span>
             </div>
-          }
-          popover={<FilterItem setOpenFilter={setOpenFilterItems} />}
-          owStyles={{ contentClasses: 'px-0' }}
-        />
+          </PopoverTrigger>
+          <PopoverContent className="ow:px-0 ow:py-2.5">
+            <FilterItem setOpenFilter={setOpenFilterItems} />
+          </PopoverContent>
+        </Popover>
       </div>
     </section>
   );
