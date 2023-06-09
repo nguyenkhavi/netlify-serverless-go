@@ -11,7 +11,7 @@ export default function Adv() {
     <div
       className={classcat([
         'mt-7.5 rounded-[5px] bg-header-bg py-5.5 pl-8.5 pr-3.5',
-        'sm:mt-9 sm:rounded-[10px] sm:bg-[#040908] sm:px-6 sm:py-[24.5px]',
+        'sm:mt-9 sm:rounded-[10px] sm:bg-[#040908] sm:px-6 sm:py-[17px]',
         'border-[.5px] border-white/25',
         'xlg:px-20 2xl:mx-2.5 2xl:mt-20.5',
       ])}

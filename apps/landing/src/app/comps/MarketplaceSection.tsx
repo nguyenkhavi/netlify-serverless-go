@@ -17,9 +17,9 @@ export default function MarketplaceSection() {
     >
       <div
         className={classcat([
-          'h-auto w-[300px]',
+          'h-auto w-[225px]',
           'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:right-0 xl:w-[395px] 2xl:right-[130px]',
+          'xl:right-0 xl:w-[360px] 2xl:right-[130px]',
         ])}
       >
         <DecentralizedCartIcon

@@ -19,14 +19,14 @@ export default function SocialNetworkSection() {
         className={classcat([
           'h-auto w-[200px]',
           'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:right-0 xl:w-[392px] 2xl:right-[189px]',
+          'xl:right-0 xl:w-[360px] 2xl:right-[189px]',
         ])}
       >
         <DecentralizedSocialNetworkIcon
           data-sal="zoom-in"
           data-sal-duration="800"
           data-sal-delay="300"
-          className='h-full w-full'
+          className="h-full w-full"
         />
       </div>
 
@@ -68,7 +68,7 @@ export default function SocialNetworkSection() {
           href="/social-network"
           className="btnlg mt-7.5 ow:w-62.5 xl:mt-10 [&>span]:tracking-[-.1px]"
         >
-          Join everyone in our community
+          Join our community
         </Button>
       </div>
     </section>

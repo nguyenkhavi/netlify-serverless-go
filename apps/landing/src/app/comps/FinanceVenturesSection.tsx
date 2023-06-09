@@ -19,7 +19,7 @@ export default function FinanceVenturesSection() {
         className={classcat([
           'h-auto w-[200px]',
           'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:left-0 xl:w-[327px] 2xl:left-[145px]',
+          'xl:left-0 xl:w-[360px] 2xl:left-[145px]',
         ])}
       >
         <DecentralizedFinanceVenturesIcon
@@ -69,7 +69,7 @@ export default function FinanceVenturesSection() {
           href="/finance-ventures"
           className="btnlg mt-7.5 ow:w-62.5 xl:mt-10"
         >
-          Go To Ventures
+          Go to ventures
         </Button>
       </div>
     </section>

@@ -19,7 +19,7 @@ export default function ExchangeSection() {
         className={classcat([
           'h-auto w-[200px]',
           'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:left-0 xl:w-[327px] 2xl:left-[145px]',
+          'xl:left-0 xl:w-[360px] 2xl:left-[145px]',
         ])}
       >
         <DecentralizedExchangeIcon

@@ -37,7 +37,7 @@ export default function Home() {
       <FinanceVenturesSection />
       <HomeAdvHorizontal />
       <AchievementsSection />
-      <HomeAdvHorizontal />
+      <HomeAdvHorizontal className="2xl:ow:hidden" />
       <ClientsSection />
       <PartnersSection />
       <HomeAdvHorizontal className="2xl:ow:hidden" />

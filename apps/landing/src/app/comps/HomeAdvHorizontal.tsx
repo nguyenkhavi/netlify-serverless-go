@@ -16,7 +16,7 @@ export default function HomeAdvHorizontal({ className, isHome = false }: Props) 
     <div
       className={classcat([
         'rounded-[10px] bg-header-bg py-5.5 pl-3.5 pr-4.5',
-        'border-[.5px] border-text-20 sm:px-6 sm:py-[24.5px]',
+        'border-[.5px] border-text-20 sm:px-6 sm:py-[17px]',
         'xlg:px-20',
         className,
       ])}
