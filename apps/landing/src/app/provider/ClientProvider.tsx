@@ -27,13 +27,5 @@ const UseClientProvider = api.withTRPC(({ children }: { children: any }) => {
 // Create this Wrapper because of TS error
 export default function Wrapper({ children }: { children: any }) {
   // @ts-ignore
-  return (
-    <ThirdwebProvider
-      supportedWallets={[metamaskWallet(), coinbaseWallet(), walletConnectV1(), safeWallet()]}
-      activeChain="ethereum"
-    >
-      {/* @ts-ignore */}
-      <UseClientProvider>{children}</UseClientProvider>
-    </ThirdwebProvider>
-  );
+  return <UseClientProvider>{children}</UseClientProvider>;
 }

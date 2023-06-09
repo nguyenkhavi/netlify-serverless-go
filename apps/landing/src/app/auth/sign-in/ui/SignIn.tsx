@@ -1,17 +1,39 @@
 'use client';
 //THIRD PARTY MODULES
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
-import FormInput from '_@shared/components/FormInput';
+import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
 //SHARED
 import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
-//SHARED
+
+const values = z.object({
+  phone: z.object({
+    digitalCode: z.string().min(1).max(3),
+    phoneNumber: z.string().min(0).max(10, { message: 'Phone number must be 10 digits' }),
+  }),
+});
+
+type Values = z.infer<typeof values>;
 
 export default function SignIn() {
-  const methods = useForm();
-  const { handleSubmit } = methods;
+  const methods = useForm<Values>({
+    resolver: zodResolver(values),
+    defaultValues: {
+      phone: {
+        digitalCode: 'GB',
+        phoneNumber: '',
+      },
+    },
+  });
+  const {
+    handleSubmit,
+    formState: { errors },
+  } = methods;
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -28,12 +50,17 @@ export default function SignIn() {
           <FormProvider {...methods}>
             <form onSubmit={onSubmit} className="mt-8.5 md:mt-10">
               <div className="grid gap-4">
-                <FormItem label="Email/username" name="username">
-                  <FormInput name="username" placeholder="www.uihut@gmail.com" />
-                </FormItem>
-
-                <FormItem label="Password" name="password">
-                  <FormInput name="password" placeholder="**********" type="password" />
+                <FormItem label="Email/username" name="">
+                  <>
+                    <FormPhoneInput
+                      name={{ digitalCode: 'phone.digitalCode', phoneNumber: 'phone.phoneNumber' }}
+                    />
+                    <Show when={errors.phone?.digitalCode || errors.phone?.phoneNumber}>
+                      <p className="mt-1 text-body2 text-error">
+                        {errors.phone?.digitalCode?.message || errors.phone?.phoneNumber?.message}
+                      </p>
+                    </Show>
+                  </>
                 </FormItem>
               </div>
               <div className="mt-1 text-end md:mt-2">
@@ -41,10 +68,12 @@ export default function SignIn() {
                   Forget Password?
                 </a>
               </div>
-              <Button className="btnlg mx-auto mt-6 ow:w-62 md:ow:w-full">Sign in</Button>
+              <Button type="submit" className="btnlg mx-auto mt-6 ow:w-62 md:ow:w-full">
+                Sign in
+              </Button>
 
               <p className="mt-11 flex items-center justify-center space-x-1">
-                <span className="text-body1 text-text-80">Don’t have an account?</span>
+                <span className="text-body1 text-text-80">Don't have an account?</span>
                 <button className="btn-link text-primary ow:w-fit">Sign Up</button>
               </p>
             </form>

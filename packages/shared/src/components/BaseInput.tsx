@@ -20,7 +20,7 @@ import Show from './Show';
 import type { Assign } from '_@shared/utils/type';
 
 const baseClasses = [
-  'transition-all',
+  'transition-colors',
   'focus-visible:outline-none',
   'border-[.5px] border-text-10',
   'bg-secondary/70 w-full',
