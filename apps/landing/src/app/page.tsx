@@ -21,9 +21,9 @@ export default function Home() {
     <main
       className={classcat([
         'relative overflow-hidden',
-        'grid gap-7.5 px-[--px] pb-7.5 pt-10',
+        'grid gap-10 px-[--px] pb-10 pt-6',
         'xlg:gap-20 xlg:pb-[110px] xlg:pt-7',
-        '2xl:pb-[304px]',
+        '2xl:pb-[235px]',
       ])}
     >
       <Ellipse />
@@ -37,7 +37,6 @@ export default function Home() {
       <FinanceVenturesSection />
       <HomeAdvHorizontal />
       <AchievementsSection />
-      <HomeAdvHorizontal className="2xl:ow:hidden" />
       <ClientsSection />
       <PartnersSection />
       <HomeAdvHorizontal className="2xl:ow:hidden" />

@@ -8,32 +8,20 @@ import DecentralizedExchangeIcon from '_@shared/icons/DecentralizedExchangeIcon'
 
 export default function ExchangeSection() {
   return (
-    <section
-      id="exchange"
-      className={classcat([
-        'grid justify-items-center',
-        'xlg:px-20 xl:relative xl:justify-items-start xl:py-[67px]',
-      ])}
-    >
-      <div
-        className={classcat([
-          'h-auto w-[200px]',
-          'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:left-0 xl:w-[360px] 2xl:left-[145px]',
-        ])}
-      >
+    <section id="exchange" className={classcat(['items-center xl:flex'])}>
+      <div className={classcat(['grid grow place-items-center'])}>
         <DecentralizedExchangeIcon
           data-sal="zoom-in"
           data-sal-duration="800"
           data-sal-delay="300"
-          className="h-full w-full"
+          className="h-[196px] w-[196px] xl:h-[393px] xl:w-[393px]"
         />
       </div>
 
       <div
         className={classcat([
           'mt-10 grid w-full justify-items-center',
-          'xl:ml-auto xl:mt-0 xl:max-w-[590px] xl:justify-items-start',
+          'xl:ml-auto xl:mt-0 xl:max-w-[724px] xl:justify-items-start',
         ])}
       >
         <div

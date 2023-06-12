@@ -37,7 +37,7 @@ const CLIENT_LIST = [
 
 export default function ClientsSection() {
   return (
-    <section id="clients" className="mx-[calc(-1*var(--px))]">
+    <section id="clients" className="mx-[calc(-1*var(--px))] mb-22 xl:mb-12">
       <div className="grid justify-items-center">
         <div
           className={classcat([

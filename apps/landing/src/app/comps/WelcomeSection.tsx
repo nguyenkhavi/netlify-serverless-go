@@ -6,14 +6,14 @@ export default function WelcomeSection() {
     <section
       id="welcome"
       className={classcat([
-        'px-6.5 pb-9 pt-[67px]',
+        'mb-10.5 px-4 py-6.75 xl:mb-4',
         'rounded-[20px] border border-[#2E2E2E]',
         'bg-welcome-mobile bg-cover bg-center bg-no-repeat',
         'xlg:h-[793px] xlg:px-10 xlg:py-0',
         'xlg:grid xlg:place-items-center xlg:bg-welcome-desktop',
       ])}
     >
-      <div className="grid gap-2.5 xlg:max-w-[1049px] xlg:gap-1">
+      <div className="grid gap-6 xlg:max-w-[1208px]">
         <div
           data-sal="slide-up"
           data-sal-duration="800"

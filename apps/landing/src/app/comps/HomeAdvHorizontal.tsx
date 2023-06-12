@@ -15,9 +15,8 @@ export default function HomeAdvHorizontal({ className, isHome = false }: Props) 
   return (
     <div
       className={classcat([
-        'rounded-[10px] bg-header-bg py-5.5 pl-3.5 pr-4.5',
-        'border-[.5px] border-text-20 sm:px-6 sm:py-[17px]',
-        'xlg:px-20',
+        'rounded-[10px] bg-secondary-200 p-6',
+        'ring-1 ring-text-10',
         className,
       ])}
     >
@@ -35,7 +34,7 @@ export default function HomeAdvHorizontal({ className, isHome = false }: Props) 
           ])}
         />
         <span className="ml-3 mr-2 text-center text-subtitle2 sm:text-h4 xl:mx-0">
-          “<span className="text-bold mr-1 text-primary">50%</span>
+          “<span className="mr-1 text-primary">50%</span>
           Off Through This Saturday”
         </span>
         <Button

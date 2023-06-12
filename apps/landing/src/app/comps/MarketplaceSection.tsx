@@ -8,32 +8,20 @@ import DecentralizedCartIcon from '_@shared/icons/DecentralizedCartIcon';
 
 export default function MarketplaceSection() {
   return (
-    <section
-      id="marketplace"
-      className={classcat([
-        'grid justify-items-center py-3',
-        'xlg:px-20 xl:relative xl:justify-items-start xl:py-16',
-      ])}
-    >
-      <div
-        className={classcat([
-          'h-auto w-[225px]',
-          'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:right-0 xl:w-[360px] 2xl:right-[130px]',
-        ])}
-      >
+    <section id="marketplace" className={classcat(['items-center xl:flex'])}>
+      <div className={classcat(['grid grow place-items-center xl:order-2'])}>
         <DecentralizedCartIcon
           data-sal="zoom-in"
           data-sal-duration="800"
           data-sal-delay="300"
-          className="h-full w-full"
+          className="ow:h-[168px] ow:w-[169px] xl:h-[336px] xl:w-[337px]"
         />
       </div>
 
       <div
         className={classcat([
-          'mt-10 grid w-full justify-items-center',
-          'xl:mt-0 xl:max-w-[623px] xl:justify-items-start',
+          'mt-10 grid w-full justify-items-center xl:order-1',
+          'xl:mt-0 xl:max-w-[724px] xl:justify-items-start',
         ])}
       >
         <div

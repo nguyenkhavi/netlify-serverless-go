@@ -43,7 +43,7 @@ const PARTNER_LIST = [
 
 export default function PartnersSection() {
   return (
-    <section id="partners" className="mx-[calc(-1*var(--px))] 2xl:relative 2xl:mx-0">
+    <section id="partners" className="mx-[calc(-1*var(--px))] mb-16 xl:mb-0 xl:pt-16 2xl:relative 2xl:mx-0">
       <HomeAdvVertical className="left-0" />
       <HomeAdvVertical className="right-0" />
 
@@ -62,8 +62,8 @@ export default function PartnersSection() {
 
       <div
         className={classcat([
-          'hidden xlg:grid',
-          'mx-auto mt-[59px] w-fit justify-items-center gap-25',
+          'mt-10 hidden xlg:grid xl:mt-8',
+          'mx-auto w-fit justify-items-center gap-25',
         ])}
       >
         <div className="grid auto-cols-max grid-flow-col gap-25">

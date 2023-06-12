@@ -15,7 +15,7 @@ export default function HomeAdvVertical({ className, btnClasses }: Props) {
   return (
     <div
       className={classcat([
-        'absolute top-[42px] h-[600px] w-[160px]',
+        'absolute top-16 h-[600px] w-[160px]',
         'rounded-[10px] border-[.5px] border-white/20 bg-[#0D0D0D]',
         'hidden place-items-center 2xl:grid',
         className,

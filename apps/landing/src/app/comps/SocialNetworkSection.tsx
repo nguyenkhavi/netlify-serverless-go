@@ -8,32 +8,20 @@ import DecentralizedSocialNetworkIcon from '_@shared/icons/DecentralizedSocialNe
 
 export default function SocialNetworkSection() {
   return (
-    <section
-      id="social-network"
-      className={classcat([
-        'grid justify-items-center',
-        'xlg:px-20 xl:relative xl:justify-items-start xl:py-[51px]',
-      ])}
-    >
-      <div
-        className={classcat([
-          'h-auto w-[200px]',
-          'xl:absolute xl:bottom-1/2 xl:translate-y-1/2',
-          'xl:right-0 xl:w-[360px] 2xl:right-[189px]',
-        ])}
-      >
+    <section id="social-network" className={classcat(['items-center xl:flex'])}>
+      <div className={classcat(['grid grow place-items-center xl:order-2'])}>
         <DecentralizedSocialNetworkIcon
           data-sal="zoom-in"
           data-sal-duration="800"
           data-sal-delay="300"
-          className="h-full w-full"
+          className="ow:h-[193px] ow:w-[192px] xl:h-[382px] xl:w-[385px]"
         />
       </div>
 
       <div
         className={classcat([
           'mt-10 grid w-full justify-items-center',
-          'xl:mt-0 xl:max-w-[585px] xl:justify-items-start',
+          'xl:mt-0 xl:max-w-[724px] xl:justify-items-start',
         ])}
       >
         <div

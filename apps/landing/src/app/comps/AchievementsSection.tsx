@@ -26,8 +26,8 @@ export default function AchievementsSection() {
       id="achievements"
       className={classcat([
         'rounded-[10px] border-[.5px] border-white/[.22] bg-achievement',
-        'px-[27.5px] py-[43px]',
-        'xlg:px-13.25 xlg:pb-14.5 xlg:pt-7',
+        'mb-22 px-6 py-4 xl:mb-20',
+        'lg:py-12.5',
       ])}
     >
       <div
@@ -42,7 +42,7 @@ export default function AchievementsSection() {
             'xlg:justify-items-stretch xlg:gap-1',
           ])}
         >
-          <div className="xl:text-3 text-h4">Achievements</div>
+          <div className="text-h4 xl:text-h3">Achievements</div>
           <div className="text-center text-body2 text-text-50 xlg:text-left xl:text-h6">
             We onboarded over $500 million worth of goods onto our marketplaces
           </div>
@@ -62,7 +62,7 @@ export default function AchievementsSection() {
                 'xlg:justify-items-stretch xlg:gap-3.75',
               ])}
             >
-              <div className="xl:text-3 text-h4">{value}</div>
+              <div className="text-h4 xl:text-h3">{value}</div>
               <div className="text-subtitle2 text-text-50 xl:text-subtitle1">{title}</div>
             </div>
           ))}

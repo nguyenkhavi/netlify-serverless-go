@@ -150,8 +150,7 @@ export default function Info() {
         <LogoWhiteIcon />
         <div
           className={classcat([
-            'mt-[11px] w-[215px] text-center text-[12px] font-medium leading-[20px] text-[color:#A6A6A6]',
-            'md:text-left',
+            'mt-[11px] text-center text-body1 text-text-50 lg:w-[287px] lg:text-start',
           ])}
         >
           Design amazing digital experiences that create more happy in the world.
