@@ -1,14 +1,20 @@
 'use client';
 //THIRD PARTY MODULES
 import { useState } from 'react';
+import { useContext } from 'react';
 import { api } from '_@landing/utils/api';
 import { useRouter } from 'next/navigation';
+import { ListenerService } from '_@landing/utils/tyoe';
 import { EGender } from '_@rpc/routers/clerk/clerk.validators';
+import { useValidDirectListings, useContract } from '@thirdweb-dev/react';
 import { useSignIn, useClerk, useSignUp, useSession } from '@clerk/nextjs';
 //LAYOUT, COMPONENTS
 import { ConnectWalletButton } from '_@landing/components/provider/ConnectWalletButton';
 //SHARED
 import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
+//RELATIVE MODULES
+import { getLastBlock } from '../services';
+import { useIndexedDBContext } from '../provider/IndexedDBProvider';
 
 const SignInPage = () => {
   const { push } = useRouter();
@@ -19,6 +25,26 @@ const SignInPage = () => {
   const { isLoaded, signIn, setActive } = useSignIn();
   const { session } = useSession();
   const { mutate: logout } = api['user-logout'].useMutation();
+  const { db } = useIndexedDBContext();
+
+  const contractAddress = '0x0a7D39504176eE6de53a6e320fb47c5D44f3666A';
+  const { contract } = useContract(contractAddress, 'marketplace-v3');
+
+  const {
+    data: directListings,
+    isLoading,
+    error,
+  } = useValidDirectListings(contract, {
+    count: 100, // Number of listings to fetch
+    // offeror: '{{offeror_address}}', // Has offers from this address
+    // seller: '{{seller_address}}', // Being sold by this address
+    start: 0, // Start from this index (pagination)
+    // tokenContract: '{{token_contract_address}}', // Only show NFTs from this collection
+    // tokenId: '{{token_id}}', // Only show NFTs with this token ID
+  });
+
+  console.log({ directListings });
+
   async function handleSignIn() {
     signIn
       ?.create({

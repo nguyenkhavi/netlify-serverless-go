@@ -45,6 +45,7 @@
     "crypto-js": "^4.1.1",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.7",
+    "decimal.js": "^10.4.3",
     "drizzle-orm": "^0.26.5",
     "ethers": "^5.7.2",
     "fastify": "^4.17.0",
