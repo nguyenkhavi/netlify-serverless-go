@@ -1,3 +1,4 @@
+'use client';
 //THIRD PARTY MODULES
 import * as React from 'react';
 import classcat from 'classcat';

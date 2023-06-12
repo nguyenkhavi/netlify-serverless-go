@@ -65,7 +65,7 @@ export default function ProfileNav() {
             Personalize your account by adding your details.
           </p>
           <div className="flex items-center text-subtitle2">
-            <button className='mr-9'>Dismiss</button>
+            <button className="mr-9">Dismiss</button>
             <button>Add Detail</button>
           </div>
         </div>
@@ -110,7 +110,7 @@ export const PROFILE_NAV: TProfileNav[] = [
   },
   {
     label: 'Account History',
-    path: '/account-history',
+    path: '/profile/account-history',
     icon: <UserBarIcon />,
   },
   {
