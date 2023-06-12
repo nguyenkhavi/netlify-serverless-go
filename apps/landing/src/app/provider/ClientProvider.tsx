@@ -20,12 +20,11 @@ const queryClient = new QueryClient({
   },
 });
 
-const UseClientProvider = api.withTRPC(({ children }: { children: any }) => {
+const UseClientProvider = api.withTRPC(({ children }) => {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
-});
+}) as ({ children }: { children: React.ReactNode }) => JSX.Element;
 
 // Create this Wrapper because of TS error
-export default function Wrapper({ children }: { children: any }) {
-  // @ts-ignore
+export default function Wrapper({ children }: { children: React.ReactNode }) {
   return <UseClientProvider>{children}</UseClientProvider>;
 }

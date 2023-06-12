@@ -1,7 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 //LAYOUT, COMPONENTS
 import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/ui/popover';
 import {
@@ -13,7 +13,7 @@ import {
 } from '_@shared/components/ui/command';
 //SHARED
 import ChevronDownIcon from '_@shared/icons/ChevronDownIcon';
-import countries, { Country } from '_@shared/constant/countries';
+import countries, { Country, countryMapping } from '_@shared/constant/countries';
 
 const Flag = ({ code }: { code: string }) => {
   return (
@@ -22,7 +22,7 @@ const Flag = ({ code }: { code: string }) => {
       srcSet={`https://flagcdn.com/32x24/${code}.png 2x, https://flagcdn.com/48x36/${code}.png 3x`}
       width="16"
       height="12"
-      alt="South Africa"
+      alt={`Flag of ${code}`}
     />
   );
 };
@@ -36,13 +36,6 @@ type Props = {
 export default function CountrySelect({ className, onChange: _onChange, value: _value }: Props) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<Country['code']>(_value);
-
-  const countryMapping = useMemo(() => {
-    return countries.reduce((acc, country) => {
-      acc[country.code] = country;
-      return acc;
-    }, {} as Record<string, (typeof countries)[number]>);
-  }, []);
 
   const valueSelected = countryMapping[value];
 
@@ -63,7 +56,8 @@ export default function CountrySelect({ className, onChange: _onChange, value: _
       <PopoverContent className="h-58 w-72.5 bg-black p-0">
         <Command
           filter={(value, search) => {
-            const name = countryMapping[value.toUpperCase()]?.name as string;
+            const code = value.toUpperCase() as Country['code'];
+            const name = countryMapping[code]?.name as string;
 
             if (name === undefined) return 0;
             if (search.length > 0 && name.toLowerCase().includes(search.toLowerCase())) {
