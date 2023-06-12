@@ -5,7 +5,6 @@ import classcat from 'classcat';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { feedbackStore } from '_@landing/stores/feedbackStore';
-import { useAuthStoreAction } from '_@landing/stores/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
@@ -62,7 +61,7 @@ export default function ProfileNavMobile({ title }: ProfileNavMobileProps) {
             <MenuIcon className="h-6 text-text-50" />
           </div>
         </PopoverTrigger>
-        <PopoverContent align="end">
+        <PopoverContent align='end'>
           <ProfileDropdown />
         </PopoverContent>
       </Popover>
@@ -71,7 +70,6 @@ export default function ProfileNavMobile({ title }: ProfileNavMobileProps) {
 }
 
 function ProfileDropdown() {
-  const { logout } = useAuthStoreAction();
   const { setOpen } = feedbackStore();
   const pathname = usePathname();
 
@@ -105,7 +103,6 @@ function ProfileDropdown() {
           'rounded-[30px] [&>svg]:h-4',
         ])}
         trailingIcon={<LogoutIcon />}
-        onClick={logout}
       >
         Logout
       </Button>

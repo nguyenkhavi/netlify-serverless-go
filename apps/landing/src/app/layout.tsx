@@ -2,8 +2,7 @@
 import { Metadata } from 'next';
 import classcat from 'classcat';
 import { Archivo } from 'next/font/google';
-import { AuthProvider } from '_@landing/stores/useAuthStore';
-import ClientProvider from '_@landing/app/provider/ClientProvider';
+import { ClerkProvider } from '@clerk/nextjs';
 //LAYOUT, COMPONENTS
 import Header from '_@landing/layouts/Header';
 import Footer from '_@landing/layouts/footer/Footer';
@@ -12,6 +11,7 @@ import ModalFeedback from '_@landing/components/modal/ModalFeedback';
 import { DialogConfirm } from '_@landing/components/dialog/DialogConfirm';
 //RELATIVE MODULES
 import './globals.css';
+import ClientProvider from './provider/ClientProvider';
 
 export const metadata: Metadata = {
   title: 'Fleamint',
@@ -25,7 +25,7 @@ const archivo = Archivo({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <AuthProvider>
+    <ClerkProvider>
       <ClientProvider>
         <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
           <body>
@@ -39,6 +39,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </body>
         </html>
       </ClientProvider>
-    </AuthProvider>
+    </ClerkProvider>
   );
 }

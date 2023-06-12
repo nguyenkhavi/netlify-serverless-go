@@ -1514,9 +1514,4 @@ const countries = [
 ] as const;
 export type Country = (typeof countries)[number];
 
-export const countryMapping = countries.reduce((acc, country) => {
-  acc[country.code] = country;
-  return acc;
-}, {} as Record<Country['code'], (typeof countries)[number]>);
-
 export default countries;

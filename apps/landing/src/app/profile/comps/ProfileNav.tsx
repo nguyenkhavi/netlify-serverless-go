@@ -5,7 +5,6 @@ import Link from 'next/link';
 import classcat from 'classcat';
 import { usePathname } from 'next/navigation';
 import { feedbackStore } from '_@landing/stores/feedbackStore';
-import { useAuthStoreAction } from '_@landing/stores/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
@@ -19,7 +18,6 @@ import FeedbackIcon from '_@shared/icons/FeedbackIcon';
 import UserProfileIcon from '_@shared/icons/UserProfileIcon';
 
 export default function ProfileNav() {
-  const { logout } = useAuthStoreAction();
   const { setOpen } = feedbackStore();
   const pathname = usePathname();
 
@@ -80,7 +78,6 @@ export default function ProfileNav() {
             'mt-2.5 ow:border-text-10 ow:bg-text-10 ow:text-white',
             'rounded-[30px] [&>svg]:h-4',
           ])}
-          onClick={() => logout()}
           trailingIcon={<LogoutIcon />}
         >
           Logout

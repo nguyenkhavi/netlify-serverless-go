@@ -3,7 +3,6 @@
 import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useAuthStoreAction } from '_@landing/stores/useAuthStore';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
@@ -11,7 +10,6 @@ import FormItem from '_@shared/components/FormItem';
 import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
 //SHARED
 import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
-import { Country, countryMapping } from '_@shared/constant/countries';
 
 const values = z.object({
   phone: z.object({
@@ -23,13 +21,12 @@ const values = z.object({
 type Values = z.infer<typeof values>;
 
 export default function SignIn() {
-  const { loginWithSMS, logout } = useAuthStoreAction();
   const methods = useForm<Values>({
     resolver: zodResolver(values),
     defaultValues: {
       phone: {
-        digitalCode: 'VN',
-        phoneNumber: '834493868',
+        digitalCode: 'GB',
+        phoneNumber: '',
       },
     },
   });
@@ -38,10 +35,8 @@ export default function SignIn() {
     formState: { errors },
   } = methods;
 
-  const onSubmit = handleSubmit(async (data) => {
-    const digitalCode = data.phone.digitalCode as Country['code'];
-    const digital = countryMapping[digitalCode];
-    await loginWithSMS(`+${digital.dialCode}${data.phone.phoneNumber}`);
+  const onSubmit = handleSubmit((data) => {
+    console.log(data);
   });
 
   return (
@@ -51,7 +46,7 @@ export default function SignIn() {
       </div>
       <div className="mx-[--px] md:mx-auto md:max-w-[theme(space.135)]">
         <div className="rounded-[10px] bg-secondary-200 px-3 py-9 md:px-8.25 md:pb-7 md:pt-8.5 ">
-          <h5 className="text-center text-h5 text-primary-700 md:text-h4">Sign In</h5>
+          <h5 className="md:text-h-4 text-center text-h5 text-primary-700">Sign In</h5>
           <FormProvider {...methods}>
             <form onSubmit={onSubmit} className="mt-8.5 md:mt-10">
               <div className="grid gap-4">
@@ -79,14 +74,7 @@ export default function SignIn() {
 
               <p className="mt-11 flex items-center justify-center space-x-1">
                 <span className="text-body1 text-text-80">Don't have an account?</span>
-                <button
-                  onClick={() => {
-                    logout();
-                  }}
-                  className="btn-link text-primary ow:w-fit"
-                >
-                  Sign Up
-                </button>
+                <button className="btn-link text-primary ow:w-fit">Sign Up</button>
               </p>
             </form>
           </FormProvider>
