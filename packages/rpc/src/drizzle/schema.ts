@@ -23,3 +23,4 @@ export { token } from './token';
 export { userActivity } from './userActivity';
 export { userAnswer } from './userAnswer';
 export { userWallet } from './userWallet';
+export { session } from './session';

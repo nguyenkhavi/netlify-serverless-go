@@ -29,11 +29,12 @@ export const api = createTRPCNext<AppRouter>({
         }),
         httpBatchLink({
           url: `/api/trpc`,
-          fetch(url, options) {
-            return fetch(url, {
-              ...options,
-              credentials: 'include',
-            });
+          headers() {
+            if (typeof localStorage === 'undefined') return {};
+            if (!localStorage.getItem('token')) return {};
+            return {
+              authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+            };
           },
         }),
       ],

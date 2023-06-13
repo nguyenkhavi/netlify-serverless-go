@@ -1,13 +1,7 @@
-import { clerkClient } from '@clerk/nextjs';
-import { TRPCError, initTRPC } from '@trpc/server';
-import type { NextRequest } from 'next/server';
-import { parse } from 'cookie';
-export interface Context {
-  auth?: {
-    userId: string;
-  };
-  req: NextRequest;
-}
+import { initTRPC } from '@trpc/server';
+
+import { authenticateRequest } from '_@rpc/services/magic.link';
+import { Context } from '_@rpc/config/context';
 
 const t = initTRPC.context<Context>().create({
   errorFormatter({ shape }) {
@@ -23,30 +17,10 @@ export const mergeRouter = t.mergeRouters;
 export const protectedRouter = t.procedure.use(
   t.middleware(async (opts) => {
     const { ctx, next } = opts;
-
-    const cookies = parse(ctx.req.headers.get('cookie') || '');
-    const cookieToken = cookies['__session'];
-
-    const authorization = ctx.req.headers.get('authorization');
-    const headerToken = authorization ? authorization.replace('Bearer ', '') : '';
-
-    const token = cookieToken || headerToken;
-    if (!token) throw new TRPCError({ code: 'UNAUTHORIZED' });
-
-    const request = await clerkClient.authenticateRequest({
-      headerToken: headerToken,
-      cookieToken: token,
-      apiKey: process.env.CLERK_PUBLISHABLE_KEY || '',
-      secretKey: process.env.CLERK_SECRET_KEY || '',
-      publishableKey: process.env.CLERK_PUBLISHABLE_KEY || '',
-      host: '',
-      frontendApi: '',
-    });
-    const auth = request.toAuth();
-    if (!auth?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
-
+    const req = ctx.req;
+    const { metadata, token } = await authenticateRequest(req);
     return next({
-      ctx: { auth },
+      ctx: { ...ctx, metadata, token },
     });
   }),
 );

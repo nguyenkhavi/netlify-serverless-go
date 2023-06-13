@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "generate": "drizzle-kit generate:mysql",
-    "migrate": "drizzle-kit push:mysql"
+    "migrate": "env-cmd -f ../../apps/landing/.env drizzle-kit push:mysql"
   }
 }

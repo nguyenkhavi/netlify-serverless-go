@@ -1,53 +1,53 @@
 import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
-import { paginationSchema } from '../../config/schemas';
+// import { paginationSchema } from '../../config/schemas';
 
-import {
-  connectIGSchema,
-  connectWalletSchema,
-  createUserActivitySchema,
-  forgotPasswordSchema,
-  setKYCSchema,
-  closeSessionSchema,
-  closeAllSessionSchema,
-  logoutSchema,
-  verifyForgotPasswordTokenSchema,
-  createShippingAddressSchema,
-  updateShippingAddressSchema,
-} from '_@rpc/routers/users/user.schemas';
-import {
-  connectInstagram,
-  connectWeb3Wallet,
-  createUserActivity,
-  forgotPassword,
-  getUserActivities,
-  setKYCInfo,
-  twitterObtainOauthAccessToken,
-  // logout,
-  // verifyForgotPasswordToken,
-  // closeSession,
-  // closeAllSession,
-} from './user.services';
+// import {
+//   connectIGSchema,
+//   connectWalletSchema,
+//   createUserActivitySchema,
+//   forgotPasswordSchema,
+//   setKYCSchema,
+//   closeSessionSchema,
+//   closeAllSessionSchema,
+//   logoutSchema,
+//   verifyForgotPasswordTokenSchema,
+//   createShippingAddressSchema,
+//   updateShippingAddressSchema,
+// } from '_@rpc/routers/users/user.schemas';
+// import {
+// connectInstagram,
+// connectWeb3Wallet,
+// createUserActivity,
+// forgotPassword,
+// getUserActivities,
+// setKYCInfo,
+// twitterObtainOauthAccessToken,
+// logout,
+// verifyForgotPasswordToken,
+// closeSession,
+// closeAllSession,
+// } from './user.services';
 
 import { requestToken } from '../../services/twitter';
 
 export const userRouters = router({
-  'user-connect-instagram': protectedRouter
-    .input(connectIGSchema)
-    .mutation(({ input, ctx }) => connectInstagram(input, ctx.auth.userId)),
+  // 'user-connect-instagram': protectedRouter
+  //   .input(connectIGSchema)
+  //   .mutation(({ input, ctx }) => connectInstagram(input, ctx.auth.userId)),
 
-  'user-set-KYC': protectedRouter
-    .input(setKYCSchema)
-    .mutation(({ input, ctx }) => setKYCInfo(input, ctx.auth.userId)),
+  // 'user-set-KYC': protectedRouter
+  //   .input(setKYCSchema)
+  //   .mutation(({ input, ctx }) => setKYCInfo(input, ctx.auth.userId)),
 
-  'user-connect-wallet': protectedRouter
-    .input(connectWalletSchema)
-    .mutation(({ input, ctx }) => connectWeb3Wallet(input, ctx.auth.userId)),
+  // 'user-connect-wallet': protectedRouter
+  //   .input(connectWalletSchema)
+  //   .mutation(({ input, ctx }) => connectWeb3Wallet(input, ctx.auth.userId)),
   // userCreateUserActivity: protectedRouter
   //   .input(createUserActivitySchema)
   //   .mutation(({ input, ctx }) => createUserActivity(input, ctx.auth.userId, ctx.requestClient)),
-  'user-get-user-activities': protectedRouter
-    .input(paginationSchema)
-    .query(({ input, ctx }) => getUserActivities(input, ctx.auth.userId)),
+  // 'user-get-user-activities': protectedRouter
+  //   .input(paginationSchema)
+  //   .query(({ input, ctx }) => getUserActivities(input, ctx.auth.userId)),
 
   'user-twitter-request-token': protectedRouter.mutation(() => requestToken()),
 
@@ -68,9 +68,9 @@ export const userRouters = router({
   //   .input(closeAllSessionSchema)
   //   .mutation(({ input }) => closeAllSession(input)),
 
-  'user-logout': protectedRouter
-    .input(logoutSchema)
-    .mutation(({ input }) => console.log({ input })),
+  // 'user-logout': protectedRouter
+  //   .input(logoutSchema)
+  //   .mutation(({ input }) => console.log({ input })),
   // userForgotPassword: publicProcedure
   //   .input(forgotPasswordSchema)
   //   .mutation(({ input, ctx }) => forgotPassword(input, ctx.requestClient)),

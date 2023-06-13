@@ -2,6 +2,8 @@
 import { appRouter } from '_@rpc/app.router';
 //HOOK
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
+//CONFIG
+import { createTRPCContext } from '_@rpc/config';
 
 const handler = (request: Request) => {
   console.log(`incoming request ${request.url}`);
@@ -9,9 +11,7 @@ const handler = (request: Request) => {
     endpoint: '/api/trpc',
     req: request,
     router: appRouter,
-    createContext: function (opts) {
-      return opts;
-    },
+    createContext: createTRPCContext,
   });
 };
 

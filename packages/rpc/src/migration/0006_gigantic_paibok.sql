@@ -1,0 +1,3 @@
+ALTER TABLE `session` DROP PRIMARY KEY
+ALTER TABLE `session` MODIFY COLUMN `token` varchar(1000);
+ALTER TABLE `session` ADD `id` varchar(32) PRIMARY KEY NOT NULL;
