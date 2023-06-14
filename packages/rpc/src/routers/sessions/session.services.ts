@@ -12,9 +12,20 @@ import { TRPCError } from '@trpc/server';
 import { ActivityAction } from '_@rpc/drizzle/enum';
 import { TPaginationInput } from '_@rpc/config/schemas';
 import { Profile } from '_@rpc/drizzle/userProfile';
+import { getLocationDetail } from '_@rpc/services/ip2location/ip2location';
+import { MagicUserMetadata } from '@magic-sdk/admin';
 
 export const userLogin = async (token: string, requestClient: RequestClient) => {
   const [_, claim] = magicAdmin.token.decode(token);
+  const ip = requestClient.ipAddress;
+  let location = '';
+  if (ip) {
+    const locationDetail = await getLocationDetail(ip);
+    if (locationDetail && 'city' in locationDetail) {
+      location = locationDetail.city;
+    }
+  }
+
   await db.transaction(async (ctx) => {
     await ctx
       .insert(session)
@@ -22,9 +33,10 @@ export const userLogin = async (token: string, requestClient: RequestClient) => 
         ext: claim.ext,
         iss: claim.iss,
         token,
-        ipAddress: requestClient.ipAddress,
+        ipAddress: ip,
         origin: requestClient.origin,
         userAgent: requestClient.userAgent.browser.name,
+        location,
       })
       .execute();
     await ctx
@@ -34,6 +46,7 @@ export const userLogin = async (token: string, requestClient: RequestClient) => 
         ipAddress: requestClient.ipAddress,
         browser: requestClient.userAgent.browser.name,
         action: ActivityAction.LOG_IN,
+        location,
       })
       .execute();
   });
@@ -76,7 +89,16 @@ export const revokeToken = async (token: string, { sessionId }: RevokeTokenInput
   }
 };
 
-export const signUp = async (input: SignUpInput, requestClient: RequestClient) => {
+export const revokeAllToken = async (metadata: MagicUserMetadata) => {
+  const userId = metadata.issuer;
+  if (userId) {
+    await magicAdmin.users.logoutByIssuer(userId);
+    await db.delete(session).where(eq(session.iss, userId)).execute();
+  }
+  return true;
+};
+
+export const signUp = async (input: SignUpInput) => {
   const { email, phone, username, lastName, firstName, dob, gender } = input;
   const { phoneCode, phoneNumber } = phone;
   const conflictUser = await db
@@ -129,6 +151,14 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
   const [_, claim] = magicAdmin.token.decode(input.didToken);
 
   await db.transaction(async (ctx) => {
+    const ip = requestClient.ipAddress;
+    let location = '';
+    if (ip) {
+      const locationDetail = await getLocationDetail(ip);
+      if (locationDetail && 'city' in locationDetail) {
+        location = locationDetail.city;
+      }
+    }
     await ctx
       .update(userProfileTable)
       .set({ userId: claim.iss })
@@ -142,6 +172,7 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
         ipAddress: requestClient.ipAddress,
         origin: requestClient.origin,
         userAgent: requestClient.userAgent.browser.name,
+        location,
       })
       .execute();
     await ctx
@@ -151,13 +182,14 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
         ipAddress: requestClient.ipAddress,
         browser: requestClient.userAgent.browser.name,
         action: ActivityAction.SIGN_UP,
+        location,
       })
       .execute();
   });
   return true;
 };
 
-export const validateLogin = async (input: ValidateLoginInput, requestClient: RequestClient) => {
+export const validateLogin = async (input: ValidateLoginInput) => {
   const { phone } = input;
   const { phoneCode, phoneNumber } = phone;
 

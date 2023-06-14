@@ -10,6 +10,7 @@ import {
   getMyActivities,
   listSession,
   postSignUp,
+  revokeAllToken,
   revokeToken,
   signUp,
   userLogin,
@@ -30,14 +31,17 @@ export const sessionRouter = router({
   'revoke-session': protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx, input }) => {
     return revokeToken(ctx.token, input);
   }),
-  signup: publicProcedure.input(signupSchema).mutation(async ({ ctx, input }) => {
-    return signUp(input, ctx.requestClient);
+  'revoke-all-session': protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx }) => {
+    return revokeAllToken(ctx.metadata);
+  }),
+  signup: publicProcedure.input(signupSchema).mutation(async ({ input }) => {
+    return signUp(input);
   }),
   'post-signup': publicProcedure.input(postSignupSchema).mutation(async ({ ctx, input }) => {
     return postSignUp(input, ctx.requestClient);
   }),
-  'validate-login': publicProcedure.input(validateLoginSchema).mutation(async ({ ctx, input }) => {
-    return validateLogin(input, ctx.requestClient);
+  'validate-login': publicProcedure.input(validateLoginSchema).mutation(async ({ input }) => {
+    return validateLogin(input);
   }),
   'my-profile': protectedRouter.query(async ({ ctx }) => {
     return {

@@ -18,3 +18,5 @@ export const ZPhoneSchema = z
   .refine((data) => SUPPORTED_PHONE_CODES.includes(data.phoneCode), 'Phone code is not supported.');
 
 export const ZPassword = z.string().trim().min(8).regex(/[A-Z]/).regex(/[a-z]/).regex(/[0-9]/);
+
+export const ipSchema = z.string().ip();
