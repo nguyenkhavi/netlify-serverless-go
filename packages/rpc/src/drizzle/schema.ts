@@ -11,6 +11,7 @@ export {
   MarketStatusEnum,
   TokenStandardEnum,
   SuggestionTypeEnum,
+  GenderEnum,
 } from './enum';
 export { item } from './item';
 export { KYCInfo } from './KYCInfo';
@@ -24,3 +25,4 @@ export { userActivity } from './userActivity';
 export { userAnswer } from './userAnswer';
 export { userWallet } from './userWallet';
 export { session } from './session';
+export { userProfileTable } from './userProfile';

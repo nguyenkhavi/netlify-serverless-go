@@ -64,6 +64,48 @@
       "when": 1686645431870,
       "tag": "0008_good_northstar",
       "breakpoints": false
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1686714726118,
+      "tag": "0009_strong_princess_powerful",
+      "breakpoints": false
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1686714798665,
+      "tag": "0010_ordinary_jazinda",
+      "breakpoints": false
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1686714914453,
+      "tag": "0011_mushy_machine_man",
+      "breakpoints": false
+    },
+    {
+      "idx": 12,
+      "version": "5",
+      "when": 1686715632672,
+      "tag": "0012_curved_red_hulk",
+      "breakpoints": false
+    },
+    {
+      "idx": 13,
+      "version": "5",
+      "when": 1686715705185,
+      "tag": "0013_yellow_colossus",
+      "breakpoints": false
+    },
+    {
+      "idx": 14,
+      "version": "5",
+      "when": 1686716825313,
+      "tag": "0014_windy_husk",
+      "breakpoints": false
     }
   ]
 }

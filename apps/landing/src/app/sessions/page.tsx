@@ -2,6 +2,7 @@
 //THIRD PARTY MODULES
 import { Magic } from 'magic-sdk';
 import { api } from '_@landing/utils/api';
+import { Gender } from '_@rpc/drizzle/enum';
 import React, { useEffect, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
@@ -12,6 +13,14 @@ const magic = new Magic(`${process.env.NEXT_PUBLIC_MAGIC_API_KEY}`, {
 });
 
 function Sessions() {
+  const { mutateAsync: signUpFn } = api['signup'].useMutation({});
+  const { mutateAsync: postSignUpFn } = api['post-signup'].useMutation({});
+  const { mutateAsync: validateLoginFn } = api['validate-login'].useMutation({
+    onError: (e) => {
+      console.log({ e });
+    },
+  });
+
   const { mutateAsync: loginFn } = api['login'].useMutation({});
   const { mutateAsync: logoutFn } = api['logout'].useMutation({});
 
@@ -20,13 +29,49 @@ function Sessions() {
   const { data: sessions = [] } = api['list-session'].useQuery(undefined, {});
 
   const _handleLogin = async () => {
-    const didToken = await magic.auth.loginWithEmailOTP({ email });
+    const found = await validateLoginFn({
+      phone: {
+        phoneCode: '84',
+        phoneNumber: '374246292',
+      },
+    });
+    if (found) {
+      const didToken = await magic.auth.loginWithEmailOTP({ email: 'vidzai@mailinator.com' });
 
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', didToken || '');
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', didToken || '');
+      }
+      await loginFn();
+      _refresh();
     }
-    await loginFn();
-    _refresh();
+  };
+  const _handleSignUp = async () => {
+    const requestId = await signUpFn({
+      username: 'vidzai',
+      email: 'vidzai@mailinator.com',
+      lastName: 'Nguyen',
+      firstName: 'Vi',
+      dob: new Date().toISOString(),
+      gender: Gender.MALE,
+      phone: {
+        phoneCode: '84',
+        phoneNumber: '374246292',
+      },
+    });
+    const didToken = await magic.auth.loginWithEmailOTP({ email: 'vidzai@mailinator.com' });
+
+    if (didToken) {
+      const postRes = await postSignUpFn({
+        didToken,
+        requestId,
+      });
+      if (postRes) {
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('token', didToken || '');
+        }
+        _refresh();
+      }
+    }
   };
   const _handleLogout = async () => {
     try {
@@ -64,6 +109,9 @@ function Sessions() {
           </Button>
         </>
       )}
+      <Button onClick={_handleSignUp} className="flex">
+        Sign Up
+      </Button>
     </div>
   );
 }

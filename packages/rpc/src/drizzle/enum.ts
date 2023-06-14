@@ -55,3 +55,11 @@ export enum ActivityType {
 }
 export const ActivityTypeValues = Object.values(ActivityType) as any as ReadOnlyTuple;
 export const ActivityTypeEnum = mysqlEnum('activity-type', ActivityTypeValues);
+
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  OTHER = 'OTHER',
+}
+export const GenderValues = Object.values(Gender) as any as ReadOnlyTuple;
+export const GenderEnum = mysqlEnum('gender', GenderValues);
