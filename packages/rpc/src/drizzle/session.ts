@@ -9,6 +9,7 @@ export const session = mysqlTable('session', {
   userAgent: varchar('userAgent', { length: 255 }),
   ipAddress: varchar('ipAddress', { length: 48 }),
   origin: varchar('origin', { length: 255 }),
+  location: varchar('location', { length: 128 }),
   ext: int('ext'),
 });
 

@@ -1,0 +1,1 @@
+ALTER TABLE `user_activity` MODIFY COLUMN `id` serial AUTO_INCREMENT NOT NULL;

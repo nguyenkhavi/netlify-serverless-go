@@ -1,4 +1,5 @@
 import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
+import { paginationSchema } from '_@rpc/config/schemas';
 import {
   postSignupSchema,
   revokeTokenSchema,
@@ -6,6 +7,7 @@ import {
   validateLoginSchema,
 } from '_@rpc/routers/sessions/session.schemas';
 import {
+  getMyActivities,
   listSession,
   postSignUp,
   revokeToken,
@@ -36,5 +38,14 @@ export const sessionRouter = router({
   }),
   'validate-login': publicProcedure.input(validateLoginSchema).mutation(async ({ ctx, input }) => {
     return validateLogin(input, ctx.requestClient);
+  }),
+  'my-profile': protectedRouter.query(async ({ ctx }) => {
+    return {
+      metadata: ctx.metadata,
+      profile: ctx.profile,
+    };
+  }),
+  'my-activities': protectedRouter.input(paginationSchema).query(async ({ ctx, input }) => {
+    return getMyActivities(input, ctx.profile);
   }),
 });

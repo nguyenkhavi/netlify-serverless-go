@@ -21,7 +21,7 @@ export { securityQuestion } from './securityQuestion';
 export { subscriber } from './subscriber';
 export { suggestion } from './suggestion';
 export { token } from './token';
-export { userActivity } from './userActivity';
+export { userActivityTable } from './userActivity';
 export { userAnswer } from './userAnswer';
 export { userWallet } from './userWallet';
 export { session } from './session';

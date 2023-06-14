@@ -7,7 +7,7 @@ const getRequestClient = (req: FetchCreateContextFnOptions['req']) => {
   const browserString = headers.get('user-agent') || '';
   const parser = new UAParser(browserString); // you need to pass the user-agent for nodejs
   const userAgent = parser.getResult();
-  const ipAddress = req.headers.get('x-forwarded-for');
+  const ipAddress = req.headers.get('x-forwarded-for') as string;
   const origin = headers.get('origin') as string;
 
   return { userAgent, ipAddress, origin };

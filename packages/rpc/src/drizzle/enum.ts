@@ -4,7 +4,7 @@ import { mysqlEnum } from 'drizzle-orm/mysql-core';
 type ReadOnlyTuple = readonly [string, ...string[]];
 
 export enum ActivityAction {
-  CHANGE_PASSWORD = 'CHANGE_PASSWORD',
+  // CHANGE_PASSWORD = 'CHANGE_PASSWORD',
   LOG_IN = 'LOG_IN',
   SIGN_UP = 'SIGN_UP',
 }

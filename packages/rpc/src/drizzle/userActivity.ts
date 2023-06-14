@@ -1,14 +1,13 @@
 import { sql } from 'drizzle-orm';
-import { datetime, mysqlTable, varchar, index } from 'drizzle-orm/mysql-core';
+import { datetime, mysqlTable, varchar, index, serial } from 'drizzle-orm/mysql-core';
 import { ActivityActionValues } from './enum';
 
-export const userActivity = mysqlTable(
+export const userActivityTable = mysqlTable(
   'user_activity',
   {
-    id: varchar('id', { length: 32 }).primaryKey(),
-    userId: varchar('user_id', { length: 32 }),
+    id: serial('id').primaryKey(),
+    userId: varchar('user_id', { length: 52 }).notNull(),
     createdAt: datetime('created_at').default(sql`NOW()`),
-    updatedAt: datetime('updated_at'),
 
     browser: varchar('browser', { length: 32 }),
     ipAddress: varchar('ip_address', { length: 32 }),

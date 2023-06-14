@@ -1,6 +1,6 @@
 import { magicAdmin } from '_@rpc/services/magic.link';
-import { db, session, userProfileTable } from '_@rpc/services/drizzle';
-import { and, eq, gt, isNotNull, or } from 'drizzle-orm';
+import { db, session, userActivityTable, userProfileTable } from '_@rpc/services/drizzle';
+import { and, eq, gt, isNotNull, or, sql } from 'drizzle-orm';
 import { RequestClient } from '_@rpc/config';
 import {
   PostSignUpInput,
@@ -9,21 +9,35 @@ import {
   ValidateLoginInput,
 } from '_@rpc/routers/sessions/session.schemas';
 import { TRPCError } from '@trpc/server';
+import { ActivityAction } from '_@rpc/drizzle/enum';
+import { TPaginationInput } from '_@rpc/config/schemas';
+import { Profile } from '_@rpc/drizzle/userProfile';
 
 export const userLogin = async (token: string, requestClient: RequestClient) => {
   const [_, claim] = magicAdmin.token.decode(token);
+  await db.transaction(async (ctx) => {
+    await ctx
+      .insert(session)
+      .values({
+        ext: claim.ext,
+        iss: claim.iss,
+        token,
+        ipAddress: requestClient.ipAddress,
+        origin: requestClient.origin,
+        userAgent: requestClient.userAgent.browser.name,
+      })
+      .execute();
+    await ctx
+      .insert(userActivityTable)
+      .values({
+        userId: claim.iss,
+        ipAddress: requestClient.ipAddress,
+        browser: requestClient.userAgent.browser.name,
+        action: ActivityAction.LOG_IN,
+      })
+      .execute();
+  });
 
-  await db
-    .insert(session)
-    .values({
-      ext: claim.ext,
-      iss: claim.iss,
-      token,
-      ipAddress: requestClient.ipAddress,
-      origin: requestClient.origin,
-      userAgent: requestClient.userAgent.browser.name,
-    })
-    .execute();
   return true;
 };
 
@@ -130,6 +144,15 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
         userAgent: requestClient.userAgent.browser.name,
       })
       .execute();
+    await ctx
+      .insert(userActivityTable)
+      .values({
+        userId: claim.iss,
+        ipAddress: requestClient.ipAddress,
+        browser: requestClient.userAgent.browser.name,
+        action: ActivityAction.SIGN_UP,
+      })
+      .execute();
   });
   return true;
 };
@@ -150,4 +173,28 @@ export const validateLogin = async (input: ValidateLoginInput, requestClient: Re
     throw new TRPCError({ code: 'BAD_REQUEST' });
   }
   return true;
+};
+
+export const getMyActivities = async (input: TPaginationInput, profile: Profile) => {
+  const { size, page } = input;
+  const whereSql = eq(userActivityTable.userId, profile.userId as string);
+  const [data, total] = await Promise.all([
+    db
+      .select()
+      .from(userActivityTable)
+      .where(whereSql)
+      .offset((page - 1) * size)
+      .limit(size),
+    db
+      .select({ count: sql<number>`count(*)` })
+      .from(userActivityTable)
+      .where(whereSql)
+      .then((result) => result[0].count || 0),
+  ]);
+  return {
+    page,
+    size,
+    total,
+    data,
+  };
 };

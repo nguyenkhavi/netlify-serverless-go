@@ -1,6 +1,6 @@
 import { GenderValues } from '_@rpc/drizzle/enum';
-import { sql } from 'drizzle-orm';
-import { datetime, mysqlTable, serial, uniqueIndex, varchar } from 'drizzle-orm/mysql-core';
+import { InferModel, sql } from 'drizzle-orm';
+import { datetime, mysqlTable, serial, tinytext, varchar } from 'drizzle-orm/mysql-core';
 
 export const userProfileTable = mysqlTable(
   'user_profile',
@@ -16,6 +16,14 @@ export const userProfileTable = mysqlTable(
     gender: varchar('gender', { length: 8, enum: GenderValues }).notNull(),
     phoneCode: varchar('phone_code', { length: 8 }).notNull(),
     phoneNumber: varchar('phone_number', { length: 16 }).notNull(),
+
+    avatarUrl: tinytext('avatar_url'),
+    coverUrl: tinytext('cover_url'),
+    aboutMe: tinytext('about_me'),
+    description: tinytext('description'),
+    twitterUid: tinytext('twitter_uid'),
+    instagramUid: tinytext('instagram_uid'),
+    personaInquiryId: tinytext('persona_inquiry_id'),
   },
   (userProfile) => ({
     // usernameIndex: uniqueIndex('username_idx').on(userProfile.username),
@@ -23,3 +31,6 @@ export const userProfileTable = mysqlTable(
     // phoneIndex: uniqueIndex('phone_idx').on(userProfile.phoneCode, userProfile.phoneNumber),
   }),
 );
+
+export type Profile = InferModel<typeof userProfileTable, 'select'>;
+export type NewProfile = InferModel<typeof userProfileTable, 'insert'>;
