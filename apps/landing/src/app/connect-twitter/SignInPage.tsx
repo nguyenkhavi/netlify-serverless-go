@@ -13,7 +13,7 @@ import { ConnectWalletButton } from '_@landing/components/provider/ConnectWallet
 //SHARED
 import { useSocketStore } from '_@shared/stores/socket/useSocketStore';
 //RELATIVE MODULES
-import { getLastBlock } from '../services';
+import { getLastBlock } from '../../services';
 import { useIndexedDBContext } from '../provider/IndexedDBProvider';
 
 const SignInPage = () => {

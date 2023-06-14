@@ -426,15 +426,6 @@ importers:
         specifier: 0.31.1
         version: 0.31.1(@vitest/ui@0.31.1)(jsdom@20.0.3)
 
-  apps/landing:
-    dependencies:
-      '@thirdweb-dev/chains':
-        specifier: ^0.1.19
-        version: 0.1.19
-      idb:
-        specifier: ^7.1.1
-        version: 7.1.1
-
   packages/rpc: {}
 
 packages:

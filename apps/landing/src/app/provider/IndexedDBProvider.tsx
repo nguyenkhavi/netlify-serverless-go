@@ -5,10 +5,10 @@ import { IDBPDatabase, deleteDB, openDB } from 'idb';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 //RELATIVE MODULES
-import { startEventListener } from '../listener';
-import { insertSeedTokenData } from '../services/token';
-import { getAllCategories, insertSeedCategoryData } from '../services/category';
-import { getTrendingCollectionsByCategory, getTrendingMarketByCategory } from '../services';
+import { startEventListener } from '../../listener';
+import { insertSeedTokenData } from '../../services/token';
+import { getAllCategories, insertSeedCategoryData } from '../../services/category';
+import { getTrendingCollectionsByCategory, getTrendingMarketByCategory } from '../../services';
 
 type IndexedDBContextType = {
   db: IDBPDatabase | null;
