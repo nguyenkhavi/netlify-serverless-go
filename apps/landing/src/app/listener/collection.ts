@@ -2,18 +2,9 @@
 import { IDBPDatabase } from 'idb';
 import { ContractEvent, ThirdwebSDK } from '@thirdweb-dev/react';
 import { ContractEventNames, parseJson } from '_@landing/utils/constants';
-import {
-  IChain,
-  ICollection,
-  IItem,
-  IMetadata,
-  IMetadataNFT,
-  INewProxyDeployed,
-  ListenerService,
-  NFTType,
-} from '_@landing/utils/type';
+import { IChain, ICollection, IMetadata, INewProxyDeployed, NFTType } from '_@landing/utils/type';
 //RELATIVE MODULES
-import { addCollection, addItem, updateLastBlock } from '../services';
+import { addCollection } from '../services';
 
 export async function handleNewCollections(
   sdk: ThirdwebSDK,

@@ -1,6 +1,0 @@
-{
-	"dependencies": {
-		"@thirdweb-dev/chains": "^0.1.19",
-		"idb": "^7.1.1"
-	}
-}

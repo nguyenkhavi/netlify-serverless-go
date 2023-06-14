@@ -14,12 +14,8 @@ export async function addItem(db: IDBPDatabase, data: IItem) {
 export async function getTrendingItemsByCategory(db: IDBPDatabase, category: number) {
   const market = await db.getAllFromIndex(dbOS.market, dbIndex.marketCategoryIndex, category);
   const buyRecords = await db.getAllFromIndex(dbOS.marketStatus, dbIndex.marketAvailableIndex, 1);
-  console.log({ market });
-  console.log({ buyRecords });
-
   const successMarket = market.filter((m) => {
     const buy = buyRecords.find((b) => b.listingId == m.listingId);
-    console.log({ buy });
     if (buy) return true;
     return false;
   });
@@ -30,6 +26,10 @@ export async function updateItem(db: IDBPDatabase, data: IItem) {
   return db.put(dbOS.items, data);
 }
 
-export async function getItemById(db: IDBPDatabase, id: string) {
+export async function getItemById(db: IDBPDatabase, id: string): Promise<IItem> {
   return db.getFromIndex(dbOS.items, dbIndex.itemIdIndex, id);
+}
+
+export async function getAllItemByCollection(db: IDBPDatabase, address: string): Promise<IItem> {
+  return db.getFromIndex(dbOS.items, dbIndex.itemAssetContractIndex, address);
 }

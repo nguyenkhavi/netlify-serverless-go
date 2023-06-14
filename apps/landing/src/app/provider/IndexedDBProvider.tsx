@@ -1,10 +1,14 @@
 'use client';
 //THIRD PARTY MODULES
+import { _ } from 'drizzle-orm/column.d-66a08b85';
 import { IDBPDatabase, deleteDB, openDB } from 'idb';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 //RELATIVE MODULES
 import { startEventListener } from '../listener';
+import { insertSeedTokenData } from '../services/token';
+import { getAllCategories, insertSeedCategoryData } from '../services/category';
+import { getTrendingCollectionsByCategory, getTrendingMarketByCategory } from '../services';
 
 type IndexedDBContextType = {
   db: IDBPDatabase | null;
@@ -81,18 +85,38 @@ export default function IndexedDBProvider({ children }: { children: any }) {
               /// create a field = contract address +_+ tokenId
               market.createIndex(dbIndex.itemIdIndex, 'id');
             }
+            if (!db.objectStoreNames.contains(dbOS.items)) {
+              const market = db.createObjectStore(dbOS.items, {
+                keyPath: ['id'],
+              });
+              market.createIndex(dbIndex.itemOwnerIndex, 'owner');
+              market.createIndex(dbIndex.itemAssetContractIndex, 'assetContract');
+              market.createIndex(dbIndex.itemTokenIdIndex, 'tokenId');
+              /// create a field = contract address +_+ tokenId
+              market.createIndex(dbIndex.itemIdIndex, 'id');
+            }
+            if (!db.objectStoreNames.contains(dbOS.category)) {
+              const market = db.createObjectStore(dbOS.category, {
+                keyPath: ['id'],
+              });
+              market.createIndex(dbIndex.categoryIdIndex, 'id');
+            }
+            if (!db.objectStoreNames.contains(dbOS.token)) {
+              const market = db.createObjectStore(dbOS.token, {
+                keyPath: ['address'],
+              });
+              market.createIndex(dbIndex.tokenAddressIndex, 'address');
+              market.createIndex(dbIndex.tokenChainIndex, 'chain');
+            }
           },
         });
+        const category = await getAllCategories(db);
+        if (!category.length) {
+          insertSeedCategoryData(db);
+          insertSeedTokenData(db);
+        }
         startEventListener(db);
         // Open a transaction on the object store
-
-        const market = await db.getAll(dbOS.items);
-        console.log({ market });
-        const lastBlock = await db.getAll(dbOS.lastBlock);
-        console.log({ lastBlock });
-        const collection = await db.getAll(dbOS.collection);
-        console.log({ collection });
-
         setDB(db);
       }
     };

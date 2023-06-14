@@ -1,4 +1,5 @@
 //THIRD PARTY MODULES
+import { BoolEnum } from 'sharp';
 import { BigNumber } from 'ethers';
 import { NFTMetadata } from '@thirdweb-dev/react';
 
@@ -11,6 +12,7 @@ export interface IMarketData {
   price: number;
   currency: string;
   quantity: number;
+  blockNumber: number;
   startTime: number;
   endTime: number;
   tokenType: NFTType;
@@ -83,9 +85,9 @@ export interface IActivity {
   assetContract: string;
   itemId: string;
   tokenId: number;
-  listingId: number;
+  listingId?: number;
   price: number;
-  currency: string;
+  currency?: string;
   quantity: number;
   fromAddress: string;
   toAddress: string;
@@ -169,4 +171,29 @@ export interface INewProxyDeployed extends Record<string, any> {
   implementation: string;
   proxy: string;
   deployer: string;
+}
+
+export interface IPaging {
+  page: number;
+  pageSize: number;
+}
+export interface ISorting {
+  price?: 'asc' | 'desc';
+  releaseDate?: 'asc' | 'desc';
+}
+
+export interface IToken {
+  chain: string;
+  address: string;
+  name: string;
+  symbol: string;
+  decimal: number;
+  image: string;
+}
+
+export interface ICategory {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
 }

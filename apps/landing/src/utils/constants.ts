@@ -37,6 +37,13 @@ export const dbIndex = {
   itemIdIndex: 'item_id_idx',
   itemAssetContractIndex: 'item_asset_contract_idx',
   itemTokenIdIndex: 'item_token_id_idx',
+
+  /// category indexed:
+  categoryIdIndex: 'category_id_idx',
+
+  /// token address:
+  tokenAddressIndex: 'token_address_idx',
+  tokenChainIndex: 'token_chain_idx',
 };
 
 export const dbOS = {
@@ -46,6 +53,8 @@ export const dbOS = {
   items: 'items',
   lastBlock: 'last_block',
   marketStatus: 'market_status',
+  token: 'token',
+  category: 'category',
 };
 
 export const Chains = {

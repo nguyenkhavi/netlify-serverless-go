@@ -1,12 +1,8 @@
 //THIRD PARTY MODULES
 import { IDBPDatabase } from 'idb';
-import { constants, BigNumber } from 'ethers';
-import { ContractEvent, NewDirectListing, ThirdwebSDK } from '@thirdweb-dev/react';
-import {
-  ContractEventNames,
-  formatBigNumberToNumberWithDecimal,
-  parseJson,
-} from '_@landing/utils/constants';
+import { BigNumber, constants } from 'ethers';
+import { ContractEvent, ThirdwebSDK } from '@thirdweb-dev/react';
+import { formatBigNumberToNumberWithDecimal, parseJson } from '_@landing/utils/constants';
 import {
   ActivityType,
   IActivity,
@@ -16,17 +12,9 @@ import {
   IMetadata,
   INewBuyEventData,
   INewListingEventData,
-  ListenerService,
 } from '_@landing/utils/type';
 //RELATIVE MODULES
-import {
-  addActivity,
-  addMarket,
-  getCollectionByContract,
-  getMarketByListingId,
-  updateLastBlock,
-  updateMarket,
-} from '../services';
+import { addActivity, addMarket, updateMarket } from '../services';
 
 export async function handleListing(
   sdk: ThirdwebSDK,
@@ -43,6 +31,7 @@ export async function handleListing(
     tokenId: event.data.listing.tokenId.toNumber(),
     listingCreator: event.data.listingCreator,
     itemId: event.data.assetContract + '_' + event.data.listing.tokenId.toNumber(),
+    blockNumber: event.transaction.blockNumber,
     price: formatBigNumberToNumberWithDecimal(event.data.listing.pricePerToken, 18),
     currency: event.data.listing.currency,
     quantity: event.data.listing.quantity.toNumber(),
@@ -120,6 +109,7 @@ export async function handleBuy(
 ) {
   const marketContract = await sdk.getContract(chain.marketContract, 'marketplace-v3');
   const listing = await marketContract.directListings.getListing(event.data.listingId);
+
   await updateMarket(db, {
     listingId: event.data.listingId.toNumber(),
     isAvailable: 0,
