@@ -1,18 +1,32 @@
 //THIRD PARTY MODULES
+import superjson from 'superjson';
 import { createTRPCNext } from '@trpc/next';
 import { type AppRouter } from '_@rpc/app.router';
-/**
- * This is the client-side entrypoint for your tRPC API. It is used to create the `api` object which
- * contains the Next.js App-wrapper, as well as your type-safe React Query hooks.
- *
- * We also create a few inference helpers for input and output types.
- */
-import { httpBatchLink, loggerLink } from '@trpc/client';
-//HOOK
-import { type inferRouterInputs, type inferRouterOutputs } from '@trpc/server';
+import { createTRPCProxyClient, httpBatchLink, httpLink, loggerLink } from '@trpc/client';
+//TYPES MODULES
+import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
 
-/** A set of type-safe react-query hooks for your tRPC API. */
-export const api = createTRPCNext<AppRouter>({
+export const api = createTRPCProxyClient<AppRouter>({
+  transformer: superjson as any,
+  links: [
+    loggerLink({
+      enabled: (opts) =>
+        process.env.NODE_ENV === 'development' ||
+        (opts.direction === 'down' && opts.result instanceof Error),
+    }),
+    httpBatchLink({
+      url: `/api/trpc`,
+      headers() {
+        const session = localStorage.getItem('session');
+        return {
+          Authorization: session ? `Bearer ${session}` : '',
+        };
+      },
+    }),
+  ],
+});
+
+export const nextApi = createTRPCNext<AppRouter>({
   config() {
     return {
       // transformer: SuperJSON,
@@ -27,24 +41,18 @@ export const api = createTRPCNext<AppRouter>({
             process.env.NODE_ENV === 'development' ||
             (opts.direction === 'down' && opts.result instanceof Error),
         }),
-        httpBatchLink({
+        httpLink({
           url: `/api/trpc`,
           headers() {
-            if (typeof localStorage === 'undefined') return {};
-            if (!localStorage.getItem('token')) return {};
+            const session = localStorage.getItem('session');
             return {
-              authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+              Authorization: session ? `Bearer ${session}` : '',
             };
           },
         }),
       ],
     };
   },
-  /**
-   * Whether tRPC should await queries when server rendering pages.
-   *
-   * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
-   */
   ssr: false,
 });
 

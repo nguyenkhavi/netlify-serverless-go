@@ -4,6 +4,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 //LAYOUT, COMPONENTS
 import CountrySelect from '_@shared/components/input/phone-input/CountrySelect';
 //SHARED
+import { getErrorMessage } from '_@shared/utils/func';
 
 const baseClasses = [
   'w-full bg-transparent',
@@ -28,7 +29,9 @@ export default function FormPhoneInput({ name }: Props) {
 
   return (
     <div
-      data-valid={errors[name.phoneNumber] || errors[name.digitalCode]}
+      data-valid={
+        !getErrorMessage(name.phoneNumber, errors) && !getErrorMessage(name.digitalCode, errors)
+      }
       className={classcat([
         'flex space-x-2 rounded-[14px] border-[.5px] border-text-10 bg-secondary/70 px-4',
         'data-[valid="false"]:rounded-none data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error',

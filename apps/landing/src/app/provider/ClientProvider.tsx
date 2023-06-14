@@ -1,15 +1,14 @@
 'use client';
 //THIRD PARTY MODULES
-import { useEffect } from 'react';
-import { api } from '_@landing/utils/api';
+import { nextApi } from '_@landing/utils/api';
 import { Sepolia } from '@thirdweb-dev/chains';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   ThirdwebProvider,
-  metamaskWallet,
   coinbaseWallet,
-  walletConnectV1,
+  metamaskWallet,
   safeWallet,
+  walletConnectV1,
 } from '@thirdweb-dev/react';
 
 const queryClient = new QueryClient({
@@ -21,7 +20,7 @@ const queryClient = new QueryClient({
   },
 });
 
-const UseClientProvider = api.withTRPC(({ children }: { children: any }) => {
+const UseClientProvider = nextApi.withTRPC(({ children }: { children: any }) => {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 });
 

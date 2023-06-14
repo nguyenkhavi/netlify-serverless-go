@@ -29,9 +29,7 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
   const { openToast } = toastStore();
 
   const [coverUrl, setCoverUrl] = useState('/images/profile/cover.jpeg');
-  const [avatarUrl, setAvatarUrl] = useState(
-    'https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
-  );
+  const [avatarUrl, setAvatarUrl] = useState('/images/profile/avatar-default.webp');
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(schema),

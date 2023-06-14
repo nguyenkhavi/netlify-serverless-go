@@ -1,15 +1,18 @@
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
+import Link from 'next/link';
+import classcat from 'classcat';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //SHARED
-import PenIcon from '_@shared/icons/PenIcon'
-import MailIcon from '_@shared/icons/MailIcon'
-import MobilePhoneIcon from '_@shared/icons/MobilePhoneIcon'
+import PenIcon from '_@shared/icons/PenIcon';
+import MailIcon from '_@shared/icons/MailIcon';
+import MobilePhoneIcon from '_@shared/icons/MobilePhoneIcon';
 
 const boxClasses = ['px-4.5 py-7.5 md:py4.5 rounded-[10px] border border-text-10 bg-secondary-300'];
 const titleClasses = ['mb-2.5 text-body2'];
 const contentClasses = ['text-body3 text-text-50'];
 export function ProfileInfoDetail() {
+  const { user } = useAuthStore();
+  const phone = `+${user?.profile?.phoneCode}${user?.profile?.phoneNumber}`;
   return (
     <section className="grid gap-5 md:grid-cols-[1fr_316px]">
       <div className={classcat([boxClasses])}>
@@ -23,13 +26,13 @@ export function ProfileInfoDetail() {
       <div className={classcat([boxClasses, 'px-7 py-8'])}>
         <h2 className={classcat([titleClasses])}>Contact Info</h2>
         <p className="text-gradient-pr flex items-center">
-          <MobilePhoneIcon className="mr-1.25" /> +42543452344
+          <MobilePhoneIcon className="mr-1.25" /> {phone}
         </p>
         <p className="text-gradient-pr mt-2.5 flex items-center">
-          <MailIcon className="mr-1.25" /> Kevinsmith@gmail.com
+          <MailIcon className="mr-1.25" /> {user?.profile.email}
         </p>
       </div>
-      <div className={classcat([boxClasses, 'col-start-1-1 row-start-2'])}>
+      <div className={classcat([boxClasses, 'col-start-1 row-start-2'])}>
         <h2 className={classcat([titleClasses])}>Store description</h2>
         <p className={classcat([contentClasses])}>
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has

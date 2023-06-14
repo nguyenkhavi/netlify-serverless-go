@@ -1,23 +1,25 @@
 'use client';
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
-import { useMemo, useState } from 'react'
-import { usePathname } from 'next/navigation'
+import Link from 'next/link';
+import classcat from 'classcat';
+import { useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import useAuthStore, { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
-import Show from '_@shared/components/Show'
-import Button from '_@shared/components/Button'
-import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover'
+import Show from '_@shared/components/Show';
+import Button from '_@shared/components/Button';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
-import MenuIcon from '_@shared/icons/MenuIcon'
-import CartIcon from '_@shared/icons/CartIcon'
-import WalletIcon from '_@shared/icons/WalletIcon'
-import MenuCloseIcon from '_@shared/icons/MenuCloseIcon'
-import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon'
+import MenuIcon from '_@shared/icons/MenuIcon';
+import CartIcon from '_@shared/icons/CartIcon';
+import WalletIcon from '_@shared/icons/WalletIcon';
+import MenuCloseIcon from '_@shared/icons/MenuCloseIcon';
+import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 
 export default function Header() {
+  const user = useAuthStore((state) => state.user);
+  const { logout } = useAuthStoreAction();
   const [openMenu, setOpenMenu] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
   const [openDropdown, setOpenDropdown] = useState(false);
   const pathname = usePathname();
 
@@ -30,7 +32,7 @@ export default function Header() {
   }, [pathname]);
 
   const _handleCloseDropdown = () => {
-    setOpenDropdown(false);
+    logout();
   };
 
   return (
@@ -84,8 +86,8 @@ export default function Header() {
         </ul>
       </div>
 
-      <div className={classcat(['ml-auto grid grid-flow-col', isLogin ? 'gap-6' : ''])}>
-        <Show when={!isLogin}>
+      <div className={classcat(['ml-auto grid grid-flow-col', user ? 'gap-6' : ''])}>
+        <Show when={!user}>
           <Link
             href="/auth/sign-in"
             className={classcat([
@@ -99,7 +101,7 @@ export default function Header() {
             Sign up
           </Button>
         </Show>
-        <Show when={isLogin}>
+        <Show when={user}>
           <button className="grid h-10 w-10 place-items-center rounded-full bg-[#1D1D1D]">
             <WalletIcon />
           </button>

@@ -1,12 +1,15 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //SHARED
 import VerifyIcon from '_@shared/icons/VerifyIcon';
 import TwitterIcon from '_@shared/icons/TwitterIcon';
 import InstagramIcon from '_@shared/icons/InstagramIcon';
 
 export default function ProfileBanner() {
+  const { user } = useAuthStore();
+
   return (
     <section
       className={classcat([
@@ -15,7 +18,11 @@ export default function ProfileBanner() {
         'pb-5 lg:pb-18',
       ])}
     >
-      <img className="relative z-[1] h-51 w-full object-cover lg:h-57" src="/images/profile/cover.jpeg" alt="" />
+      <img
+        className="relative z-[1] h-51 w-full object-cover lg:h-57"
+        src="/images/profile/cover.jpeg"
+        alt=""
+      />
       <div
         className={classcat([
           'overflow-hidden rounded-full',
@@ -28,14 +35,16 @@ export default function ProfileBanner() {
       >
         <img
           className="h-full w-full object-cover"
-          src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80"
+          src="/images/profile/avatar-default.webp"
           alt=""
         />
       </div>
       <div
         className={classcat(['lg:ml-60.75 lg:mt-5 lg:flex lg:grow lg:pl-3 lg:pr-7', 'flex-wrap'])}
       >
-        <h1 className="mb-2.5 text-center text-h6 lg:mb-0 lg:mr-16 lg:text-h5-bold">@Kevin _Smiith</h1>
+        <h1 className="mb-2.5 text-center text-h6 lg:mb-0 lg:mr-16 lg:text-h5-bold">
+          {user?.profile.firstName + ' ' + user?.profile.lastName}
+        </h1>
         <div className="mb-12.5 flex justify-center text-caption lg:mb-0 lg:mr-auto">
           <p className="flex items-center">
             <VerifyIcon className="h-4 shrink-0" />

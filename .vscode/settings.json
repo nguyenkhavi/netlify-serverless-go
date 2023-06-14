@@ -13,6 +13,7 @@
     "callees",
     "classcat",
     "classname",
+    "cmdk",
     "devkit",
     "fastify",
     "fleamint",
@@ -23,6 +24,7 @@
     "onboarded",
     "Parens",
     "Roadmap",
+    "signup",
     "superjson",
     "SVGR",
     "svix",
@@ -30,8 +32,7 @@
     "thirdweb",
     "TRPC",
     "webp",
-    "zustand",
-    "cmdk"
+    "zustand"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
