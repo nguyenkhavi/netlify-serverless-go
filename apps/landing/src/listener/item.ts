@@ -21,7 +21,7 @@ import {
   addItem,
   getCollectionByContract,
   getMarketStatusByListingId,
-  getMarketsByItem,
+  getAllRawMarketsByItem,
   updateItem,
   updateMarket,
 } from '../services';
@@ -79,7 +79,7 @@ export async function handleTransferItem(
   await addActivity(db, activity);
 
   /// check market available?
-  const market: IMarketData[] = await getMarketsByItem(
+  const market: IMarketData[] = await getAllRawMarketsByItem(
     db,
     event.transaction.address + '_' + event.data.tokenId.toNumber(),
   );

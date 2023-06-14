@@ -42,11 +42,14 @@ export async function getTrendingMarketByCategory(
       };
     }),
   );
-  return markets
-    .sort((marketA, marketB) => {
-      return marketB.totalSale - marketA.totalSale;
-    })
-    .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize);
+  return {
+    data: markets
+      .sort((marketA, marketB) => {
+        return marketB.totalSale - marketA.totalSale;
+      })
+      .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
+    total: markets.length,
+  };
 }
 
 export async function updateMarket(db: IDBPDatabase, data: IMarketStatusData) {
@@ -81,8 +84,22 @@ export async function getMarketsByCollection(db: IDBPDatabase, collection: strin
   return db.getAllFromIndex(dbOS.market, dbIndex.marketAssetContractIndex, collection);
 }
 
-export async function getMarketsByItem(db: IDBPDatabase, itemId: string) {
+export async function getAllRawMarketsByItem(
+  db: IDBPDatabase,
+  itemId: string,
+): Promise<IMarketData[]> {
   return db.getAllFromIndex(dbOS.market, dbIndex.marketItemIdIndex, itemId);
+}
+
+export async function getAvailableMarketByItem(db: IDBPDatabase, itemId: string) {
+  const market = await getAllRawMarketsByItem(db, itemId);
+  return market.filter(async (mk) => {
+    const status = await getMarketStatusByListingId(db, mk.listingId);
+    if (status.isAvailable == 1) {
+      return true;
+    }
+    return false;
+  });
 }
 
 export async function getAllAvailableMarket(db: IDBPDatabase): Promise<IMarketStatusData[]> {

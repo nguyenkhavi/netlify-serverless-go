@@ -18,7 +18,7 @@ export async function getTrendingCollectionsByCategory(
   category: number,
   paging: IPaging,
 ) {
-  const collections = await getCollectionsByCategory(db, category);
+  const collections = await getAllRawCollectionByCategory(db, category);
   const collectionsWithVolume = await Promise.all(
     collections.map(async (collection) => {
       const activities = (await getAllActivitiesByCollectionAddress(db, collection.address)).filter(
@@ -37,10 +37,14 @@ export async function getTrendingCollectionsByCategory(
       };
     }),
   );
-  return collectionsWithVolume.sort((marketA, marketB) => {
-    return marketB.totalSale - marketA.totalSale;
-  });
-  // .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize);
+  return {
+    data: collectionsWithVolume
+      .sort((marketA, marketB) => {
+        return marketB.volume - marketA.volume;
+      })
+      .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
+    total: collections.length,
+  };
 }
 
 export async function getCollectionByContract(
@@ -64,14 +68,40 @@ export async function batchAddCollection(db: IDBPDatabase, data: ICollection[]) 
 export async function getAllCollections(db: IDBPDatabase): Promise<ICollection[]> {
   return db.getAll(dbOS.collection);
 }
-export async function getCollectionsByOwner(
-  db: IDBPDatabase,
-  owner: string,
-): Promise<ICollection[]> {
-  return db.getAllFromIndex(dbOS.collection, dbIndex.collectionOwnerIndex, owner);
+export async function getCollectionsByOwner(db: IDBPDatabase, owner: string, paging: IPaging) {
+  const collections: ICollection[] = await db.getAllFromIndex(
+    dbOS.collection,
+    dbIndex.collectionOwnerIndex,
+    owner,
+  );
+  const collectionWithVolume = await Promise.all(
+    collections.map(async (collection) => {
+      const activities = (await getAllActivitiesByCollectionAddress(db, collection.address)).filter(
+        (activity) => {
+          return activity.type == ActivityType.BUY;
+        },
+      );
+      return {
+        ...collection,
+        volume: activities.reduce((total, current) => {
+          total += current.price * current.quantity;
+          return total;
+        }, 0),
+      };
+    }),
+  );
+
+  return {
+    data: collectionWithVolume
+      .sort((collectionA, collectionB) => {
+        return collectionA.volume - collectionB.volume;
+      })
+      .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
+    total: collections.length,
+  };
 }
 
-export async function getCollectionsByCategory(
+export async function getAllRawCollectionByCategory(
   db: IDBPDatabase,
   category: number,
 ): Promise<ICollection[]> {

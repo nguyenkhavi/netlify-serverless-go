@@ -30,7 +30,7 @@ import {
   getItemById,
   getLastBlock,
   getMarketStatusByListingId,
-  getMarketsByItem,
+  getAllRawMarketsByItem,
   updateItem,
   updateLastBlock,
   updateMarket,
@@ -301,7 +301,7 @@ export async function getAllNFTsOwners(
           await addItem(db, data);
         } else {
           /// check market available?
-          const market: IMarketData[] = await getMarketsByItem(
+          const market: IMarketData[] = await getAllRawMarketsByItem(
             db,
             address + '_' + Number(nft.metadata.id),
           );

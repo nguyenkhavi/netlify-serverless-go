@@ -1,7 +1,9 @@
 //THIRD PARTY MODULES
 import { IDBPDatabase } from 'idb';
-import { IItem } from '_@landing/utils/type';
+import { IItem, IPaging } from '_@landing/utils/type';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
+//RELATIVE MODULES
+import { getAvailableMarketByItem } from './market';
 
 export async function addItem(db: IDBPDatabase, data: IItem) {
   try {
@@ -30,6 +32,27 @@ export async function getItemById(db: IDBPDatabase, id: string): Promise<IItem> 
   return db.getFromIndex(dbOS.items, dbIndex.itemIdIndex, id);
 }
 
-export async function getAllItemByCollection(db: IDBPDatabase, address: string): Promise<IItem> {
+export async function getAllRawItemByCollection(db: IDBPDatabase, address: string): Promise<IItem> {
   return db.getFromIndex(dbOS.items, dbIndex.itemAssetContractIndex, address);
+}
+
+export async function getAllRawItemByOwner(db: IDBPDatabase, owner: string): Promise<IItem[]> {
+  return db.getAllFromIndex(dbOS.items, dbIndex.itemOwnerIndex, owner);
+}
+
+export async function getItemByOwner(db: IDBPDatabase, owner: string, paging: IPaging) {
+  const items = await getAllRawItemByOwner(db, owner);
+  const itemWithListing = await Promise.all(
+    items.map(async (item) => {
+      const listing = await getAvailableMarketByItem(db, item.id);
+      return {
+        ...item,
+        market: listing,
+      };
+    }),
+  );
+  return {
+    data: itemWithListing.slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
+    total: items.length,
+  };
 }
