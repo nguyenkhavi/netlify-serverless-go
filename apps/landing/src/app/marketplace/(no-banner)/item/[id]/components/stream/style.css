@@ -1,0 +1,119 @@
+.str-chat {
+  --str-chat__background-color: #0d0d0d;
+}
+.str-chat__message-list-scroll {
+  @apply max-h-175;
+}
+
+.str-chat__textarea {
+  @apply flex items-center;
+}
+
+.str-chat__message-textarea {
+  @apply w-full p-2 pr-12 rounded-[theme(spacing[7.5])] text-body3 text-text-50 bg-[#181818]
+    border border-solid border-secondary-700/20
+    focus:outline-none resize-none
+    placeholder:text-text-30 placeholder:truncate placeholder-shown:truncate;
+  @apply md:py-2 md:px-3.75 md:pr-20;
+}
+
+.str-chat__date-separator {
+  @apply p-3;
+}
+
+.str-chat__message-replies-count-button {
+  @apply text-primary-700;
+}
+
+.str-chat__list .str-chat__message-list-scroll .str-chat__li {
+  padding-inline: 0;
+  @apply first-of-type:pt-0;
+}
+
+.quoted-message-preview-header {
+  @apply grid grid-flow-col gap-2;
+}
+
+.str-chat__quoted-message-remove {
+  @apply absolute right-3 top-0 text-primary-700;
+  @apply [&>svg]:fill-white [&>svg>path]:fill-white;
+}
+
+.str-chat__quoted-message-reply-to-message {
+  @apply text-primary-700;
+}
+
+.str-chat__quoted-message-preview .str-chat__quoted-message-bubble {
+  @apply bg-secondary-300 border border-solid border-text-10 text-text-50;
+}
+
+.str-chat__emoji-picker-container {
+  @apply absolute top-0 right-0 -translate-y-90;
+}
+
+.str-chat__attachment-list .str-chat__message-attachment {
+  @apply flex justify-start rounded-none bg-transparent;
+}
+
+.str-chat__attachment-list
+  .str-chat__message-attachment--image:not(.str-chat__message-attachment--card)
+  > img {
+  @apply w-auto object-contain rounded-md;
+}
+
+.str-chat__quoted-message-bubble
+  .str-chat__attachment-list
+  .str-chat__message-attachment--image:not(.str-chat__message-attachment--card)
+  > img {
+  @apply w-full;
+}
+
+.rfu-file-upload-button > label > input > input {
+  @apply hidden;
+}
+
+.str-chat__list::-webkit-scrollbar {
+  @apply w-4.5;
+}
+
+.str-chat__list::-webkit-scrollbar-track {
+  @apply bg-secondary-400;
+}
+
+.str-chat__list::-webkit-scrollbar-thumb {
+  @apply bg-text-20 rounded-[theme(spacing[7.5])];
+}
+
+.str-chat__list::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-10;
+}
+
+/* Vendor prefixes for Firefox */
+.str-chat__list {
+  scrollbar-width: 18px;
+  scrollbar-color: #46494f #313130;
+}
+
+@media (max-width: 768px) {
+  .str-chat__list::-webkit-scrollbar {
+    @apply w-2.25;
+  }
+
+  .str-chat__list::-webkit-scrollbar-track {
+    @apply bg-secondary-400;
+  }
+
+  .str-chat__list::-webkit-scrollbar-thumb {
+    @apply bg-text-20 rounded-[theme(spacing[7.5])];
+  }
+
+  .str-chat__list::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-10;
+  }
+
+  /* Vendor prefixes for Firefox */
+  .str-chat__list {
+    scrollbar-width: 9px;
+    scrollbar-color: #46494f #313130;
+  }
+}
