@@ -1,6 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
-import Link from 'next/link';
+const Link = require('next/link');
+//THIRD PARTY MODULES
 import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
@@ -44,7 +45,13 @@ export default function MyItems() {
               Create Collection
             </Button>
           ) : (
-            <Button className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5">Create NFT</Button>
+            <Button
+              as={Link}
+              href="/profile/create/nft"
+              className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5"
+            >
+              Create NFT
+            </Button>
           )}
         </Tab.List>
         {TABS.map((tab, index) => (

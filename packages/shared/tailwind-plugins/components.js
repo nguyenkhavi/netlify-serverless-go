@@ -18,5 +18,21 @@ module.exports = plugin(({ addComponents }) => {
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
     },
+    '.text-green-gradient': {
+      background:
+        'linear-gradient(90deg, #B2F2E1 -0.29%, #BBF4E5 20.77%, #D5F8EF 54.86%, #FEFFFF 97.97%, #FFFFFF 98.97%)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      backgroundClip: 'text',
+      textFillColor: 'transparent',
+    },
+    '.border-green-gradient': {
+      border: '2px solid transparent',
+      borderRadius: '15px',
+      // borderImage:
+      //   'linear-gradient(90deg, #3EDEB5 0%, #47DEB8 16%, #61DFBE 44%, #8AE0C9 78%, #A7E1D1 99%) 1',
+      background:
+        'linear-gradient(theme(colors.secondary.200), theme(colors.secondary.200)) padding-box, linear-gradient(90deg, #3EDEB5 0%, #47DEB8 16%, #61DFBE 44%, #8AE0C9 78%, #A7E1D1 99%) border-box',
+    },
   });
 });

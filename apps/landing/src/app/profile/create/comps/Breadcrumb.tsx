@@ -15,9 +15,14 @@ type Props = {
 } & React.ComponentProps<'div'>;
 
 export default function Breadcrumb({ paths, className, ...props }: Props) {
+  const backPath = paths?.[paths.length - 2];
   return (
     <div className={`flex items-center space-x-2 ${className}`} {...props}>
-      <ArrowRightAltIcon className="h-6.5 w-6.5" />
+      <Show when={backPath}>
+        <Link href={backPath?.href || '#'} className="btn-link">
+          <ArrowRightAltIcon className="h-6.5 w-6.5" />
+        </Link>
+      </Show>
       <div className="flex items-center">
         {paths.map((path, i) => (
           <Fragment key={i}>
