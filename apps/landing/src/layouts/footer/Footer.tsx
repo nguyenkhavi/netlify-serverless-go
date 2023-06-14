@@ -10,7 +10,7 @@ export default function Footer() {
     <footer
       id="footer"
       className={classcat([
-        'bg-footer-mobile px-[--px] pb-[13px] pt-[47px]',
+        'bg-footer-mobile px-[--px] py-12 lg:pt-16',
         'sm:bg-footer-desktop sm:shadow-[inset_0_1px] sm:shadow-white/[.14]',
       ])}
     >

@@ -76,7 +76,7 @@ export default function ProfileNav() {
         <Button
           className={classcat([
             'mt-2.5 ow:border-text-10 ow:bg-text-10 ow:text-white',
-            'rounded-[30px] [&>svg]:h-4',
+            'ow:rounded-[30px] [&>svg]:h-4',
           ])}
           trailingIcon={<LogoutIcon />}
         >

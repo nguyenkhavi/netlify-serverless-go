@@ -62,7 +62,7 @@ export default function PartnersSection() {
 
       <div
         className={classcat([
-          'mt-10 hidden xlg:grid xl:mt-8',
+          'mt-10 hidden xlg:grid',
           'mx-auto w-fit justify-items-center gap-25',
         ])}
       >
@@ -88,7 +88,7 @@ export default function PartnersSection() {
         </div>
       </div>
 
-      <div className="mt-7.5 grid w-fit max-w-[100vw] auto-cols-max grid-flow-col overflow-hidden xlg:hidden">
+      <div className="mt-10 grid w-fit max-w-[100vw] auto-cols-max grid-flow-col overflow-hidden xlg:hidden">
         {Array(2)
           .fill(0)
           .map((_, i) => (
@@ -96,7 +96,7 @@ export default function PartnersSection() {
               key={i}
               className={classcat([
                 'grid w-fit auto-cols-max grid-flow-col',
-                'animate-slide-right gap-7 pl-7',
+                'animate-slide-right gap-7.5 pl-7.5',
               ])}
             >
               {PARTNER_LIST.map((partner) => (

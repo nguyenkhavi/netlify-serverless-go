@@ -32,13 +32,13 @@ export default function AchievementsSection() {
     >
       <div
         className={classcat([
-          'grid justify-items-center gap-10',
+          'grid justify-items-center gap-4',
           'xlg:justify-items-stretch xlg:gap-11.5',
         ])}
       >
         <div
           className={classcat([
-            'grid justify-items-center gap-1.25',
+            'grid justify-items-center gap-1',
             'xlg:justify-items-stretch xlg:gap-1',
           ])}
         >
@@ -50,7 +50,7 @@ export default function AchievementsSection() {
 
         <div
           className={classcat([
-            'grid justify-items-center gap-10',
+            'grid justify-items-center gap-4',
             'xlg:auto-cols-max xlg:grid-flow-col xlg:gap-37.5',
           ])}
         >
@@ -58,7 +58,7 @@ export default function AchievementsSection() {
             <div
               key={title}
               className={classcat([
-                'grid justify-items-center gap-1.25',
+                'grid justify-items-center gap-1',
                 'xlg:justify-items-stretch xlg:gap-3.75',
               ])}
             >

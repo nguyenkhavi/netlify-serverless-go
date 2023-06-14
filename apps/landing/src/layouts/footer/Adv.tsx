@@ -9,23 +9,17 @@ import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 export default function Adv() {
   return (
     <div
-      className={classcat([
-        'mt-7.5 rounded-[5px] bg-header-bg py-5.5 pl-8.5 pr-3.5',
-        'sm:mt-9 sm:rounded-[10px] sm:bg-[#040908] sm:px-6 sm:py-[17px]',
-        'border-[.5px] border-white/25',
-        'xlg:px-20 2xl:mx-2.5 2xl:mt-20.5',
-      ])}
+      className={classcat(['rounded-[10px] bg-secondary-200 p-6', 'ring-1 ring-text-10', 'mt-6'])}
     >
       <div
         className={classcat([
-          'sm:mx-auto sm:max-w-[1088px]',
-          'grid grid-flow-col items-center justify-center gap-3',
-          'sm:justify-between',
+          'grid grid-flow-col justify-center xsm:items-center',
+          'xsm:justify-between sm:mx-auto',
         ])}
       >
-        <HeaderLogoIcon className="h-[28px] w-[23px] sm:h-[40px] sm:w-[34px]" />
+        <HeaderLogoIcon className={classcat(['h-[28px] w-[23px] sm:h-[40px] sm:w-[34px] '])} />
         <span className="ml-3 mr-2 text-center text-subtitle2 sm:text-h4 xl:mx-0">
-          “<span className="text-bold mr-1 text-primary">50%</span>
+          “<span className="mr-1 text-primary">50%</span>
           Off Through This Saturday”
         </span>
         <Button
@@ -33,7 +27,7 @@ export default function Adv() {
           href="https://www.google.com/"
           target="_blank"
           rel="noopener noreferrer"
-          className="sm:btnmd ow:w-29 sm:w-34.5"
+          className={classcat(['sm:btnmd ow:w-29 sm:w-34.5'])}
         >
           Click Here
         </Button>

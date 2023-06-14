@@ -5,8 +5,8 @@ export default function Copyright() {
   return (
     <div
       className={classcat([
-        'mt-5 pt-3 shadow-[inset_0_1px] shadow-white/[.15]',
-        'sm:mt-12 sm:pt-5 sm:shadow-white/5',
+        'mt-6 pt-6 shadow-[inset_0_1px] shadow-white/[.15]',
+        'sm:shadow-white/5 lg:mt-10 lg:pt-5',
       ])}
     >
       <div

@@ -22,8 +22,8 @@ export default function HomeAdvHorizontal({ className, isHome = false }: Props) 
     >
       <div
         className={classcat([
-          'grid grid-flow-col items-center justify-center',
-          'sm:mx-auto sm:justify-between',
+          'grid grid-flow-col justify-center xsm:items-center',
+          'xsm:justify-between sm:mx-auto',
           isHome ? 'xl:justify-start' : '',
         ])}
       >

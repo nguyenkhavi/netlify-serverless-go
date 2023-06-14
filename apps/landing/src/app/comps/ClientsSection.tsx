@@ -8,7 +8,7 @@ import Client4Icon from '_@shared/icons/Client4Icon';
 
 const clientSquareClasses = [
   'grid place-items-center',
-  'aspect-square w-[76.84px] rounded-[5.48864px] bg-[#0E0E0E]',
+  'aspect-square w-[77px] rounded-[5.48864px] bg-[#0E0E0E]',
   'xlg:w-[140px] xlg:rounded-[10px]',
 ];
 
@@ -54,8 +54,8 @@ export default function ClientsSection() {
       <div
         className={classcat([
           'hidden',
-          'xsm:mx-auto xsm:mt-7.5 xsm:grid xsm:w-fit xsm:auto-cols-max xsm:grid-flow-col xsm:gap-5.5',
-          'xlg:mt-15 xlg:gap-10 xl:gap-25',
+          'mt-10 xsm:mx-auto xsm:grid xsm:w-fit xsm:auto-cols-max xsm:grid-flow-col xsm:gap-7',
+          'xlg:gap-10 xl:gap-25',
         ])}
       >
         {CLIENT_LIST.map((client) => (
@@ -65,7 +65,7 @@ export default function ClientsSection() {
         ))}
       </div>
 
-      <div className="mt-7.5 grid w-fit max-w-[100vw] auto-cols-max grid-flow-col overflow-hidden xsm:hidden">
+      <div className="mt-10 grid w-fit max-w-[100vw] auto-cols-max grid-flow-col overflow-hidden xsm:hidden">
         {Array(2)
           .fill(0)
           .map((_, i) => (
@@ -73,7 +73,7 @@ export default function ClientsSection() {
               key={i}
               className={classcat([
                 'grid w-fit auto-cols-max grid-flow-col',
-                'animate-slide-left gap-5.5 pr-5.5',
+                'animate-slide-left gap-7 pr-7',
               ])}
             >
               {CLIENT_LIST.map((client) => (

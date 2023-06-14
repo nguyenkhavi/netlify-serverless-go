@@ -34,7 +34,7 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         <img src={value.url} alt="image" className="h-full w-full object-cover" />
       </div>
-      <p className="body-3 mt-2 xlg:mt-4 xlg:text-body2">{value.name}</p>
+      <p className="mt-2 text-body3 xlg:mt-4 xlg:text-body2">{value.name}</p>
       <span className="mt-1.5 text-caption text-text-80 xlg:mt-1.25 xlg:text-body3">
         {value.prices}
       </span>
@@ -46,7 +46,7 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
             'shrink-0',
           ])}
         >
-          <CartIcon className="h-4 w-4 xlg:h-5 xlg:w-5" />
+          <CartIcon className="h-4 w-4 xlg:h-5 xlg:w-5" color="#0A0A0E" />
         </Button>
       </div>
     </div>
@@ -88,7 +88,7 @@ function ListView({ value, ...props }: MainCardProps) {
               'shrink-0',
             ])}
           >
-            <CartIcon className="h-5 w-5" />
+            <CartIcon className="h-5 w-5" color="#0A0A0E" />
           </Button>
         </div>
       </div>
@@ -105,7 +105,7 @@ function GridViewOnly({ value, ...props }: MainCardProps) {
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         <img src={value.url} alt="image" className="h-full w-full object-cover" />
       </div>
-      <p className="body-3 mt-1.25 xlg:mt-4 xlg:text-body2">{value.name}</p>
+      <p className="mt-1.25 text-body3 xlg:mt-4 xlg:text-body2">{value.name}</p>
       <p className="text-caption text-text-50 xlg:text-body3">
         Creator: <span className="text-text-80">@{value.owner}</span>
       </p>

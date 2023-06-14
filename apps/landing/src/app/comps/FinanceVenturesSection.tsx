@@ -38,7 +38,7 @@ export default function FinanceVenturesSection() {
           data-sal-duration="800"
           data-sal-delay="300"
           className={classcat([
-            'mt-5 text-center text-body1 text-text-60',
+            'mt-6 text-center text-body1 text-text-60',
             'xl:text-left xl:text-h5',
           ])}
         >
@@ -55,7 +55,7 @@ export default function FinanceVenturesSection() {
           data-sal-delay="100"
           as={Link}
           href="/finance-ventures"
-          className="btnlg mt-7.5 ow:w-62.5 xl:mt-10"
+          className="btnlg mt-10 lg:ow:w-62.5"
         >
           Go to ventures
         </Button>

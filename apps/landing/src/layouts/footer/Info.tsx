@@ -104,34 +104,22 @@ const SOCIAL_LIST = [
 
 export default function Info() {
   return (
-    <div
-      className={classcat([
-        'md:flex md:flex-wrap md:items-start md:justify-between',
-        '2xl:relative',
-      ])}
-    >
+    <div className={classcat(['md:flex md:flex-wrap md:items-start', '2xl:relative'])}>
       <div
         className={classcat([
           'grid auto-cols-max grid-flow-col items-start justify-between',
-          'md:min-w-[480px] s-924:min-w-[560px] s-1036:min-w-[640px]',
-          's-1117:min-w-[480px]',
-          '2xl:absolute 2xl:right-[355px]',
+          'md:mr-28.75 md:gap-28.75 lg:ml-auto',
         ])}
       >
         {LINK_LIST.map((linkList) => (
-          <div
-            key={linkList.title}
-            className={classcat(['grid justify-items-center gap-[10px]', 'md:justify-items-start'])}
-          >
-            <div className="text-subtitle2 md:text-subtitle1">{linkList.title}</div>
-            <div
-              className={classcat(['grid justify-items-center gap-2', 'md:justify-items-start'])}
-            >
+          <div key={linkList.title} className={classcat(['grid gap-4'])}>
+            <div className="text-subtitle1">{linkList.title}</div>
+            <div className={classcat(['grid gap-3'])}>
               {linkList.links.map((link) => (
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="text-body3 text-[color:#A6A6A6] hover:underline"
+                  className="text-body3 text-text-50 hover:underline"
                 >
                   {link.title}
                 </Link>
@@ -143,7 +131,7 @@ export default function Info() {
 
       <div
         className={classcat([
-          'mt-7.5 grid justify-items-center',
+          'mt-6 grid justify-items-center',
           'md:-order-1 md:mt-0 md:justify-items-start',
         ])}
       >
@@ -159,19 +147,25 @@ export default function Info() {
 
       <div
         className={classcat([
-          'mt-5 grid justify-items-center gap-[7px]',
-          'md:mx-auto md:mt-7.5',
-          's-1117:mx-0 s-1117:mt-0 s-1117:justify-items-start',
+          'mt-6 grid justify-items-center gap-1.25',
+          'md:mt-0',
+          'md:mx-0 md:justify-items-start',
           '2xl:mr-[55px]',
         ])}
       >
         <div className="text-subtitle2 md:text-subtitle1">Follow Us</div>
-        <div className="grid grid-cols-[repeat(5,30px)] gap-2">
+        <div className="grid grid-cols-[repeat(5,34px)] grid-rows-[34px] gap-2 lg:grid-cols-[repeat(5,40px)] lg:grid-rows-[40px]">
           {SOCIAL_LIST.map((social) => {
             const Icon = social.Icon;
             return (
-              <Link key={social.href} href={social.href} target="_blank" rel="noopener noreferrer">
-                <Icon />
+              <Link
+                className="h-full w-full"
+                key={social.href}
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon className="h-full w-full" />
               </Link>
             );
           })}

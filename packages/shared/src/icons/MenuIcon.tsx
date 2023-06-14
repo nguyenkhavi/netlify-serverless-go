@@ -1,8 +1,8 @@
 export default function MenuIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg
-      height="43"
-      width="43"
+      height="44"
+      width="44"
       fill="none"
       viewBox="0 0 43 43"
       xmlns="http://www.w3.org/2000/svg"
