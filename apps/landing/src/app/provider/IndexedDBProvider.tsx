@@ -23,7 +23,7 @@ export default function IndexedDBProvider({ children }: { children: any }) {
   useEffect(() => {
     const connectDB = async () => {
       if (typeof window !== 'undefined' && 'indexedDB' in window) {
-        await deleteDB('Fleamint');
+        // await deleteDB('Fleamint');
         const db = await openDB('Fleamint', 1, {
           upgrade(db) {
             // Create a store of objects
