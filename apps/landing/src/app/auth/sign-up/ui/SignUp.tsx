@@ -2,10 +2,8 @@
 //THIRD PARTY MODULES
 import * as z from 'zod';
 import dayjs from 'dayjs';
-import React from 'react';
-import Link from 'next/link';
-import { useMemo } from 'react';
 import classcat from 'classcat';
+import { useMemo, useState } from 'react';
 import { Gender } from '_@rpc/drizzle/enum';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -45,6 +43,7 @@ const valuesSchema = z.object({
 type Values = z.infer<typeof valuesSchema>;
 
 export default function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
   const { signUp } = useAuthStoreAction();
   const methods = useForm<Values>({
     resolver: zodResolver(valuesSchema),
@@ -71,22 +70,27 @@ export default function SignIn() {
   );
 
   const onSubmit = handleSubmit(async (data) => {
-    const digitalCode = data.phone.digitalCode as Country['code'];
-    const digital = countryMapping[digitalCode];
-    await signUp({
-      email: data.email,
-      dob: new Date(
-        `${data.birthday.year}-${data.birthday.month}-${data.birthday.day}`,
-      ).toISOString(),
-      firstName: data.firstName,
-      lastName: data.lastName,
-      username: data.username,
-      phone: {
-        phoneCode: digital.dialCode,
-        phoneNumber: data.phone.phoneNumber,
-      },
-      gender: data.gender as any,
-    });
+    try {
+      setIsLoading(true);
+      const digitalCode = data.phone.digitalCode as Country['code'];
+      const digital = countryMapping[digitalCode];
+      await signUp({
+        email: data.email,
+        dob: new Date(
+          `${data.birthday.year}-${data.birthday.month}-${data.birthday.day}`,
+        ).toISOString(),
+        firstName: data.firstName,
+        lastName: data.lastName,
+        username: data.username,
+        phone: {
+          phoneCode: digital.dialCode,
+          phoneNumber: data.phone.phoneNumber,
+        },
+        gender: data.gender as any,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
@@ -167,16 +171,13 @@ export default function SignIn() {
 
               <ReCAPTCHA name="recaptcha" className="mt-6 md:mt-9" />
 
-              <Button type="submit" className="btnlg mx-auto mt-4 ow:w-62 md:mt-6 md:ow:w-full">
-                Sign Up
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                className="btnlg mx-auto mt-4 ow:w-62 md:mt-6 md:ow:w-full"
+              >
+                Get Started
               </Button>
-
-              <p className="mt-7 flex items-center justify-center space-x-1 md:mt-6">
-                <span className="text-body3 text-text-80 md:text-body1">Already a member?</span>
-                <Link href="/auth/sign-in" className="btn-link text-body2 text-primary ow:w-fit">
-                  Sign In
-                </Link>
-              </p>
             </form>
           </FormProvider>
         </div>

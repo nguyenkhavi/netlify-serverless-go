@@ -2,6 +2,7 @@
 import superjson from 'superjson';
 import { createTRPCNext } from '@trpc/next';
 import { type AppRouter } from '_@rpc/app.router';
+import cookieHandler from '_@landing/utils/cookieHandler';
 import { createTRPCProxyClient, httpBatchLink, httpLink, loggerLink } from '@trpc/client';
 //TYPES MODULES
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server';
@@ -17,7 +18,7 @@ export const api = createTRPCProxyClient<AppRouter>({
     httpBatchLink({
       url: `/api/trpc`,
       headers() {
-        const session = localStorage.getItem('session');
+        const session = cookieHandler.get('session');
         return {
           Authorization: session ? `Bearer ${session}` : '',
         };
@@ -52,7 +53,7 @@ export const nextApi = createTRPCNext<AppRouter>({
         httpLink({
           url: `/api/trpc`,
           headers() {
-            const session = localStorage.getItem('session');
+            const session = cookieHandler.get('session');
             return {
               Authorization: session ? `Bearer ${session}` : '',
             };

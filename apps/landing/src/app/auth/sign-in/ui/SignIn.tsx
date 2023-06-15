@@ -1,6 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
 import * as z from 'zod';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
@@ -23,6 +24,7 @@ const values = z.object({
 type Values = z.infer<typeof values>;
 
 export default function SignIn() {
+  const [isLoading, setIsLoading] = useState(false);
   const { loginWithSMS } = useAuthStoreAction();
   const methods = useForm<Values>({
     resolver: zodResolver(values),
@@ -39,14 +41,19 @@ export default function SignIn() {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    const digitalCode = data.phone.digitalCode as Country['code'];
-    const digital = countryMapping[digitalCode];
-    await loginWithSMS({
-      phone: {
-        phoneCode: digital.dialCode,
-        phoneNumber: data.phone.phoneNumber,
-      },
-    });
+    try {
+      const digitalCode = data.phone.digitalCode as Country['code'];
+      const digital = countryMapping[digitalCode];
+      setIsLoading(true);
+      await loginWithSMS({
+        phone: {
+          phoneCode: digital.dialCode,
+          phoneNumber: data.phone.phoneNumber,
+        },
+      });
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (
@@ -71,7 +78,11 @@ export default function SignIn() {
                   </>
                 </FormItem>
 
-                <Button type="submit" className="btnlg mx-auto ow:w-62 md:ow:w-full">
+                <Button
+                  isLoading={isLoading}
+                  type="submit"
+                  className="btnlg mx-auto ow:w-62 md:ow:w-full"
+                >
                   Get Started
                 </Button>
               </div>

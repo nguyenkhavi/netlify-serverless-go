@@ -4,7 +4,8 @@ import { create } from 'zustand';
 import { Magic } from 'magic-sdk';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { RouterInputs, RouterOutputs, api, nextApi } from '_@landing/utils/api';
+import cookieHandler from '_@landing/utils/cookieHandler';
+import { RouterInputs, RouterOutputs, nextApi } from '_@landing/utils/api';
 
 type State = {
   user: RouterOutputs['my-profile'] | null;
@@ -37,46 +38,48 @@ export const useAuthStoreAction = () => {
   const { mutateAsync: validateLoginFn } = nextApi['validate-login'].useMutation({});
   const { mutateAsync: loginFn } = nextApi['login'].useMutation({});
   const { mutateAsync: logoutFn } = nextApi['logout'].useMutation({});
-
-  const handleAfterLogin = async (didToken: string | null) => {
-    if (!didToken) return;
-    localStorage.setItem('session', didToken);
-    const userProfile = await api['my-profile'].query();
-    if (userProfile) {
-      setUser(userProfile);
-    }
-  };
+  const utils = nextApi.useContext();
 
   const _handleLogin = async (input: RouterInputs['validate-login']) => {
-    if (!magicClient) return;
-    const found = await validateLoginFn(input);
-    if (found) {
-      const didToken = await magicClient.auth.loginWithSMS({
-        phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
-      });
+    try {
+      if (!magicClient) return;
+      const found = await validateLoginFn(input);
+      if (found) {
+        const didToken = await magicClient.auth.loginWithSMS({
+          phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
+        });
 
-      await handleAfterLogin(didToken);
-      await loginFn();
-      router.push('/profile');
+        cookieHandler.set('session', didToken || '');
+        await loginFn();
+        utils['my-profile'].invalidate();
+        router.push('/profile');
+      }
+    } catch (error: any) {
+      console.log(`handleLogin error: ${error.message}`);
     }
   };
 
   const _handleSignUp = async (input: RouterInputs['signup']) => {
-    if (!magicClient) return;
-    const requestId = await signUpFn(input);
-    const didToken = await magicClient.auth.loginWithSMS({
-      phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
-    });
-
-    if (didToken) {
-      const postRes = await postSignUpFn({
-        didToken,
-        requestId,
+    try {
+      if (!magicClient) return;
+      const requestId = await signUpFn(input);
+      const didToken = await magicClient.auth.loginWithSMS({
+        phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
       });
-      if (postRes) {
-        handleAfterLogin(didToken);
-        router.push('/profile');
+
+      if (didToken) {
+        cookieHandler.set('session', didToken || '');
+        const postRes = await postSignUpFn({
+          didToken,
+          requestId,
+        });
+        if (postRes) {
+          router.push('/profile');
+          utils['my-profile'].invalidate();
+        }
       }
+    } catch (error: any) {
+      console.log(`handleSignUp error: ${error.message}`);
     }
   };
 
@@ -86,9 +89,10 @@ export const useAuthStoreAction = () => {
       await magicClient.user.logout();
       await logoutFn();
       setUser(undefined);
-    } finally {
-      localStorage.setItem('token', '');
+      cookieHandler.remove('session');
       router.push('/auth/sign-in');
+    } catch (error: any) {
+      console.log(`handleLogout error: ${error.message}`);
     }
   };
 

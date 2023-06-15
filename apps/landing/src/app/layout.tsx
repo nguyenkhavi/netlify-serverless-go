@@ -9,6 +9,8 @@ import ClientProvider from '_@landing/app/provider/ClientProvider';
 import Header from '_@landing/layouts/Header';
 import Footer from '_@landing/layouts/footer/Footer';
 import ModalFeedback from '_@landing/components/modal/ModalFeedback';
+//HOOK
+import getMyProfileOnServer from '_@landing/server/auth';
 //RELATIVE MODULES
 import './globals.css';
 import IndexedDBProvider from './provider/IndexedDBProvider';
@@ -23,11 +25,12 @@ const archivo = Archivo({
   variable: '--font-archivo',
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const user = await getMyProfileOnServer();
   return (
     <ClerkProvider>
       <ClientProvider>
-        <AuthProvider>
+        <AuthProvider user={user}>
           <IndexedDBProvider>
             <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
               <body>
