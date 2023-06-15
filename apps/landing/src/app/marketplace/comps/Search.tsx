@@ -31,7 +31,7 @@ export default function Search() {
   };
 
   return (
-    <div className="flex px-[--px] py-4.5 md:py-4">
+    <div className="flex px-[--px] pb-6 pt-4 md:pt-6">
       <div className="w-full md:max-w-[633px]">
         <SearchInput
           ref={searchText}
@@ -54,13 +54,13 @@ export default function Search() {
             <ChevronBottomIcon className="ml-1" />
           </div>
         </PopoverTrigger>
-        <PopoverContent className="min-w-[125px] ow:py-7" align="end">
-          <div className="grid gap-3">
+        <PopoverContent className="min-w-[125px] ow:px-3 ow:py-4" align="end">
+          <div className="grid gap-4">
             {MOCK_DATA.map((category, i) => (
               <Link
                 className={classcat([
                   'text-body2 hover:text-primary',
-                  categoryId === category.id ? 'text-primary' : '',
+                  categoryId === category.id ? 'text-primary' : 'text-text-50',
                 ])}
                 href={`/marketplace${category.id === '' ? '' : '/category/' + category.id}`}
                 key={i}
@@ -72,13 +72,13 @@ export default function Search() {
           </div>
           <Link
             href="/marketplace/category"
-            className="mx-auto mt-11 block cursor-pointer text-center text-underline underline"
+            className="mx-auto mt-8 block cursor-pointer text-center text-underline text-text-80 underline"
           >
-            See All
+            See all
           </Link>
         </PopoverContent>
       </Popover>
-      <Button className="ml-2 hidden p-0 ow:w-29.25 xlg:block" onClick={_handleSearch}>
+      <Button className="ml-4 hidden p-0 ow:w-29.25 xlg:block" onClick={_handleSearch}>
         Search
       </Button>
     </div>

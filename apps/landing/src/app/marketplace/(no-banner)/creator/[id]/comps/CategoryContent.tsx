@@ -8,7 +8,7 @@ import CategoryCard from '_@landing/components/card/CategoryCard';
 
 export default function CategoryContent() {
   return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-7.5 md:grid-cols-3 md:gap-x-16.5 xlg:gap-y-7">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-x-10 xlg:gap-y-6">
       {MOCK_DATA_CATEGORY_ITEM.slice(0, 9).map((item, index) => (
         <React.Fragment key={index}>
           <CategoryCard value={item} className="[&>p]:mt-2.75"/>

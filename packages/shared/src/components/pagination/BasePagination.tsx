@@ -14,7 +14,11 @@ export interface IBasePaginationProps {
 }
 
 const disableClasses = 'ow:cursor-not-allowed text-foundation-black-100 pointer-events-none';
-const buttonArrowClasses = 'h-5 w-5 grid place-items-center';
+const buttonArrowClasses = [
+  'h-8 w-8 grid place-items-center',
+  'hover:bg-main-gradient rounded-lg [&>svg]:hover:text-black',
+  'md:w-10 md:h-10'
+];
 
 export default function BasePagination({ perPage, totalItems, className }: IBasePaginationProps) {
   const params = useSearchParams();
@@ -56,7 +60,7 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
   return (
     <div
       className={classcat([
-        'flex h-12.5 w-max items-center rounded-[27px] bg-secondary-300',
+        'flex w-max items-center rounded-[27px] bg-secondary-300 py-2',
         'px-6',
         className,
       ])}
@@ -68,20 +72,20 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
         />
       </button>
 
-      <div className="mx-8">
+      <div>
         {pages.map((item, index) =>
           item ? (
             <button
               className={classcat([
-                'rounded',
+                'h-8 w-8 rounded-lg hover:text-body3 md:h-10 md:w-10',
                 currentPage === item
-                  ? 'bg-main-gradient text-secondary-100'
-                  : 'hover:bg-main-gradient hover:text-secondary-100',
+                  ? 'bg-main-gradient text-body3 text-secondary-100'
+                  : 'text-body2 hover:bg-main-gradient hover:text-secondary-100',
               ])}
               key={index}
               onClick={handleChangePage(item)}
             >
-              <span className="block min-w-[22px]">{item}</span>
+              <span>{item}</span>
             </button>
           ) : (
             <span className="mr-2 inline-block min-w-[22px] text-center" key={index}>
@@ -107,7 +111,7 @@ const getPagesWithFirstAndLast = (currentPage: number, totalPage: number) => {
   const pages = [currentPage];
 
   let pageBefore = currentPage - 1;
-  let count = 2;
+  let count = 1;
 
   while (pageBefore >= 1 && count > 0) {
     pages.unshift(pageBefore);
@@ -117,7 +121,7 @@ const getPagesWithFirstAndLast = (currentPage: number, totalPage: number) => {
   }
 
   let pageAfter = currentPage + 1;
-  count = 2;
+  count = 1;
 
   while (pageAfter <= totalPage && count > 0) {
     pages.push(pageAfter);

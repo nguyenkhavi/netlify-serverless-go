@@ -23,18 +23,15 @@ export default function BrowseCategory() {
 
   return (
     <div
-      className={classcat([
-        'bg-secondary-300 px-6.25 py-7.5',
-        'mt-5.25 rounded-[15px] border-[.5px] border-text-20',
-      ])}
+      className={classcat(['bg-secondary-300 p-6', 'rounded-[15px] border-[.5px] border-text-20'])}
     >
-      <h3 className="mb-7.5 text-h5 text-text-100">Browse Categories</h3>
-      <div className="grid gap-3">
+      <h3 className="mb-8 text-h5 text-text-100">Browse Categories</h3>
+      <div className="grid gap-4">
         {MOCK_DATA.map((category, i) => (
           <Link
             className={classcat([
-              'text-body2 hover:text-primary',
-              categoryId === category.id ? 'text-primary' : '',
+              'text-body2 hover:text-gradient-pr',
+              categoryId === category.id ? 'text-gradient-pr' : '',
             ])}
             href={`/marketplace${category.id === '' ? '' : '/category/' + category.id}`}
             key={i}
@@ -45,7 +42,7 @@ export default function BrowseCategory() {
       </div>
       <Link
         href="/marketplace/category"
-        className="mx-auto mt-11 block cursor-pointer text-center text-underline underline"
+        className="mx-auto mt-6 block cursor-pointer text-center text-underline text-text-80 underline"
       >
         See All
       </Link>

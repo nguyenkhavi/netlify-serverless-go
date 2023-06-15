@@ -23,7 +23,7 @@ export default function Marketplace() {
         <>
           <BrowseCategory />
           <HomeAdvVertical
-            className="relative h-auto w-full py-8 xl:grid"
+            className="relative h-auto w-full py-8 ow:top-6 ow:px-15 xl:grid"
             btnClasses="ow:static mt-6.25"
           />
         </>
@@ -31,13 +31,13 @@ export default function Marketplace() {
     >
       <TopSellers />
       <TrendingInArts />
-      <HomeAdvHorizontal isHome={false} />
+      <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
       <TrendingInPFP />
       <TrendingInWildlife />
-      <HomeAdvHorizontal isHome={false} />
+      <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
       <TrendingInNature />
       <TrendingInGaming />
-      <HomeAdvHorizontal isHome={false} />
+      <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
     </MarketplaceBox>
   );
 }

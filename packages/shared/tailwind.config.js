@@ -69,6 +69,7 @@ module.exports = {
       animation: {
         'slide-left': 'slide-left 10s linear infinite',
         'slide-right': 'slide-right 10s linear infinite',
+        'spin-ring': 'spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite',
       },
       fontSize: {
         h1: [

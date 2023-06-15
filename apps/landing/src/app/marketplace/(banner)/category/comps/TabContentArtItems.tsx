@@ -9,8 +9,8 @@ type IPropsComp = {
   view: TViewMainCard;
 };
 
-const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-3.25 gap-y-5 md:gap-7'];
-const listViewClasses = ['gap-x-3.25 gap-y-4.5'];
+const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 md:gap-4'];
+const listViewClasses = ['gap-4'];
 
 export default function TabContentArtItems({ view }: IPropsComp) {
   return (
@@ -20,13 +20,13 @@ export default function TabContentArtItems({ view }: IPropsComp) {
           <MainCard key={index} value={item} view={view} />
         ))}
       </div>
-      <HomeAdvHorizontal className="my-5 md:my-6" isHome={false} />
+      <HomeAdvHorizontal className="my-6 md:my-10" isHome={false} />
       <div className={classcat(['grid', view === 'grid' ? gridViewClasses : listViewClasses])}>
         {MOCK_DATA_ITEM.map((item, index) => (
           <MainCard key={index} value={item} view={view} />
         ))}
       </div>
-      <HomeAdvHorizontal className="my-5 md:my-6" isHome={false} />
+      <HomeAdvHorizontal className="my-6 md:my-10" isHome={false} />
     </div>
   );
 }

@@ -10,6 +10,11 @@ module.exports = plugin(
       },
       { values: theme('tabSize') },
     );
+    matchUtilities({
+      'animation-delay': (value) => ({
+        animationDelay: value,
+      }),
+    });
   },
   {
     theme: {

@@ -97,11 +97,11 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           type="text"
           placeholder="Search by Versace"
           className={classcat([
-            'ow:h-9 md:h-11.25',
+            'grow ow:h-11.25',
             'border-none ow:bg-secondary-200 md:text-body1',
             'sm:h-11.25',
           ])}
-          boxClasses="w-[146px] max-w-[324px] md:w-full"
+          boxClasses="max-w-[324px] md:w-full"
         />
         <Popover open={openFilter} onOpenChange={(open) => setOpenFilter(open)}>
           <PopoverTrigger>

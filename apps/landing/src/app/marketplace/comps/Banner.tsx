@@ -58,7 +58,7 @@ export default function Banner() {
           <div
             key={index}
             className={classcat([
-              'relative flex overflow-hidden rounded-xl px-4 py-6 xlg:py-22',
+              'relative flex overflow-hidden rounded-xl px-8 py-6 xlg:py-22',
               'mx-[--site-padding] h-full basis-[--content-width] xlg:justify-center',
               'shrink-0 grow bg-banner-bg bg-cover bg-no-repeat xlg:mx-0 xlg:basis-full',
             ])}
@@ -78,8 +78,8 @@ export default function Banner() {
                 height={320}
               />
             </div>
-            <div className="z-20 ml-4.5 max-w-[169px] xlg:ml-11 xlg:max-w-[475px]">
-              <p className="text-h6 text-text-100 xlg:text-h2">{item.title}</p>
+            <div className="z-20 ml-4.75 max-w-[169px] xlg:ml-10 xlg:max-w-[475px]">
+              <p className="mb-2 text-h6 text-text-100 xlg:mb-4 xlg:text-h2">{item.title}</p>
               <p
                 className={classcat([
                   'text-body3 text-text-100 xlg:mt-3.75 xlg:text-h4 xlg:text-text-80',

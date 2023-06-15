@@ -9,7 +9,7 @@ import MainCard from '_@landing/components/card/MainCard'
 
 export default function ItemContent() {
   return (
-    <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-4 md:gap-x-7.5 xlg:gap-y-5">
+    <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 md:gap-6">
       {MOCK_DATA_ITEM.map((item, index) => (
         <React.Fragment key={index}>
           <MainCard value={item} />

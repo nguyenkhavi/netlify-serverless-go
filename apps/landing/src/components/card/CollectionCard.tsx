@@ -24,19 +24,19 @@ function GridView({ value, ...props }: CollectionCardProps) {
   return (
     <Link
       href={'/marketplace/collection/' + value.id}
-      className="rounded-[10px] border border-[#303030] px-2.25 py-3.75 xlg:px-3.75 xlg:py-5"
+      className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]"
       {...props}
     >
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         <img src={value.url} alt="image" className="h-full w-full object-cover" />
       </div>
-      <p className="body-3 mt-1.25 xlg:mt-4 xlg:text-body2">{value.name}</p>
-      <p className="text-caption text-text-50 xlg:text-body3">
+      <p className="mt-3 text-body3 xlg:text-body2">{value.name}</p>
+      <p className="mt-2 text-caption text-text-50 xlg:text-body3">
         Creator: <span className="text-text-80">@{value.owner}</span>
       </p>
-      <hr className="my-1.25 h-[0.5px] border-none bg-text-10" />
-      <div className="flex items-center justify-between text-caption text-text-70 xlg:text-body3">
-        <span>Volume</span>
+      <hr className="my-2 h-[0.5px] border-none bg-text-10" />
+      <div className="flex items-center text-caption text-text-70 xlg:text-body3">
+        <span className='mr-2 w-12.5'>Volume</span>
         <span>{value.prices}</span>
       </div>
     </Link>

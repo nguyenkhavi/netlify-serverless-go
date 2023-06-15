@@ -16,12 +16,12 @@ export default function HomeAdvVertical({ className, btnClasses }: Props) {
     <div
       className={classcat([
         'absolute top-16 h-[600px] w-[160px]',
-        'rounded-[10px] border-[.5px] border-white/20 bg-[#0D0D0D]',
+        'rounded-[10px] border-[.5px] border-text-20 bg-secondary-300',
         'hidden place-items-center 2xl:grid',
         className,
       ])}
     >
-      <div className="grid w-[125px] justify-items-center gap-10">
+      <div className="grid w-[125px] justify-items-center gap-6">
         <HeaderLogoIcon className="h-[40px] w-[34px]" />
         <div className="text-center text-[24px] font-bold leading-[36px]">
           “<span className="text-primary">50%</span> Off Through This Saturday”

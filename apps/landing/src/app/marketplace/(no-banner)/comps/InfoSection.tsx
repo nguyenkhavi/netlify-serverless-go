@@ -41,12 +41,12 @@ export default function InfoSection({
       </div>
       <div
         className={classcat([
-          'mx-auto -mt-18 rounded-[10px] px-8 pb-15',
+          'mx-auto -mt-18 rounded-[10px] px-6 pb-6 lg:px-15',
           'relative z-sticky w-[--content-width]  bg-secondary-200',
           contentClasses,
         ])}
       >
-        <div className="mb-5 -translate-y-1/2">
+        <div className="mb-4 -translate-y-1/2">
           <img
             className={classcat([
               'h-20 w-20 rounded-full border-2 border-solid border-primary',
@@ -58,7 +58,7 @@ export default function InfoSection({
         </div>
         <div className="-mt-10 justify-between md:-mt-15.25 lg:flex">
           <div>
-            <h1 className="mb-1.25 text-h5-bold md:text-h4">
+            <h1 className="mb-2 text-h5-bold md:text-h4">
               {!isCollection && '@'}
               {data.name}
             </h1>
@@ -75,7 +75,7 @@ export default function InfoSection({
           <Show when={isCollection}>
             <ul
               className={classcat([
-                'mt-6 grid gap-2 rounded-[10px] bg-secondary-300 px-11.75 py-7 lg:mt-0',
+                'mt-6 grid gap-2 rounded-[10px] bg-secondary-300 p-4 lg:mt-0 lg:p-6',
                 'md:border md:border-text-10',
               ])}
             >
@@ -101,7 +101,8 @@ export default function InfoSection({
         <Button
           className={classcat([
             'w-max border-none bg-secondary-400',
-            'mt-5 ow:w-29.25 [&>svg]:h-3.75',
+            'ow:w-29.25  [&>svg]:h-3.75',
+            isCollection ? 'mt-12 lg:mt-6' : 'mt-16 lg:mt-18',
           ])}
           leadingIcon={<ShareIcon />}
         >

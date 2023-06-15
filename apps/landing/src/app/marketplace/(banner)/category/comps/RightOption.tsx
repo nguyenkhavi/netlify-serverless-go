@@ -44,14 +44,14 @@ export default function RightOption({ view }: RightOptionProps) {
         owStyles={{
           triggerClasses:
             'h-full ow:rounded w-auto min-w-[9.625rem] text-caption hidden lg:block ow:text-text-60',
-          itemClasses: 'text-caption my-1 h-4.5',
-          contentClasses: 'ow:py-1',
+          itemClasses: 'ow:py-2 ow:my-0 text-base ow:h-auto',
+          contentClasses: 'ow:py-2',
         }}
       />
       <Popover open={openFilter} onOpenChange={(open) => setOpenFilter(open)}>
         <PopoverTrigger>
           <div
-            className="ml-2 flex h-6.25 items-center rounded bg-secondary-200 px-1 lg:ml-4 lg:hidden"
+            className="ml-2 flex h-7.5 items-center rounded bg-secondary-200 px-1 lg:ml-4 lg:hidden"
             onClick={() => setOpenFilter(true)}
           >
             <FilterIcon className="h-5" />
@@ -64,7 +64,7 @@ export default function RightOption({ view }: RightOptionProps) {
       </Popover>
       <div
         className={classcat([
-          'flex h-6.25 w-16 items-center justify-between rounded bg-secondary-200 px-2.25',
+          'flex h-7.5 w-16 items-center justify-between rounded bg-secondary-200 px-2.25',
           'ml-2 lg:h-11 lg:w-30.75 lg:border lg:border-text-10 lg:px-7',
         ])}
       >
