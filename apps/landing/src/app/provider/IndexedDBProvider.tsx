@@ -3,7 +3,6 @@
 //THIRD PARTY MODULES
 import { IDBPDatabase, openDB } from 'idb';
 import { Sepolia } from '@thirdweb-dev/chains';
-import { _ } from 'drizzle-orm/column.d-66a08b85';
 import { startEventListener } from '_@landing/listener';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 import { insertSeedTokenData } from '_@landing/services/token';

@@ -2,7 +2,7 @@
 import { BigNumber } from 'ethers';
 import { Decimal } from 'decimal.js';
 
-export const blockRanger = 50000;
+export const blockRange = 50000;
 
 export const dbIndex = {
   //// market indexes

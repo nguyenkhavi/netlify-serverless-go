@@ -76,7 +76,7 @@ export async function handleTransferItem(
     chain: chain.chainId,
   };
 
-  await addActivity(db, activity);
+  addActivity(db, activity);
 
   /// check market available?
   const market: IMarketData[] = await getAllRawMarketsByItem(
@@ -86,31 +86,26 @@ export async function handleTransferItem(
 
   market.map(async (mk) => {
     const status: IMarketStatusData = await getMarketStatusByListingId(db, mk.listingId);
-    if (status.isAvailable == 1) {
-      await updateMarket(db, {
-        listingId: mk.listingId,
-        isAvailable: 0,
-        isBought: 0,
-        isCanceled: 1,
-      });
+    if (status.isAvailable !== 1) return;
 
-      const activity: IActivity = {
-        type: ActivityType.CANCELED_LISTING,
-        transactionHash: event.transaction.transactionHash,
-        transactionIndex: event.transaction.transactionIndex,
-        blockNumber: event.transaction.blockNumber,
-        assetContract: mk.assetContract,
-        itemId: mk.assetContract + '_' + mk.tokenId,
-        tokenId: Number(mk.tokenId),
-        listingId: mk.listingId,
-        price: mk.price,
-        currency: mk.currency,
-        quantity: 0,
-        fromAddress: mk.listingCreator,
-        toAddress: constants.AddressZero,
-        chain: chain.chainId,
-      };
-      await addActivity(db, activity);
-    }
+    updateMarket(db, { listingId: mk.listingId, isAvailable: 0, isBought: 0, isCanceled: 1 });
+
+    const activity: IActivity = {
+      type: ActivityType.CANCELED_LISTING,
+      transactionHash: event.transaction.transactionHash,
+      transactionIndex: event.transaction.transactionIndex,
+      blockNumber: event.transaction.blockNumber,
+      assetContract: mk.assetContract,
+      itemId: mk.assetContract + '_' + mk.tokenId,
+      tokenId: Number(mk.tokenId),
+      listingId: mk.listingId,
+      price: mk.price,
+      currency: mk.currency,
+      quantity: 0,
+      fromAddress: mk.listingCreator,
+      toAddress: constants.AddressZero,
+      chain: chain.chainId,
+    };
+    addActivity(db, activity);
   });
 }

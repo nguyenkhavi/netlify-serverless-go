@@ -3,8 +3,17 @@ import { IDBPDatabase } from 'idb';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 import { ILastBlock, ListenerService } from '_@landing/utils/type';
 
+type BlockType = {
+  chain: string;
+  id: string;
+  lastBlock: number;
+  service: number;
+};
+
 export async function getLastBlock(db: IDBPDatabase, chain: string, service: ListenerService) {
-  return db.getFromIndex(dbOS.lastBlock, dbIndex.lastBlockIdIndex, service + '_' + chain);
+  return db
+    .getFromIndex(dbOS.lastBlock, dbIndex.lastBlockIdIndex, service + '_' + chain)
+    .then((data: BlockType) => Number(data.lastBlock));
 }
 
 export async function updateLastBlock(

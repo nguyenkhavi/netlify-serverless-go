@@ -11,7 +11,7 @@ import Footer from '_@landing/layouts/footer/Footer';
 import ModalFeedback from '_@landing/components/modal/ModalFeedback';
 //RELATIVE MODULES
 import './globals.css';
-// import IndexedDBProvider from './provider/IndexedDBProvider';
+import IndexedDBProvider from './provider/IndexedDBProvider';
 
 export const metadata: Metadata = {
   title: 'Fleamint',
@@ -28,16 +28,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <ClerkProvider>
       <ClientProvider>
         <AuthProvider>
-          {/* <IndexedDBProvider> */}
-          <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
-            <body>
-              <Header />
-              {children}
-              <Footer />
-              <ModalFeedback />
-            </body>
-          </html>
-          {/* </IndexedDBProvider> */}
+          <IndexedDBProvider>
+            <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
+              <body>
+                <Header />
+                {children}
+                <Footer />
+                <ModalFeedback />
+              </body>
+            </html>
+          </IndexedDBProvider>
         </AuthProvider>
       </ClientProvider>
     </ClerkProvider>
