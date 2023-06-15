@@ -1,7 +1,8 @@
 import { Magic } from '@magic-sdk/admin';
 import { TRPCError } from '@trpc/server';
 import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
-import { userProfileTable } from '_@rpc/drizzle/userProfile';
+import { TProfile, userProfileTable } from '_@rpc/drizzle/userProfile';
+
 import { db } from '_@rpc/services/drizzle';
 import { eq } from 'drizzle-orm';
 
@@ -28,7 +29,11 @@ export const authenticateRequest = async (req: FetchCreateContextFnOptions['req'
     if (!profiles.length) {
       throw new TRPCError({ code: 'UNAUTHORIZED' });
     }
-    return { metadata, token, profile: profiles[0] };
+    return {
+      metadata,
+      token,
+      profile: profiles[0] as TProfile,
+    };
   } catch (e) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }

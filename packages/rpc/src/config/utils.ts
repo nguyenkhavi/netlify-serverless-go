@@ -26,3 +26,9 @@ export function getClientIpFromXForwardedFor(value: string) {
     })
     .find((ipLike) => isIP(ipLike));
 }
+
+export const getQuery = (reqUrl: string) => {
+  const url = new URL(reqUrl);
+  const query = new URLSearchParams(url.search);
+  return query;
+};

@@ -1,6 +1,6 @@
 export { achievement } from './achievement';
 export { activity } from './activity';
-export { address } from './address';
+export { addressTable } from './address';
 export { bid } from './bid';
 export { chain } from './chain';
 export { collection } from './collection';
