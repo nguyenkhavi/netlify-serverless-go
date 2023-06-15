@@ -149,7 +149,7 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
     throw new TRPCError({ code: 'BAD_REQUEST' });
   }
   const [_, claim] = magicAdmin.token.decode(input.didToken);
-
+  const wallet = magicAdmin.token.getPublicAddress(input.didToken);
   await db.transaction(async (ctx) => {
     const ip = requestClient.ipAddress;
     let location = '';
@@ -161,7 +161,7 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
     }
     await ctx
       .update(userProfileTable)
-      .set({ userId: claim.iss })
+      .set({ userId: claim.iss, wallet })
       .where(eq(userProfileTable.requestId, input.requestId));
     await ctx
       .insert(session)

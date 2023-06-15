@@ -1,6 +1,6 @@
 import { GenderValues } from '_@rpc/drizzle/enum';
 import { InferModel, sql } from 'drizzle-orm';
-import { datetime, mysqlTable, serial, tinytext, varchar } from 'drizzle-orm/mysql-core';
+import { datetime, index, mysqlTable, serial, tinytext, varchar } from 'drizzle-orm/mysql-core';
 
 export const userProfileTable = mysqlTable(
   'user_profile',
@@ -8,6 +8,7 @@ export const userProfileTable = mysqlTable(
     requestId: serial('request_id').primaryKey(),
     createdAt: datetime('created_at').default(sql`NOW()`),
     userId: varchar('user_id', { length: 52 }),
+    wallet: varchar('wallet', { length: 52 }),
     firstName: varchar('first_name', { length: 255 }).notNull(),
     lastName: varchar('last_name', { length: 255 }).notNull(),
     username: varchar('username', { length: 255 }).notNull(),
@@ -26,9 +27,10 @@ export const userProfileTable = mysqlTable(
     personaInquiryId: tinytext('persona_inquiry_id'),
   },
   (userProfile) => ({
-    // usernameIndex: uniqueIndex('username_idx').on(userProfile.username),
-    // emailIndex: uniqueIndex('username_idx').on(userProfile.email),
-    // phoneIndex: uniqueIndex('phone_idx').on(userProfile.phoneCode, userProfile.phoneNumber),
+    usernameIndex: index('username_idx').on(userProfile.username),
+    emailIndex: index('email_idx').on(userProfile.email),
+    phoneIndex: index('phone_idx').on(userProfile.phoneCode, userProfile.phoneNumber),
+    walletIndex: index('wallet_idx').on(userProfile.wallet),
   }),
 );
 
