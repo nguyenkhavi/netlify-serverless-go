@@ -1,8 +1,8 @@
 'use client';
 //THIRD PARTY MODULES
 import { Magic } from 'magic-sdk';
-import { api } from '_@landing/utils/api';
 import { Gender } from '_@rpc/drizzle/enum';
+import { nextApi } from '_@landing/utils/api';
 import React, { useEffect, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
@@ -13,20 +13,20 @@ const magic = new Magic(`${process.env.NEXT_PUBLIC_MAGIC_API_KEY}`, {
 });
 
 function Sessions() {
-  const { mutateAsync: signUpFn } = api['signup'].useMutation({});
-  const { mutateAsync: postSignUpFn } = api['post-signup'].useMutation({});
-  const { mutateAsync: validateLoginFn } = api['validate-login'].useMutation({
+  const { mutateAsync: signUpFn } = nextApi['signup'].useMutation({});
+  const { mutateAsync: postSignUpFn } = nextApi['post-signup'].useMutation({});
+  const { mutateAsync: validateLoginFn } = nextApi['validate-login'].useMutation({
     onError: (e) => {
       console.log({ e });
     },
   });
 
-  const { mutateAsync: loginFn } = api['login'].useMutation({});
-  const { mutateAsync: logoutFn } = api['logout'].useMutation({});
+  const { mutateAsync: loginFn } = nextApi['login'].useMutation({});
+  const { mutateAsync: logoutFn } = nextApi['logout'].useMutation({});
 
-  const [email, setEmail] = useState('');
+  const [_, setEmail] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const { data: sessions = [] } = api['list-session'].useQuery(undefined, {});
+  const { data: sessions = [] } = nextApi['list-session'].useQuery(undefined, {});
 
   const _handleLogin = async () => {
     const found = await validateLoginFn({
@@ -82,7 +82,7 @@ function Sessions() {
       _refresh();
     }
   };
-  const _handleChange = (e) => {
+  const _handleChange = (e: any) => {
     e.preventDefault();
     const target = e.target;
     setEmail(target.value);

@@ -1,14 +1,21 @@
 'use client';
+
 //THIRD PARTY MODULES
+import { IDBPDatabase, openDB } from 'idb';
+import { Sepolia } from '@thirdweb-dev/chains';
 import { _ } from 'drizzle-orm/column.d-66a08b85';
-import { IDBPDatabase, deleteDB, openDB } from 'idb';
+import { startEventListener } from '_@landing/listener';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { insertSeedTokenData } from '_@landing/services/token';
 import { createContext, useContext, useEffect, useState } from 'react';
-//RELATIVE MODULES
-import { startEventListener } from '../../listener';
-import { insertSeedTokenData } from '../../services/token';
-import { getAllCategories, insertSeedCategoryData } from '../../services/category';
-import { getTrendingCollectionsByCategory, getTrendingMarketByCategory } from '../../services';
+import { getAllCategories, insertSeedCategoryData } from '_@landing/services/category';
+import {
+  ThirdwebProvider,
+  coinbaseWallet,
+  metamaskWallet,
+  safeWallet,
+  walletConnectV1,
+} from '@thirdweb-dev/react';
 
 type IndexedDBContextType = {
   db: IDBPDatabase | null;
@@ -18,8 +25,9 @@ export const IndexedDBContext = createContext<IndexedDBContextType>({} as Indexe
 
 export const useIndexedDBContext = () => useContext(IndexedDBContext);
 
-export default function IndexedDBProvider({ children }: { children: any }) {
+export default function IndexedDBProvider({ children }: { children: React.ReactNode }) {
   const [db, setDB] = useState<IDBPDatabase | null>(null);
+
   useEffect(() => {
     const connectDB = async () => {
       if (typeof window !== 'undefined' && 'indexedDB' in window) {
@@ -47,7 +55,6 @@ export default function IndexedDBProvider({ children }: { children: any }) {
               marketStatus.createIndex(dbIndex.marketCanceledIndex, 'isCanceled');
               marketStatus.createIndex(dbIndex.marketSuccessIndex, 'isBought');
             }
-
             if (!db.objectStoreNames.contains(dbOS.collection)) {
               const collection = db.createObjectStore(dbOS.collection, {
                 keyPath: 'address',
@@ -124,5 +131,12 @@ export default function IndexedDBProvider({ children }: { children: any }) {
     connectDB();
   }, []);
 
-  return <IndexedDBContext.Provider value={{ db }}>{children}</IndexedDBContext.Provider>;
+  return (
+    <ThirdwebProvider
+      activeChain={Sepolia}
+      supportedWallets={[metamaskWallet(), coinbaseWallet(), walletConnectV1(), safeWallet()]}
+    >
+      <IndexedDBContext.Provider value={{ db }}>{children}</IndexedDBContext.Provider>
+    </ThirdwebProvider>
+  );
 }

@@ -3,6 +3,7 @@
 import * as z from 'zod';
 import dayjs from 'dayjs';
 import React from 'react';
+import Link from 'next/link';
 import { useMemo } from 'react';
 import classcat from 'classcat';
 import { Gender } from '_@rpc/drizzle/enum';
@@ -172,7 +173,9 @@ export default function SignIn() {
 
               <p className="mt-7 flex items-center justify-center space-x-1 md:mt-6">
                 <span className="text-body3 text-text-80 md:text-body1">Already a member?</span>
-                <button className="btn-link text-body2 text-primary ow:w-fit">Sign In</button>
+                <Link href="/auth/sign-in" className="btn-link text-body2 text-primary ow:w-fit">
+                  Sign In
+                </Link>
               </p>
             </form>
           </FormProvider>
