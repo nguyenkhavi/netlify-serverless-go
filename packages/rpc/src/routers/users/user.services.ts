@@ -1,10 +1,11 @@
-import { TConnectIG } from './user.schemas';
+import { TConnectIG, TSetKYC } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 
 import { addressTable, db, userProfileTable } from '_@rpc/services/drizzle';
 import { and, eq } from 'drizzle-orm';
 import { TProfile } from '_@rpc/drizzle/userProfile';
+import { verifyInquiryId } from '_@rpc/services';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -15,10 +16,14 @@ export const connectInstagram = async (input: TConnectIG, uid: string) => {
   return true;
 };
 
-// export const setKYCInfo = async (input: TSetKYC, uid: string) => {
-//   await verifyInquiryId(input.inquiryId);
-//   return updatePersonaInquiryUid(uid, input.inquiryId);
-// };
+export const setKYCInfo = async (input: TSetKYC, uid: string) => {
+  await verifyInquiryId(input.inquiryId);
+  await db
+    .update(userProfileTable)
+    .set({ personaInquiryId: input.inquiryId })
+    .where(eq(userProfileTable.userId, uid));
+  return true;
+};
 
 // export const connectWeb3Wallet = (input: TConnectWallet, uid: string) => {
 //   const message = generateSignedMessage(uid);

@@ -15,7 +15,7 @@ export default function HomeAdvHorizontal({ className, isHome = false }: Props) 
   return (
     <div
       className={classcat([
-        'rounded-[10px] bg-secondary-200 p-6',
+        'rounded-[10px] bg-secondary-200 px-4 py-[22.5px] md:p-6',
         'ring-1 ring-text-10',
         className,
       ])}

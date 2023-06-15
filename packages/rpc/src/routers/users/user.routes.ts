@@ -1,9 +1,10 @@
 import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
 
 import { requestToken } from '../../services/twitter';
-import { connectIGSchema } from '_@rpc/routers/users/user.schemas';
+import { connectIGSchema, setKYCSchema } from '_@rpc/routers/users/user.schemas';
 import {
   connectInstagram,
+  setKYCInfo,
   twitterObtainOauthAccessToken,
   verifiedPercentage,
 } from '_@rpc/routers/users/user.services';
@@ -14,9 +15,9 @@ export const userRouters = router({
     .input(connectIGSchema)
     .mutation(({ input, ctx }) => connectInstagram(input, ctx.metadata.issuer || '')),
 
-  // 'user-set-KYC': protectedRouter
-  //   .input(setKYCSchema)
-  //   .mutation(({ input, ctx }) => setKYCInfo(input, ctx.auth.userId)),
+  'user-set-KYC': protectedRouter
+    .input(setKYCSchema)
+    .mutation(({ input, ctx }) => setKYCInfo(input, ctx.metadata.issuer || '')),
 
   // 'user-connect-wallet': protectedRouter
   //   .input(connectWalletSchema)

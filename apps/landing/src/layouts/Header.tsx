@@ -51,8 +51,8 @@ export default function Header() {
         )}
       </button>
 
-      <Link href="/">
-        <HeaderLogoIcon />
+      <Link href="/" className="grid h-8 w-8 place-items-center md:h-10 md:w-10">
+        <HeaderLogoIcon className="h-full w-full" />
       </Link>
 
       <div
@@ -61,7 +61,7 @@ export default function Header() {
           'grid grid-rows-[0fr] overflow-hidden data-[show=true]:grid-rows-[1fr] lg:grid-rows-[1fr]',
           'absolute left-0 top-[--header-height] w-full lg:static lg:w-auto ',
           'px-[--px] transition-all duration-200 lg:px-0',
-          'bg-black lg:bg-transparent lg:py-0',
+          'bg-black lg:h-full lg:bg-transparent lg:py-0',
           openMenu ? 'py-6' : 'px-0',
         ])}
       >
@@ -142,7 +142,7 @@ export default function Header() {
   );
 }
 
-const itemDropdownClasses = 'text-body2 hover:text-primary';
+const itemDropdownClasses = 'text-body2 hover:text-primary text-text-50';
 
 const menuData = [
   {
