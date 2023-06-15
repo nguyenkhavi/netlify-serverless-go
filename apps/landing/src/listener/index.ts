@@ -4,7 +4,7 @@ import { IDBPDatabase } from 'idb';
 import NFTABI from '_@landing/utils/NFTABI';
 import MarketABI from '_@landing/utils/NFTMarket';
 import NFTFactoryABI from '_@landing/utils/NFTFactory';
-import { ContractEvent, ThirdwebSDK } from '@thirdweb-dev/react';
+import { ContractEvent, NFTCollection, ThirdwebSDK } from '@thirdweb-dev/react';
 import { Chains, ContractEventNames, blockRanger, parseJson } from '_@landing/utils/constants';
 import {
   ICancelListingEventData,
@@ -130,7 +130,11 @@ export async function getMarketEvents(sdk: ThirdwebSDK, db: IDBPDatabase, chain:
 export async function getFactoryEvents(sdk: ThirdwebSDK, db: IDBPDatabase<unknown>, chain: IChain) {
   const factoryContract = await sdk.getContract(chain.factoryContract, NFTFactoryABI);
   factoryContract.events.addEventListener<INewProxyDeployed>('ProxyDeployed', async (event) => {
-    handleNewCollections(sdk, chain, db, event);
+    const collectionContract = await sdk.getContract(event.data.proxy, 'nft-collection');
+    const metadata: IMetadata = await collectionContract.app.metadata.get();
+    const appURI = await parseJson(metadata.app_uri);
+    if (!appURI || !appURI.app || appURI.app !== 'Fleamint') return;
+    handleNewCollections(sdk, metadata, appURI, chain, db, event);
   });
 
   const currentBlock =
@@ -166,8 +170,12 @@ export async function getFactoryEvents(sdk: ThirdwebSDK, db: IDBPDatabase<unknow
 
     await Promise.all(
       events.map(async (event) => {
-        handleNewCollections(sdk, chain, db, event);
-        getAllNFTsOwners(db, sdk, event.data.proxy, chain);
+        const collectionContract = await sdk.getContract(event.data.proxy, 'nft-collection');
+        const metadata: IMetadata = await collectionContract.app.metadata.get();
+        const appURI = await parseJson(metadata.app_uri);
+        if (!appURI || !appURI.app || appURI.app !== 'Fleamint') return;
+        handleNewCollections(sdk, metadata, appURI, chain, db, event);
+        getAllNFTsOwners(db, collectionContract, appURI, event.data.proxy, chain);
       }),
     );
     await updateLastBlock(db, ListenerService.Factory, toBlock, chain.chainId);
@@ -266,13 +274,11 @@ export async function getCollectionsEvents(
 
 export async function getAllNFTsOwners(
   db: IDBPDatabase,
-  sdk: ThirdwebSDK,
+  collectionContract: NFTCollection,
+  appURI: any,
   address: string,
   chain: IChain,
 ) {
-  const collectionContract = await sdk.getContract(address, 'nft-collection');
-  const metadata: IMetadata = await collectionContract.app.metadata.get();
-  const appURI = await parseJson(metadata.app_uri);
   const total = (await collectionContract.erc721.totalCount()).toNumber();
   const itemPerPage = 50;
   const totalPage = Math.ceil(total / itemPerPage);

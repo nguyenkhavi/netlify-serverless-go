@@ -12,7 +12,9 @@ import {
 } from '_@landing/utils/type';
 //RELATIVE MODULES
 import { getItemById } from './item';
+import { getTokenByAddress } from './token';
 import { getAllActivitiesByItem } from './activity';
+import { getCollectionByContract } from './collection';
 export async function addMarket(db: IDBPDatabase, data: IMarketData) {
   try {
     await db.add(dbOS.market, data);
@@ -111,4 +113,19 @@ export async function getMarketStatusByListingId(
   listingId: number,
 ): Promise<IMarketStatusData> {
   return db.getFromIndex(dbOS.marketStatus, dbIndex.marketListingIdIndex, listingId);
+}
+
+export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: number) {
+  const market = await getMarketByListingId(db, listingId);
+  const item = await getItemById(db, market.itemId);
+  const activities = await getAllActivitiesByItem(db, market.itemId);
+  const collection = await getCollectionByContract(db, market.assetContract);
+  const token = await getTokenByAddress(db, market.currency);
+  return {
+    ...market,
+    token,
+    item,
+    activities,
+    collection,
+  };
 }

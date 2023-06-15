@@ -3,7 +3,14 @@ import { IDBPDatabase } from 'idb';
 import { IItem, IPaging } from '_@landing/utils/type';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 //RELATIVE MODULES
-import { getAvailableMarketByItem } from './market';
+import { getTokenByAddress } from './token';
+import { getAllActivitiesByItem } from './activity';
+import { getCollectionByContract } from './collection';
+import {
+  getAllRawMarketsByItem,
+  getAvailableMarketByItem,
+  getMarketStatusByListingId,
+} from './market';
 
 export async function addItem(db: IDBPDatabase, data: IItem) {
   try {
@@ -54,5 +61,29 @@ export async function getItemByOwner(db: IDBPDatabase, owner: string, paging: IP
   return {
     data: itemWithListing.slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
     total: items.length,
+  };
+}
+
+export async function getItemDetailById(db: IDBPDatabase, id: string) {
+  const item = await getItemById(db, id);
+  const activities = await getAllActivitiesByItem(db, id);
+  const collection = await getCollectionByContract(db, item.address);
+  const market = await getAllRawMarketsByItem(db, id);
+  const availableMarket = market.filter(async (mk) => {
+    const status = await getMarketStatusByListingId(db, mk.listingId);
+    return status.isAvailable == 1;
+  });
+  const marketDetail = availableMarket.map(async (mk) => {
+    const token = await getTokenByAddress(db, mk.currency);
+    return {
+      ...mk,
+      token,
+    };
+  });
+  return {
+    market: marketDetail,
+    item,
+    activities,
+    collection,
   };
 }
