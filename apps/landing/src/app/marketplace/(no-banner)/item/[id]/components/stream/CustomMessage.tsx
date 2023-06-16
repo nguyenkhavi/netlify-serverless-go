@@ -50,7 +50,7 @@ const CustomMessage = () => {
     return (
       <div className={classcat(['flex space-x-0.75'])}>
         <button
-          disabled={!isReactionEnabled || message.deleted_at !== null}
+          disabled={!isReactionEnabled || !!message.deleted_at}
           onClick={onLike}
           className="cursor-pointer disabled:cursor-not-allowed"
         >

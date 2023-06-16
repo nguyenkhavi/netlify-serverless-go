@@ -9,7 +9,7 @@ export async function getAllCategories(db: IDBPDatabase): Promise<ICategory[]> {
 }
 
 export async function getCategoryById(db: IDBPDatabase, id: number): Promise<ICategory> {
-  return db.getFromIndex(dbOS.token, dbIndex.categoryIdIndex, id);
+  return db.getFromIndex(dbOS.category, dbIndex.categoryIdIndex, id);
 }
 
 export async function insertSeedCategoryData(db: IDBPDatabase) {

@@ -7,7 +7,7 @@ import useAuthStore from '_@landing/stores/auth/useAuthStore';
 export const useGetStreamUser = () => {
   const [token, setToken] = useState<string>();
 
-  const { mutate: getStreamToken } = nextApi.getStreamGetUserToken.useMutation({
+  const { mutate: getStreamToken } = nextApi.getstreamGetUserToken.useMutation({
     onSuccess: (data: string) => {
       setToken(data);
     },
@@ -29,7 +29,7 @@ export const useGetStreamUser = () => {
 
     client.connectUser(
       {
-        id: user?.profile.userId || '',
+        id: user?.profile.wallet ?? '',
         name: user?.profile.username || '',
         image: user?.profile.avatarUrl,
       },
@@ -49,7 +49,7 @@ export const useGetStreamUser = () => {
       client.off('connection.changed', handleConnectionChange);
       client.disconnectUser().then(() => console.log('connection closed'));
     };
-  }, [token, user?.profile]);
+  }, [token, user?.profile.avatarUrl, user?.profile.username, user?.profile.wallet]);
 
   return { client };
 };

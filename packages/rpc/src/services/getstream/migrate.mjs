@@ -1,14 +1,22 @@
 import { StreamChat } from 'stream-chat';
 
 const getstreamClient = StreamChat.getInstance(
-  process.env.GETSTREAM_API_KEY || '',
+  process.env.NEXT_PUBLIC_GETSTREAM_API_KEY || '',
   process.env.GETSTREAM_API_SECRET || '',
 );
+console.log(process.env.GETSTREAM_API_KEY, process.env.GETSTREAM_API_SECRET);
 
 const migrateGetstream = async () => {
   await getstreamClient.updateChannelType('messaging', {
     grants: {
-      user: ['read-channel', 'create-message', 'create-reaction', 'delete-reaction-owner'],
+      user: [
+        'read-channel',
+        'create-channel',
+        'create-message',
+        'create-reaction',
+        'delete-reaction-owner',
+        'upload-attachment',
+      ],
       guest: ['read-channel'],
       channel_moderator: [],
       moderator: ['pin-message'],

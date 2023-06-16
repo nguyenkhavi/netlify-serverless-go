@@ -44,7 +44,7 @@ export const CustomMessageInput = () => {
     <div
       id="input-message"
       className={classcat([
-        'grid grid-flow-row gap-3 border-b border-solid border-text-10 p-4',
+        'grid grid-flow-row border-b border-solid border-text-10 p-4',
         'md:p-6 md:pt-3',
       ])}
     >

@@ -35,5 +35,5 @@ export const userProfileTable = mysqlTable(
 );
 
 export type Profile = InferModel<typeof userProfileTable, 'select'>;
-export type TProfile = Profile & { userId: string };
+export type TProfile = Profile & { userId: string; wallet: string };
 export type NewProfile = InferModel<typeof userProfileTable, 'insert'>;

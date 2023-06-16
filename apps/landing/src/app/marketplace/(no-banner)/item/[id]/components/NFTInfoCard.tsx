@@ -1,48 +1,53 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import React, { useMemo } from 'react';
+import { formatAddress, formatTokenId } from '_@landing/utils/format';
 //SHARED
 import ItemInfoIcon from '_@shared/icons/ItemInfoIcon';
 //RELATIVE MODULES
 import NFTInfoItem from './NFTInfoItem';
+import { NFT_TYPES } from '../constants';
+import { TypeMarketDetail } from '../type';
 
-function NFTInfoCard() {
+type Props = {
+  data: TypeMarketDetail;
+};
+
+function NFTInfoCard({ data }: Props) {
   const nftDetails = useMemo(
     () => [
       {
         label: 'Contact Address',
         value: (
           <p className={classcat(['text-body3 text-primary', 'md:text-body1'])}>
-            {formatContactAddress(mockDataNTFDetail.contactAddress)}
+            {formatAddress(data.collection.address)}
           </p>
         ),
       },
       {
         label: 'Token ID',
-        value: formatTokenId(mockDataNTFDetail.tokenId),
+        value: formatTokenId(data.item.tokenId.toString()),
       },
       {
         label: 'Token Standard',
-        value: mockDataNTFDetail.tokenStandard,
+        value: NFT_TYPES?.[data.item.type],
       },
       {
         label: 'Chain',
-        value: mockDataNTFDetail.chain,
-      },
-      {
-        label: 'Metadata',
-        value: mockDataNTFDetail.metadata,
+        value: data.chain?.name,
       },
       {
         label: 'Creator Earnings',
-        value: mockDataNTFDetail.creatorEarning,
-      },
-      {
-        label: 'Fleamint item no',
-        value: mockDataNTFDetail.fleamintItemNo,
+        value: data.collection.royalty,
       },
     ],
-    [],
+    [
+      data.chain?.name,
+      data.collection.address,
+      data.collection.royalty,
+      data.item.tokenId,
+      data.item.type,
+    ],
   );
 
   return (
@@ -59,10 +64,11 @@ function NFTInfoCard() {
             NFT Description
           </p>
         </div>
-        <div
-          className={classcat(['p-4 text-body3 text-text-50', 'md:p-6 md:text-body1'])}
-          dangerouslySetInnerHTML={{ __html: `${mockDataNTFDesc}` }}
-        />
+        <div className={classcat(['p-4 text-body3 text-text-50', 'md:p-6 md:text-body1'])}>
+          <p className="text-body3 text-text-50 marker:md:text-body1">
+            {data.item.metadata.description}
+          </p>
+        </div>
       </div>
       <div className={classcat(['grid grid-flow-row'])}>
         <div
@@ -85,29 +91,3 @@ function NFTInfoCard() {
 }
 
 export default NFTInfoCard;
-
-const formatContactAddress = (value: string) => {
-  return value.substring(0, 6) + '....' + value.substring(value.length - 4);
-};
-
-const formatTokenId = (value: string) => {
-  return value.substring(0, 14) + '..';
-};
-
-const mockDataNTFDesc = `<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-<ul>
-<li>· totam rem</li>
-<li>· aperiam, eaque ipsa quae ab illo </li>
-<li>· inventore veritatis et quasi </li>
-<li>· architecto beatae vitae dicta sunt explicabo.</li>
-</ul>`;
-
-const mockDataNTFDetail = {
-  contactAddress: '0x5343daj89dabddh7g6f',
-  tokenId: '13434345354353121',
-  tokenStandard: 'ERC-1155',
-  chain: 'BSC',
-  metadata: 'Centralized',
-  creatorEarning: '10%',
-  fleamintItemNo: '324222',
-};

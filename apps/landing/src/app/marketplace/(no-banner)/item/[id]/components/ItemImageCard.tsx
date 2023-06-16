@@ -1,14 +1,21 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
+import { ICategory } from '_@landing/utils/type';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 
-function ItemImageCard() {
+type Props = {
+  name: string;
+  image: string;
+  category: ICategory;
+};
+
+function ItemImageCard({ image, name, category }: Props) {
   return (
     <div className={classcat(['relative'])}>
       <img
-        src="/images/marketplace/item-1.png"
-        alt="image"
+        src={image}
+        alt={`Image of ${name}`}
         className="w-full rounded-[theme(spacing[2.5])] object-contain"
       />
       <Button
@@ -17,7 +24,7 @@ function ItemImageCard() {
           'md:left-3 md:top-3',
         ])}
       >
-        Arts
+        {category.name}
       </Button>
     </div>
   );

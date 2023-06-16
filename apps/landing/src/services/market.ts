@@ -1,11 +1,9 @@
 //THIRD PARTY MODULES
 import Decimal from 'decimal.js';
 import { IDBPDatabase } from 'idb';
-import { MarketStatus } from '_@rpc/drizzle/enum';
-import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { Chains, dbIndex, dbOS } from '_@landing/utils/constants';
 import {
   ActivityType,
-  IActivity,
   IMarketData,
   IMarketStatusData,
   IPaging,
@@ -14,6 +12,7 @@ import {
 //RELATIVE MODULES
 import { getItemById } from './item';
 import { getTokenByAddress } from './token';
+import { getCategoryById } from './category';
 import { getCollectionByContract } from './collection';
 import { getAllActivitiesByItem, getAllBuyActivities } from './activity';
 export async function addMarket(db: IDBPDatabase, data: IMarketData) {
@@ -121,13 +120,20 @@ export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: nu
   const item = await getItemById(db, market.itemId);
   const activities = await getAllActivitiesByItem(db, market.itemId);
   const collection = await getCollectionByContract(db, market.assetContract);
+  const category = await getCategoryById(db, collection.category);
   const token = await getTokenByAddress(db, market.currency);
+  const chain = Object.values(Chains)
+    .map((chain) => chain)
+    .find((chain) => chain.chainId === item.chain);
+
   return {
     ...market,
     token,
     item,
     activities,
     collection,
+    category,
+    chain,
   };
 }
 

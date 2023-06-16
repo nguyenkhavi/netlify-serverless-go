@@ -1,17 +1,50 @@
 'use client';
+//THIRD PARTY MODULES
+import { useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
-import MainCard from '_@landing/components/card/MainCard';
-import BasePaginationClient from '_@shared/components/pagination/BasePaginationClient';
+import Show from '_@shared/components/Show';
+import MainCard, { CardValue } from '_@landing/components/card/MainCard';
+//HOOK
+import { useCacheLocalStorage } from '_@landing/hooks/useCacheLocalStorage';
 //RELATIVE MODULES
 import ContentBox from './ContentBox';
-function RecentlyViewed() {
-  const onChange = (page: number) => {
-    console.log(page);
-  };
+import { TypeMarketDetail } from '../type';
+import { MARKET_ITEM_RECENTLY_VIEWED } from '../constants';
+
+type Props = {
+  data: TypeMarketDetail;
+};
+
+function RecentlyViewed({ data }: Props) {
+  const [recentlyItems, setRecentlyItems] = useState<CardValue[]>([]);
+
+  const id = useMemo(() => data.listingId.toString(), [data.listingId]);
+  const { setItems, getItems } = useCacheLocalStorage<TypeMarketDetail>({
+    key: MARKET_ITEM_RECENTLY_VIEWED,
+    maxItem: 5,
+  });
+
+  useEffect(() => {
+    const items = getItems();
+
+    if (items) {
+      const itemsNotIncludeCurrent = items.filter((item) => item.__key !== id);
+      const recentlyItems = itemsNotIncludeCurrent.map((item) => ({
+        url: item.item.metadata.image,
+        name: item.item.metadata.name,
+        prices: `${item.price} ${item.token.name}`,
+      }));
+      setRecentlyItems(recentlyItems);
+    }
+    if (data) {
+      setItems(id, data);
+    }
+  }, [data, getItems, id, setItems]);
+
   return (
-    <>
+    <Show when={recentlyItems.length}>
       <ContentBox title="Recently viewed">
-        {MOCK_DATA_ITEM_5.map((item, index) => (
+        {recentlyItems.map((item, index) => (
           <MainCard
             data-sal="slide-up"
             data-sal-duration="800"
@@ -21,21 +54,8 @@ function RecentlyViewed() {
           />
         ))}
       </ContentBox>
-      <div className="flex justify-center md:hidden">
-        <BasePaginationClient perPage={1} totalItems={20} onChange={onChange} />
-      </div>
-    </>
+    </Show>
   );
 }
 
 export default RecentlyViewed;
-
-export const MOCK_DATA_ITEM_5 = Array(5).fill({
-  url: '/images/marketplace/trending.png',
-  name: 'Golden Hand',
-  prices: '0.08 BUSD',
-  description:
-    'Lorem ipsum dolor sit amet consectetur. Sit tempus sed placerat magnis.Lorem ipsum dolor sit amet consectetur. Sit tempus sed placerat magnis.',
-  owner: 'Diamon Hands',
-  pricesDollar: '$24.00',
-});

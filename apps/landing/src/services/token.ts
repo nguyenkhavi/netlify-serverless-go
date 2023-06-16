@@ -8,7 +8,7 @@ export async function getAllTokenByChain(db: IDBPDatabase, chainId: string): Pro
 }
 
 export async function getTokenByAddress(db: IDBPDatabase, address: string): Promise<IToken> {
-  return db.getFromIndex(dbOS.token, dbIndex.tokenChainIndex, address);
+  return db.getFromIndex(dbOS.token, dbIndex.tokenAddressIndex, address);
 }
 
 export async function insertSeedTokenData(db: IDBPDatabase) {

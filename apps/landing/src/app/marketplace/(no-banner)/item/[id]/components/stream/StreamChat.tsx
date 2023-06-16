@@ -1,6 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
 import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 import 'stream-chat-react/dist/css/v2/index.css';
 import { Channel as StreamChannel } from 'stream-chat';
 import { Channel, Chat, MessageInput, MessageList, Thread, Window } from 'stream-chat-react';
@@ -10,23 +11,26 @@ import { useGetStreamUser } from '_@landing/hooks/useGetStreamUser';
 import './style.css';
 import CustomMessage from './CustomMessage';
 import CustomChannelHeader from './CustomHeader';
+import { CHANNEL_NAME_PREFIX } from '../../constants';
 import { CustomMessageInput } from './CustomMessageInput';
 
 function StreamChat() {
+  const { id } = useParams();
   const { client } = useGetStreamUser();
 
   const [channel, setChannel] = useState<StreamChannel>();
 
   useEffect(() => {
-    if (!client || !client.userID) return;
-    const channel = client.channel('messaging', 'minh', {
-      image: 'dave.png',
-      name: 'Create a Messaging Channel',
+    if (!client) return;
+    const _channel = client.channel('messaging', `${CHANNEL_NAME_PREFIX}${id}`, {
+      image: '',
+      name: 'Join conversation',
     });
-    setChannel(channel);
-  }, [client]);
 
-  if (!channel || !client || !client.userID) return null;
+    setChannel(_channel);
+  }, [client, id]);
+
+  if (!channel || !client) return null;
 
   return (
     <Chat client={client}>
