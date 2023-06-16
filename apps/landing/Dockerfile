@@ -6,6 +6,7 @@ COPY dist/apps/landing/pnpm-lock.yaml pnpm-lock.yaml
 RUN pnpm i
 COPY dist/apps/landing/ ./
 COPY apps/landing/.env .env
+COPY apps/landing/node node
 CMD pnpm run start
 
 

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { EActivityAction } from '@prisma/client';
 import { ZPassword, ZPhoneSchema } from '_@rpc/config/schemas';
+import { ActivityType } from '_@rpc/drizzle/enum';
 
 export const verifyInquirySchema = z
   .object({
@@ -69,7 +69,7 @@ export type TConnectWallet = z.infer<typeof connectWalletSchema>;
 
 export const createUserActivitySchema = z.object({
   location: z.string().nullable(),
-  action: z.nativeEnum(EActivityAction),
+  action: z.nativeEnum(ActivityType),
 });
 
 export type TCreateUserActivity = z.infer<typeof createUserActivitySchema>;
