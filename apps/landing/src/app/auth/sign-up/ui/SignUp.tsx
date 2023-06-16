@@ -3,22 +3,24 @@
 import * as z from 'zod';
 import dayjs from 'dayjs';
 import classcat from 'classcat';
-import { useMemo, useState } from 'react';
 import { Gender } from '_@rpc/drizzle/enum';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
+import { GoogleReCaptcha, GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
-import ReCAPTCHA from '_@landing/components/ReCAPTCHA';
 import FormSelect from '_@shared/components/FormSelect';
 import { BaseSelectOption } from '_@shared/components/BaseSelect';
 import FormRadioGroup from '_@shared/components/radio/FormRadioGroup';
 import FormCheckboxArray from '_@shared/components/checkbox/FormCheckboxArray';
 import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
 //SHARED
+import BgLeftAuth from '_@shared/icons/BgLeftAuth';
+import BgRightAuth from '_@shared/icons/BgRightAuth';
 import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
 import { Country, countryMapping } from '_@shared/constant/countries';
 
@@ -60,7 +62,7 @@ export default function SignIn() {
       gender: Gender.MALE,
     },
   });
-  const { handleSubmit, watch } = methods;
+  const { handleSubmit, watch, setValue } = methods;
 
   const month = watch('birthday.month');
   const year = watch('birthday.year');
@@ -93,69 +95,104 @@ export default function SignIn() {
     }
   });
 
+  const _handleVerifyReCaptcha = useCallback(
+    (token: string) => {
+      setValue('recaptcha', token);
+    },
+    [setValue],
+  );
+
   return (
-    <section className="mb-11 mt-13.75 grid gap-11.5 md:mb-23 md:mt-27.5 md:gap-20">
+    <section className="grid gap-6 py-20 md:gap-20 md:py-40">
+      <div className="absolute top-0 flex w-screen justify-between">
+        <BgLeftAuth />
+        <BgRightAuth />
+      </div>
+
       <LogoWhiteIcon className="mx-auto" />
-      <div className="mx-[--px] w-full md:mx-auto md:max-w-[theme(space.135)]">
+      <div className="w-screen px-[--px] md:mx-auto md:max-w-[theme(space.135)] md:px-0">
         <div
-          className={classcat([
-            'rounded-[10px] bg-secondary-200',
-            'grid gap-9 md:gap-2.5',
-            'px-3 pb-10 pt-7 md:px-8.25 md:pb-7 md:pt-8.5',
-          ])}
+          className={classcat(['rounded-[10px] bg-secondary-200 md:w-full', 'grid gap-8', 'p-4'])}
         >
           <h5 className="text-center text-h4 text-primary-700">Sign Up</h5>
           <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
-              <div className="grid gap-2 md:gap-4">
-                <FormItem label="First Name" name="firstName">
-                  <FormInput placeholder="First name" />
-                </FormItem>
+              <GoogleReCaptchaProvider
+                reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA || ''}
+              >
+                <GoogleReCaptcha onVerify={_handleVerifyReCaptcha} />
+              </GoogleReCaptchaProvider>
 
-                <FormItem label="Last Name" name="lastName">
-                  <FormInput placeholder="Last name" />
-                </FormItem>
+              <div className="grid gap-10">
+                <div className="grid gap-5 md:gap-4">
+                  <FormItem label="First Name" name="firstName">
+                    <FormInput placeholder="First name" className="input-md" />
+                  </FormItem>
 
-                <FormItem label="Username" name="username">
-                  <FormInput placeholder="Username" />
-                </FormItem>
+                  <FormItem label="Last Name" name="lastName">
+                    <FormInput placeholder="Last name" className="input-md" />
+                  </FormItem>
 
-                <FormItem label="Email" name="email">
-                  <FormInput placeholder="Email" />
-                </FormItem>
+                  <FormItem label="Username" name="username">
+                    <FormInput placeholder="Username" className="input-md" />
+                  </FormItem>
 
-                <FormItem label="Phone Number" name="phone.phoneNumber">
-                  <>
-                    <FormPhoneInput
-                      name={{
-                        digitalCode: 'phone.digitalCode',
-                        phoneNumber: 'phone.phoneNumber',
-                      }}
+                  <FormItem label="Email" name="email">
+                    <FormInput placeholder="Email" className="input-md" />
+                  </FormItem>
+
+                  <FormItem label="Phone Number" name="phone.phoneNumber">
+                    <>
+                      <FormPhoneInput
+                        name={{
+                          digitalCode: 'phone.digitalCode',
+                          phoneNumber: 'phone.phoneNumber',
+                        }}
+                      />
+                    </>
+                  </FormItem>
+
+                  <FormItem label="Birthday" name="birthday">
+                    <div className="flex space-x-3">
+                      <FormSelect
+                        owStyles={{
+                          triggerClasses: 'input-md',
+                        }}
+                        options={monthOptions}
+                        name="birthday.month"
+                        placeholder="Month"
+                      />
+                      <FormSelect
+                        owStyles={{
+                          triggerClasses: 'input-md',
+                        }}
+                        options={dayOptions}
+                        name="birthday.day"
+                        placeholder="Day"
+                      />
+                      <FormSelect
+                        owStyles={{
+                          triggerClasses: 'input-md',
+                        }}
+                        options={yearOptions}
+                        name="birthday.year"
+                        placeholder="Year"
+                      />
+                    </div>
+                  </FormItem>
+
+                  <FormItem label="Gender" name="gender">
+                    <FormRadioGroup
+                      className="gap-4"
+                      options={[
+                        { label: 'Male', value: Gender.MALE },
+                        { label: 'Female', value: Gender.FEMALE },
+                        { label: 'Other', value: Gender.OTHER },
+                      ]}
                     />
-                  </>
-                </FormItem>
+                  </FormItem>
+                </div>
 
-                <FormItem label="Birthday" name="birthday">
-                  <div className="flex space-x-3">
-                    <FormSelect options={monthOptions} name="birthday.month" placeholder="Month" />
-                    <FormSelect options={dayOptions} name="birthday.day" placeholder="Day" />
-                    <FormSelect options={yearOptions} name="birthday.year" placeholder="Year" />
-                  </div>
-                </FormItem>
-
-                <FormItem label="Gender" name="gender">
-                  <FormRadioGroup
-                    className="space-y-4"
-                    options={[
-                      { label: 'Male', value: Gender.MALE },
-                      { label: 'Female', value: Gender.FEMALE },
-                      { label: 'Other', value: Gender.OTHER },
-                    ]}
-                  />
-                </FormItem>
-              </div>
-
-              <div className="mt-4 md:mt-9">
                 <FormCheckboxArray
                   name="rule"
                   label={
@@ -167,17 +204,11 @@ export default function SignIn() {
                     </p>
                   }
                 />
+
+                <Button isLoading={isLoading} type="submit" className="btnlg mx-auto">
+                  Get Started
+                </Button>
               </div>
-
-              <ReCAPTCHA name="recaptcha" className="mt-6 md:mt-9" />
-
-              <Button
-                isLoading={isLoading}
-                type="submit"
-                className="btnlg mx-auto mt-4 ow:w-62 md:mt-6 md:ow:w-full"
-              >
-                Get Started
-              </Button>
             </form>
           </FormProvider>
         </div>

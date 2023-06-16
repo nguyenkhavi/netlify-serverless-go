@@ -24,7 +24,7 @@ import Show from './Show';
 
 const triggerClasses = [
   'relative',
-  'h-15 w-full bg-secondary/70',
+  'w-full bg-secondary/70',
   'rounded-[5px] border-[.5px] border-white/20',
   'focus-visible:outline-none focus-visible:ring focus-visible:ring-orange-600',
   'data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error data-[valid="false"]:rounded-none',
@@ -119,7 +119,7 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
               <ChevronUpIcon />
             </ScrollUpButton>
 
-            <Viewport>
+            <Viewport className="max-h-[60vh]">
               {options.map((option) => (
                 <Item
                   key={option.value}

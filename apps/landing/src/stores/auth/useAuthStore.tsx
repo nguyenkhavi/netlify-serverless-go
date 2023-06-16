@@ -38,7 +38,9 @@ export const useAuthStoreAction = () => {
   const { mutateAsync: validateLoginFn } = nextApi.validateLogin.useMutation({});
   const { mutateAsync: loginFn } = nextApi.login.useMutation({});
   const { mutateAsync: logoutFn } = nextApi.logout.useMutation({});
-  const { refetch } = nextApi.myProfile.useQuery(undefined, {});
+  const { refetch } = nextApi.myProfile.useQuery(undefined, {
+    enabled: false,
+  });
 
   const _handleLogin = async (input: RouterInputs['validateLogin']) => {
     try {

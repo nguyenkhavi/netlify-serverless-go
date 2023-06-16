@@ -46,14 +46,14 @@ export default function CountrySelect({ className, onChange: _onChange, value: _
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className={classcat(['h-14', className])}>
+      <PopoverTrigger className={classcat(['h-full', className])}>
         <div className="flex items-center space-x-1">
           <Flag code={valueSelected?.code.toLowerCase()} />
           <span>+{valueSelected?.dialCode}</span>
           <ChevronDownIcon />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="h-58 w-72.5 bg-black p-0">
+      <PopoverContent className="w-72.5 bg-black p-0">
         <Command
           filter={(value, search) => {
             const code = value.toUpperCase() as Country['code'];
@@ -70,7 +70,7 @@ export default function CountrySelect({ className, onChange: _onChange, value: _
           <CommandEmpty className="text-center">No country found.</CommandEmpty>
           <CommandGroup
             className={classcat([
-              'overflow-auto py-1',
+              'max-h-[232px] overflow-auto py-1 ',
               '[&_[cmdk-group-items]]:grid [&_[cmdk-group-items]]:grid-flow-row',
               '[&_[cmdk-item]]:grid [&_[cmdk-item]]:grid-cols-[19px_1fr_50px] [&_[cmdk-item]]:items-center [&_[cmdk-item]]:gap-1',
             ])}

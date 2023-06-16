@@ -11,6 +11,8 @@ import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
 //SHARED
+import BgLeftAuth from '_@shared/icons/BgLeftAuth';
+import BgRightAuth from '_@shared/icons/BgRightAuth';
 import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
 import { Country, countryMapping } from '_@shared/constant/countries';
 
@@ -58,6 +60,10 @@ export default function SignIn() {
 
   return (
     <section className="my-20 grid gap-6 md:my-40 md:gap-20">
+      <div className="absolute top-0 flex w-screen justify-between">
+        <BgLeftAuth />
+        <BgRightAuth />
+      </div>
       <LogoWhiteIcon className="mx-auto" />
       <div className="mx-[--px] md:mx-auto md:w-full md:max-w-[theme(space.135)]">
         <div className="rounded-lg bg-secondary-200 p-4 md:p-6">

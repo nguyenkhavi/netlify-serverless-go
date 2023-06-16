@@ -25,7 +25,7 @@ export default function FormItem({
   } = useFormContext();
 
   return (
-    <div className={classcat(['grid gap-2.5', className])}>
+    <div className={classcat(['grid gap-1', className])}>
       <label
         htmlFor={id}
         className={classcat(['cursor-pointer text-body1 font-medium text-text-80', labelClasses])}

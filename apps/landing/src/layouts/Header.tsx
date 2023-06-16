@@ -32,7 +32,12 @@ export default function Header() {
   }, [pathname]);
 
   const _handleCloseDropdown = () => {
+    setOpenDropdown(false);
+  };
+
+  const onSignOut = () => {
     logout();
+    setOpenDropdown(false);
   };
 
   return (
@@ -132,7 +137,7 @@ export default function Header() {
                 </Link>
                 <button
                   className={classcat([itemDropdownClasses, 'text-start'])}
-                  onClick={_handleCloseDropdown}
+                  onClick={onSignOut}
                 >
                   Log Out
                 </button>

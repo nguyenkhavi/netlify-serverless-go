@@ -33,7 +33,7 @@ export default function FormPhoneInput({ name }: Props) {
         !getErrorMessage(name.phoneNumber, errors) && !getErrorMessage(name.digitalCode, errors)
       }
       className={classcat([
-        'flex space-x-2 rounded-[14px] border-[.5px] border-text-10 bg-secondary/70 px-4',
+        'flex space-x-2 rounded-lg border-[.5px] border-text-10 bg-secondary/70 px-4',
         'data-[valid="false"]:rounded-none data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error',
       ])}
     >
@@ -46,7 +46,7 @@ export default function FormPhoneInput({ name }: Props) {
       />
 
       <input
-        className={classcat([baseClasses])}
+        className={classcat([baseClasses, 'h-16.25'])}
         placeholder="Enter Your Phone Number"
         onKeyPress={(e) => {
           if (!/[0-9]/.test(e.key)) {
