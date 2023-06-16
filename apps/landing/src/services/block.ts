@@ -13,7 +13,8 @@ type BlockType = {
 export async function getLastBlock(db: IDBPDatabase, chain: string, service: ListenerService) {
   return db
     .getFromIndex(dbOS.lastBlock, dbIndex.lastBlockIdIndex, service + '_' + chain)
-    .then((data: BlockType) => Number(data.lastBlock));
+    .then((data: BlockType) => Number(data.lastBlock))
+    .catch(() => NaN);
 }
 
 export async function updateLastBlock(
