@@ -216,6 +216,7 @@ export const getMyActivities = async (input: TPaginationInput, profile: Profile)
       .from(userActivityTable)
       .where(whereSql)
       .offset((page - 1) * size)
+      .orderBy(sql`${userActivityTable.createdAt} desc`)
       .limit(size),
     db
       .select({ count: sql<number>`count(*)` })

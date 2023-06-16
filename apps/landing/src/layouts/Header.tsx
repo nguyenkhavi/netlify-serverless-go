@@ -130,9 +130,12 @@ export default function Header() {
                 <Link className={itemDropdownClasses} href="#" onClick={_handleCloseDropdown}>
                   Purchase History
                 </Link>
-                <Link className={itemDropdownClasses} href="#" onClick={_handleCloseDropdown}>
+                <button
+                  className={classcat([itemDropdownClasses, 'text-start'])}
+                  onClick={_handleCloseDropdown}
+                >
                   Log Out
-                </Link>
+                </button>
               </div>
             </PopoverContent>
           </Popover>

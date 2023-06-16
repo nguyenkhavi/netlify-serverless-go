@@ -2,6 +2,7 @@
 //THIRD PARTY MODULES
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import getTimeZone from '_@landing/utils/getTimeZone';
 import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import {
   createColumnHelper,
@@ -58,7 +59,8 @@ const currentCol = columnHelper.accessor((row) => row['createdAt'], {
   header: () => <p className="text-center">Current</p>,
   cell: (cell) => {
     const value = cell.getValue() || '';
-    const time = dayjs(value).fromNow();
+    const timeZone = getTimeZone();
+    const time = dayjs(value).subtract(timeZone, 'hour').fromNow();
     return <p className="text-center">{time}</p>;
   },
 });

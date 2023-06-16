@@ -1,5 +1,6 @@
 //THIRD PARTY MODULES
 import { eq } from 'drizzle-orm';
+import { RouterOutputs } from '_@landing/utils/api';
 import { magicAdmin } from '_@rpc/services/magic.link';
 import { db, userProfileTable } from '_@rpc/services/drizzle';
 import { userLogout } from '_@rpc/routers/sessions/session.services';
@@ -15,7 +16,6 @@ const getMyProfileOnServer = async () => {
   const code = headerReq.get('x-auth-code') || '';
 
   if (session && code.includes('ERROR')) {
-    console.log('runnnn');
     await userLogout(session);
   }
 
@@ -33,7 +33,10 @@ const getMyProfileOnServer = async () => {
       .limit(1)
       .execute();
 
-    return { status: true, data: { metadata, profile: profiles[0] } } as const;
+    return {
+      status: true,
+      data: { metadata, profile: profiles[0] } as unknown as RouterOutputs['myProfile'],
+    } as const;
   } catch (e: any) {
     return {
       status: false,
