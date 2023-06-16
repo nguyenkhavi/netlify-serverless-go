@@ -1,5 +1,5 @@
 import { z } from 'zod';
-
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 export const page = z.coerce.number().min(1).catch(1);
 export const size = z.coerce.number().min(1).catch(10);
 
@@ -15,7 +15,14 @@ export const ZPhoneSchema = z
     phoneCode: zNumericString,
     phoneNumber: zNumericString,
   })
-  .refine((data) => SUPPORTED_PHONE_CODES.includes(data.phoneCode), 'Phone code is not supported.');
+  .refine((data) => SUPPORTED_PHONE_CODES.includes(data.phoneCode), 'Phone code is not supported.')
+  .transform(({ phoneCode, phoneNumber }) => {
+    const normalize = parsePhoneNumberFromString(`+${phoneCode}${phoneNumber}`);
+    return {
+      phoneCode,
+      phoneNumber: normalize ? normalize.nationalNumber : phoneNumber,
+    };
+  });
 
 export const ZPassword = z.string().trim().min(8).regex(/[A-Z]/).regex(/[a-z]/).regex(/[0-9]/);
 
