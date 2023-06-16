@@ -12,7 +12,7 @@ import { ContactCardShieldIcon } from '_@shared/icons/ContactCardIcon';
 import ProfileNavMobile from '../comps/ProfileNavMobile';
 
 export default function VerifyPage() {
-  const { mutateAsync } = nextApi['user-set-KYC'].useMutation({});
+  const { mutateAsync } = nextApi.userSetKYC.useMutation({});
 
   const _startKYCId = useCallback(() => {
     const client = new Persona.Client({

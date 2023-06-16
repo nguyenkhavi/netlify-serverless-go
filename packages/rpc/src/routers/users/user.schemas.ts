@@ -1,6 +1,4 @@
 import { z } from 'zod';
-import { ZPassword, ZPhoneSchema } from '_@rpc/config/schemas';
-import { ActivityType } from '_@rpc/drizzle/enum';
 
 export const verifyInquirySchema = z
   .object({
@@ -66,61 +64,11 @@ export const setKYCSchema = z.object({
 
 export type TSetKYC = z.infer<typeof setKYCSchema>;
 
-export const connectWalletSchema = z.object({
-  signature: z.string(),
-});
-
-export type TConnectWallet = z.infer<typeof connectWalletSchema>;
-
-export const createUserActivitySchema = z.object({
-  location: z.string().nullable(),
-  action: z.nativeEnum(ActivityType),
-});
-
-export type TCreateUserActivity = z.infer<typeof createUserActivitySchema>;
 export const userIdSchema = z.object({
   userId: z.string(),
 });
 
 export type UserId = z.infer<typeof userIdSchema>;
-
-export const closeSessionSchema = z.object({
-  socketId: z.string(),
-  sessionId: z.string(),
-});
-
-export type CloseSession = z.infer<typeof closeSessionSchema>;
-
-export const closeAllSessionSchema = z.object({
-  userId: z.string(),
-  currentSessionId: z.string(),
-});
-
-export type CloseAllSession = z.infer<typeof closeAllSessionSchema>;
-
-export const logoutSchema = z.object({
-  userId: z.string(),
-  currentSessionId: z.string(),
-  socketId: z.string(),
-});
-
-export type Logout = z.infer<typeof logoutSchema>;
-
-export const forgotPasswordSchema = z.object({
-  email: z.string().email(),
-  username: z.string(),
-  phone: ZPhoneSchema,
-  dob: z.string().datetime(),
-  newPassword: ZPassword,
-});
-
-export type TForgotPassword = z.infer<typeof forgotPasswordSchema>;
-
-export const verifyForgotPasswordTokenSchema = z.object({
-  token: z.string(),
-});
-
-export type TVerifyForgotPasswordToken = z.infer<typeof verifyForgotPasswordTokenSchema>;
 
 export const createShippingAddressSchema = z.object({
   country: z.string().optional(),
@@ -154,12 +102,10 @@ export const updateShippingAddressSchema = z.object({
 export type UpdateShippingAddress = z.infer<typeof updateShippingAddressSchema>;
 
 export const updateUserInformationSchema = z.object({
-  coverPicture: z.string().optional(),
-  avatar: z.string().optional(),
+  coverUrl: z.string().optional(),
+  avatarUrl: z.string().optional(),
   aboutMe: z.string().optional(),
   description: z.string().optional(),
-  twitterId: z.string().optional(),
-  instagramId: z.string().optional(),
 });
 
 export type UpdateUserInformation = z.infer<typeof updateUserInformationSchema>;

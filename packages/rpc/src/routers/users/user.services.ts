@@ -1,4 +1,4 @@
-import { TConnectIG, TSetKYC, TUserByWallet } from './user.schemas';
+import { TConnectIG, TSetKYC, TUserByWallet, UpdateUserInformation } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 
@@ -6,6 +6,7 @@ import { addressTable, db, userProfileTable } from '_@rpc/services/drizzle';
 import { and, eq } from 'drizzle-orm';
 import { TProfile } from '_@rpc/drizzle/userProfile';
 import { verifyInquiryId } from '_@rpc/services';
+import { MySqlUpdateSetSource } from 'drizzle-orm/mysql-core';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -92,4 +93,23 @@ export const verifiedPercentage = async (profile: TProfile) => {
   return {
     percentage,
   };
+};
+
+export const updatePersonalInfo = async (input: UpdateUserInformation, profile: TProfile) => {
+  const dataSet: MySqlUpdateSetSource<typeof userProfileTable> = {};
+  const { coverUrl, avatarUrl, aboutMe, description } = input;
+  if (coverUrl) {
+    dataSet.coverUrl = coverUrl;
+  }
+  if (avatarUrl) {
+    dataSet.avatarUrl = avatarUrl;
+  }
+  if (aboutMe) {
+    dataSet.aboutMe = aboutMe;
+  }
+  if (description) {
+    dataSet.description = description;
+  }
+  await db.update(userProfileTable).set(dataSet).where(eq(userProfileTable.userId, profile.userId));
+  return true;
 };
