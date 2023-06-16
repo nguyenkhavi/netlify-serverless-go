@@ -13,9 +13,9 @@
     "build": {
       "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
-      "dependsOn": ["prebuild"],
       "defaultConfiguration": "production",
       "options": {
+        "root": "apps/landing",
         "outputPath": "dist/apps/landing",
         "generateLockfile": true
       },
@@ -24,6 +24,21 @@
           "outputPath": "apps/landing"
         },
         "production": {}
+      }
+    },
+    "start": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "production",
+      "options": {
+        "buildTarget": "landing:build",
+        "port": 2023,
+        "hostname": "0.0.0.0"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "landing:build:production",
+          "dev": false
+        }
       }
     },
     "dev": {
