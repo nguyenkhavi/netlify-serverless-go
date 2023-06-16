@@ -1,6 +1,13 @@
-import { TConnectIG, TSetKYC, TUserByWallet, UpdateUserInformation } from './user.schemas';
+import {
+  CreateShippingAddress,
+  TConnectIG,
+  TSetKYC,
+  UpdateShippingAddress,
+  TUserByWallet,
+  UpdateUserInformation,
+} from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
-import { queryIGUserNode } from '../../services/instagram';
+import { queryIGUserNode } from '_@rpc/services/instagram';
 
 import { addressTable, db, userProfileTable } from '_@rpc/services/drizzle';
 import { and, eq } from 'drizzle-orm';
@@ -112,4 +119,56 @@ export const updatePersonalInfo = async (input: UpdateUserInformation, profile: 
   }
   await db.update(userProfileTable).set(dataSet).where(eq(userProfileTable.userId, profile.userId));
   return true;
+};
+
+export const userGetShippingAddressByUserId = async (userId: string) => {
+  const data = await db.select().from(addressTable).where(eq(addressTable.userId, userId));
+
+  return data[0];
+};
+
+export const userCreateShippingAddress = async (input: CreateShippingAddress, userId: string) => {
+  const { isDefault } = input;
+
+  return db.transaction(async (tx) => {
+    if (isDefault) {
+      await tx
+        .update(addressTable)
+        .set({ isDefault: false })
+        .where(and(eq(addressTable.userId, userId), eq(addressTable.isDefault, true)))
+        .execute();
+    }
+
+    return tx
+      .insert(addressTable)
+      .values({ ...input, userId })
+      .execute();
+  });
+};
+
+export const userUpdateShippingAddressById = async (
+  input: UpdateShippingAddress,
+  userId: string,
+) => {
+  const { id, ...data } = input;
+
+  return db.transaction(async (tx) => {
+    if (input.isDefault) {
+      await tx
+        .update(addressTable)
+        .set({ isDefault: false })
+        .where(eq(addressTable.userId, userId))
+        .execute();
+    }
+
+    return tx
+      .update(addressTable)
+      .set({ ...data, userId })
+      .where(eq(addressTable.id, id))
+      .execute();
+  });
+};
+
+export const userDeleteShippingAddressById = async (id: number) => {
+  return db.delete(addressTable).where(eq(addressTable.id, id)).execute();
 };

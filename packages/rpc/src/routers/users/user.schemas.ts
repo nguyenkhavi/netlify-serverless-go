@@ -71,35 +71,41 @@ export const userIdSchema = z.object({
 export type UserId = z.infer<typeof userIdSchema>;
 
 export const createShippingAddressSchema = z.object({
-  country: z.string().optional(),
-  state: z.string().optional(),
-  streetAddress: z.string().optional(),
-  secondStreetAddress: z.string().optional(),
-  apartmentNumber: z.string().optional(),
-  postCode: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  phoneCode: z.string().optional(),
+  country: z.string(),
+  state: z.string(),
+  street: z.string(),
+  secondStreet: z.string(),
+  apartmentNumber: z.string(),
+  postalCode: z.string(),
+  contactNumber: z.string(),
+  dialCode: z.string(),
   additionalInformation: z.string().optional(),
-  isDefault: z.boolean().optional(),
+  isDefault: z.boolean(),
 });
 
 export type CreateShippingAddress = z.infer<typeof createShippingAddressSchema>;
 
 export const updateShippingAddressSchema = z.object({
-  id: z.string(),
-  country: z.string().optional(),
-  state: z.string().optional(),
-  streetAddress: z.string().optional(),
-  secondStreetAddress: z.string().optional(),
-  apartmentNumber: z.string().optional(),
-  postCode: z.string().optional(),
-  phoneNumber: z.string().optional(),
-  phoneCode: z.string().optional(),
+  id: z.number(),
+  country: z.string(),
+  state: z.string(),
+  street: z.string(),
+  secondStreet: z.string(),
+  apartmentNumber: z.string(),
+  postCode: z.string(),
+  contactNumber: z.string(),
+  dialCode: z.string(),
   additionalInformation: z.string().optional(),
-  isDefault: z.boolean().optional(),
+  isDefault: z.boolean(),
 });
 
 export type UpdateShippingAddress = z.infer<typeof updateShippingAddressSchema>;
+
+export const userDeleteShippingAddressSchema = z.object({
+  id: z.number(),
+});
+
+export type UserGetShippingAddressById = z.infer<typeof userDeleteShippingAddressSchema>;
 
 export const updateUserInformationSchema = z.object({
   coverUrl: z.string().optional(),

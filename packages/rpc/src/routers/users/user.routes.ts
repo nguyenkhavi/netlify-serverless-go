@@ -1,20 +1,29 @@
 import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
 
-import { requestToken } from '../../services/twitter';
+import { requestToken } from '_@rpc/services/twitter';
 import {
   connectIGSchema,
   setKYCSchema,
   updateUserInformationSchema,
   userByWalletSchema,
+  createShippingAddressSchema,
+  updateShippingAddressSchema,
+  userDeleteShippingAddressSchema,
 } from '_@rpc/routers/users/user.schemas';
+
 import {
   connectInstagram,
   getUserByWallet,
   setKYCInfo,
   twitterObtainOauthAccessToken,
   updatePersonalInfo,
+  userCreateShippingAddress,
   verifiedPercentage,
+  userUpdateShippingAddressById,
+  userGetShippingAddressByUserId,
+  userDeleteShippingAddressById,
 } from '_@rpc/routers/users/user.services';
+
 import { getQuery } from '_@rpc/config';
 
 export const userRouters = router({
@@ -48,6 +57,22 @@ export const userRouters = router({
     .mutation(({ ctx, input }) => {
       return updatePersonalInfo(input, ctx.profile);
     }),
+
+  userGetShippingAddressByUserId: protectedRouter.query(({ ctx }) =>
+    userGetShippingAddressByUserId(ctx.profile.userId),
+  ),
+
+  userCreateShippingAddress: protectedRouter
+    .input(createShippingAddressSchema)
+    .mutation(({ input, ctx }) => userCreateShippingAddress(input, ctx.profile.userId)),
+
+  userUpdateShippingAddressById: protectedRouter
+    .input(updateShippingAddressSchema)
+    .mutation(({ input, ctx }) => userUpdateShippingAddressById(input, ctx.profile.userId)),
+
+  userDeleteShippingAddress: protectedRouter
+    .input(userDeleteShippingAddressSchema)
+    .mutation(({ input }) => userDeleteShippingAddressById(input.id)),
 });
 
 export type UserRouter = typeof userRouters;
