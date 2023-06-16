@@ -8,7 +8,7 @@ export const test = router({
       text: `hello  'world'`,
     };
   }),
-  'connection-drizzle': publicProcedure.query(async () => {
+  connectionDrizzle: publicProcedure.query(async () => {
     const data = await db.select().from(subscriber).execute();
     return {
       data,

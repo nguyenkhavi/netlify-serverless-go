@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export const useGetStreamUser = () => {
   const [token, setToken] = useState<string>();
 
-  const { mutate: getStreamToken } = api['getstream-get-user-token'].useMutation({
+  const { mutate: getStreamToken } = api.getstreamGetUserToken.useMutation({
     onSuccess: (data: string) => {
       setToken(data);
     },

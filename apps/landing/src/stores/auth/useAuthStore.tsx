@@ -33,14 +33,14 @@ export const useAuthStoreAction = () => {
   const router = useRouter();
   const [magicClient, setMagicClient] = useState<Magic | null>(null);
 
-  const { mutateAsync: signUpFn } = nextApi['signup'].useMutation({});
-  const { mutateAsync: postSignUpFn } = nextApi['post-signup'].useMutation({});
-  const { mutateAsync: validateLoginFn } = nextApi['validate-login'].useMutation({});
-  const { mutateAsync: loginFn } = nextApi['login'].useMutation({});
-  const { mutateAsync: logoutFn } = nextApi['logout'].useMutation({});
+  const { mutateAsync: signUpFn } = nextApi.signup.useMutation({});
+  const { mutateAsync: postSignUpFn } = nextApi.postSignup.useMutation({});
+  const { mutateAsync: validateLoginFn } = nextApi.validateLogin.useMutation({});
+  const { mutateAsync: loginFn } = nextApi.login.useMutation({});
+  const { mutateAsync: logoutFn } = nextApi.logout.useMutation({});
   const utils = nextApi.useContext();
 
-  const _handleLogin = async (input: RouterInputs['validate-login']) => {
+  const _handleLogin = async (input: RouterInputs['validateLogin']) => {
     try {
       if (!magicClient) return;
       const found = await validateLoginFn(input);
@@ -51,7 +51,7 @@ export const useAuthStoreAction = () => {
 
         cookieHandler.set('session', didToken || '');
         await loginFn();
-        utils['my-profile'].invalidate();
+        utils.myProfile.invalidate();
         router.push('/profile');
       }
     } catch (error: any) {
@@ -75,7 +75,7 @@ export const useAuthStoreAction = () => {
         });
         if (postRes) {
           router.push('/profile');
-          utils['my-profile'].invalidate();
+          utils.myProfile.invalidate();
         }
       }
     } catch (error: any) {

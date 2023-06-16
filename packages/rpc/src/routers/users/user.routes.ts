@@ -11,7 +11,7 @@ import {
 import { getQuery } from '_@rpc/config';
 
 export const userRouters = router({
-  'user-connect-instagram': protectedRouter
+  userConnectInstagram: protectedRouter
     .input(connectIGSchema)
     .mutation(({ input, ctx }) => connectInstagram(input, ctx.metadata.issuer || '')),
 
@@ -29,9 +29,9 @@ export const userRouters = router({
   //   .input(paginationSchema)
   //   .query(({ input, ctx }) => getUserActivities(input, ctx.auth.userId)),
 
-  'user-twitter-request-token': protectedRouter.mutation(() => requestToken()),
+  userTwitterRequestToken: protectedRouter.mutation(() => requestToken()),
 
-  'user-twitter-obtain-oath': protectedRouter.mutation(async ({ ctx }) => {
+  userTwitterObtainOath: protectedRouter.mutation(async ({ ctx }) => {
     const query = getQuery(ctx.req.url);
 
     return twitterObtainOauthAccessToken(
@@ -40,15 +40,7 @@ export const userRouters = router({
       ctx.metadata.issuer || '',
     );
   }),
-
-  'user-greeting': publicProcedure.query(() => {
-    // This is what you're returning to your client
-    return {
-      text: `💡 Tip: Try adding a new property here and see it propagate to the client straight-away`,
-      //
-    };
-  }),
-  'user-verified-percentage': protectedRouter.query(({ ctx }) => {
+  userVerifiedPercentage: protectedRouter.query(({ ctx }) => {
     return verifiedPercentage(ctx.profile);
   }),
 });

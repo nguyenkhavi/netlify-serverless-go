@@ -11,7 +11,7 @@ type Props = {
 };
 
 const AuthProvider = ({ children, user: data }: Props & { user: GetMyProfileOnServer }) => {
-  nextApi['my-profile'].useQuery(undefined, {
+  nextApi.myProfile.useQuery(undefined, {
     enabled: data?.status,
     initialData: (data?.status ? data.data : {}) as any,
     staleTime: data?.status ? 10 * 60 * 1000 : 0,
