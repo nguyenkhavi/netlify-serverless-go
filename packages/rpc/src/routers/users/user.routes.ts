@@ -1,9 +1,14 @@
 import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
 
 import { requestToken } from '../../services/twitter';
-import { connectIGSchema, setKYCSchema } from '_@rpc/routers/users/user.schemas';
+import {
+  connectIGSchema,
+  setKYCSchema,
+  userByWalletSchema,
+} from '_@rpc/routers/users/user.schemas';
 import {
   connectInstagram,
+  getUserByWallet,
   setKYCInfo,
   twitterObtainOauthAccessToken,
   verifiedPercentage,
@@ -42,6 +47,9 @@ export const userRouters = router({
   }),
   userVerifiedPercentage: protectedRouter.query(({ ctx }) => {
     return verifiedPercentage(ctx.profile);
+  }),
+  getUserByWallet: publicProcedure.input(userByWalletSchema).query(({ input }) => {
+    return getUserByWallet(input);
   }),
 });
 

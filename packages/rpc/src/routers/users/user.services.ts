@@ -1,4 +1,4 @@
-import { TConnectIG, TSetKYC } from './user.schemas';
+import { TConnectIG, TSetKYC, TUserByWallet } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '../../services/instagram';
 
@@ -30,6 +30,10 @@ export const setKYCInfo = async (input: TSetKYC, uid: string) => {
 //   const wallet = ethers.utils.verifyMessage(message, input.signature);
 //   return true;
 // };
+
+export const getUserByWallet = async (input: TUserByWallet) => {
+  return db.select().from(userProfileTable).where(eq(userProfileTable.wallet, input.wallet));
+};
 
 export const twitterObtainOauthAccessToken = async (
   oauthVerifier: string,
