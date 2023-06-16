@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
-import MainCard, { CardValue } from '_@landing/components/card/MainCard';
+import MainCard from '_@landing/components/card/MainCard';
 //HOOK
 import { useCacheLocalStorage } from '_@landing/hooks/useCacheLocalStorage';
 //RELATIVE MODULES
@@ -16,7 +16,7 @@ type Props = {
 };
 
 function RecentlyViewed({ data }: Props) {
-  const [recentlyItems, setRecentlyItems] = useState<CardValue[]>([]);
+  const [recentlyItems, setRecentlyItems] = useState<any[]>([]);
 
   const id = useMemo(() => data.listingId.toString(), [data.listingId]);
   const { setItems, getItems } = useCacheLocalStorage<TypeMarketDetail>({

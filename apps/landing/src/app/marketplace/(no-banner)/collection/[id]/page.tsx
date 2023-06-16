@@ -8,7 +8,7 @@ import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import FilterPrice from '_@landing/app/marketplace/comps/FilterPrice';
 import MarketplaceBox from '_@landing/app/marketplace/comps/MarketplaceBox';
 //LAYOUT, COMPONENTS
-import MainCard from '_@landing/components/card/MainCard';
+import MainCardOld from '_@landing/components/card/MainCardOld';
 import BasePagination from '_@shared/components/pagination/BasePagination';
 //RELATIVE MODULES
 import FilterBar from '../../comps/FilterBar';
@@ -47,7 +47,7 @@ export default function SellerPage() {
         <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-4 md:gap-x-7.5 xlg:gap-y-5">
           {MOCK_DATA_ITEM.map((item, index) => (
             <React.Fragment key={index}>
-              <MainCard value={item} />
+              <MainCardOld value={item} />
               {(index + 1) % 4 === 0 ? (
                 <HomeAdvHorizontal
                   className={classcat(['col-span-full', (index + 1) % 8 === 0 ? '' : 'md:hidden'])}

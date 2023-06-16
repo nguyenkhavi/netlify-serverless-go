@@ -1,21 +1,19 @@
 'use client';
 //THIRD PARTY MODULES
+import React from 'react';
+import { categoryStore } from '_@landing/stores/categoryStore';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import TopSellers from '_@landing/app/marketplace/comps/TopSellers';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
-import TrendingInPFP from '_@landing/app/marketplace/comps/TrendingInPFP';
 import MarketplaceBox from '_@landing/app/marketplace/comps/MarketplaceBox';
-import TrendingInArts from '_@landing/app/marketplace/comps/TrendingInArts';
-import TrendingInGaming from '_@landing/app/marketplace/comps/TrendingInGaming';
-import TrendingInNature from '_@landing/app/marketplace/comps/TrendingInNature';
-import TrendingInWildlife from '_@landing/app/marketplace/comps/TrendingInWildlife';
-//HOOK
-import { useSalAnim } from '_@landing/hooks/useSalAnim';
+//LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 //RELATIVE MODULES
 import BrowseCategory from '../comps/BrowseCategory';
+import TrendingContent from '../comps/TrendingContent';
 
 export default function Marketplace() {
-  useSalAnim();
+  const { category } = categoryStore();
 
   return (
     <MarketplaceBox
@@ -30,14 +28,18 @@ export default function Marketplace() {
       }
     >
       <TopSellers />
-      <TrendingInArts />
-      <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
-      <TrendingInPFP />
-      <TrendingInWildlife />
-      <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
-      <TrendingInNature />
-      <TrendingInGaming />
-      <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
+      {category.map((category, index) => (
+        <React.Fragment key={index}>
+          <TrendingContent
+            title={`Trending in ${category.name}`}
+            pathViewAll={`/marketplace/category/${category.id}`}
+            category={category}
+          />
+          <Show when={(index + 1) % 2 === 0}>
+            <HomeAdvHorizontal className="w-[--content-width] md:w-auto" isHome={false} />
+          </Show>
+        </React.Fragment>
+      ))}
     </MarketplaceBox>
   );
 }

@@ -3,17 +3,13 @@ import Link from 'next/link';
 import classcat from 'classcat';
 import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
-
-export const MOCK_DATA = [
-  { label: 'All', id: '' },
-  { label: 'PFP', id: '1' },
-  { label: 'Wildlife', id: '2' },
-  { label: 'Nature', id: '3' },
-  { label: 'Gaming', id: '4' },
-  { label: 'Art', id: '5' },
-];
+import { categoryStore } from '_@landing/stores/categoryStore';
+//LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
+import { SkeLine } from '_@landing/components/skeleton/skeleton';
 
 export default function BrowseCategory() {
+  const { category, isLoading } = categoryStore();
   const params = useParams();
 
   const categoryId = useMemo(() => {
@@ -27,18 +23,35 @@ export default function BrowseCategory() {
     >
       <h3 className="mb-8 text-h5 text-text-100">Browse Categories</h3>
       <div className="grid gap-4">
-        {MOCK_DATA.map((category, i) => (
+        <Show when={isLoading}>
+          <SkeLine />
+          <SkeLine />
+          <SkeLine />
+          <SkeLine />
+        </Show>
+        <Show when={!isLoading}>
           <Link
             className={classcat([
               'text-body2 hover:text-gradient-pr',
-              categoryId === category.id ? 'text-gradient-pr' : '',
+              categoryId === '' ? 'text-gradient-pr' : '',
             ])}
-            href={`/marketplace${category.id === '' ? '' : '/category/' + category.id}`}
-            key={i}
+            href="/marketplace"
           >
-            {category.label}
+            All
           </Link>
-        ))}
+          {category.map((category, i) => (
+            <Link
+              className={classcat([
+                'text-body2 hover:text-gradient-pr',
+                categoryId === category.id.toString() ? 'text-gradient-pr' : '',
+              ])}
+              href={`/marketplace/category/${category.id}`}
+              key={i}
+            >
+              {category.name}
+            </Link>
+          ))}
+        </Show>
       </div>
       <Link
         href="/marketplace/category"

@@ -39,7 +39,7 @@ export default function SellerPage() {
           </div>
         </Show>
         <div
-          className={classcat(['relative grid grow gap-6.25', view === 'item' ? 'xlg:ml-8' : ''])}
+          className={classcat(['relative grid h-max grow gap-6.25', view === 'item' ? 'xlg:ml-8' : ''])}
         >
           {view === 'item' ? <ItemContent /> : <CategoryContent />}
           <div className="flex justify-center">

@@ -204,3 +204,13 @@ export interface ICategory {
   description: string;
   image: string;
 }
+
+export interface IItemCard extends IMarketData {
+  activities: IActivity[];
+  item: IItem;
+}
+
+export interface ICollectionCard extends ICollection {
+  activities: IActivity[];
+  volume: number;
+}

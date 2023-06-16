@@ -4,7 +4,7 @@ import classcat from 'classcat'
 import { MOCK_DATA_ITEM } from '_@landing/mock/Item'
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal'
 //LAYOUT, COMPONENTS
-import MainCard from '_@landing/components/card/MainCard'
+import MainCardOld from '_@landing/components/card/MainCardOld'
 //LAYOUT, COMPONENTS
 
 export default function ItemContent() {
@@ -12,7 +12,7 @@ export default function ItemContent() {
     <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 md:gap-6">
       {MOCK_DATA_ITEM.map((item, index) => (
         <React.Fragment key={index}>
-          <MainCard value={item} />
+          <MainCardOld value={item} />
           {(index + 1) % 4 === 0 ? (
             <HomeAdvHorizontal
               className={classcat(['col-span-full', index + 1 === 4 ? 'md:hidden' : ''])}

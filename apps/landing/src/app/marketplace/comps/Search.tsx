@@ -5,6 +5,7 @@ import Link from 'next/link';
 import classcat from 'classcat';
 import { useParams } from 'next/navigation';
 import { useMemo, useRef, useState } from 'react';
+import { categoryStore } from '_@landing/stores/categoryStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import SearchInput from '_@shared/components/SearchInput';
@@ -12,9 +13,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/pop
 //SHARED
 import ChevronBottomIcon from '_@shared/icons/ChevronBottomIcon';
 //RELATIVE MODULES
-import { MOCK_DATA } from './BrowseCategory';
 
 export default function Search() {
+  const { category } = categoryStore();
   const params = useParams();
   const searchText = useRef<HTMLInputElement>(null);
 
@@ -23,8 +24,8 @@ export default function Search() {
   const [categoryId, label] = useMemo(() => {
     if (!params.id) return ['', ''];
 
-    return [params.id, MOCK_DATA.find((item) => item.id === params.id)?.label];
-  }, [params.id]);
+    return [params.id, category.find((item) => item.id.toString() === params.id)?.name];
+  }, [params.id, category]);
 
   const _handleSearch = () => {
     console.log(searchText.current?.value);
@@ -56,17 +57,27 @@ export default function Search() {
         </PopoverTrigger>
         <PopoverContent className="min-w-[125px] ow:px-3 ow:py-4" align="end">
           <div className="grid gap-4">
-            {MOCK_DATA.map((category, i) => (
+            <Link
+              className={classcat([
+                'text-body2 hover:text-primary',
+                categoryId === '' ? 'text-primary' : 'text-text-50',
+              ])}
+              href="/marketplace"
+              onClick={() => setOpen(false)}
+            >
+              All
+            </Link>
+            {category.map((category, i) => (
               <Link
                 className={classcat([
                   'text-body2 hover:text-primary',
-                  categoryId === category.id ? 'text-primary' : 'text-text-50',
+                  categoryId === category.id.toString() ? 'text-primary' : 'text-text-50',
                 ])}
-                href={`/marketplace${category.id === '' ? '' : '/category/' + category.id}`}
+                href={`/marketplace/category/${category.id}`}
                 key={i}
                 onClick={() => setOpen(false)}
               >
-                {category.label}
+                {category.name}
               </Link>
             ))}
           </div>

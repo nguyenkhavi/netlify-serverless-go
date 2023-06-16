@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import classcat from 'classcat';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import BasePagination from '_@shared/components/pagination/BasePagination';
 //SHARED
 import FilterIcon from '_@shared/icons/FilterIcon';
@@ -11,11 +12,17 @@ type ContentWithBackProps = {
   path: string;
   title: string;
   children: React.ReactNode;
+  totalItems?: number;
 };
 
-export default function ContentWithBack({ path, title, children }: ContentWithBackProps) {
+export default function ContentWithBack({
+  path,
+  title,
+  children,
+  totalItems,
+}: ContentWithBackProps) {
   return (
-    <div className="px-[--px]">
+    <div className="px-[--px] pb-24">
       <div className="mb-6 flex items-center md:mb-7">
         <Link
           href={path}
@@ -39,9 +46,11 @@ export default function ContentWithBack({ path, title, children }: ContentWithBa
         </div>
       </div>
       <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 xlg:gap-10 ">{children}</div>
-      <div className="my-16 flex justify-center">
-        <BasePagination perPage={1} totalItems={20} />
-      </div>
+      <Show when={totalItems}>
+        <div className="my-16 flex justify-center">
+          <BasePagination perPage={1} totalItems={totalItems || 0} />
+        </div>
+      </Show>
     </div>
   );
 }

@@ -17,7 +17,7 @@ const disableClasses = 'ow:cursor-not-allowed text-foundation-black-100 pointer-
 const buttonArrowClasses = [
   'h-8 w-8 grid place-items-center',
   'hover:bg-main-gradient rounded-lg [&>svg]:hover:text-black',
-  'md:w-10 md:h-10'
+  'md:w-10 md:h-10',
 ];
 
 export default function BasePagination({ perPage, totalItems, className }: IBasePaginationProps) {
@@ -39,7 +39,6 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
   };
 
   const handleChangePage = (pageNumber: number) => () => {
-    console.log(pageNumber);
     setPageToUrl(pageNumber);
   };
 

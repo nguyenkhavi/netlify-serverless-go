@@ -1,21 +1,20 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
-
-export type CategoryCard = {
-  id: number;
-  url: string;
-  name: string;
-};
+import { ICategory } from '_@landing/utils/type';
 
 export type CategoryCardProps = {
-  value: CategoryCard;
+  value: ICategory;
 } & React.HTMLAttributes<HTMLAnchorElement>;
 
 export default function CategoryCard({ value, ...props }: CategoryCardProps) {
   return (
     <Link href={`/marketplace/category/${value.id}`} {...props}>
       <div className="aspect-square overflow-hidden rounded-[10px]">
-        <img src={value.url} alt="image" className="h-full w-full object-cover" />
+        <img
+          src={process.env.NEXT_PUBLIC_IPFS_GATE_WAY + value.image}
+          alt=""
+          className="h-full w-full object-cover"
+        />
       </div>
       <p className="mt-2 text-h6 xlg:text-h4">{value.name}</p>
     </Link>
