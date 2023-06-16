@@ -17,7 +17,7 @@ import MenuCloseIcon from '_@shared/icons/MenuCloseIcon';
 import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 
 export default function Header() {
-  const user = useAuthStore((state) => state.user);
+  const { user } = useAuthStore();
   const { logout } = useAuthStoreAction();
   const [openMenu, setOpenMenu] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);

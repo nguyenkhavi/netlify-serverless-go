@@ -1,33 +1,28 @@
 'use client';
 //THIRD PARTY MODULES
-import { create } from 'zustand';
 import { Magic } from 'magic-sdk';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import cookieHandler from '_@landing/utils/cookieHandler';
 import { RouterInputs, RouterOutputs, nextApi } from '_@landing/utils/api';
 
-type State = {
-  user: RouterOutputs['my-profile'] | null;
-};
+const useAuthStore = () => {
+  const utils = nextApi.useContext();
+  const { data: user, refetch } = nextApi.myProfile.useQuery(undefined, {
+    enabled: !!cookieHandler.get('session'),
+    staleTime: 60 * 1000,
+  });
 
-type Action = {
-  setUser: (user: RouterOutputs['my-profile'] | undefined) => void;
+  return {
+    user,
+    refetch,
+    setUser: (user: RouterOutputs['myProfile'] | undefined) => {
+      utils.myProfile.setData(undefined, user);
+    },
+  };
 };
-
-const useAuthStore = create<State & Action>((set) => ({
-  user: null,
-  setUser: (user) => {
-    set({ user });
-  },
-}));
 
 export default useAuthStore;
-
-const { setUser } = useAuthStore.getState();
-export const authStoreAction = {
-  setUser,
-};
 
 export const useAuthStoreAction = () => {
   const router = useRouter();
@@ -38,7 +33,7 @@ export const useAuthStoreAction = () => {
   const { mutateAsync: validateLoginFn } = nextApi.validateLogin.useMutation({});
   const { mutateAsync: loginFn } = nextApi.login.useMutation({});
   const { mutateAsync: logoutFn } = nextApi.logout.useMutation({});
-  const utils = nextApi.useContext();
+  const { refetch, setUser } = useAuthStore();
 
   const _handleLogin = async (input: RouterInputs['validateLogin']) => {
     try {
@@ -51,7 +46,8 @@ export const useAuthStoreAction = () => {
 
         cookieHandler.set('session', didToken || '');
         await loginFn();
-        utils.myProfile.invalidate();
+        const user = await refetch();
+        setUser(user.data);
         router.push('/profile');
       }
     } catch (error: any) {
@@ -74,8 +70,9 @@ export const useAuthStoreAction = () => {
           requestId,
         });
         if (postRes) {
+          const user = await refetch();
+          setUser(user.data);
           router.push('/profile');
-          utils.myProfile.invalidate();
         }
       }
     } catch (error: any) {

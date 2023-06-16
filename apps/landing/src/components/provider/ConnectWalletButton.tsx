@@ -1,27 +1,27 @@
 'use client';
 
 //THIRD PARTY MODULES
-import { useUser } from '@clerk/nextjs';
-import { api } from '_@landing/utils/api';
+import { nextApi } from '_@landing/utils/api';
 import { useCallback, useEffect } from 'react';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import { ConnectWallet, useAddress, useSDK } from '@thirdweb-dev/react';
 //CONFIG
 import { generateSignedMessage } from '_@rpc/config/utils';
 export function ConnectWalletButton() {
   const sdk = useSDK();
-  const { user, isLoaded } = useUser();
+  const { user } = useAuthStore();
 
   const address = useAddress();
-  const { mutate: connectWallet } = api.user.connectWallet.useMutation();
+  const { mutate: connectWallet } = nextApi.userConnectInstagram.useMutation({});
 
   const signAndSend = useCallback(async () => {
-    if (sdk && address && isLoaded && user?.id) {
-      const signature = await sdk.wallet.sign(generateSignedMessage(user.id));
+    if (sdk && address && user?.profile.userId) {
+      const signature = await sdk.wallet.sign(generateSignedMessage(user.profile.userId));
       connectWallet({
-        signature,
+        code: signature,
       });
     }
-  }, [address, connectWallet, isLoaded, sdk, user]);
+  }, [address, connectWallet, sdk, user]);
   useEffect(() => {
     signAndSend();
   }, [signAndSend]);

@@ -1,8 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
-import { useMemo } from 'react';
 import { nextApi } from '_@landing/utils/api';
-import { authStoreAction } from '_@landing/stores/auth/useAuthStore';
+import cookieHandler from '_@landing/utils/cookieHandler';
 //HOOK
 import { GetMyProfileOnServer } from '_@landing/server/auth';
 
@@ -10,18 +9,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-const AuthProvider = ({ children, user: data }: Props & { user: GetMyProfileOnServer }) => {
+const AuthProvider = ({ children, user }: Props & { user: GetMyProfileOnServer }) => {
   nextApi.myProfile.useQuery(undefined, {
-    enabled: data?.status,
-    initialData: (data?.status ? data.data : {}) as any,
-    staleTime: data?.status ? 10 * 60 * 1000 : 0,
+    enabled: !!cookieHandler.get('session'),
+    initialData: (user?.status ? user.data : undefined) as any,
+    staleTime: user?.status ? 60 * 1000 : 0,
   });
-
-  useMemo(() => {
-    if (data?.status) {
-      authStoreAction.setUser(data.data as any);
-    }
-  }, [data]);
 
   return <>{children}</>;
 };

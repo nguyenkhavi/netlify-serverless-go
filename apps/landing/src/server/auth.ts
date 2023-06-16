@@ -15,6 +15,7 @@ const getMyProfileOnServer = async () => {
   const code = headerReq.get('x-auth-code') || '';
 
   if (session && code.includes('ERROR')) {
+    console.log('runnnn');
     await userLogout(session);
   }
 

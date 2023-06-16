@@ -2,9 +2,8 @@
 
 //THIRD PARTY MODULES
 import dayjs from 'dayjs';
-import { useUser } from '@clerk/nextjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { useCallback, useEffect, useState } from 'react';
+import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import {
   createColumnHelper,
   flexRender,
@@ -13,37 +12,23 @@ import {
 } from '@tanstack/react-table';
 //LAYOUT, COMPONENTS
 import T from '_@shared/components/table/TableCore';
-//SHARED
-import CheckIcon from '_@shared/icons/CheckIcon';
 
 // Init dayjs plugins
 dayjs.extend(relativeTime);
 
-type TData = {
-  status: string;
-  lastActiveAt: Date;
-  id: string;
-  browserName?: string | undefined;
-  browserVersion?: string | undefined;
-  deviceType?: string | undefined;
-  ipAddress?: string | undefined;
-  city?: string | undefined;
-  country?: string | undefined;
-  isMobile?: boolean | undefined;
-};
+type TData = RouterOutputs['listSession'][number];
 
 const columnHelper = createColumnHelper<TData>();
 
-const signInCol = columnHelper.accessor((row) => row['lastActiveAt'], {
-  id: 'lastActiveAt',
-  header: 'Signed In',
+const signInCol = columnHelper.accessor((row) => row['createdAt'], {
+  id: 'createdAt',
+  header: () => <p className="text-center">Signed in</p>,
   cell: (cell) => {
-    return <p>{dayjs(cell.getValue()).fromNow()}</p>;
+    return <p className="text-center">{dayjs(cell.getValue()).fromNow()}</p>;
   },
 });
-
-const browserCol = columnHelper.accessor((row) => row['browserName'], {
-  id: 'browserName',
+const browserCol = columnHelper.accessor((row) => row['userAgent'], {
+  id: 'userAgent',
   header: () => <p className="text-center">Browser</p>,
   cell: (cell) => <p className="text-center">{cell.getValue()}</p>,
 });
@@ -51,56 +36,25 @@ const ipCol = columnHelper.accessor((row) => row['ipAddress'], {
   id: 'ipAddress',
   header: 'IP Address',
 });
-const locationCol = columnHelper.accessor((row) => row['country'], {
-  id: 'country',
+const locationCol = columnHelper.accessor((row) => row['location'], {
+  id: 'location',
   header: 'Location',
 });
-const currentCol = columnHelper.accessor((row) => row['status'], {
+const currentCol = columnHelper.accessor((row) => row['ext'], {
   id: 'status',
   header: 'Current',
-
-  cell: (cell) => {
-    if (cell.getValue() === 'active') {
-      return (
-        <p className="inline-flex items-center text-primary">
-          <span className="mr-1 grid h-3 w-3 place-items-center rounded-full bg-primary">
-            <CheckIcon className="h-2.5 w-2.5 text-black" />
-          </span>
-          Active
-        </p>
-      );
-    }
-    return <p>Inactive</p>;
-  },
 });
 
 const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
 
 export default function ActiveSection() {
-  const [data, setData] = useState<TData[]>([]);
+  const { data: listSession } = nextApi.listSession.useQuery();
+
   const table = useReactTable({
-    data,
+    data: listSession || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  const { user } = useUser();
-
-  const _getUserSession = useCallback(async () => {
-    const res = await user?.getSessions();
-    if (!res) return;
-    setData(
-      res.map((item) => ({
-        ...item.latestActivity,
-        status: item.status,
-        lastActiveAt: item.lastActiveAt,
-      })),
-    );
-  }, [user]);
-
-  useEffect(() => {
-    _getUserSession();
-  }, [_getUserSession]);
 
   return (
     <section>

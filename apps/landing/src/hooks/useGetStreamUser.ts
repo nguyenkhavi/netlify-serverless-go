@@ -1,13 +1,13 @@
 //THIRD PARTY MODULES
-import { useUser } from '@clerk/nextjs';
 import { StreamChat } from 'stream-chat';
-import { api } from '_@landing/utils/api';
 import { useEffect, useState } from 'react';
+import { nextApi } from '_@landing/utils/api';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 
 export const useGetStreamUser = () => {
   const [token, setToken] = useState<string>();
 
-  const { mutate: getStreamToken } = api.getstreamGetUserToken.useMutation({
+  const { mutate: getStreamToken } = nextApi.getStreamGetUserToken.useMutation({
     onSuccess: (data: string) => {
       setToken(data);
     },
@@ -15,7 +15,7 @@ export const useGetStreamUser = () => {
 
   const [client, setClient] = useState<StreamChat>();
 
-  const { user } = useUser();
+  const { user } = useAuthStore();
 
   useEffect(getStreamToken, [getStreamToken]);
 
@@ -29,9 +29,9 @@ export const useGetStreamUser = () => {
 
     client.connectUser(
       {
-        id: 'minh1',
-        name: user?.username || '',
-        image: user?.imageUrl,
+        id: user?.profile.userId || '',
+        name: user?.profile.username || '',
+        image: user?.profile.avatarUrl,
       },
       token,
     );
@@ -49,7 +49,7 @@ export const useGetStreamUser = () => {
       client.off('connection.changed', handleConnectionChange);
       client.disconnectUser().then(() => console.log('connection closed'));
     };
-  }, [token, user?.imageUrl, user?.username]);
+  }, [token, user?.profile]);
 
   return { client };
 };

@@ -2,6 +2,7 @@
 //THIRD PARTY MODULES
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import {
   createColumnHelper,
   flexRender,
@@ -10,53 +11,72 @@ import {
 } from '@tanstack/react-table';
 //LAYOUT, COMPONENTS
 import T from '_@shared/components/table/TableCore';
+//SHARED
 
 // Init dayjs plugins
 dayjs.extend(relativeTime);
 
-type TData = {
-  id: string;
-  action: string;
-  browser: string;
-  'ip-address': string;
-  location: string;
-  'signed-in': Date;
-};
+type TData = RouterOutputs['myActivities']['data'][number];
 
 const columnHelper = createColumnHelper<TData>();
 
-const actionCol = columnHelper.accessor((row) => row['action'], {
+const firstUpperCase = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+const signInCol = columnHelper.accessor((row) => row['action'], {
   id: 'action',
-  header: 'Action',
-});
-
-const signInCol = columnHelper.accessor((row) => row['signed-in'], {
-  id: 'signed-in',
-  header: 'Signed In',
+  header: () => <p className="text-center">Action</p>,
   cell: (cell) => {
-    return <p>{dayjs(cell.getValue()).fromNow()}</p>;
+    let value = cell.getValue() || '';
+    value = value
+      .split('_')
+      .map((word) => firstUpperCase(word))
+      .join(' ');
+    return <p className="text-center">{value}</p>;
   },
 });
 const browserCol = columnHelper.accessor((row) => row['browser'], {
   id: 'browser',
-  header: 'Browser',
+  header: () => <p className="text-center">Browser</p>,
+  cell: (cell) => <p className="text-center">{cell.getValue()}</p>,
 });
-const ipCol = columnHelper.accessor((row) => row['ip-address'], {
-  id: 'ip-address',
+const ipCol = columnHelper.accessor((row) => row['ipAddress'], {
+  id: 'ipAddress',
   header: 'IP Address',
 });
 const locationCol = columnHelper.accessor((row) => row['location'], {
   id: 'location',
-  header: 'Location',
+  header: () => <p className="text-center">Location</p>,
+  cell: (cell) => {
+    const value = cell.getValue() || 'N/A';
+
+    return <p className="text-center">{value}</p>;
+  },
+});
+const currentCol = columnHelper.accessor((row) => row['createdAt'], {
+  id: 'createdAt',
+  header: () => <p className="text-center">Current</p>,
+  cell: (cell) => {
+    const value = cell.getValue() || '';
+    const time = dayjs(value).fromNow();
+    return <p className="text-center">{time}</p>;
+  },
 });
 
-const columns = [actionCol, browserCol, ipCol, locationCol, signInCol];
+const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
+
 export default function AccountActivity() {
+  const { data: listSession } = nextApi.myActivities.useQuery({
+    page: 0,
+    size: 10,
+  });
+
   const table = useReactTable({
-    data: MOCK_DATA,
+    data: listSession?.data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <section>
       <h1 className="mb-4 text-h5-bold text-primary">Account activity</h1>
@@ -109,38 +129,3 @@ export default function AccountActivity() {
     </section>
   );
 }
-
-const MOCK_DATA = [
-  {
-    id: '1',
-    action: 'Change Password',
-    browser: 'Chrome',
-    'ip-address': '192:62:24:1',
-    location: 'N/A',
-    'signed-in': new Date('2023-05-01T12:00:00'),
-  },
-  {
-    id: '2',
-    action: 'Login',
-    browser: 'Chrome',
-    'ip-address': '192:62:24:1',
-    location: 'N/A',
-    'signed-in': new Date('2023-05-01T12:00:00'),
-  },
-  {
-    id: '3',
-    action: 'Signup',
-    browser: 'Chrome',
-    'ip-address': '192:62:24:1',
-    location: 'N/A',
-    'signed-in': new Date('2023-05-01T12:00:00'),
-  },
-  {
-    id: '4',
-    action: 'Change Password',
-    browser: 'Chrome',
-    'ip-address': '192:62:24:1',
-    location: 'N/A',
-    'signed-in': new Date('2023-05-01T12:00:00'),
-  },
-];
