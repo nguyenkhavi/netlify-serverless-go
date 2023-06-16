@@ -1,8 +1,9 @@
 'use client';
 
 //THIRD PARTY MODULES
-import { IDBPDatabase, openDB } from 'idb';
 import { Sepolia } from '@thirdweb-dev/chains';
+import { getBestSeller } from '_@landing/services';
+import { IDBPDatabase, deleteDB, openDB } from 'idb';
 import { startEventListener } from '_@landing/listener';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 import { insertSeedTokenData } from '_@landing/services/token';
@@ -116,12 +117,16 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
             }
           },
         });
+
+        const seller = await getBestSeller(db);
+        console.log({ seller });
         const category = await getAllCategories(db);
         if (!category.length) {
           insertSeedCategoryData(db);
           insertSeedTokenData(db);
         }
         startEventListener(db);
+
         // Open a transaction on the object store
         setDB(db);
       }

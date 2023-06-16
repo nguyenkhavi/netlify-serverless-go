@@ -27,6 +27,11 @@ export interface IMarketStatusData {
   isCanceled: number;
 }
 
+export interface IDefaultRoyalties {
+  seller_fee_basis_points: number;
+  fee_recipient: string;
+}
+
 export interface ICollection {
   address: string;
   chain: string;
@@ -35,6 +40,8 @@ export interface ICollection {
   name: string;
   type: NFTType;
   metadata: IMetadata;
+  royalty: number;
+  royaltyRecipient: string;
 }
 
 export interface IItem {

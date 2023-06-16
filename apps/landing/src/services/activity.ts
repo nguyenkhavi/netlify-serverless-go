@@ -1,7 +1,8 @@
 //THIRD PARTY MODULES
 import { IDBPDatabase } from 'idb';
-import { IActivity } from '_@landing/utils/type';
+import { ActivityAction } from '_@rpc/drizzle/enum';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { ActivityType, IActivity } from '_@landing/utils/type';
 
 export async function addActivity(db: IDBPDatabase, data: IActivity) {
   try {
@@ -40,4 +41,8 @@ export async function getAllActivitiesByItem(
   itemId: string,
 ): Promise<IActivity[]> {
   return db.getAllFromIndex(dbOS.activity, dbIndex.activityItemIdIndex, itemId);
+}
+
+export async function getAllBuyActivities(db: IDBPDatabase): Promise<IActivity[]> {
+  return db.getAllFromIndex(dbOS.activity, dbIndex.activityTypeIndex, ActivityType.BUY);
 }

@@ -29,16 +29,16 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <ClientProvider>
       <AuthProvider user={user}>
-        {/* <IndexedDBProvider> */}
-        <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
-          <body>
-            <Header />
-            {children}
-            <Footer />
-            <ModalFeedback />
-          </body>
-        </html>
-        {/* </IndexedDBProvider> */}
+        <IndexedDBProvider>
+          <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
+            <body>
+              <Header />
+              {children}
+              <Footer />
+              <ModalFeedback />
+            </body>
+          </html>
+        </IndexedDBProvider>
       </AuthProvider>
     </ClientProvider>
   );

@@ -1,4 +1,5 @@
 //THIRD PARTY MODULES
+import Decimal from 'decimal.js';
 import { IDBPDatabase } from 'idb';
 import { MarketStatus } from '_@rpc/drizzle/enum';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
@@ -13,8 +14,8 @@ import {
 //RELATIVE MODULES
 import { getItemById } from './item';
 import { getTokenByAddress } from './token';
-import { getAllActivitiesByItem } from './activity';
 import { getCollectionByContract } from './collection';
+import { getAllActivitiesByItem, getAllBuyActivities } from './activity';
 export async function addMarket(db: IDBPDatabase, data: IMarketData) {
   try {
     await db.add(dbOS.market, data);
@@ -128,4 +129,34 @@ export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: nu
     activities,
     collection,
   };
+}
+
+export async function getBestSeller(db: IDBPDatabase) {
+  const activities = await getAllBuyActivities(db);
+  const sellers: { [key: string]: number } = activities.reduce(
+    (sellers: { [key: string]: number }, activity) => {
+      const { toAddress, price, quantity } = activity;
+      const totalPrice = new Decimal(price).mul(quantity).toNumber();
+
+      // eslint-disable-next-line no-prototype-builtins
+      if (!sellers.hasOwnProperty(toAddress)) {
+        sellers[toAddress] = totalPrice;
+      } else {
+        sellers[toAddress] += totalPrice;
+      }
+
+      return sellers;
+    },
+    {},
+  );
+  return Object.keys(sellers)
+    .map((seller) => {
+      return {
+        seller: seller,
+        volume: sellers[seller],
+      };
+    })
+    .sort((a, b) => {
+      return b.volume - a.volume;
+    });
 }
