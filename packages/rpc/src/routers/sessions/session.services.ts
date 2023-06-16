@@ -64,7 +64,16 @@ export const listSession = async (token: string) => {
   const [_, claim] = magicAdmin.token.decode(token);
   const nowSeconds = Math.ceil(new Date().getTime() / 1000);
   const queryResult = await db
-    .select()
+    .select({
+      iss: session.iss,
+      createdAt: session.createdAt,
+      ext: session.ext,
+      userAgent: session.userAgent,
+      ipAddress: session.ipAddress,
+      origin: session.origin,
+      id: session.id,
+      location: session.location,
+    })
     .from(session)
     .where(eq(session.iss, claim.iss))
     .where(gt(session.ext, nowSeconds))
