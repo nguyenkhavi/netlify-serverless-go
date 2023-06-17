@@ -29,7 +29,7 @@ export function ProfileInfoDetail() {
           <MobilePhoneIcon className="mr-1.25" /> {phone}
         </p>
         <p className="text-gradient-pr mt-2.5 flex items-center">
-          <MailIcon className="mr-1.25" /> {user?.profile.email}
+          <MailIcon className="mr-1.25" color="default" /> {user?.profile.email}
         </p>
       </div>
       <div className={classcat([boxClasses, 'col-start-1 row-start-2'])}>

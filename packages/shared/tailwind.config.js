@@ -50,6 +50,8 @@ module.exports = {
         'banner-bg': "url('/images/marketplace/banner-bg.png')",
         'main-gradient':
           'linear-gradient(270deg, #3edeb5 2.7%, #47deb8 18.27%,#61dfbe 45.51%, #8ae0c9 78.59%, #a7e1d1 99.03%)',
+        'icon-gradient':
+          'linear-gradient(90deg, #3EDEB5 0%, #47DEB8 15.99%, #61DFBE 43.97%, #8AE0C9 77.95%, #A7E1D1 98.94%)',
       },
       keyframes: {
         'slide-left': {
