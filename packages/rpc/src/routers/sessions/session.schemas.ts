@@ -24,6 +24,11 @@ export const postSignupSchema = z.object({
 });
 export type PostSignUpInput = z.infer<typeof postSignupSchema>;
 
+export const signInSchema = z.object({
+  didToken: z.string(),
+});
+export type SignInInput = z.infer<typeof signInSchema>;
+
 export const validateLoginSchema = z.object({
   phone: ZPhoneSchema,
 });

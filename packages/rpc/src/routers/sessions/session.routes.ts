@@ -3,6 +3,7 @@ import { paginationSchema } from '_@rpc/config/schemas';
 import {
   postSignupSchema,
   revokeTokenSchema,
+  signInSchema,
   signupSchema,
   validateLoginSchema,
 } from '_@rpc/routers/sessions/session.schemas';
@@ -11,7 +12,6 @@ import {
   listSession,
   postSignUp,
   revokeAllToken,
-  revokeToken,
   signUp,
   userLogin,
   userLogout,
@@ -19,18 +19,18 @@ import {
 } from '_@rpc/routers/sessions/session.services';
 
 export const sessionRouter = router({
-  login: protectedRouter.mutation(async ({ ctx }) => {
-    return userLogin(ctx.token, ctx.requestClient);
+  login: publicProcedure.input(signInSchema).mutation(async ({ ctx, input }) => {
+    return userLogin(input.didToken, ctx.requestClient);
   }),
   logout: protectedRouter.mutation(async ({ ctx }) => {
     return userLogout(ctx.token);
   }),
   listSession: protectedRouter.query(async ({ ctx }) => {
-    return listSession(ctx.token);
+    return listSession(ctx.profile.userId);
   }),
-  revokeSession: protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx, input }) => {
-    return revokeToken(ctx.token, input);
-  }),
+  // revokeSession: protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx, input }) => {
+  //   return revokeToken(ctx.token, input);
+  // }),
   revokeAllSession: protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx }) => {
     return revokeAllToken(ctx.metadata);
   }),

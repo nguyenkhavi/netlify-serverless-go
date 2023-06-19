@@ -47,18 +47,19 @@ export const useAuthStoreAction = () => {
       if (!magicClient) return;
       const found = await validateLoginFn(input);
       if (found) {
-        await magicClient.auth.loginWithSMS({
+        const didToken = await magicClient.auth.loginWithSMS({
           phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
         });
-        const newDidToken = await magicClient.user.getIdToken({
-          lifespan: 60 * 60 * 24 * 365, // 1 year
-        });
 
-        cookieHandler.set('session', newDidToken || '');
-        await loginFn();
-        const user = await refetch();
-        setUser(user.data);
-        router.push('/profile');
+        if (didToken) {
+          const resp = await loginFn({
+            didToken,
+          });
+          cookieHandler.set('session', resp.accessToken || '');
+          const user = await refetch();
+          setUser(user.data);
+          router.push('/profile');
+        }
       }
     } catch (error: any) {
       console.log(`handleLogin error: ${error.message}`);
@@ -69,25 +70,19 @@ export const useAuthStoreAction = () => {
     try {
       if (!magicClient) return;
       const requestId = await signUpFn(input);
-      await magicClient.auth.loginWithSMS({
+      const didToken = await magicClient.auth.loginWithSMS({
         phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
       });
 
-      const newDidToken = await magicClient.user.getIdToken({
-        lifespan: 60 * 60 * 24 * 365, // 1 year
-      });
-
-      cookieHandler.set('session', newDidToken || '');
-
-      if (newDidToken) {
-        cookieHandler.set('session', newDidToken || '');
+      if (didToken) {
         const postRes = await postSignUpFn({
-          didToken: newDidToken,
+          didToken,
           requestId,
         });
         if (postRes) {
           const user = await refetch();
           setUser(user.data);
+          cookieHandler.set('session', postRes.accessToken || '');
           router.push('/profile');
         }
       }

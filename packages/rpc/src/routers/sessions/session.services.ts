@@ -1,6 +1,6 @@
 import { magicAdmin } from '_@rpc/services/magic.link';
 import { db, session, userActivityTable, userProfileTable } from '_@rpc/services/drizzle';
-import { and, eq, gt, isNotNull, or, sql } from 'drizzle-orm';
+import { and, eq, isNotNull, or, sql } from 'drizzle-orm';
 import { RequestClient } from '_@rpc/config';
 import {
   PostSignUpInput,
@@ -14,9 +14,14 @@ import { TPaginationInput } from '_@rpc/config/schemas';
 import { Profile } from '_@rpc/drizzle/userProfile';
 import { getLocationDetail } from '_@rpc/services/ip2location/ip2location';
 import { MagicUserMetadata } from '@magic-sdk/admin';
+import { generateAccessToken } from '_@rpc/services/jwt';
 
-export const userLogin = async (token: string, requestClient: RequestClient) => {
-  const [_, claim] = magicAdmin.token.decode(token);
+export const userLogin = async (didToken: string, requestClient: RequestClient) => {
+  magicAdmin.token.validate(didToken);
+  const metadata = await magicAdmin.users.getMetadataByToken(didToken);
+
+  const userId = metadata.issuer as string;
+
   const ip = requestClient.ipAddress;
   let location = '';
   if (ip) {
@@ -25,14 +30,15 @@ export const userLogin = async (token: string, requestClient: RequestClient) => 
       location = locationDetail.city;
     }
   }
+  const { accessToken, ext } = generateAccessToken({ userId });
 
   await db.transaction(async (ctx) => {
     await ctx
       .insert(session)
       .values({
-        ext: claim.ext,
-        iss: claim.iss,
-        token,
+        ext,
+        iss: userId,
+        token: accessToken,
         ipAddress: ip,
         origin: requestClient.origin,
         userAgent: requestClient.userAgent.browser.name,
@@ -42,7 +48,7 @@ export const userLogin = async (token: string, requestClient: RequestClient) => 
     await ctx
       .insert(userActivityTable)
       .values({
-        userId: claim.iss,
+        userId: userId,
         ipAddress: requestClient.ipAddress,
         browser: requestClient.userAgent.browser.name,
         action: ActivityAction.LOG_IN,
@@ -51,18 +57,15 @@ export const userLogin = async (token: string, requestClient: RequestClient) => 
       .execute();
   });
 
-  return true;
+  return { accessToken };
 };
 
 export const userLogout = async (token: string) => {
-  await magicAdmin.users.logoutByToken(token);
   await db.delete(session).where(eq(session.token, token)).execute();
   return true;
 };
 
-export const listSession = async (token: string) => {
-  const [_, claim] = magicAdmin.token.decode(token);
-  const nowSeconds = Math.ceil(new Date().getTime() / 1000);
+export const listSession = async (userId: string) => {
   const queryResult = await db
     .select({
       iss: session.iss,
@@ -75,8 +78,7 @@ export const listSession = async (token: string) => {
       location: session.location,
     })
     .from(session)
-    .where(eq(session.iss, claim.iss))
-    .where(gt(session.ext, nowSeconds))
+    .where(eq(session.iss, userId))
     .execute();
   return queryResult;
 };
@@ -100,9 +102,9 @@ export const revokeToken = async (token: string, { sessionId }: RevokeTokenInput
 
 export const revokeAllToken = async (metadata: MagicUserMetadata) => {
   const userId = metadata.issuer;
+  const nowSeconds = Math.floor(new Date().getTime() / 1000);
   if (userId) {
-    await magicAdmin.users.logoutByIssuer(userId);
-    await db.delete(session).where(eq(session.iss, userId)).execute();
+    await db.update(session).set({ ext: nowSeconds }).where(eq(session.iss, userId)).execute();
   }
   return true;
 };
@@ -148,6 +150,7 @@ export const signUp = async (input: SignUpInput) => {
 };
 
 export const postSignUp = async (input: PostSignUpInput, requestClient: RequestClient) => {
+  magicAdmin.token.validate(input.didToken);
   const profiles = await db
     .select()
     .from(userProfileTable)
@@ -158,6 +161,8 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
     throw new TRPCError({ code: 'BAD_REQUEST' });
   }
   const [_, claim] = magicAdmin.token.decode(input.didToken);
+  const { accessToken, ext } = generateAccessToken({ userId: claim.iss });
+
   const wallet = magicAdmin.token.getPublicAddress(input.didToken);
   await db.transaction(async (ctx) => {
     const ip = requestClient.ipAddress;
@@ -175,9 +180,9 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
     await ctx
       .insert(session)
       .values({
-        ext: claim.ext,
+        ext,
         iss: claim.iss,
-        token: input.didToken,
+        token: accessToken,
         ipAddress: requestClient.ipAddress,
         origin: requestClient.origin,
         userAgent: requestClient.userAgent.browser.name,
@@ -195,7 +200,7 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
       })
       .execute();
   });
-  return true;
+  return { accessToken };
 };
 
 export const validateLogin = async (input: ValidateLoginInput) => {

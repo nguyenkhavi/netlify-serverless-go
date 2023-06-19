@@ -1,7 +1,7 @@
 import { initTRPC } from '@trpc/server';
 
-import { authenticateRequest } from '_@rpc/services/magic.link';
 import { Context } from '_@rpc/config/context';
+import { authenticateRequest } from '_@rpc/services';
 
 const t = initTRPC.context<Context>().create({
   errorFormatter({ shape }) {

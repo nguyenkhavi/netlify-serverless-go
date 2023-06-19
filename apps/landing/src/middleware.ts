@@ -1,5 +1,6 @@
 //THIRD PARTY MODULES
 import { Magic } from '@magic-sdk/admin';
+import { verifyAccessToken } from '_@rpc/services/jwt';
 //HOOK
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -43,8 +44,6 @@ export const config = {
 const validate = async (session: string) => {
   try {
     if (!session) return { status: false, code: 'SESSION_NOT_FOUND' } as const;
-    const mAdmin = new Magic(process.env.MAGIC_SECRET_KEY);
-    await mAdmin.token.validate(session);
     return { status: true } as const;
   } catch (e: any) {
     return {

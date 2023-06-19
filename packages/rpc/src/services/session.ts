@@ -1,33 +1,39 @@
 import { TRPCError } from '@trpc/server';
-import { redisClient } from './redis';
-import jwtDecode from 'jwt-decode';
-export const pushSessionToWhiteList = (sessionId: string, userId: string, expiredAt: number) => {
-  const now = new Date().getTime();
-  const EX = Math.floor((expiredAt - now) / 1000);
-  return redisClient.set(sessionId, userId, {
-    EX,
-  });
-};
+import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
+import { TProfile, userProfileTable } from '_@rpc/drizzle/userProfile';
 
-export const removeSessionFromWhiteList = (sessionId: string) => {
-  return redisClient.del(sessionId);
-};
+import { db } from '_@rpc/services/drizzle';
+import { verifyAccessToken } from '_@rpc/services/jwt';
+import { magicAdmin } from '_@rpc/services/magic.link';
+import { eq } from 'drizzle-orm';
 
-export const isInWhiteList = (sessionId: string) => {
-  return redisClient.get(sessionId);
-};
-type TDecoded = {
-  azp: string;
-  exp: number;
-  iat: number;
-  iss: string;
-  nbf: string;
-  sid: string;
-  sub: string;
-};
-export const decodeToken = (token?: string) => {
-  if (!token) {
+export const authenticateRequest = async (req: FetchCreateContextFnOptions['req']) => {
+  const authorization = req.headers.get('authorization');
+  if (!authorization) {
     throw new TRPCError({ code: 'UNAUTHORIZED' });
   }
-  return jwtDecode(token) as TDecoded;
+  try {
+    const token = magicAdmin.utils.parseAuthorizationHeader(authorization);
+    const userId = await verifyAccessToken(token);
+    const metadata = await magicAdmin.users.getMetadataByIssuer(userId);
+    if (!metadata.issuer) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+    const profiles = await db
+      .select()
+      .from(userProfileTable)
+      .where(eq(userProfileTable.userId, metadata.issuer))
+      .limit(1)
+      .execute();
+    if (!profiles.length) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+    return {
+      metadata,
+      token,
+      profile: profiles[0] as TProfile,
+    };
+  } catch (e) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
+  }
 };
