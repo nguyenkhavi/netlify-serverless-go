@@ -5,7 +5,7 @@ const sharedConfig = require('../../packages/shared/tailwind.config');
 module.exports = {
   ...sharedConfig,
   content: [
-    join(__dirname, '{src,pages,components}/**/*!(*.stories|*.spec).{ts,tsx,html}'),
-    join(__dirname, '../../packages/shared/src/**/*!(*.stories|*.spec).{ts,tsx,html}'),
+    join(__dirname, 'src/**/*!(*.stories|*.spec).tsx'),
+    join(__dirname, '../../packages/shared/src/**/*!(*.stories|*.spec).tsx'),
   ],
 };

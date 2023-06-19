@@ -59,7 +59,7 @@
     "libphonenumber-js": "^1.10.36",
     "magic-sdk": "^17.3.0",
     "nanoid": "^4.0.2",
-    "next": "13.4.3",
+    "next": "13.4.6",
     "next-auth": "^4.21.0",
     "nx": "16.3.2",
     "persona": "4.8.0-alpha",
