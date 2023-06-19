@@ -98,6 +98,7 @@ export default function SignIn() {
           phoneNumber: data.phone.phoneNumber,
         },
         gender: data.gender as any,
+        reCaptchaToken: data.recaptcha,
       });
     } finally {
       setIsLoading(false);

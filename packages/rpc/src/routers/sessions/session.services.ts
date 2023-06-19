@@ -15,6 +15,7 @@ import { Profile } from '_@rpc/drizzle/userProfile';
 import { getLocationDetail } from '_@rpc/services/ip2location/ip2location';
 import { MagicUserMetadata } from '@magic-sdk/admin';
 import { generateAccessToken } from '_@rpc/services/jwt';
+import { verifyReCapchaToken } from '_@rpc/services/re-captcha';
 
 export const userLogin = async (didToken: string, requestClient: RequestClient) => {
   magicAdmin.token.validate(didToken);
@@ -110,8 +111,14 @@ export const revokeAllToken = async (metadata: MagicUserMetadata) => {
 };
 
 export const signUp = async (input: SignUpInput) => {
-  const { email, phone, username, lastName, firstName, dob, gender } = input;
+  const { email, phone, username, lastName, firstName, dob, gender, reCaptchaToken } = input;
   const { phoneCode, phoneNumber } = phone;
+  const reCapchaValid = await verifyReCapchaToken(reCaptchaToken);
+  console.log({ reCapchaValid });
+  if (!reCapchaValid) {
+    throw new TRPCError({ code: 'BAD_REQUEST', message: 'ReCapcha token is invalid!' });
+  }
+
   const conflictUser = await db
     .select()
     .from(userProfileTable)

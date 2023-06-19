@@ -15,6 +15,7 @@ export const signupSchema = z.object({
   phone: ZPhoneSchema,
   dob: z.string().datetime(),
   gender: z.nativeEnum(Gender),
+  reCaptchaToken: z.string(),
 });
 export type SignUpInput = z.infer<typeof signupSchema>;
 
