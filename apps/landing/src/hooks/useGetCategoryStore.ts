@@ -10,12 +10,15 @@ export default function useGetCategoryStore() {
 
   const { db } = useIndexedDBContext();
   const _handleFetchData = useCallback(async () => {
+    console.log('----useGetCategoryStore----', db);
     if (db === null) return;
     getAllCategories(db)
       .then((res) => {
+        console.log('-----res category store-----', res);
         setCategory(res);
       })
-      .catch((_) => {
+      .catch((error) => {
+        console.error('-----res category store error-----', error);
         setCategory([]);
       })
       .finally(() => setLoading(false));
