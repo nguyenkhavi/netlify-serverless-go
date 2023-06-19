@@ -5,7 +5,7 @@ import { nextApi } from '_@landing/utils/api';
 import Button from '_@shared/components/Button';
 import Switch from '_@shared/components/conditions/Switch';
 //SHARED
-import UserIcon from '_@shared/icons/UserICon';
+import UserIcon from '_@shared/icons/UserIcon';
 import CheckIcon from '_@shared/icons/CheckIcon';
 import StoreIcon from '_@shared/icons/StoreIcon';
 
