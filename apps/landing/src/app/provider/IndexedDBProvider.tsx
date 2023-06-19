@@ -125,7 +125,7 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
           insertSeedCategoryData(db);
           insertSeedTokenData(db);
         }
-        startEventListener(db);
+        // startEventListener(db);
 
         // Open a transaction on the object store
         setDB(db);

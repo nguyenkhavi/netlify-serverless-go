@@ -62,7 +62,16 @@ export default function SignIn() {
       gender: Gender.MALE,
     },
   });
-  const { handleSubmit, watch, setValue } = methods;
+  const {
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = methods;
+
+  console.log({
+    errors,
+  });
 
   const month = watch('birthday.month');
   const year = watch('birthday.year');
@@ -205,7 +214,7 @@ export default function SignIn() {
                   }
                 />
 
-                <Button isLoading={isLoading} type="submit" className="btnlg mx-auto">
+                <Button isLoading={isLoading} type="submit" className="btnxlg mx-auto">
                   Get Started
                 </Button>
               </div>

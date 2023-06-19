@@ -87,7 +87,7 @@ export default function SignIn() {
                 <Button
                   isLoading={isLoading}
                   type="submit"
-                  className="btnlg mx-auto ow:w-62 md:ow:w-full"
+                  className="btnxlg mx-auto ow:w-62 md:ow:w-full"
                 >
                   Get Started
                 </Button>
