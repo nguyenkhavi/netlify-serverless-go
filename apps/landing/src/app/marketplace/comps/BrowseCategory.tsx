@@ -17,8 +17,6 @@ export default function BrowseCategory() {
     return params.id;
   }, [params.id]);
 
-  console.log('------Category in BrowseCategory------', category);
-
   return (
     <div
       className={classcat(['bg-secondary-300 p-6', 'rounded-[15px] border-[.5px] border-text-20'])}
