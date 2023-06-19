@@ -31,7 +31,7 @@ function ItemInfoCard({ data }: Props) {
             <Button
               className={classcat([
                 'btnmd w-max border-none bg-secondary-300 ow:rounded-[theme(spacing.5)]',
-                'ow:h-9 ow:w-20 [&>svg]:h-4 [&>svg]:w-4',
+                'ow:h-9 ow:w-fit ow:px-4.5 [&>svg]:h-4 [&>svg]:w-4',
               ])}
               leadingIcon={<ImageArtIcon />}
             >

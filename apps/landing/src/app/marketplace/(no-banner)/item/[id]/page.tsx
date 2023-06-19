@@ -35,14 +35,9 @@ const Page = () => {
   const { user } = useAuthStore();
 
   const _callData = useCallback(() => {
-    if (!db) {
-      setState((prev) => ({ ...prev, loading: false }));
-      return;
-    }
+    if (!db) return;
     getMarketDetailByListingId(db, parseFloat(id))
-      .then((marketDetail) => {
-        setState((prev) => ({ ...prev, data: marketDetail }));
-      })
+      .then((marketDetail) => setState((prev) => ({ ...prev, data: marketDetail })))
       .catch((error) => {
         console.log(error);
       })
