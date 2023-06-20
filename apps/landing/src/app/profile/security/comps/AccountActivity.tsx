@@ -61,8 +61,7 @@ const currentCol = columnHelper.accessor((row) => row['createdAt'], {
   header: () => <p className="text-center">Current</p>,
   cell: (cell) => {
     const value = cell.getValue() || '';
-    const timeZone = getTimeZone();
-    const time = dayjs(value).subtract(timeZone, 'hour').fromNow();
+    const time = dayjs(value).fromNow();
     return <p className="text-center">{time}</p>;
   },
 });
