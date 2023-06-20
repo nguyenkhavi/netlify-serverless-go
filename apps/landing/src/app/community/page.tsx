@@ -2,7 +2,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import 'react-activity-feed/dist/index.css';
-import { Avatar } from 'react-activity-feed';
+import { Avatar, EmojiPicker } from 'react-activity-feed';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
@@ -107,8 +107,17 @@ export default function CommunityPage() {
               <button className="mr-[15px]">
                 <ImageArtIcon className="h-[15px] w-[15px]" />
               </button>
-              <button>
+              <button className="relative">
                 <SmileFaceIcon className="h-[15px] w-[15px]" />
+                <div className="absolute left-0 top-0 h-[15px] w-[15px]">
+                  <EmojiPicker
+                    className="[&>div:last-of-type]:opacity-0"
+                    onSelect={(emoji) => {
+                      const emojiValue = emoji.native;
+                      if (inputRef.current) inputRef.current.value += emojiValue;
+                    }}
+                  />
+                </div>
               </button>
             </div>
             <Button className={classcat(['btnsm ml-auto w-max'])} onClick={_handleCreatePost}>

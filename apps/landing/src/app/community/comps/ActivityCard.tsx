@@ -1,8 +1,8 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useState } from 'react';
-import { Avatar } from 'react-activity-feed';
 import React, { useCallback, useEffect } from 'react';
+import { Avatar, EmojiPicker } from 'react-activity-feed';
 import { FlatActivity, EnrichedUser, EnrichedReaction } from 'getstream';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
@@ -157,8 +157,17 @@ function Comment({ activityId }: { activityId: string }) {
           <button className="mr-[15px]">
             <ImageArtIcon className="h-[15px] w-[15px]" />
           </button>
-          <button>
+          <button className="relative" type="button">
             <SmileFaceIcon className="h-[15px] w-[15px]" />
+            <div className="absolute left-0 top-0 h-[15px] w-[15px]">
+              <EmojiPicker
+                className="[&>div:last-of-type]:opacity-0"
+                onSelect={(emoji) => {
+                  const emojiValue = emoji.native;
+                  if (inputRef.current) inputRef.current.value += emojiValue;
+                }}
+              />
+            </div>
           </button>
         </div>
         <Button className={classcat(['btnsm mr-auto w-max'])} onClick={handleComment}>
