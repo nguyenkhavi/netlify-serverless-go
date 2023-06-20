@@ -16,7 +16,10 @@
         "name": "next"
       }
     ],
-    "types": ["jest", "node"]
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "exclude": [
     "node_modules",
@@ -30,6 +33,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "next-env.d.ts",
-    "../../apps/landing/.next/types/**/*.ts"
+    "../../apps/landing/.next/types/**/*.ts",
+    "../../dist/apps/landing/.next/types/**/*.ts"
   ]
 }
