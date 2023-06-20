@@ -73,21 +73,27 @@ export async function getMarketEvents(sdk: ThirdwebSDK, db: IDBPDatabase, chain:
   const totalPage = Math.ceil((lastBlock - currentBlock) / blockRange);
 
   for (let currentPage = 0; currentPage < totalPage; currentPage++) {
-    const fromBlock = currentBlock + 1 + currentPage * blockRange;
-    const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
-    /// GENESIS BLOCK
-    const events = await marketContract.events.getAllEvents({ fromBlock, toBlock, order: 'asc' });
+    try {
+      const fromBlock = currentBlock + 1 + currentPage * blockRange;
+      const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
+      /// GENESIS BLOCK
+      const events = await marketContract.events.getAllEvents({ fromBlock, toBlock, order: 'asc' });
 
-    events.map((event) => {
-      if (event.eventName === ContractEventNames.newListing)
-        handleListing(sdk, db, chain, event as ContractEvent<INewListingEventData>);
-      else if (event.eventName === ContractEventNames.newSale)
-        handleBuy(sdk, db, chain, event as ContractEvent<INewBuyEventData>);
-      else if (event.eventName === ContractEventNames.cancelledListing)
-        handleCancelListing(sdk, db, chain, event as ContractEvent<ICancelListingEventData>);
-    });
+      await Promise.all(
+        events.map((event) => {
+          if (event.eventName === ContractEventNames.newListing)
+            handleListing(sdk, db, chain, event as ContractEvent<INewListingEventData>);
+          else if (event.eventName === ContractEventNames.newSale)
+            handleBuy(sdk, db, chain, event as ContractEvent<INewBuyEventData>);
+          else if (event.eventName === ContractEventNames.cancelledListing)
+            handleCancelListing(sdk, db, chain, event as ContractEvent<ICancelListingEventData>);
+        }),
+      );
 
-    updateLastBlock(db, ListenerService.Market, toBlock, chain.chainId);
+      updateLastBlock(db, ListenerService.Market, toBlock, chain.chainId);
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 
@@ -111,27 +117,33 @@ export async function getFactoryEvents(sdk: ThirdwebSDK, db: IDBPDatabase<unknow
   console.log('Factory', { currentBlock, lastBlock, totalPage }, new Date());
 
   for (let currentPage = 0; currentPage < totalPage; currentPage++) {
-    const fromBlock = currentBlock + 1 + currentPage * blockRange;
-    const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
+    try {
+      const fromBlock = currentBlock + 1 + currentPage * blockRange;
+      const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
 
-    /// GENESIS BLOCK
-    const events = await factoryContract.events.getEvents<INewProxyDeployed>('ProxyDeployed', {
-      fromBlock: fromBlock,
-      toBlock: toBlock,
-      filters: { implementation: chain.nftImplementation },
-      order: 'asc',
-    });
+      /// GENESIS BLOCK
+      const events = await factoryContract.events.getEvents<INewProxyDeployed>('ProxyDeployed', {
+        fromBlock: fromBlock,
+        toBlock: toBlock,
+        filters: { implementation: chain.nftImplementation },
+        order: 'asc',
+      });
 
-    events.map(async (event) => {
-      const collectionContract = await sdk.getContract(event.data.proxy, 'nft-collection');
-      const metadata: IMetadata = await collectionContract.app.metadata.get();
-      const appURI = await parseJson(metadata.app_uri);
-      // if (!appURI || !appURI.app || appURI.app !== 'Fleamint') return;
-      handleNewCollections(sdk, metadata, appURI, collectionContract, chain, db, event);
-      getAllNFTsOwners(db, collectionContract, appURI, event.data.proxy, chain);
-    });
+      await Promise.all(
+        events.map(async (event) => {
+          const collectionContract = await sdk.getContract(event.data.proxy, 'nft-collection');
+          const metadata: IMetadata = await collectionContract.app.metadata.get();
+          const appURI = await parseJson(metadata.app_uri);
+          // if (!appURI || !appURI.app || appURI.app !== 'Fleamint') return;
+          handleNewCollections(sdk, metadata, appURI, collectionContract, chain, db, event);
+          getAllNFTsOwners(db, collectionContract, appURI, event.data.proxy, chain);
+        }),
+      );
 
-    updateLastBlock(db, ListenerService.Factory, toBlock, chain.chainId);
+      updateLastBlock(db, ListenerService.Factory, toBlock, chain.chainId);
+    } catch (e) {
+      console.log('get factory error', { currentPage, currentBlock, lastBlock, totalPage }, e);
+    }
   }
 }
 
@@ -167,46 +179,52 @@ export async function getCollectionsEvents(
   //Main
   const provider = await sdk.getProvider();
   for (let currentPage = 0; currentPage < totalPage; currentPage++) {
-    const fromBlock = currentBlock + 1 + currentPage * blockRange;
-    const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
+    try {
+      const fromBlock = currentBlock + 1 + currentPage * blockRange;
+      const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
 
-    const iface = new ethers.utils.Interface(NFTABI);
+      const iface = new ethers.utils.Interface(NFTABI);
 
-    const logList = await provider.getLogs({
-      fromBlock: fromBlock,
-      toBlock: toBlock,
-      topics: [
-        '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef', // Transfer
-      ],
-    });
-
-    const transferEvents = logList
-      .filter((log) => collections.some((collection) => collection.address === log.address))
-      .map((log) => {
-        const data = iface.parseLog(log);
-        return {
-          eventName: 'Transfer',
-          transaction: log,
-          data: data.args,
-        } as unknown as ContractEvent<ITransferEventData>;
+      const logList = await provider.getLogs({
+        fromBlock: fromBlock,
+        toBlock: toBlock,
+        topics: [
+          '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef', // Transfer
+        ],
       });
 
-    transferEvents.map((event) => handleTransferItem(db, sdk, chain, event));
+      const transferEvents = logList
+        .filter((log) => collections.some((collection) => collection.address === log.address))
+        .map((log) => {
+          const data = iface.parseLog(log);
+          return {
+            eventName: 'Transfer',
+            transaction: log,
+            data: data.args,
+          } as unknown as ContractEvent<ITransferEventData>;
+        });
 
-    updateLastBlock(db, ListenerService.Collection, toBlock, chain.chainId);
+      await Promise.all(transferEvents.map((event) => handleTransferItem(db, sdk, chain, event)));
 
-    collections.map(async (collection) => {
-      const contract = await sdk.getContract(collection.address, NFTABI);
-      contract.events.addEventListener<ITransferEventData>('Transfer', async (event) => {
-        handleTransferItem(db, sdk, chain, event);
-        updateLastBlock(
-          db,
-          ListenerService.Collection,
-          event.transaction.blockNumber,
-          chain.chainId,
-        );
-      });
-    });
+      updateLastBlock(db, ListenerService.Collection, toBlock, chain.chainId);
+
+      await Promise.all(
+        collections.map(async (collection) => {
+          const contract = await sdk.getContract(collection.address, NFTABI);
+          contract.events.addEventListener<ITransferEventData>('Transfer', async (event) => {
+            handleTransferItem(db, sdk, chain, event);
+            updateLastBlock(
+              db,
+              ListenerService.Collection,
+              event.transaction.blockNumber,
+              chain.chainId,
+            );
+          });
+        }),
+      );
+    } catch (e) {
+      console.log('get collection error', e);
+    }
   }
 }
 
@@ -224,39 +242,43 @@ export async function getAllNFTsOwners(
   const itemPerPage = 50;
   const totalPage = Math.ceil(total / itemPerPage);
   for (let currentPage = 0; currentPage < totalPage; currentPage++) {
-    const nftOwners = await collectionContract.erc721.getAll({
-      start: currentPage * itemPerPage,
-      count: itemPerPage,
-    });
-
-    nftOwners.map(async (nft) => {
-      const data = {
-        address: address,
-        tokenId: Number(nft.metadata.id),
-        chain: chain.chainId,
-        owner: nft.owner,
-        category: appURI?.category || 1,
-        name: nft.metadata.name as string,
-        type: NFTType.ERC721,
-        metadata: nft.metadata as unknown as IMetadataNFT,
-        // id = address_tokenId, for getByIndex
-        id: address + '_' + nft.metadata.id,
-      };
-
-      const item = await getItemById(db, address + '_' + nft.metadata.id);
-      if (!item) return addItem(db, data);
-
-      /// check market available?
-      const market = await getAllRawMarketsByItem(db, address + '_' + nft.metadata.id);
-
-      market.forEach(async (mk) => {
-        const marketStatus = await getMarketStatusByListingId(db, mk.listingId);
-        if (marketStatus.isAvailable !== 1) return;
-
-        updateMarket(db, { listingId: mk.listingId, isAvailable: 0, isBought: 0, isCanceled: 1 });
+    try {
+      const nftOwners = await collectionContract.erc721.getAll({
+        start: currentPage * itemPerPage,
+        count: itemPerPage,
       });
 
-      updateItem(db, data);
-    });
+      nftOwners.map(async (nft) => {
+        const data = {
+          address: address,
+          tokenId: Number(nft.metadata.id),
+          chain: chain.chainId,
+          owner: nft.owner,
+          category: appURI?.category || 1,
+          name: nft.metadata.name as string,
+          type: NFTType.ERC721,
+          metadata: nft.metadata as unknown as IMetadataNFT,
+          // id = address_tokenId, for getByIndex
+          id: address + '_' + nft.metadata.id,
+        };
+
+        const item = await getItemById(db, address + '_' + nft.metadata.id);
+        if (!item) return addItem(db, data);
+
+        /// check market available?
+        const market = await getAllRawMarketsByItem(db, address + '_' + nft.metadata.id);
+
+        market.forEach(async (mk) => {
+          const marketStatus = await getMarketStatusByListingId(db, mk.listingId);
+          if (marketStatus.isAvailable !== 1) return;
+
+          updateMarket(db, { listingId: mk.listingId, isAvailable: 0, isBought: 0, isCanceled: 1 });
+        });
+
+        updateItem(db, data);
+      });
+    } catch (e) {
+      console.log('get all nfts error', e);
+    }
   }
 }
