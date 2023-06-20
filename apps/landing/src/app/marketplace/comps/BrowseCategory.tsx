@@ -3,13 +3,13 @@ import Link from 'next/link';
 import classcat from 'classcat';
 import { useMemo } from 'react';
 import { useParams } from 'next/navigation';
-import { categoryStore } from '_@landing/stores/categoryStore';
+import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import { SkeLine } from '_@landing/components/skeleton/skeleton';
 
 export default function BrowseCategory() {
-  const { category, isLoading } = categoryStore();
+  const { category } = useIndexedDBContext();
   const params = useParams();
 
   const categoryId = useMemo(() => {
@@ -23,13 +23,13 @@ export default function BrowseCategory() {
     >
       <h3 className="mb-8 text-h5 text-text-100">Browse Categories</h3>
       <div className="grid gap-4">
-        <Show when={isLoading}>
+        <Show when={category.loading}>
           <SkeLine />
           <SkeLine />
           <SkeLine />
           <SkeLine />
         </Show>
-        <Show when={!isLoading}>
+        <Show when={!category.loading}>
           <Link
             className={classcat([
               'text-body2 hover:text-gradient-pr',
@@ -39,7 +39,7 @@ export default function BrowseCategory() {
           >
             All
           </Link>
-          {category.map((category, i) => (
+          {category.data.map((category, i) => (
             <Link
               className={classcat([
                 'text-body2 hover:text-gradient-pr',

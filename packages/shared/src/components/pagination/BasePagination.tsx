@@ -15,9 +15,8 @@ export interface IBasePaginationProps {
 
 const disableClasses = 'ow:cursor-not-allowed text-foundation-black-100 pointer-events-none';
 const buttonArrowClasses = [
-  'h-8 w-8 grid place-items-center',
+  'h-6 w-6 grid place-items-center',
   'hover:bg-main-gradient rounded-lg [&>svg]:hover:text-black',
-  'md:w-10 md:h-10',
 ];
 
 export default function BasePagination({ perPage, totalItems, className }: IBasePaginationProps) {
@@ -64,7 +63,9 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
         className,
       ])}
     >
-      <button className={classcat([buttonArrowClasses, currentPage <= 1 ? disableClasses : ''])}>
+      <button
+        className={classcat([buttonArrowClasses, currentPage <= 1 ? disableClasses : '', 'mr-2'])}
+      >
         <ChevronBottomIcon
           className={classcat(['h-3 w-4 rotate-90 cursor-pointer text-primary'])}
           onClick={changePageBy(-1)}
@@ -95,7 +96,11 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
       </div>
 
       <button
-        className={classcat([buttonArrowClasses, currentPage >= totalPage ? disableClasses : ''])}
+        className={classcat([
+          buttonArrowClasses,
+          currentPage >= totalPage ? disableClasses : '',
+          'ml-2',
+        ])}
       >
         <ChevronBottomIcon
           className={classcat(['h-3 w-4 -rotate-90 cursor-pointer text-primary'])}

@@ -1,7 +1,10 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
+import { useMemo } from 'react';
+import { nextApi } from '_@landing/utils/api';
 import { IItemCard } from '_@landing/utils/type';
+import { formatAddress } from '_@landing/utils/format';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
@@ -47,6 +50,16 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
 }
 
 function ListView({ value, ...props }: MainCardProps) {
+  const { data: dataUser } = nextApi.getUserByWallet.useQuery(
+    { wallet: value.item.owner },
+    { enabled: !!value.item },
+  );
+
+  const owner = useMemo(() => {
+    if (dataUser?.length && dataUser[0].username) return dataUser[0].username;
+    return formatAddress(value.item.owner);
+  }, [dataUser, value.item.owner]);
+
   return (
     <div
       className={classcat([
@@ -71,14 +84,14 @@ function ListView({ value, ...props }: MainCardProps) {
         <p className="mt-4 text-body2 md:mt-0 xlg:text-h5-bold">
           {value.item ? value.item.name : ''}
         </p>
-        <p className="mt-1 text-body3 text-text-60">
+        <p className="mt-1 text-body3 text-text-60 dot-para-2">
           {value.item ? value.item.metadata.description : ''}
         </p>
         <div className="mt-1 flex items-center justify-center text-h6 text-text-100 md:justify-start md:text-h5">
           <span>{value.price} </span>
           <span className="ml-1.25 text-subtitle2 text-text-50">{value.price}</span>
         </div>
-        <p className="mt-1 text-subtitle2 text-primary">By {value.item ? value.item.owner : ''}</p>
+        <p className="mt-1 text-subtitle2 text-primary">By {owner}</p>
         <div className="mt-4 flex justify-center md:justify-start">
           <Button className={classcat(['mr-1 h-10 p-0 ow:rounded-lg md:max-w-[9.375rem]'])}>
             Buy now

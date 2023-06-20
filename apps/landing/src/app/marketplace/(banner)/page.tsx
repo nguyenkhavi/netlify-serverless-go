@@ -1,11 +1,11 @@
 'use client';
 //THIRD PARTY MODULES
 import React from 'react';
-import { categoryStore } from '_@landing/stores/categoryStore';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import TopSellers from '_@landing/app/marketplace/comps/TopSellers';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import MarketplaceBox from '_@landing/app/marketplace/comps/MarketplaceBox';
+import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 //RELATIVE MODULES
@@ -13,7 +13,7 @@ import BrowseCategory from '../comps/BrowseCategory';
 import TrendingContent from '../comps/TrendingContent';
 
 export default function Marketplace() {
-  const { category } = categoryStore();
+  const { category } = useIndexedDBContext();
 
   return (
     <MarketplaceBox
@@ -28,7 +28,7 @@ export default function Marketplace() {
       }
     >
       <TopSellers />
-      {category.map((category, index) => (
+      {category.data.map((category, index) => (
         <React.Fragment key={index}>
           <TrendingContent
             title={`Trending in ${category.name}`}

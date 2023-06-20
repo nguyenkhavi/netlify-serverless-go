@@ -1,27 +1,16 @@
 //THIRD PARTY MODULES
 import dayjs from 'dayjs';
 import classcat from 'classcat';
+import { RouterOutputs } from '_@landing/utils/api';
+import { formatFullName } from '_@landing/utils/format';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
 import ShareIcon from '_@shared/icons/ShareIcon';
 
-type InfoCreator = {
-  name: string;
-  image: string;
-  description: string;
-  createdAt?: string;
-  wallet?: {
-    floor: string;
-    volume: string;
-    nfts: string;
-    owners: string;
-  };
-};
-
 type InfoSectionProps = {
-  data: InfoCreator;
+  data: RouterOutputs['myProfile']['profile'] | null;
   isCollection?: boolean;
   contentClasses?: string;
 };
@@ -52,7 +41,7 @@ export default function InfoSection({
               'h-20 w-20 rounded-full border-2 border-solid border-primary',
               'md:h-30.5 md:w-30.5',
             ])}
-            src={data.image}
+            src={data?.avatarUrl || '/images/profile/avatar-default.webp'}
             alt=""
           />
         </div>
@@ -60,15 +49,17 @@ export default function InfoSection({
           <div>
             <h1 className="mb-2 text-h5-bold md:text-h4">
               {!isCollection && '@'}
-              {data.name}
+              {data?.username}
             </h1>
             <p className="max-w-[31.5rem] text-body3 text-text-70 md:text-body1">
-              {data.description}
+              {data?.description || ''}
             </p>
-            <Show when={data.createdAt}>
+            <Show when={data?.createdAt}>
               <p className="mt-6 text-body3 text-text-50 md:mt-4 md:text-body2">
                 Created date:{' '}
-                <span className="text-text-100">{dayjs(data.createdAt).format('MMM D, YYYY')}</span>
+                <span className="text-text-100">
+                  {dayjs(data?.createdAt).format('MMM D, YYYY')}
+                </span>
               </p>
             </Show>
           </div>

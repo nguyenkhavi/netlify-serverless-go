@@ -118,7 +118,7 @@ export const PROFILE_NAV: TProfileNav[] = [
   },
   {
     label: 'My Portfolio',
-    path: '/portfolio',
+    path: '/profile/my-portfolio',
     icon: <FolderIcon className="h-4.75" />,
   },
   {

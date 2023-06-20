@@ -5,7 +5,7 @@ import Link from 'next/link';
 import classcat from 'classcat';
 import { useParams } from 'next/navigation';
 import { useMemo, useRef, useState } from 'react';
-import { categoryStore } from '_@landing/stores/categoryStore';
+import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import SearchInput from '_@shared/components/SearchInput';
@@ -15,7 +15,7 @@ import ChevronBottomIcon from '_@shared/icons/ChevronBottomIcon';
 //RELATIVE MODULES
 
 export default function Search() {
-  const { category } = categoryStore();
+  const { category } = useIndexedDBContext();
   const params = useParams();
   const searchText = useRef<HTMLInputElement>(null);
 
@@ -24,7 +24,7 @@ export default function Search() {
   const [categoryId, label] = useMemo(() => {
     if (!params.id) return ['', ''];
 
-    return [params.id, category.find((item) => item.id.toString() === params.id)?.name];
+    return [params.id, category.data.find((item) => item.id.toString() === params.id)?.name];
   }, [params.id, category]);
 
   const _handleSearch = () => {
@@ -67,7 +67,7 @@ export default function Search() {
             >
               All
             </Link>
-            {category.map((category, i) => (
+            {category.data.map((category, i) => (
               <Link
                 className={classcat([
                   'text-body2 hover:text-primary',

@@ -6,6 +6,7 @@ import { getBestSeller } from '_@landing/services';
 import { IDBPDatabase, deleteDB, openDB } from 'idb';
 import { startEventListener } from '_@landing/listener';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { ICategory, ITopSeller } from '_@landing/utils/type';
 import { insertSeedTokenData } from '_@landing/services/token';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAllCategories, insertSeedCategoryData } from '_@landing/services/category';
@@ -17,8 +18,11 @@ import {
   walletConnectV1,
 } from '@thirdweb-dev/react';
 
+type TCategoryContext = { loading: boolean; data: ICategory[] };
 type IndexedDBContextType = {
   db: IDBPDatabase | null;
+  bestSeller: ITopSeller[];
+  category: TCategoryContext;
 };
 
 export const IndexedDBContext = createContext<IndexedDBContextType>({} as IndexedDBContextType);
@@ -27,6 +31,11 @@ export const useIndexedDBContext = () => useContext(IndexedDBContext);
 
 export default function IndexedDBProvider({ children }: { children: React.ReactNode }) {
   const [db, setDB] = useState<IDBPDatabase | null>(null);
+  const [bestSeller, setBestSeller] = useState<ITopSeller[]>([]);
+  const [category, setCategory] = useState<TCategoryContext>({
+    loading: true,
+    data: [],
+  });
 
   useEffect(() => {
     const connectDB = async () => {
@@ -119,7 +128,6 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
         });
 
         const seller = await getBestSeller(db);
-        console.log({ seller });
         const category = await getAllCategories(db);
         if (!category.length) {
           insertSeedCategoryData(db);
@@ -129,9 +137,13 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
 
         // Open a transaction on the object store
         setDB(db);
+        setCategory({
+          loading: false,
+          data: category,
+        });
+        setBestSeller(seller as ITopSeller[]);
       }
     };
-
     connectDB();
   }, []);
 
@@ -140,7 +152,9 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
       activeChain={Sepolia}
       supportedWallets={[metamaskWallet(), coinbaseWallet(), walletConnectV1(), safeWallet()]}
     >
-      <IndexedDBContext.Provider value={{ db }}>{children}</IndexedDBContext.Provider>
+      <IndexedDBContext.Provider value={{ db, bestSeller, category }}>
+        {children}
+      </IndexedDBContext.Provider>
     </ThirdwebProvider>
   );
 }

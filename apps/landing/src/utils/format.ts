@@ -7,3 +7,7 @@ export const formatAddress = (value: string) => {
 export const formatTokenId = (value: string) => {
   return value.length > 14 ? value.substring(0, 14) + '..' : value;
 };
+
+export const formatFullName = (firstName: string, lastName: string): string => {
+  return [firstName, lastName].join(' ').trim();
+};

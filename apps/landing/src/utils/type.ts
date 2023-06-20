@@ -214,3 +214,12 @@ export interface ICollectionCard extends ICollection {
   activities: IActivity[];
   volume: number;
 }
+
+export interface ITopSeller {
+  seller: string;
+  volume: number;
+}
+
+export interface IItemsStore extends IItem {
+  market: IMarketData[];
+}

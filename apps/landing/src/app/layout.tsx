@@ -28,8 +28,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const user = await getMyProfileOnServer();
 
   return (
-    <IndexedDBProvider>
-      <ClientProvider>
+    <ClientProvider>
+      <IndexedDBProvider>
         <AuthProvider user={user}>
           <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
             <body>
@@ -40,7 +40,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </body>
           </html>
         </AuthProvider>
-      </ClientProvider>
-    </IndexedDBProvider>
+      </IndexedDBProvider>
+    </ClientProvider>
   );
 }
