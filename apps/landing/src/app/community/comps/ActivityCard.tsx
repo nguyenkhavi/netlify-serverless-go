@@ -99,14 +99,28 @@ export default function ActivityCard({ activity }: ActivityProps) {
       <div className="mb-3 mt-6 whitespace-pre-line text-text-70">{_contentRender()}</div>
       <div className="flex [&>*:not(:last-child)]:mr-8">
         <button className="flex items-center" onClick={handleLikeActivity}>
-          {isLiked ? <HeartActiveIcon /> : <HeartIcon className="mr-[7px]" />}
-          <p>{likes?.length || 0}</p>
-        </button>
-        <button className="flex items-center" onClick={toggleOpenComment}>
-          {openComment ? <CommentActiveIcon /> : <CommentIcon className={classcat(['mr-[7px]'])} />}
+          {isLiked ? (
+            <HeartActiveIcon className="mr-[7px] drop-shadow-btn" />
+          ) : (
+            <HeartIcon className="mr-[7px] drop-shadow-btn" />
+          )}
           <p
             className={classcat([
-              openComment ? 'bg-main-gradient bg-clip-text text-transparent' : '',
+              isLiked ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn' : '',
+            ])}
+          >
+            {likes?.length || 0}
+          </p>
+        </button>
+        <button className="flex items-center" onClick={toggleOpenComment}>
+          {openComment ? (
+            <CommentActiveIcon className="mr-[7px] drop-shadow-btn" />
+          ) : (
+            <CommentIcon className="mr-[7px] drop-shadow-btn" />
+          )}
+          <p
+            className={classcat([
+              openComment ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn' : '',
             ])}
           >
             {comments?.length || 0}
@@ -139,6 +153,8 @@ function Comment({ activityId }: { activityId: string }) {
   const handleComment = async () => {
     const content = inputRef.current?.value;
     await client?.reactions.add('comment', activityId, { text: content });
+
+    if (inputRef.current) inputRef.current.value = '';
   };
 
   return (
@@ -213,11 +229,11 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
   }, [client?.userId, comment?.latest_children?.like]);
 
   return (
-    <div>
+    <div className="[&:not(:last-of-type)]:mb-[25px]">
       <div className="flex justify-start [&>*:not(:last-child)]:mr-2">
         <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={46} circle />
         <div className="grow">
-          <div className="rounded-lg bg-black/[.7] px-4 py-[7px]">
+          <div className="mb-2 rounded-lg bg-black/[.7] px-4 py-[7px]">
             <p className="text-h6">
               @{typeof user?.data?.username === 'string' ? user?.data?.username : ''}
             </p>
@@ -228,8 +244,18 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
           </div>
           <div className="flex [&>*:not(:last-child)]:mr-8">
             <button className="flex items-center" onClick={toggleLikeComment}>
-              <HeartActiveIcon />
-              <p>{comment.children_counts?.like}</p>
+              {isLiked ? (
+                <HeartActiveIcon className="mr-[7px] drop-shadow-btn" />
+              ) : (
+                <HeartIcon className="mr-[7px] drop-shadow-btn" />
+              )}
+              <p
+                className={classcat([
+                  isLiked ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn' : '',
+                ])}
+              >
+                {comment.children_counts?.like}
+              </p>
             </button>
           </div>
         </div>

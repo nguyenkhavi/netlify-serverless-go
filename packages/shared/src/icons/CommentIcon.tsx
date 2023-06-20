@@ -18,40 +18,24 @@ function CommentIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 
 export default CommentIcon;
 
-export function CommentActiveIcon() {
+export function CommentActiveIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" fill="none" viewBox="0 0 33 33">
-      <g filter="url(#filter0_d_5384_38062)">
-        <path fill="url(#paint0_linear_5384_38062)" d="M10.008 16.501v6h6a6 6 0 10-6-6z"></path>
-      </g>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="16"
+      height="16"
+      fill="none"
+      viewBox="0 0 16 16"
+      {...props}
+    >
+      <path fill="url(#paint0_linear_5538_108408)" d="M2 8v6h6a6 6 0 10-6-6z"></path>
       <defs>
-        <filter
-          id="filter0_d_5384_38062"
-          width="32"
-          height="32"
-          x="0.008"
-          y="0.501"
-          colorInterpolationFilters="sRGB"
-          filterUnits="userSpaceOnUse"
-        >
-          <feFlood floodOpacity="0" result="BackgroundImageFix"></feFlood>
-          <feColorMatrix
-            in="SourceAlpha"
-            result="hardAlpha"
-            values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-          ></feColorMatrix>
-          <feOffset></feOffset>
-          <feGaussianBlur stdDeviation="5"></feGaussianBlur>
-          <feColorMatrix values="0 0 0 0 0.0980392 0 0 0 0 0.792157 0 0 0 0 0.607843 0 0 0 1 0"></feColorMatrix>
-          <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_5384_38062"></feBlend>
-          <feBlend in="SourceGraphic" in2="effect1_dropShadow_5384_38062" result="shape"></feBlend>
-        </filter>
         <linearGradient
-          id="paint0_linear_5384_38062"
-          x1="10.008"
-          x2="22"
-          y1="16.501"
-          y2="16.501"
+          id="paint0_linear_5538_108408"
+          x1="2"
+          x2="13.993"
+          y1="8"
+          y2="8"
           gradientUnits="userSpaceOnUse"
         >
           <stop stopColor="#3EDEB5"></stop>
