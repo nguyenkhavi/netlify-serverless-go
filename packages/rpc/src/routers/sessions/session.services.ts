@@ -62,7 +62,8 @@ export const userLogin = async (didToken: string, requestClient: RequestClient) 
 };
 
 export const userLogout = async (token: string) => {
-  await db.delete(session).where(eq(session.token, token)).execute();
+  const nowSeconds = Math.floor(new Date().getTime() / 1000);
+  await db.update(session).set({ ext: nowSeconds }).where(eq(session.token, token)).execute();
   return true;
 };
 

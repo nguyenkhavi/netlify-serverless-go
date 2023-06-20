@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { session } from '_@rpc/drizzle/session';
 import { db } from '_@rpc/services/drizzle';
-import { eq, gt } from 'drizzle-orm';
+import { eq, gt, and } from 'drizzle-orm';
 import * as jwt from 'jsonwebtoken';
 type TAccessPayload = {
   userId: string;
@@ -24,8 +24,7 @@ export const verifyAccessToken = async (token: string) => {
   const sessions = await db
     .select()
     .from(session)
-    .where(eq(session.token, token))
-    .where(gt(session.ext, nowSeconds))
+    .where(and(eq(session.token, token), gt(session.ext, nowSeconds)))
     .limit(1)
     .execute();
   if (!sessions.length) {

@@ -1,5 +1,6 @@
 //THIRD PARTY MODULES
-import { jwtVerify } from 'jose';
+import { and, eq, gt } from 'drizzle-orm';
+import { db, session } from '_@rpc/services/drizzle';
 //HOOK
 import { NextRequest, NextResponse } from 'next/server';
 const loggedList = ['/auth'];
@@ -38,15 +39,30 @@ export const config = {
   matcher: ['/((?!_next|api|trpc|.*\\..*).*)'],
 };
 
-const validate = async (session: string) => {
+const validate = async (token: string) => {
   try {
-    if (!session) return { status: false } as const;
-    await jwtVerify(session, new TextEncoder().encode(process.env.JWT_ACCESS_SECRET || ''));
+    if (!token) return { status: false } as const;
+    const nowSeconds = Math.ceil(new Date().getTime() / 1000);
+    const sessions = await db
+      .select()
+      .from(session)
+      .where(and(eq(session.token, token), gt(session.ext, nowSeconds)))
+      .limit(1)
+      .execute();
+
+    if (!sessions.length) {
+      throw new Error('ERROR_NOT_FOUND');
+    }
+    const { ext } = sessions[0];
+    if (Number(ext ?? 0) - nowSeconds) {
+      throw new Error('ERROR_EXPIRED');
+    }
+
     return { status: true } as const;
   } catch (e: any) {
     return {
       status: false,
-      code: 'ERROR_EXPIRED',
+      code: e?.message || 'ERROR_ANY',
     } as const;
   }
 };

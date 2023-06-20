@@ -2,9 +2,11 @@
 
 //THIRD PARTY MODULES
 import dayjs from 'dayjs';
+import { useState } from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import getTimeZone from '_@landing/utils/getTimeZone';
 import { RouterOutputs, nextApi } from '_@landing/utils/api';
+import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 import {
   createColumnHelper,
   flexRender,
@@ -51,18 +53,24 @@ const locationCol = columnHelper.accessor((row) => row['location'], {
     return <p className="text-center">{value}</p>;
   },
 });
-const currentCol = columnHelper.accessor((row) => row['id'], {
-  id: 'id',
+const currentCol = columnHelper.accessor((row) => row['ext'], {
+  id: 'ext',
   header: 'Current',
   cell: (cell) => {
-    return (
-      <p className="inline-flex items-center text-primary">
-        <span className="mr-1 grid h-3 w-3 place-items-center rounded-full bg-primary">
-          <CheckIcon className="h-2.5 w-2.5 text-black" />
-        </span>
-        Active
-      </p>
-    );
+    const expTime = (cell.getValue() || 0) * 1000;
+    const isExpired = expTime < Date.now();
+    if (isExpired) {
+      return <p className="inline-flex items-center text-error">Inactive</p>;
+    } else {
+      return (
+        <p className="inline-flex items-center text-primary">
+          <span className="mr-1 grid h-3 w-3 place-items-center rounded-full bg-primary">
+            <CheckIcon className="h-2.5 w-2.5 text-black" />
+          </span>
+          Active
+        </p>
+      );
+    }
   },
 });
 
@@ -70,12 +78,21 @@ const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
 
 export default function ActiveSection() {
   const { data: listSession, isFetching } = nextApi.listSession.useQuery();
+  const { logout } = useAuthStoreAction();
+  const [isLoading, setIsLoading] = useState(false);
+  const { mutate: closeSession } = nextApi.revokeAllSession.useMutation({});
 
   const table = useReactTable({
     data: listSession || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const onCloseSession = async () => {
+    setIsLoading(true);
+    await closeSession({});
+    await logout();
+  };
 
   return (
     <section>
@@ -119,7 +136,13 @@ export default function ActiveSection() {
                     ))}
                     <T.TableRow>
                       <T.TableCell>
-                        <p className="cursor-pointer text-info underline">Close all sessions</p>
+                        <button onClick={onCloseSession}>
+                          {isLoading ? (
+                            'Logout all sessions...'
+                          ) : (
+                            <p className="cursor-pointer text-info underline">Close all sessions</p>
+                          )}
+                        </button>
                       </T.TableCell>
                       <T.TableCell colSpan={columns.length - 1}></T.TableCell>
                     </T.TableRow>
