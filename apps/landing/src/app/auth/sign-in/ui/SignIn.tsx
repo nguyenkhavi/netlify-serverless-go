@@ -66,33 +66,36 @@ export default function SignIn() {
 
   return (
     <section className="my-20 grid gap-6 md:my-40 md:gap-20">
-      <div className="absolute top-0 flex w-screen justify-between">
+      <div className="absolute top-0 hidden w-screen justify-between md:flex">
         <BgLeftAuth />
         <BgRightAuth />
       </div>
       <LogoWhiteIcon className="mx-auto" />
-      <div className="mx-[--px] md:mx-auto md:w-full md:max-w-[theme(space.135)]">
-        <div className="rounded-lg bg-secondary-200 p-4 md:p-6">
+      <div className="mx-[--px]  md:mx-auto md:w-full md:max-w-[theme(space.135)]">
+        <div className="flex h-80 flex-col  space-y-8 rounded-lg bg-secondary-200 p-4 md:h-84 md:p-6">
           <h5 className="text-center text-h5 text-primary-700 md:text-h4">Sign In</h5>
           <FormProvider {...methods}>
-            <form onSubmit={onSubmit} className="mt-8">
-              <div className="grid gap-16.5">
+            <form className="flex grow flex-col" onSubmit={onSubmit}>
+              <div className="grow">
                 <FormItem label="Phone Number" name="phone.phoneNumber">
                   <>
                     <FormPhoneInput
-                      name={{ digitalCode: 'phone.digitalCode', phoneNumber: 'phone.phoneNumber' }}
+                      name={{
+                        digitalCode: 'phone.digitalCode',
+                        phoneNumber: 'phone.phoneNumber',
+                      }}
                     />
                   </>
                 </FormItem>
-
-                <Button
-                  isLoading={isLoading}
-                  type="submit"
-                  className="btnxlg mx-auto ow:w-62 md:ow:w-full"
-                >
-                  Get Started
-                </Button>
               </div>
+
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                className="btnxlg mx-auto ow:w-62 md:ow:w-full"
+              >
+                Get Started
+              </Button>
             </form>
           </FormProvider>
         </div>

@@ -25,7 +25,7 @@ const baseClasses = [
   'border-[.5px] border-text-10',
   'bg-secondary/70 w-full',
   'text-text-50 placeholder:text-text-20',
-  'data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error data-[valid="false"]:rounded-none',
+  'data-[valid="false"]:shadow-error',
 ];
 
 type TElement = HTMLInputElement | HTMLTextAreaElement;

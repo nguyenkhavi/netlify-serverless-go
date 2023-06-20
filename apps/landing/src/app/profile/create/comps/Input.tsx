@@ -37,9 +37,7 @@ export const Input = (props: Props & { inputProps?: ComponentProps<typeof FormIn
   <FormInput
     tag={(props?.type || 'input') as TagInput}
     name={props.name}
-    className={classcat([
-      props?.type === 'textarea' ? 'resize-none text-body3 ow:h-27' : 'ow:h-10.5 ow:rounded-[7px]',
-    ])}
+    className={classcat([props?.type === 'textarea' ? 'input-md' : 'input-md'])}
     placeholder={props.placeholder}
     {...(props?.type === 'textarea'
       ? {

@@ -53,10 +53,6 @@ const validate = async (token: string) => {
     if (!sessions.length) {
       throw new Error('ERROR_NOT_FOUND');
     }
-    const { ext } = sessions[0];
-    if (Number(ext ?? 0) - nowSeconds) {
-      throw new Error('ERROR_EXPIRED');
-    }
 
     return { status: true } as const;
   } catch (e: any) {

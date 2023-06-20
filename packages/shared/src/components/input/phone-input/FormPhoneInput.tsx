@@ -34,7 +34,7 @@ export default function FormPhoneInput({ name }: Props) {
       }
       className={classcat([
         'flex space-x-2 rounded-lg border-[.5px] border-text-10 bg-secondary/70 px-4',
-        'data-[valid="false"]:rounded-none data-[valid="false"]:shadow-[inset_0_-.66px] data-[valid="false"]:shadow-error',
+        'data-[valid="false"]:border-error',
       ])}
     >
       <Controller

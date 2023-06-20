@@ -2,6 +2,7 @@
 //THIRD PARTY MODULES
 import * as z from 'zod';
 import dayjs from 'dayjs';
+import Link from 'next/link';
 import classcat from 'classcat';
 import { useMemo, useState } from 'react';
 import { Gender } from '_@rpc/drizzle/enum';
@@ -119,7 +120,7 @@ export default function SignIn() {
           <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
               <div className="grid gap-10">
-                <div className="grid gap-5 md:gap-4">
+                <div className="grid gap-5">
                   <FormItem label="First Name" name="firstName">
                     <FormInput placeholder="First name" className="input-md" />
                   </FormItem>
@@ -204,6 +205,13 @@ export default function SignIn() {
                 <Button isLoading={isLoading} type="submit" className="btnxlg mx-auto">
                   Get Started
                 </Button>
+
+                <p className="flex items-center justify-center space-x-1">
+                  <span className="text-body3 text-text-80 md:text-body1">Already a member?</span>
+                  <Link href="/auth/sign-in" className="btn-link text-body2 text-primary ow:w-fit">
+                    Sign In
+                  </Link>
+                </p>
               </div>
             </form>
           </FormProvider>
