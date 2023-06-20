@@ -3,7 +3,8 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import getTimeZone from '_@landing/utils/getTimeZone';
-import { RouterOutputs, nextApi } from '_@landing/utils/api';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { RouterOutputs, api } from '_@landing/utils/api';
 import {
   createColumnHelper,
   flexRender,
@@ -11,8 +12,10 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import T from '_@shared/components/table/TableCore';
 //SHARED
+import LoadingIcon from '_@shared/icons/LoadingIcon';
 
 // Init dayjs plugins
 dayjs.extend(relativeTime);
@@ -50,7 +53,6 @@ const locationCol = columnHelper.accessor((row) => row['location'], {
   header: () => <p className="text-center">Location</p>,
   cell: (cell) => {
     const value = cell.getValue() || 'N/A';
-
     return <p className="text-center">{value}</p>;
   },
 });
@@ -68,13 +70,26 @@ const currentCol = columnHelper.accessor((row) => row['createdAt'], {
 const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
 
 export default function AccountActivity() {
-  const { data: listSession } = nextApi.myActivities.useQuery({
-    page: 0,
-    size: 10,
+  const { hasNextPage, data, fetchNextPage, isFetching } = useInfiniteQuery({
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+    queryKey: ['myActivities'],
+    queryFn: async ({ pageParam = 1 }) => {
+      return await api.myActivities.query({
+        page: pageParam,
+        size: 5,
+      });
+    },
+    getNextPageParam: (lastPage) => {
+      if (Number(lastPage.total) / Number(lastPage.size) > Number(lastPage.page)) {
+        return Number(lastPage.page) + 1;
+      }
+      return undefined;
+    },
   });
 
   const table = useReactTable({
-    data: listSession?.data || [],
+    data: data?.pages.flatMap((page) => page.data) || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -100,30 +115,48 @@ export default function AccountActivity() {
             ))}
           </T.TableHeader>
           <T.TableBody>
-            {table.getRowModel().rows?.length ? (
-              <>
-                {table.getRowModel().rows.map((row) => (
-                  <T.TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
-                    {row.getVisibleCells().map((cell) => (
-                      <T.TableCell key={cell.id}>
-                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                      </T.TableCell>
-                    ))}
-                  </T.TableRow>
-                ))}
-                <T.TableRow>
-                  <T.TableCell>
-                    <p className="cursor-pointer text-info underline">Show more</p>
-                  </T.TableCell>
-                  <T.TableCell colSpan={columns.length - 1}></T.TableCell>
-                </T.TableRow>
-              </>
-            ) : (
+            {isFetching && !table.getRowModel().rows?.length ? (
               <T.TableRow>
-                <T.TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                <T.TableCell colSpan={columns.length} className="h-24">
+                  <LoadingIcon className="mx-auto" />
                 </T.TableCell>
               </T.TableRow>
+            ) : (
+              <>
+                {table.getRowModel().rows?.length ? (
+                  <>
+                    {table.getRowModel().rows.map((row) => (
+                      <T.TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                        {row.getVisibleCells().map((cell) => (
+                          <T.TableCell key={cell.id}>
+                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                          </T.TableCell>
+                        ))}
+                      </T.TableRow>
+                    ))}
+                    <Show when={hasNextPage}>
+                      <T.TableRow>
+                        <T.TableCell>
+                          {isFetching ? (
+                            <p className="text-center">Loading...</p>
+                          ) : (
+                            <button onClick={() => fetchNextPage()}>
+                              <p className="cursor-pointer text-info underline">Show more</p>
+                            </button>
+                          )}
+                        </T.TableCell>
+                        <T.TableCell colSpan={columns.length - 1}></T.TableCell>
+                      </T.TableRow>
+                    </Show>
+                  </>
+                ) : (
+                  <T.TableRow>
+                    <T.TableCell colSpan={columns.length} className="h-24 text-center">
+                      No results.
+                    </T.TableCell>
+                  </T.TableRow>
+                )}
+              </>
             )}
           </T.TableBody>
         </T.Table>

@@ -3,12 +3,13 @@
 import * as z from 'zod';
 import dayjs from 'dayjs';
 import classcat from 'classcat';
+import { useMemo, useState } from 'react';
 import { Gender } from '_@rpc/drizzle/enum';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useCallback, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+import errorHandler from '_@landing/app/auth/utils/errorHandler';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
-import { GoogleReCaptcha, GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
@@ -25,13 +26,13 @@ import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
 import { Country, countryMapping } from '_@shared/constant/countries';
 
 const valuesSchema = z.object({
-  firstName: z.string().nonempty({ message: 'First name is required' }),
-  lastName: z.string().nonempty({ message: 'Last name is required' }),
-  username: z.string().nonempty({ message: 'Username is required' }),
-  email: z.string().email(),
+  firstName: z.string().nonempty({ message: 'This field is required' }),
+  lastName: z.string().nonempty({ message: 'This field is required' }),
+  username: z.string().nonempty({ message: 'This field is required' }),
+  email: z.string().nonempty({ message: 'This field is required' }).email(),
   phone: z.object({
-    digitalCode: z.string().nonempty({ message: 'Phone code is required' }),
-    phoneNumber: z.string().nonempty({ message: 'Phone number is required' }),
+    digitalCode: z.string().nonempty({ message: 'This field is required' }),
+    phoneNumber: z.string().nonempty({ message: 'This field is required' }),
   }),
   gender: z.enum([Gender.FEMALE, Gender.MALE, Gender.OTHER]),
   birthday: z.object({
@@ -39,7 +40,8 @@ const valuesSchema = z.object({
     month: z.string(),
     year: z.string(),
   }),
-  recaptcha: z.string().nonempty({ message: 'Please verify you are not a robot' }),
+  // check === true => agree
+  rule: z.boolean().refine((check) => check, { message: 'This field is required' }),
 });
 
 type Values = z.infer<typeof valuesSchema>;
@@ -62,16 +64,8 @@ export default function SignIn() {
       gender: Gender.MALE,
     },
   });
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = methods;
-
-  console.log({
-    errors,
-  });
+  const { handleSubmit, watch, setError } = methods;
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
   const month = watch('birthday.month');
   const year = watch('birthday.year');
@@ -83,6 +77,8 @@ export default function SignIn() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsLoading(true);
+      const token = await executeRecaptcha?.('sign_up');
+      if (!token) return;
       const digitalCode = data.phone.digitalCode as Country['code'];
       const digital = countryMapping[digitalCode];
       await signUp({
@@ -98,19 +94,14 @@ export default function SignIn() {
           phoneNumber: data.phone.phoneNumber,
         },
         gender: data.gender as any,
-        reCaptchaToken: data.recaptcha,
+        reCaptchaToken: token,
       });
+    } catch (err: any) {
+      errorHandler(err, setError);
     } finally {
       setIsLoading(false);
     }
   });
-
-  const _handleVerifyReCaptcha = useCallback(
-    (token: string) => {
-      setValue('recaptcha', token);
-    },
-    [setValue],
-  );
 
   return (
     <section className="grid gap-6 py-20 md:gap-20 md:py-40">
@@ -127,12 +118,6 @@ export default function SignIn() {
           <h5 className="text-center text-h4 text-primary-700">Sign Up</h5>
           <FormProvider {...methods}>
             <form onSubmit={onSubmit}>
-              <GoogleReCaptchaProvider
-                reCaptchaKey={process.env.NEXT_PUBLIC_GOOGLE_RECAPTCHA || ''}
-              >
-                <GoogleReCaptcha onVerify={_handleVerifyReCaptcha} />
-              </GoogleReCaptchaProvider>
-
               <div className="grid gap-10">
                 <div className="grid gap-5 md:gap-4">
                   <FormItem label="First Name" name="firstName">
@@ -202,18 +187,19 @@ export default function SignIn() {
                     />
                   </FormItem>
                 </div>
-
-                <FormCheckboxArray
-                  name="rule"
-                  label={
-                    <p className="text-body3">
-                      Yes, I agree to all Fleamint{' '}
-                      <a href="#" className="btn-link text-[#19CA9B]">
-                        Terms and Policy
-                      </a>
-                    </p>
-                  }
-                />
+                <FormItem label="" name="rule">
+                  <FormCheckboxArray
+                    name="rule"
+                    label={
+                      <p className="text-body3">
+                        Yes, I agree to all Fleamint{' '}
+                        <a href="#" className="btn-link text-[#19CA9B]">
+                          Terms and Policy
+                        </a>
+                      </p>
+                    }
+                  />
+                </FormItem>
 
                 <Button isLoading={isLoading} type="submit" className="btnxlg mx-auto">
                   Get Started

@@ -25,3 +25,6 @@ export const toastStore = create<ToastProps>((set) => ({
   },
   hideToast: () => set({ open: false }),
 }));
+
+const { openToast, setOpen, hideToast } = toastStore.getState();
+export const toastAction = { openToast, setOpen, hideToast };

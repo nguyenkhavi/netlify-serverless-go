@@ -42,52 +42,52 @@ export const useAuthStoreAction = () => {
     enabled: false,
   });
 
-  const _handleLogin = async (input: RouterInputs['validateLogin']) => {
-    try {
-      if (!magicClient) return;
-      const found = await validateLoginFn(input);
-      if (found) {
-        const didToken = await magicClient.auth.loginWithSMS({
-          phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
-        });
-
-        if (didToken) {
-          const resp = await loginFn({
-            didToken,
-          });
-          cookieHandler.set('session', resp.accessToken || '');
-          const user = await refetch();
-          setUser(user.data);
-          router.push('/profile');
-        }
-      }
-    } catch (error: any) {
-      console.log(`handleLogin error: ${error.message}`);
-    }
+  const handleLogoutMagic = async () => {
+    const isLoggedIn = await magicClient?.user.isLoggedIn();
+    if (!isLoggedIn) return;
+    await magicClient?.user.logout();
   };
 
-  const _handleSignUp = async (input: RouterInputs['signup']) => {
-    try {
-      if (!magicClient) return;
-      const requestId = await signUpFn(input);
+  const _handleLogin = async (input: RouterInputs['validateLogin']) => {
+    if (!magicClient) return;
+    await handleLogoutMagic();
+    const found = await validateLoginFn(input);
+    if (found) {
       const didToken = await magicClient.auth.loginWithSMS({
         phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
       });
 
       if (didToken) {
-        const postRes = await postSignUpFn({
+        const resp = await loginFn({
           didToken,
-          requestId,
         });
-        if (postRes) {
-          const user = await refetch();
-          setUser(user.data);
-          cookieHandler.set('session', postRes.accessToken || '');
-          router.push('/profile');
-        }
+        cookieHandler.set('session', resp.accessToken || '');
+        const user = await refetch();
+        setUser(user.data);
+        router.push('/profile');
       }
-    } catch (error: any) {
-      console.log(`handleSignUp error: ${error.message}`);
+    }
+  };
+
+  const _handleSignUp = async (input: RouterInputs['signup']) => {
+    if (!magicClient) return;
+    await handleLogoutMagic();
+    const requestId = await signUpFn(input);
+    const didToken = await magicClient.auth.loginWithSMS({
+      phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,
+    });
+
+    if (didToken) {
+      const postRes = await postSignUpFn({
+        didToken,
+        requestId,
+      });
+      if (postRes) {
+        const user = await refetch();
+        setUser(user.data);
+        cookieHandler.set('session', postRes.accessToken || '');
+        router.push('/profile');
+      }
     }
   };
 
@@ -98,8 +98,6 @@ export const useAuthStoreAction = () => {
       await logoutFn();
       cookieHandler.remove('session');
       router.push('/auth/sign-in');
-    } catch (error: any) {
-      console.log(`handleLogout error: ${error.message}`);
     } finally {
       setUser(undefined);
     }

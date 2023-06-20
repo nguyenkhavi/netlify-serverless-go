@@ -80,6 +80,7 @@ export const listSession = async (userId: string) => {
     })
     .from(session)
     .where(eq(session.iss, userId))
+    .orderBy(sql`${session.createdAt} desc`)
     .execute();
   return queryResult;
 };

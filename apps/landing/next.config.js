@@ -2,7 +2,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { composePlugins, withNx } = require('@nx/next');
-const path = require('path');
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -15,11 +14,6 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: true,
-  },
-  // atob alias ./atob.js
-  webpack: (config) => {
-    config.resolve.alias['atob'] = path.resolve(__dirname, './node/atob.js');
-    return config;
   },
 };
 

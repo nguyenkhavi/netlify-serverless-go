@@ -4,9 +4,9 @@ import * as z from 'zod';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import errorHandler from '_@landing/app/auth/utils/errorHandler';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
-import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
@@ -37,10 +37,7 @@ export default function SignIn() {
       },
     },
   });
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = methods;
+  const { handleSubmit, setError } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -53,6 +50,15 @@ export default function SignIn() {
           phoneNumber: data.phone.phoneNumber,
         },
       });
+    } catch (err: any) {
+      console.log(`Error: ${err.message}`);
+      if (err.message === 'BAD_REQUEST') {
+        setError('phone.phoneNumber', {
+          message: 'Phone number is not registered',
+          type: 'manual',
+        });
+      }
+      errorHandler(err, setError);
     } finally {
       setIsLoading(false);
     }
@@ -76,11 +82,6 @@ export default function SignIn() {
                     <FormPhoneInput
                       name={{ digitalCode: 'phone.digitalCode', phoneNumber: 'phone.phoneNumber' }}
                     />
-                    <Show when={errors.phone?.digitalCode || errors.phone?.phoneNumber}>
-                      <p className="mt-1 text-body2 text-error">
-                        {errors.phone?.digitalCode?.message || errors.phone?.phoneNumber?.message}
-                      </p>
-                    </Show>
                   </>
                 </FormItem>
 

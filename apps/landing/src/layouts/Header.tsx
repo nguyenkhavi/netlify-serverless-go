@@ -92,7 +92,7 @@ export default function Header() {
       </div>
 
       <div className={classcat(['ml-auto grid grid-flow-col', user ? 'gap-6' : ''])}>
-        <Show when={!user}>
+        <Show when={!user && !['/auth/sign-in', '/auth/sign-up'].includes(pathname)}>
           <Link
             href="/auth/sign-in"
             className={classcat([
