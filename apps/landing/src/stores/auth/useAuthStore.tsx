@@ -51,7 +51,9 @@ export const useAuthStoreAction = () => {
   const _handleLogin = async (input: RouterInputs['validateLogin']) => {
     if (!magicClient) return;
     await handleLogoutMagic();
-    const found = await validateLoginFn(input);
+    const found = await validateLoginFn(input).catch(() => {
+      throw new Error('User not found');
+    });
     if (found) {
       const didToken = await magicClient.auth.loginWithSMS({
         phoneNumber: `+${input.phone.phoneCode}${input.phone.phoneNumber}`,

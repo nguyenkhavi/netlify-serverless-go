@@ -1,6 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
 import * as z from 'zod';
+import Link from 'next/link';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -15,11 +16,13 @@ import BgLeftAuth from '_@shared/icons/BgLeftAuth';
 import BgRightAuth from '_@shared/icons/BgRightAuth';
 import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
 import { Country, countryMapping } from '_@shared/constant/countries';
+//HOOK
+import { phoneNumberSchema } from '_@landing/server/auth/auth.schema';
 
 const values = z.object({
   phone: z.object({
     digitalCode: z.string(),
-    phoneNumber: z.string().nonempty({ message: 'Phone number is required' }),
+    phoneNumber: phoneNumberSchema,
   }),
 });
 
@@ -51,14 +54,14 @@ export default function SignIn() {
         },
       });
     } catch (err: any) {
-      console.log(`Error: ${err.message}`);
       if (err.message === 'BAD_REQUEST') {
         setError('phone.phoneNumber', {
-          message: 'Phone number is not registered',
+          message: 'Invalid phone number',
           type: 'manual',
         });
+      } else {
+        errorHandler(err, setError);
       }
-      errorHandler(err, setError);
     } finally {
       setIsLoading(false);
     }
@@ -72,30 +75,35 @@ export default function SignIn() {
       </div>
       <LogoWhiteIcon className="mx-auto" />
       <div className="mx-[--px]  md:mx-auto md:w-full md:max-w-[theme(space.135)]">
-        <div className="flex h-80 flex-col  space-y-8 rounded-lg bg-secondary-200 p-4 md:h-84 md:p-6">
+        <div className="flex h-96 flex-col space-y-8 rounded-lg bg-secondary-200 p-4 md:h-100 md:p-6">
           <h5 className="text-center text-h5 text-primary-700 md:text-h4">Sign In</h5>
           <FormProvider {...methods}>
-            <form className="flex grow flex-col" onSubmit={onSubmit}>
-              <div className="grow">
-                <FormItem label="Phone Number" name="phone.phoneNumber">
-                  <>
-                    <FormPhoneInput
-                      name={{
-                        digitalCode: 'phone.digitalCode',
-                        phoneNumber: 'phone.phoneNumber',
-                      }}
-                    />
-                  </>
-                </FormItem>
+            <form className="flex grow flex-col space-y-10" onSubmit={onSubmit}>
+              <div className="flex grow flex-col">
+                <div className="grow">
+                  <FormItem label="Phone Number" name="phone.phoneNumber">
+                    <>
+                      <FormPhoneInput
+                        name={{
+                          digitalCode: 'phone.digitalCode',
+                          phoneNumber: 'phone.phoneNumber',
+                        }}
+                      />
+                    </>
+                  </FormItem>
+                </div>
+
+                <Button isLoading={isLoading} type="submit" className="btnxlg mx-auto ow:w-full">
+                  Get Started
+                </Button>
               </div>
 
-              <Button
-                isLoading={isLoading}
-                type="submit"
-                className="btnxlg mx-auto ow:w-62 md:ow:w-full"
-              >
-                Get Started
-              </Button>
+              <p className="flex items-center justify-center space-x-1">
+                <span className="text-body3 text-text-80">Don't have an account?</span>
+                <Link href="/auth/sign-up" className="btn-link text-body2 text-primary ow:w-fit">
+                  Sign Up
+                </Link>
+              </p>
             </form>
           </FormProvider>
         </div>

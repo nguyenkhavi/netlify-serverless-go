@@ -142,15 +142,13 @@ export const signUp = async (input: SignUpInput) => {
     if (user.email === email) {
       throw new TRPCError({
         code: 'CONFLICT',
-        message: 'The email has already existed',
-        cause: ['email'],
+        message: 'CONFLICT_EMAIL',
       });
     }
     if (user.phoneCode === phoneCode && user.phoneNumber === phoneNumber) {
       throw new TRPCError({
         code: 'CONFLICT',
-        message: 'The phone number has already existed',
-        cause: ['phoneCode', 'phoneNumber'],
+        message: 'CONFLICT_PHONE',
       });
     }
   }

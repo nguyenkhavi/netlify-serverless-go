@@ -25,22 +25,49 @@ import BgLeftAuth from '_@shared/icons/BgLeftAuth';
 import BgRightAuth from '_@shared/icons/BgRightAuth';
 import LogoWhiteIcon from '_@shared/icons/LogoWhiteIcon';
 import { Country, countryMapping } from '_@shared/constant/countries';
+//HOOK
+import { phoneNumberSchema } from '_@landing/server/auth/auth.schema';
 
 const valuesSchema = z.object({
-  firstName: z.string().nonempty({ message: 'This field is required' }),
-  lastName: z.string().nonempty({ message: 'This field is required' }),
-  username: z.string().nonempty({ message: 'This field is required' }),
-  email: z.string().nonempty({ message: 'This field is required' }).email(),
+  firstName: z.string().trim().nonempty({ message: 'This field is required' }),
+  lastName: z.string().trim().nonempty({ message: 'This field is required' }),
+  username: z.string().trim().nonempty({ message: 'This field is required' }),
+  email: z
+    .string()
+    .trim()
+    .nonempty({ message: 'This field is required' })
+    .email({ message: 'Invalid Email' }),
   phone: z.object({
     digitalCode: z.string().nonempty({ message: 'This field is required' }),
-    phoneNumber: z.string().nonempty({ message: 'This field is required' }),
+    phoneNumber: phoneNumberSchema,
   }),
   gender: z.enum([Gender.FEMALE, Gender.MALE, Gender.OTHER]),
-  birthday: z.object({
-    day: z.string(),
-    month: z.string(),
-    year: z.string(),
-  }),
+  birthday: z
+    .object({
+      day: z.string(),
+      month: z.string(),
+      year: z.string(),
+    })
+    .refine(
+      (data) => {
+        const { day, month, year } = data;
+        const currentDateMinus18Years = dayjs()
+          .hour(0)
+          .minute(0)
+          .second(0)
+          .millisecond(0)
+          .subtract(18, 'year');
+        const selectedDate = dayjs(`${year}-${month}-${day}`)
+          .hour(0)
+          .minute(0)
+          .second(0)
+          .millisecond(0);
+        return currentDateMinus18Years.diff(selectedDate) > 0;
+      },
+      {
+        message: 'You must be at least 18 years old',
+      },
+    ),
   // check === true => agree
   rule: z.boolean().refine((check) => check, { message: 'This field is required' }),
 });
@@ -65,18 +92,19 @@ export default function SignIn() {
       gender: Gender.MALE,
     },
   });
-  const { handleSubmit, watch, setError } = methods;
+  const { handleSubmit, watch, setError, setValue } = methods;
   const { executeRecaptcha } = useGoogleReCaptcha();
 
   const month = watch('birthday.month');
   const year = watch('birthday.year');
-  const { dayOptions, monthOptions, yearOptions } = useMemo(
-    () => getDateMockupForSelect(Number(month), Number(year)),
-    [month, year],
-  );
+  const { dayOptions, monthOptions, yearOptions } = useMemo(() => {
+    setValue('birthday.day', '1');
+    return getDateMockupForSelect(Number(month), Number(year));
+  }, [month, year, setValue]);
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (_data) => {
     try {
+      const data = valuesSchema.parse(_data);
       setIsLoading(true);
       const token = await executeRecaptcha?.('sign_up');
       if (!token) return;
@@ -229,37 +257,18 @@ const getDateMockupForSelect = (
   monthOptions: BaseSelectOption[];
   yearOptions: BaseSelectOption[];
 } => {
-  const dayOptions: BaseSelectOption[] = [];
-  const monthOptions: BaseSelectOption[] = [];
-  const yearOptions: BaseSelectOption[] = [];
-  const currentYear = dayjs().year();
-  const currentMonth = dayjs().month() + 1;
-  const currentDay = dayjs().date();
-
-  for (let i = currentYear; i >= 1900; i--) {
-    yearOptions.push({ value: i.toString(), label: i.toString() });
+  const dayOptions = [];
+  const monthOptions = [];
+  const yearOptions = [];
+  const daysInMonth = dayjs(`${year}-${month}`, 'YYYY-MM').daysInMonth();
+  for (let i = 1; i <= daysInMonth; i++) {
+    dayOptions.push({ label: i.toString(), value: i.toString() });
   }
-
-  if (year === currentYear) {
-    for (let i = 1; i <= currentMonth; i++) {
-      monthOptions.push({ value: i.toString(), label: i.toString() });
-    }
-  } else {
-    for (let i = 1; i <= 12; i++) {
-      monthOptions.push({ value: i.toString(), label: i.toString() });
-    }
+  for (let i = 1; i <= 12; i++) {
+    monthOptions.push({ label: i.toString(), value: i.toString() });
   }
-
-  if (year === currentYear && month === currentMonth) {
-    for (let i = 1; i <= currentDay; i++) {
-      dayOptions.push({ value: i.toString(), label: i.toString() });
-    }
-  } else {
-    const daysInMonth = dayjs(`${year}-${month}`).daysInMonth();
-    for (let i = 1; i <= daysInMonth; i++) {
-      dayOptions.push({ value: i.toString(), label: i.toString() });
-    }
+  for (let i = 1900; i <= dayjs().year(); i++) {
+    yearOptions.push({ label: i.toString(), value: i.toString() });
   }
-
   return { dayOptions, monthOptions, yearOptions };
 };

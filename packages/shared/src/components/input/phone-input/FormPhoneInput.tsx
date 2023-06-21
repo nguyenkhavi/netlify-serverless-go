@@ -25,8 +25,10 @@ export default function FormPhoneInput({ name }: Props) {
     control,
     register,
     formState: { errors },
+    watch,
   } = useFormContext();
-
+  const { onChange, ...props } = register(name.phoneNumber);
+  const value = watch(name.phoneNumber);
   return (
     <div
       data-valid={
@@ -48,12 +50,15 @@ export default function FormPhoneInput({ name }: Props) {
       <input
         className={classcat([baseClasses, 'h-16.25'])}
         placeholder="Enter Your Phone Number"
-        onKeyPress={(e) => {
-          if (!/[0-9]/.test(e.key)) {
-            e.preventDefault();
+        value={value}
+        onChange={(e) => {
+          const re = /^[0-9\b]+$/;
+          const value = e.target.value || '';
+          if (e.target.value === '' || re.test(value)) {
+            onChange(e);
           }
         }}
-        {...register(name.phoneNumber)}
+        {...props}
       />
     </div>
   );
