@@ -1,5 +1,11 @@
 import { router, publicProcedure, mergeRouter } from '_@rpc/config/router';
-import { userRouters, awsRouter, getstreamRouters, sessionRouter } from './routers';
+import {
+  userRouters,
+  awsRouter,
+  getstreamRouters,
+  sessionRouter,
+  communityRouters,
+} from './routers';
 import { db, subscriber } from './services/drizzle';
 
 export const test = router({
@@ -16,6 +22,13 @@ export const test = router({
   }),
 });
 
-export const appRouter = mergeRouter(test, userRouters, awsRouter, getstreamRouters, sessionRouter);
+export const appRouter = mergeRouter(
+  test,
+  userRouters,
+  awsRouter,
+  getstreamRouters,
+  sessionRouter,
+  communityRouters,
+);
 
 export type AppRouter = typeof appRouter;

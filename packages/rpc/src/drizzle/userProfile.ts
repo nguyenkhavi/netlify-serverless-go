@@ -17,7 +17,7 @@ export const userProfileTable = mysqlTable(
     gender: varchar('gender', { length: 8, enum: GenderValues }).notNull(),
     phoneCode: varchar('phone_code', { length: 8 }).notNull(),
     phoneNumber: varchar('phone_number', { length: 16 }).notNull(),
-
+    getstreamId: varchar('getstream_id', { length: 12 }).notNull(),
     avatarUrl: tinytext('avatar_url'),
     coverUrl: tinytext('cover_url'),
     aboutMe: tinytext('about_me'),
@@ -31,6 +31,7 @@ export const userProfileTable = mysqlTable(
     emailIndex: index('email_idx').on(userProfile.email),
     phoneIndex: index('phone_idx').on(userProfile.phoneCode, userProfile.phoneNumber),
     walletIndex: index('wallet_idx').on(userProfile.wallet),
+    getstreamIdIndex: index('getstream_id_idx').on(userProfile.getstreamId),
   }),
 );
 

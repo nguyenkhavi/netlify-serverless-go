@@ -3,7 +3,6 @@
 import classcat from 'classcat';
 import 'react-activity-feed/dist/index.css';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
-import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
@@ -13,32 +12,37 @@ import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
 //HOOK
 import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
+import { nextApi } from '../../utils/api';
 import ActivityCard, { ActivityType } from './comps/ActivityCard';
 
 export default function CommunityPage() {
-  const { user } = useAuthStore();
   const { client } = useGetFeedUser();
 
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
-  const timelineUser = useMemo(() => client?.feed('timeline'), [client]);
+  const userFeed = useMemo(() => client?.feed('user'), [client]);
+
+  const { mutate: createPost } = nextApi.communityCreatePost.useMutation();
 
   const _handleCreatePost = async () => {
-    if (!timelineUser || !timelineUser?.userId || !client?.currentUser) return;
+    if (!userFeed || !userFeed?.userId || !client?.currentUser) return;
 
-    timelineUser
+    userFeed
       .addActivity({
-        actor: client?.currentUser,
+        actor: client.currentUser,
         verb: 'tweet',
         object: inputRef.current?.value || '',
+        content: inputRef.current?.value || '',
+        time: new Date().toISOString(),
       })
       .then((response) => {
-        if (inputRef.current) inputRef.current.value = '';
-        if (activities.length === 0) {
+        console.log('success', response);
+        createPost({ content: response.content, postId: response.id });
+        if (activities.length) {
           _getData();
         } else {
-          setActivities((prev) => [{ ...response, actor: prev[0].actor }, ...prev]);
+          setActivities((prev) => [{ ...response, actor: prev[0]?.actor }, ...prev]);
         }
       })
       .catch((err) => {
@@ -46,28 +50,9 @@ export default function CommunityPage() {
       });
   };
 
-  const _updateUserInfo = useCallback(async () => {
-    if (!client || !client.userId || !user) return;
-    const userGetstreamInfo = await client.user(client.userId).getOrCreate({
-      username: user.profile.username,
-      firstName: user.profile.firstName,
-      lastName: user.profile.lastName,
-      gender: user.profile.gender,
-    });
-
-    if (userGetstreamInfo && !userGetstreamInfo.data?.['username']) {
-      client.user(client.userId).update({
-        username: user.profile.username,
-        firstName: user.profile.firstName,
-        lastName: user.profile.lastName,
-        gender: user.profile.gender,
-      });
-    }
-  }, [client, user]);
-
   const _getData = useCallback(() => {
-    if (!timelineUser) return;
-    timelineUser
+    if (!userFeed) return;
+    userFeed
       .get({ limit: 20 })
       .then((response) => {
         setActivities(response.results as ActivityType[]);
@@ -75,15 +60,11 @@ export default function CommunityPage() {
       .catch((err) => {
         console.log('Failed to get feed', err);
       });
-  }, [timelineUser]);
+  }, [userFeed]);
 
   useEffect(() => {
     _getData();
   }, [_getData]);
-
-  useEffect(() => {
-    _updateUserInfo();
-  }, [_updateUserInfo]);
 
   if (!client) return null;
 

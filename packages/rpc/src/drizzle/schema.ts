@@ -26,3 +26,5 @@ export { userAnswer } from './userAnswer';
 export { userWallet } from './userWallet';
 export { session } from './session';
 export { userProfileTable } from './userProfile';
+export { searchHistory } from './searchHistory';
+export { userPostTable } from './userPost';

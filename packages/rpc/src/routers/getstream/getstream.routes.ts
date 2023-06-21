@@ -3,7 +3,7 @@ import { generateGetstreamUserToken } from '../getstream/getstream.services';
 
 export const getstreamRouters = router({
   getstreamGetUserToken: protectedRouter.mutation(({ ctx }) =>
-    generateGetstreamUserToken(ctx.profile.wallet),
+    generateGetstreamUserToken(ctx.profile.getstreamId),
   ),
 });
 

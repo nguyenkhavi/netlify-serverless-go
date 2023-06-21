@@ -29,7 +29,7 @@ export const useGetStreamUser = () => {
 
     client.connectUser(
       {
-        id: user?.profile.wallet ?? '',
+        id: user?.profile.getstreamId ?? '',
         name: user?.profile.username || '',
         image: user?.profile.avatarUrl,
       },
@@ -49,7 +49,7 @@ export const useGetStreamUser = () => {
       client.off('connection.changed', handleConnectionChange);
       client.disconnectUser().then(() => console.log('connection closed'));
     };
-  }, [token, user?.profile.avatarUrl, user?.profile.username, user?.profile.wallet]);
+  }, [token, user?.profile.avatarUrl, user?.profile.username, user?.profile.getstreamId]);
 
   return { client };
 };

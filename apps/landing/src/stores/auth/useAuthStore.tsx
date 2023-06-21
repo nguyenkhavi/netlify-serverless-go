@@ -83,6 +83,7 @@ export const useAuthStoreAction = () => {
       const postRes = await postSignUpFn({
         didToken,
         requestId,
+        username: input.username,
       });
       if (postRes) {
         const user = await refetch();

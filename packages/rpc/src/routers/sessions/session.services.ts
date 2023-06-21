@@ -1,7 +1,8 @@
+import { getstreamFeedClient } from '_@rpc/services/getstream/getstream-client';
 import { magicAdmin } from '_@rpc/services/magic.link';
 import { db, session, userActivityTable, userProfileTable } from '_@rpc/services/drizzle';
 import { and, eq, isNotNull, or, sql } from 'drizzle-orm';
-import { RequestClient } from '_@rpc/config';
+import { generateNanoid, RequestClient } from '_@rpc/config';
 import {
   PostSignUpInput,
   SignUpInput,
@@ -85,23 +86,6 @@ export const listSession = async (userId: string) => {
   return queryResult;
 };
 
-// export const revokeToken = async (token: string, { sessionId }: RevokeTokenInput) => {
-//   const records = await db
-//     .select()
-//     .from(session)
-//     .where(eq(session.id, sessionId))
-//     .limit(1)
-//     .execute();
-//   if (records.length) {
-//     const record = records[0];
-//     const [_, claim] = magicAdmin.token.decode(token);
-//     if (claim.iss !== record.iss) {
-//       throw new TRPCError({ code: 'BAD_REQUEST' });
-//     }
-//     return userLogout(record.token);
-//   }
-// };
-
 export const revokeAllToken = async (metadata: MagicUserMetadata) => {
   const userId = metadata.issuer;
   const nowSeconds = Math.floor(new Date().getTime() / 1000);
@@ -152,6 +136,15 @@ export const signUp = async (input: SignUpInput) => {
       });
     }
   }
+
+  const getstreamId = generateNanoid();
+
+  getstreamFeedClient.user(getstreamId).create({
+    username: input.username,
+  });
+
+  getstreamFeedClient.feed('timeline', getstreamId).follow('user', getstreamId);
+
   const userProfile = await db
     .insert(userProfileTable)
     .values({
@@ -163,6 +156,7 @@ export const signUp = async (input: SignUpInput) => {
       firstName,
       dob: new Date(dob),
       gender,
+      getstreamId,
     })
     .execute();
   return +userProfile.insertId;
@@ -183,6 +177,7 @@ export const postSignUp = async (input: PostSignUpInput, requestClient: RequestC
   const { accessToken, ext } = generateAccessToken({ userId: claim.iss });
 
   const wallet = magicAdmin.token.getPublicAddress(input.didToken);
+
   await db.transaction(async (ctx) => {
     const ip = requestClient.ipAddress;
     let location = '';

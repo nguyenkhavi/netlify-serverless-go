@@ -1,5 +1,5 @@
 import { ipSchema } from '_@rpc/config/schemas';
-
+import { customAlphabet } from 'nanoid';
 export const generateSignedMessage = (uid: string) => {
   return `Connect wallet to user #${uid}`;
 };
@@ -32,3 +32,9 @@ export const getQuery = (reqUrl: string) => {
   const query = new URLSearchParams(url.search);
   return query;
 };
+
+const NANOID_DEFAULT_SIZE = 12;
+const CUSTOM_ALPHABET_NANOID = '0123456789abcdefghijklmnopqrstuvwxyz';
+
+export const generateNanoid = (size?: number) =>
+  customAlphabet(CUSTOM_ALPHABET_NANOID, NANOID_DEFAULT_SIZE)(size);

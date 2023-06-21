@@ -3,7 +3,7 @@ import classcat from 'classcat';
 import { useState } from 'react';
 import React, { useCallback, useEffect } from 'react';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
-import { FlatActivity, EnrichedUser, EnrichedReaction } from 'getstream';
+import { EnrichedUser, EnrichedReaction, FlatActivityEnriched } from 'getstream';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
@@ -15,11 +15,9 @@ import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
 import HeartIcon, { HeartActiveIcon } from '_@shared/icons/HeartIcon';
 import CommentIcon, { CommentActiveIcon } from '_@shared/icons/CommentIcon';
 //HOOK
-import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
+import { StreamType, useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 
-export type ActivityType = {
-  actor: EnrichedUser;
-} & FlatActivity;
+export type ActivityType = FlatActivityEnriched<StreamType>;
 
 type ActivityProps = {
   activity: ActivityType;
@@ -86,10 +84,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
         <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div>
           <p className="text-h6">
-            @
-            {typeof activity?.actor?.data?.username === 'string'
-              ? activity?.actor?.data?.username
-              : ''}
+            @{typeof activity?.actor === 'string' ? activity?.actor : activity?.actor.data.username}
           </p>
           <span className="text-body3 text-[#666666]">
             {activity?.time && new Date(activity?.time).toLocaleDateString('en-US')}
@@ -152,7 +147,7 @@ function Comment({ activityId }: { activityId: string }) {
 
   const handleComment = async () => {
     const content = inputRef.current?.value;
-    await client?.reactions.add('comment', activityId, { text: content });
+    await client?.reactions.add('comment', activityId, { text: content || '' });
 
     if (inputRef.current) inputRef.current.value = '';
   };

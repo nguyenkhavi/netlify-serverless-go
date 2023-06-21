@@ -20,6 +20,7 @@ export type SignUpInput = z.infer<typeof signupSchema>;
 export const postSignupSchema = z.object({
   requestId: z.number(),
   didToken: z.string(),
+  username: z.string(),
 });
 export type PostSignUpInput = z.infer<typeof postSignupSchema>;
 

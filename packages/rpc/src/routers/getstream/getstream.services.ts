@@ -1,9 +1,7 @@
-import { getstreamClient } from '../../services/getstream/getstream-client';
+import { getstreamClient } from '_@rpc/services/getstream/getstream-client';
 
-export const generateGetstreamUserToken = async (userId: string) => {
-  const token = getstreamClient.createToken(userId);
-
-  return token;
+export const generateGetstreamUserToken = async (getstreamId: string) => {
+  return getstreamClient.createToken(getstreamId);
 };
 
 // !BE-use: Call on an auction created
