@@ -2,7 +2,7 @@ import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
 import { paginationSchema } from '_@rpc/config/schemas';
 import {
   postSignupSchema,
-  revokeTokenSchema,
+  // revokeTokenSchema,
   signInSchema,
   signupSchema,
   validateLoginSchema,
@@ -31,7 +31,7 @@ export const sessionRouter = router({
   // revokeSession: protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx, input }) => {
   //   return revokeToken(ctx.token, input);
   // }),
-  revokeAllSession: protectedRouter.input(revokeTokenSchema).mutation(async ({ ctx }) => {
+  revokeAllSession: protectedRouter.mutation(async ({ ctx }) => {
     return revokeAllToken(ctx.metadata);
   }),
   signup: publicProcedure.input(signupSchema).mutation(async ({ input }) => {

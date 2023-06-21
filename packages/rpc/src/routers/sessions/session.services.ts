@@ -4,7 +4,6 @@ import { and, eq, isNotNull, or, sql } from 'drizzle-orm';
 import { RequestClient } from '_@rpc/config';
 import {
   PostSignUpInput,
-  RevokeTokenInput,
   SignUpInput,
   ValidateLoginInput,
 } from '_@rpc/routers/sessions/session.schemas';
@@ -86,22 +85,22 @@ export const listSession = async (userId: string) => {
   return queryResult;
 };
 
-export const revokeToken = async (token: string, { sessionId }: RevokeTokenInput) => {
-  const records = await db
-    .select()
-    .from(session)
-    .where(eq(session.id, sessionId))
-    .limit(1)
-    .execute();
-  if (records.length) {
-    const record = records[0];
-    const [_, claim] = magicAdmin.token.decode(token);
-    if (claim.iss !== record.iss) {
-      throw new TRPCError({ code: 'BAD_REQUEST' });
-    }
-    return userLogout(record.token);
-  }
-};
+// export const revokeToken = async (token: string, { sessionId }: RevokeTokenInput) => {
+//   const records = await db
+//     .select()
+//     .from(session)
+//     .where(eq(session.id, sessionId))
+//     .limit(1)
+//     .execute();
+//   if (records.length) {
+//     const record = records[0];
+//     const [_, claim] = magicAdmin.token.decode(token);
+//     if (claim.iss !== record.iss) {
+//       throw new TRPCError({ code: 'BAD_REQUEST' });
+//     }
+//     return userLogout(record.token);
+//   }
+// };
 
 export const revokeAllToken = async (metadata: MagicUserMetadata) => {
   const userId = metadata.issuer;
@@ -121,14 +120,13 @@ export const signUp = async (input: SignUpInput) => {
     throw new TRPCError({ code: 'BAD_REQUEST', message: 'ReCapcha token is invalid!' });
   }
 
-  const conflictUser = await db
+  const conflictUsers = await db
     .select()
     .from(userProfileTable)
     .where(
       and(
         or(
           eq(userProfileTable.email, email),
-          eq(userProfileTable.username, username),
           and(
             eq(userProfileTable.phoneCode, phoneCode),
             eq(userProfileTable.phoneNumber, phoneNumber),
@@ -139,8 +137,22 @@ export const signUp = async (input: SignUpInput) => {
     )
     .limit(1)
     .execute();
-  if (conflictUser.length) {
-    throw new TRPCError({ code: 'CONFLICT', message: 'User with credential already exist!' });
+  if (conflictUsers.length) {
+    const user = conflictUsers[0];
+    if (user.email === email) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: 'The email has already existed',
+        cause: ['email'],
+      });
+    }
+    if (user.phoneCode === phoneCode && user.phoneNumber === phoneNumber) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: 'The phone number has already existed',
+        cause: ['phoneCode', 'phoneNumber'],
+      });
+    }
   }
   const userProfile = await db
     .insert(userProfileTable)

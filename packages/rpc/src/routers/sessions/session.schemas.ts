@@ -2,8 +2,8 @@ import { ZPhoneSchema } from '_@rpc/config/schemas';
 import { Gender } from '_@rpc/drizzle/enum';
 import { z } from 'zod';
 
-export const revokeTokenSchema = z.object({});
-export type RevokeTokenInput = z.infer<typeof revokeTokenSchema>;
+// export const revokeTokenSchema = z.object({});
+// export type RevokeTokenInput = z.infer<typeof revokeTokenSchema>;
 
 export const signupSchema = z.object({
   lastName: z.string().max(255),
