@@ -1,8 +1,6 @@
 //THIRD PARTY MODULES
 import { IItemsStore } from '_@landing/utils/type';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
-//LAYOUT, COMPONENTS
-import Show from '_@shared/components/Show';
 
 type Props = {
   value: IItemsStore;
@@ -30,9 +28,8 @@ export default function MyItemCard({ value }: Props) {
       <hr className="my-1.25 h-[0.5px] border-none bg-text-10" />
       <div className="flex items-center justify-between text-caption text-text-70 xlg:text-body3">
         <span>{value.market.length > 0 ? 'Price' : 'Not Listed'}</span>
-        <Show when={value.market.length > 0}>
-          <span>{value.market[0].price}</span>
-        </Show>
+
+        {value.market.length > 0 ? <span>{value.market[0].price}</span> : null}
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import HomeAdvHorizontal from '../comps/HomeAdvHorizontal';
 
 export default function VenturePage() {
   return (
-    <main>
+    <main className='pb-10 xlg:pb-24'>
       <NavBar />
       <Banner />
       <div className="px-[--px]">
