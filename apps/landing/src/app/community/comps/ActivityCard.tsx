@@ -83,7 +83,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
   return (
     <div className={classcat(['rounded-[10px] bg-secondary-200 p-6'])}>
       <div className="grid grid-flow-col justify-start gap-2.5">
-        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={46} circle />
+        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div>
           <p className="text-h6">
             @
@@ -96,7 +96,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
           </span>
         </div>
       </div>
-      <div className="mb-3 mt-6 whitespace-pre-line text-text-70">{_contentRender()}</div>
+      <div className="mb-3 mt-6 whitespace-pre-line text-sm text-text-70">{_contentRender()}</div>
       <div className="flex [&>*:not(:last-child)]:mr-8">
         <button className="flex items-center" onClick={handleLikeActivity}>
           {isLiked ? (
@@ -199,8 +199,6 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
   const [user, setUser] = useState<EnrichedUser>();
   const [isLiked, setIsLiked] = useState(false);
 
-  console.log({ comment });
-
   const getUserInfo = useCallback(async () => {
     const user = await client?.user(comment.user_id).get();
     setUser(user as unknown as EnrichedUser);
@@ -231,16 +229,16 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
   return (
     <div className="[&:not(:last-of-type)]:mb-[25px]">
       <div className="flex justify-start [&>*:not(:last-child)]:mr-2">
-        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={46} circle />
+        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div className="grow">
-          <div className="mb-2 rounded-lg bg-black/[.7] px-4 py-[7px]">
-            <p className="text-h6">
+          <div className="rounded-lg bg-black/[.7] px-4 py-[7px]">
+            <p className="text-sm">
               @{typeof user?.data?.username === 'string' ? user?.data?.username : ''}
             </p>
             <span className="mb-3 text-body3 text-[#666666]">
               {comment?.updated_at && new Date(comment?.updated_at).toLocaleDateString('en-US')}
             </span>
-            <p className="text-[#B9BABD]">{comment.data.text as string}</p>
+            <p className="text-sm text-text-70">{comment.data.text as string}</p>
           </div>
           <div className="flex [&>*:not(:last-child)]:mr-8">
             <button className="flex items-center" onClick={toggleLikeComment}>

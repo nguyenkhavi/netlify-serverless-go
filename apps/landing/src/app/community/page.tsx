@@ -91,7 +91,7 @@ export default function CommunityPage() {
   return (
     <div>
       <div className="flex rounded-[10px] bg-secondary-200 p-6">
-        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={46} circle />
+        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div className="ml-2 grow">
           <form>
             <textarea
