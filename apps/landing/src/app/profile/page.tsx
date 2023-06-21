@@ -19,8 +19,10 @@ const Profile = () => {
       <ProfileNavMobile title={isEdit ? 'Profile Edit' : 'Profile View'} />
       <Show when={!isEdit}>
         <VerifyInfo />
-        <ProfileBanner />
-        <ProfileInfoDetail />
+        <div className="md:rounded-b-lg md:bg-secondary-200">
+          <ProfileBanner />
+          <ProfileInfoDetail />
+        </div>
       </Show>
 
       <Show when={isEdit}>

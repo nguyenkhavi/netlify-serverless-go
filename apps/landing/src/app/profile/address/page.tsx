@@ -60,7 +60,10 @@ export default function ProfileAddress() {
         </div>
         <div className="mt-7 grid gap-10 md:mt-13 lg:grid-cols-2">
           {MOCK_DATA.map((item, i) => (
-            <div key={i} className="flex flex-col rounded-[10px] border border-text-10 px-3 pt-7">
+            <div
+              key={i}
+              className="flex flex-col rounded-[10px] border border-text-10 bg-secondary-200 px-3 pt-7"
+            >
               <div>
                 <p className="mb-2.5 text-body2">{item.name}</p>
                 <ul

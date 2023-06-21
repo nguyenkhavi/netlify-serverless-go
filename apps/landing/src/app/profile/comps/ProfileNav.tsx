@@ -28,7 +28,7 @@ export default function ProfileNav() {
     <div>
       <nav
         className={classcat([
-          'w-86.25',
+          'w-86.25 bg-secondary-200',
           'rounded-ee-[10px] border-[0.5px] border-text-10',
           'hidden shrink-0 py-14 pl-15 pr-7 lg:block',
         ])}

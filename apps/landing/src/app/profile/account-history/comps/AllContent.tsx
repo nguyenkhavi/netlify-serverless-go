@@ -66,7 +66,7 @@ export default function AllContent() {
             </T.TableRow>
           ))}
         </T.TableHeader>
-        <T.TableBody>
+        <T.TableBody className="bg-secondary-200">
           {table.getRowModel().rows?.length ? (
             <>
               {table.getRowModel().rows.map((row) => (

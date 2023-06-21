@@ -39,7 +39,7 @@ export default function ProfileHistory() {
       <ProfileNavMobile title={'Account History'} />
       <div className="rounded-[10px] border-text-10 lg:border">
         <Tab.Root defaultValue={TABS[0].value} onValueChange={_handleTabChange}>
-          <Tab.List className="items-center">
+          <Tab.List className="items-center bg-secondary-200">
             {TABS.map((tab, index) => (
               <Tab.Trigger
                 key={index}

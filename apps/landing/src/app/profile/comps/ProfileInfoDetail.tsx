@@ -14,7 +14,7 @@ export function ProfileInfoDetail() {
   const { user } = useAuthStore();
   const phone = `+${user?.profile?.phoneCode}${user?.profile?.phoneNumber}`;
   return (
-    <section className="grid gap-5 md:grid-cols-[1fr_316px]">
+    <section className="grid gap-5 md:grid-cols-[1fr_316px] md:px-6 md:pb-6">
       <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses])}>About Me</h2>
         <p className={classcat([contentClasses])}>

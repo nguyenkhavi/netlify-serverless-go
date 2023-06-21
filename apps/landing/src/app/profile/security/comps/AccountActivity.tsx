@@ -112,7 +112,7 @@ export default function AccountActivity() {
               </T.TableRow>
             ))}
           </T.TableHeader>
-          <T.TableBody>
+          <T.TableBody className="bg-secondary-200">
             {isFetching && !table.getRowModel().rows?.length ? (
               <T.TableRow>
                 <T.TableCell colSpan={columns.length} className="h-24">

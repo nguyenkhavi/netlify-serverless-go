@@ -13,7 +13,7 @@ export default function ProfileBanner() {
   return (
     <section
       className={classcat([
-        'rounded-[10px] border-[.5px] border-text-10 bg-secondary-200',
+        'rounded-[10px] border-text-10 bg-secondary-200',
         'relative mb-5 overflow-hidden lg:mb-7',
         'pb-5 lg:pb-18',
       ])}

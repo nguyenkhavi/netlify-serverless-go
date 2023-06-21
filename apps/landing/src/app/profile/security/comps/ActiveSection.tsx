@@ -115,7 +115,7 @@ export default function ActiveSection() {
               </T.TableRow>
             ))}
           </T.TableHeader>
-          <T.TableBody>
+          <T.TableBody className="bg-secondary-200">
             {isFetching ? (
               <T.TableRow>
                 <T.TableCell colSpan={columns.length} className="h-24">

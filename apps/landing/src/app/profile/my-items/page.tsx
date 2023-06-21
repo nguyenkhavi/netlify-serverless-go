@@ -22,7 +22,7 @@ export default function MyItems() {
   };
 
   return (
-    <div>
+    <div className="rounded-lg bg-secondary-200 p-4">
       <ProfileNavMobile title="My Items" />
       <Tab.Root value={tabActive} onValueChange={_handleTabChange}>
         <Tab.List className="items-center">
