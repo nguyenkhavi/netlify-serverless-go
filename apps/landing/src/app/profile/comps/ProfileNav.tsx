@@ -28,9 +28,9 @@ export default function ProfileNav() {
     <div>
       <nav
         className={classcat([
-          'w-86.25 bg-secondary-200',
+          'w-[364px] bg-secondary-200',
           'rounded-ee-[10px] border-[0.5px] border-text-10',
-          'hidden shrink-0 py-14 pl-15 pr-7 lg:block',
+          'hidden shrink-0 py-8 pl-15 pr-6 lg:block',
         ])}
       >
         <ul className="grid gap-11">
@@ -63,7 +63,7 @@ export default function ProfileNav() {
             <p className="text-end text-caption">{process}%</p>
           </div>
           <h2 className="text-subtitle2">Complete your account</h2>
-          <p className="text-['#7F7A7A] text-body3 text-text-60">
+          <p className="text-body3 text-[#7F7A7A] text-text-60">
             Personalize your account by adding your details.
           </p>
           <div className="flex items-center text-subtitle2">

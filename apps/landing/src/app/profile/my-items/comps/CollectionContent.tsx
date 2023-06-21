@@ -41,7 +41,7 @@ export default function CollectionContent() {
   return (
     <>
       <Show when={data.length > 0}>
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-4">
+        <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 md:gap-6">
           {data.map((item, index) => (
             <React.Fragment key={index}>
               <CollectionCard value={item} view="grid" />

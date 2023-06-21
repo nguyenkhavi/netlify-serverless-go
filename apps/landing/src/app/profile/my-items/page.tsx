@@ -23,11 +23,11 @@ export default function MyItems() {
 
   return (
     <div className="rounded-lg bg-secondary-200 p-4">
-      <ProfileNavMobile title="My Items" />
+      <ProfileNavMobile title="My Items" isBorder={false} />
       <Tab.Root value={tabActive} onValueChange={_handleTabChange}>
         <Tab.List className="items-center">
           {TABS.map((tab, index) => (
-            <Tab.Trigger key={index} value={tab.value} className="py-5">
+            <Tab.Trigger key={index} value={tab.value} className="pb-2.75 pt-0.25">
               {tab.label}
             </Tab.Trigger>
           ))}

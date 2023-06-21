@@ -14,7 +14,7 @@ export function ProfileInfoDetail() {
   const { user } = useAuthStore();
   const phone = `+${user?.profile?.phoneCode}${user?.profile?.phoneNumber}`;
   return (
-    <section className="grid gap-5 md:grid-cols-[1fr_316px] md:px-6 md:pb-6">
+    <section className="grid gap-6 md:grid-cols-[1fr_330px] md:px-6 md:pb-6">
       <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses])}>About Me</h2>
         <p className={classcat([contentClasses])}>
@@ -23,7 +23,7 @@ export function ProfileInfoDetail() {
           a galley of type and scrambled it to make a type specimen book.
         </p>
       </div>
-      <div className={classcat([boxClasses, 'px-7 py-8'])}>
+      <div className={classcat([boxClasses, 'p-6'])}>
         <h2 className={classcat([titleClasses])}>Contact Info</h2>
         <p className="text-gradient-pr flex items-center">
           <MobilePhoneIcon className="mr-1.25" /> {phone}
