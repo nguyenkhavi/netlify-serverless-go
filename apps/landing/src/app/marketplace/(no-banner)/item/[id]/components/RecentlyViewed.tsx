@@ -29,12 +29,8 @@ function RecentlyViewed({ data }: Props) {
 
     if (items) {
       const itemsNotIncludeCurrent = items.filter((item) => item.__key !== id);
-      const recentlyItems = itemsNotIncludeCurrent.map((item) => ({
-        url: item.item.metadata.image,
-        name: item.item.metadata.name,
-        prices: `${item.price} ${item.token.name}`,
-      }));
-      setRecentlyItems(recentlyItems);
+
+      setRecentlyItems(itemsNotIncludeCurrent);
     }
     if (data) {
       setItems(id, data);

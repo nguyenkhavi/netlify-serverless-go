@@ -2,7 +2,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useSearchParams } from 'next/navigation';
-import { IItemsStore } from '_@landing/utils/type';
+import { TItemStore } from '_@landing/utils/type';
 import { getItemByOwner } from '_@landing/services';
 import { pageSize } from '_@landing/utils/constants';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,9 +17,10 @@ import BasePagination from '_@shared/components/pagination/BasePagination';
 type Props = {
   userWalletId: string;
 };
+
 export default function ItemContent({ userWalletId }: Props) {
   const query = useSearchParams();
-  const [data, setData] = useState<IItemsStore[]>([]);
+  const [data, setData] = useState<TItemStore>([]);
   const [totalItems, setTotalItems] = useState(0);
   const { db } = useIndexedDBContext();
 
@@ -31,7 +32,7 @@ export default function ItemContent({ userWalletId }: Props) {
       page: page - 1,
       pageSize: pageSize,
     }).then((res) => {
-      setData(res.data as IItemsStore[]);
+      setData(res.data as TItemStore);
       setTotalItems(res.total);
     });
   }, [userWalletId, db, page]);

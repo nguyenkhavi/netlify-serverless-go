@@ -44,7 +44,7 @@ export default function RightOption({ view }: RightOptionProps) {
         owStyles={{
           triggerClasses:
             'h-full ow:rounded w-auto min-w-[9.625rem] text-caption hidden lg:block ow:text-text-60',
-          itemClasses: 'ow:py-2 ow:my-0 text-base ow:h-auto',
+          itemClasses: 'ow:py-2 ow:my-0 text-base ow:h-auto ow:text-text-50',
           contentClasses: 'ow:py-2',
         }}
       />

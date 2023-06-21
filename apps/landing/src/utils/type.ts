@@ -2,6 +2,12 @@
 import { BoolEnum } from 'sharp';
 import { BigNumber } from 'ethers';
 import { NFTMetadata } from '@thirdweb-dev/react';
+import {
+  getBestSeller,
+  getItemByOwner,
+  getTrendingCollectionsByCategory,
+  getTrendingMarketByCategory,
+} from '_@landing/services';
 
 export interface IMarketData {
   listingId: number;
@@ -205,21 +211,9 @@ export interface ICategory {
   image: string;
 }
 
-export interface IItemCard extends IMarketData {
-  activities: IActivity[];
-  item: IItem;
-}
-
-export interface ICollectionCard extends ICollection {
-  activities: IActivity[];
-  volume: number;
-}
-
-export interface ITopSeller {
-  seller: string;
-  volume: number;
-}
-
-export interface IItemsStore extends IItem {
-  market: IMarketData[];
-}
+export type TItemCard = Awaited<ReturnType<typeof getTrendingMarketByCategory>>['data'][number];
+export type TItemStore = Awaited<ReturnType<typeof getItemByOwner>>['data'];
+export type TTopSeller = Awaited<ReturnType<typeof getBestSeller>>;
+export type TCollectionCard = Awaited<
+  ReturnType<typeof getTrendingCollectionsByCategory>
+>['data'][number];

@@ -23,6 +23,8 @@ export default function Header() {
   const [openDropdown, setOpenDropdown] = useState(false);
   const pathname = usePathname();
 
+  const isShowCart = useMemo(() => pathname.startsWith('/marketplace'), [pathname]);
+
   const linkActive = useMemo(() => {
     if (pathname === '/') return 'Home';
     return menuData
@@ -83,6 +85,7 @@ export default function Header() {
                 className="text-btndefault hover:text-primary data-[active=true]:text-primary"
                 data-active={menu.label === linkActive}
                 href={menu.path}
+                onClick={() => setOpenMenu(false)}
               >
                 {menu.label}
               </Link>
@@ -110,9 +113,14 @@ export default function Header() {
           <button className="grid h-10 w-10 place-items-center rounded-full bg-[#1D1D1D]">
             <WalletIcon />
           </button>
-          <button className="grid h-10 w-10 place-items-center rounded-full bg-[#1D1D1D]">
-            <CartIcon />
-          </button>
+          <Show when={isShowCart}>
+            <Link
+              href="/marketplace/cart"
+              className="grid h-10 w-10 place-items-center rounded-full bg-[#1D1D1D]"
+            >
+              <CartIcon />
+            </Link>
+          </Show>
           <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
             <PopoverTrigger>
               <div className="h-10 w-10 overflow-auto rounded-full">

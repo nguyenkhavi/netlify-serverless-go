@@ -34,10 +34,9 @@ export default function CommunityPage() {
         object: inputRef.current?.value || '',
       })
       .then((response) => {
-        console.log('success', response);
-        if (activities.length) {
+        if (inputRef.current) inputRef.current.value = '';
+        if (activities.length === 0) {
           _getData();
-          if (inputRef.current) inputRef.current.value = '';
         } else {
           setActivities((prev) => [{ ...response, actor: prev[0].actor }, ...prev]);
         }

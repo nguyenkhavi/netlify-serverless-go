@@ -1,28 +1,17 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
-import { useMemo } from 'react';
-import { nextApi } from '_@landing/utils/api';
-import { ICollectionCard } from '_@landing/utils/type';
-import { formatAddress } from '_@landing/utils/format';
+import { TCollectionCard } from '_@landing/utils/type';
+//HOOK
+import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
 
 export type CollectionCardProps = {
   view?: string;
-  value: ICollectionCard;
+  value: TCollectionCard;
   owner?: string;
 };
 export default function CollectionCard({ view, value }: CollectionCardProps) {
-  const { data: dataUser } = nextApi.getUserByWallet.useQuery(
-    {
-      wallet: value.owner,
-    },
-    { enabled: !!value.owner },
-  );
-
-  const owner = useMemo(() => {
-    if (dataUser?.[0]?.username) return dataUser?.[0]?.username;
-    return formatAddress(value.owner);
-  }, [value, dataUser]);
+  const { owner } = useGetOwnerByWallet(value.owner);
 
   if (view === 'list') return <ListView value={value} owner={owner} />;
   return <GridView value={value} owner={owner} />;
@@ -86,9 +75,7 @@ function ListView({ value, owner, ...props }: CollectionCardProps) {
             <span className="mr-1 text-subtitle2 font-normal text-text-50">Volume</span>
             {value.volume}
           </p>
-          <span className="ml-1.25 text-subtitle2 font-normal text-text-50">
-            {value.metadata.symbol}
-          </span>
+          <span className="ml-1.25 text-subtitle2 font-normal text-text-50">${value.volume}</span>
         </div>
       </div>
     </Link>

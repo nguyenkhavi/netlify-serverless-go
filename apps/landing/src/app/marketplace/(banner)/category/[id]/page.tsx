@@ -1,5 +1,6 @@
 'use client';
 //THIRD PARTY MODULES
+import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import FilterPrice from '_@landing/app/marketplace/comps/FilterPrice';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import BrowseCategory from '_@landing/app/marketplace/comps/BrowseCategory';
@@ -21,7 +22,7 @@ export default function FilterByCategory({ params }: { params: { id: string } })
 
   const TABS = [
     {
-      label: 'Arts Items',
+      label: 'Art Items',
       value: 'item',
       content: <TabContentArtItems view={view} categoryId={params.id} />,
     },
@@ -42,7 +43,14 @@ export default function FilterByCategory({ params }: { params: { id: string } })
       leftContent={
         <>
           <BrowseCategory />
-          <FilterPrice />
+          {tabActive === 'item' ? (
+            <HomeAdvVertical
+              className="relative h-auto w-full py-8 ow:top-6 ow:px-15 xlg:grid"
+              btnClasses="ow:static mt-6.25"
+            />
+          ) : (
+            <FilterPrice />
+          )}
         </>
       }
     >

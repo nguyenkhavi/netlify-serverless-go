@@ -1,9 +1,9 @@
 //THIRD PARTY MODULES
-import { IItemsStore } from '_@landing/utils/type';
+import { TItemStore } from '_@landing/utils/type';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 
 type Props = {
-  value: IItemsStore;
+  value: TItemStore[number];
 };
 
 export default function MyItemCard({ value }: Props) {

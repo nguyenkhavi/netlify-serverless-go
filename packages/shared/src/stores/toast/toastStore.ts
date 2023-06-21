@@ -1,7 +1,7 @@
 //THIRD PARTY MODULES
 import { create } from 'zustand';
 
-interface ToastProps {
+export interface ToastProps {
   open: boolean;
   message: string;
   type: 'success' | 'error';

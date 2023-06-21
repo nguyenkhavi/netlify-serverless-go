@@ -1,6 +1,6 @@
 //THIRD PARTY MODULES
 import { useCallback, useEffect, useState } from 'react';
-import { ICategory, IItemCard } from '_@landing/utils/type';
+import { ICategory, TItemCard } from '_@landing/utils/type';
 import { getTrendingMarketByCategory } from '_@landing/services';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
@@ -14,7 +14,7 @@ type TrendingContentProps = {
 } & Omit<ContentBoxProps, 'children'>;
 
 export default function TrendingContent({ category, ...props }: TrendingContentProps) {
-  const [data, setData] = useState<IItemCard[]>([]);
+  const [data, setData] = useState<TItemCard[]>([]);
   const { db } = useIndexedDBContext();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,7 +22,7 @@ export default function TrendingContent({ category, ...props }: TrendingContentP
     if (!category || !db) return;
     getTrendingMarketByCategory(db, category.id, { page: 0, pageSize: 4 })
       .then((res) => {
-        setData(res.data as IItemCard[]);
+        setData(res.data as TItemCard[]);
       })
       .catch((error) => console.log('---Error', error))
       .finally(() => setIsLoading(false));

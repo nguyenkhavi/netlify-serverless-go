@@ -6,7 +6,7 @@ import { getBestSeller } from '_@landing/services';
 import { IDBPDatabase, deleteDB, openDB } from 'idb';
 import { startEventListener } from '_@landing/listener';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
-import { ICategory, ITopSeller } from '_@landing/utils/type';
+import { ICategory, TTopSeller } from '_@landing/utils/type';
 import { insertSeedTokenData } from '_@landing/services/token';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAllCategories, insertSeedCategoryData } from '_@landing/services/category';
@@ -21,7 +21,7 @@ import {
 type TCategoryContext = { loading: boolean; data: ICategory[] };
 type IndexedDBContextType = {
   db: IDBPDatabase | null;
-  bestSeller: ITopSeller[];
+  bestSeller: TTopSeller;
   category: TCategoryContext;
 };
 
@@ -31,7 +31,7 @@ export const useIndexedDBContext = () => useContext(IndexedDBContext);
 
 export default function IndexedDBProvider({ children }: { children: React.ReactNode }) {
   const [db, setDB] = useState<IDBPDatabase | null>(null);
-  const [bestSeller, setBestSeller] = useState<ITopSeller[]>([]);
+  const [bestSeller, setBestSeller] = useState<TTopSeller>([]);
   const [category, setCategory] = useState<TCategoryContext>({
     loading: true,
     data: [],
@@ -141,7 +141,7 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
           loading: false,
           data: category,
         });
-        setBestSeller(seller as ITopSeller[]);
+        setBestSeller(seller as TTopSeller);
       }
     };
     connectDB();

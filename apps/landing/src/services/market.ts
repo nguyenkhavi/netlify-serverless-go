@@ -35,11 +35,13 @@ export async function getTrendingMarketByCategory(
       const activities = (await getAllActivitiesByItem(db, mk.itemId)).filter((activity) => {
         return activity.type == ActivityType.BUY;
       });
+      const token = await getTokenByAddress(db, mk.currency);
       const item = await getItemById(db, mk.itemId);
       return {
         ...mk,
         item,
         activities,
+        token,
         totalSale: activities.length,
       };
     }),
@@ -95,13 +97,22 @@ export async function getAllRawMarketsByItem(
 
 export async function getAvailableMarketByItem(db: IDBPDatabase, itemId: string) {
   const market = await getAllRawMarketsByItem(db, itemId);
-  return market.filter(async (mk) => {
+  const availableMarket = market.filter(async (mk) => {
     const status = await getMarketStatusByListingId(db, mk.listingId);
     if (status.isAvailable == 1) {
       return true;
     }
     return false;
   });
+  return Promise.all(
+    availableMarket.map(async (mk) => {
+      const token = await getTokenByAddress(db, mk.currency);
+      return {
+        ...mk,
+        token,
+      };
+    }),
+  );
 }
 
 export async function getAllAvailableMarket(db: IDBPDatabase): Promise<IMarketStatusData[]> {

@@ -1,14 +1,14 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
-import { IItemsStore } from '_@landing/utils/type';
+import { TItemStore } from '_@landing/utils/type';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
 import CartIcon from '_@shared/icons/CartIcon';
 
 type Props = {
-  value: IItemsStore;
+  value: TItemStore[number];
 };
 export default function ItemStoreCard({ value }: Props) {
   return (

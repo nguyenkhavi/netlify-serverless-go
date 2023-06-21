@@ -1,20 +1,22 @@
+'use client';
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
-import { useMemo } from 'react';
-import { nextApi } from '_@landing/utils/api';
-import { IItemCard } from '_@landing/utils/type';
-import { formatAddress } from '_@landing/utils/format';
+import { TItemCard } from '_@landing/utils/type';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
 import CartIcon from '_@shared/icons/CartIcon';
+import { ToastProps, toastStore } from '_@shared/stores/toast/toastStore';
+//HOOK
+import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
 
 export type TViewMainCard = 'grid' | 'list' | 'grid-only';
 
 export type MainCardProps = {
   view?: TViewMainCard;
-  value: IItemCard;
+  value: TItemCard;
 };
 
 export default function MainCard({ view = 'grid', value, ...props }: MainCardProps) {
@@ -24,6 +26,10 @@ export default function MainCard({ view = 'grid', value, ...props }: MainCardPro
 }
 
 function GridViewWithBuy({ value, ...props }: MainCardProps) {
+  const { openToast } = toastStore();
+  const { user } = useAuthStore();
+  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
+
   return (
     <div className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]" {...props}>
       <div className="aspect-square overflow-hidden">
@@ -33,14 +39,26 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
           className="h-full w-full object-cover"
         />
       </div>
-      <p className="mt-3 text-body2">{value.item ? value.item.name : '-'}</p>
-      <span className="mt-2 text-body3 text-text-80">{value.price}</span>
+      <Link
+        href={`/marketplace/item/${value.listingId}`}
+        className="mt-3 block text-body2 hover:underline"
+      >
+        {value.item ? value.item.name : '-'}
+      </Link>
+      <span className="mt-2 text-body3 text-text-80">{`${value.price} ${value.token.symbol}`}</span>
       <div className="mt-4 flex">
-        <Button className={classcat(['btnmd mr-1 h-10 p-0 ow:rounded-lg'])}>Buy now</Button>
         <Button
           as={Link}
-          href={`/marketplace/item/${value.listingId}`}
+          href={buyNowLink}
+          className={classcat(['btnmd mr-1 h-10 p-0 ow:rounded-lg'])}
+        >
+          Buy now
+        </Button>
+        <Button
           className={classcat(['h-10 border-none bg-white p-0 ow:w-12 ow:rounded-lg', 'shrink-0'])}
+          {...(!user
+            ? { as: Link, href: '/auth/sign-in' }
+            : { onClick: () => handleAddToCart(value, openToast) })}
         >
           <CartIcon className="h-5 w-5" color="#0A0A0E" />
         </Button>
@@ -50,15 +68,10 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
 }
 
 function ListView({ value, ...props }: MainCardProps) {
-  const { data: dataUser } = nextApi.getUserByWallet.useQuery(
-    { wallet: value.item.owner },
-    { enabled: !!value.item },
-  );
-
-  const owner = useMemo(() => {
-    if (dataUser?.length && dataUser[0].username) return dataUser[0].username;
-    return formatAddress(value.item.owner);
-  }, [dataUser, value.item.owner]);
+  const { openToast } = toastStore();
+  const { user } = useAuthStore();
+  const { owner } = useGetOwnerByWallet(value.item.owner);
+  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
     <div
@@ -70,8 +83,8 @@ function ListView({ value, ...props }: MainCardProps) {
     >
       <div
         className={classcat([
-          'mx-auto md:mx-0',
-          'aspect-square max-w-[12.5rem] shrink-0 overflow-hidden md:mr-8.75',
+          'mx-auto h-50 w-50 md:mx-0 md:h-51 md:w-51',
+          'aspect-square shrink-0 overflow-hidden md:mr-8',
         ])}
       >
         <img
@@ -81,28 +94,36 @@ function ListView({ value, ...props }: MainCardProps) {
         />
       </div>
       <div className="grow text-center md:text-start">
-        <p className="mt-4 text-body2 md:mt-0 xlg:text-h5-bold">
+        <Link
+          href={`/marketplace/item/${value.listingId}`}
+          className="mt-4 block text-body2 hover:underline md:mt-0 xlg:text-h5-bold"
+        >
           {value.item ? value.item.name : ''}
-        </p>
+        </Link>
         <p className="mt-1 text-body3 text-text-60 dot-para-2">
           {value.item ? value.item.metadata.description : ''}
         </p>
         <div className="mt-1 flex items-center justify-center text-h6 text-text-100 md:justify-start md:text-h5">
-          <span>{value.price} </span>
-          <span className="ml-1.25 text-subtitle2 text-text-50">{value.price}</span>
+          <span>{`${value.price} ${value.token.symbol}`}</span>
+          <span className="ml-1.25 text-subtitle2 text-text-50">{`$${value.price}`}</span>
         </div>
         <p className="mt-1 text-subtitle2 text-primary">By {owner}</p>
         <div className="mt-4 flex justify-center md:justify-start">
-          <Button className={classcat(['mr-1 h-10 p-0 ow:rounded-lg md:max-w-[9.375rem]'])}>
+          <Button
+            as={Link}
+            href={buyNowLink}
+            className={classcat(['mr-1 h-10 p-0 ow:rounded-lg md:max-w-[9.375rem]'])}
+          >
             Buy now
           </Button>
           <Button
-            as={Link}
-            href={`/marketplace/item/${value.listingId}`}
             className={classcat([
               'h-10 border-none bg-white p-0 ow:w-12 ow:rounded-lg',
               'shrink-0',
             ])}
+            {...(!user
+              ? { as: Link, href: '/auth/sign-in' }
+              : { onClick: () => handleAddToCart(value, openToast) })}
           >
             <CartIcon className="h-5 w-5" color="#0A0A0E" />
           </Button>
@@ -138,4 +159,25 @@ function GridViewOnly({ value, ...props }: MainCardProps) {
       </div>
     </div>
   );
+}
+
+function handleAddToCart(
+  value: TItemCard,
+  openToast: (message: string, type: ToastProps['type']) => void,
+) {
+  let cartValues: TItemCard[] = [];
+
+  if (window.localStorage.getItem('cart')) {
+    cartValues = JSON.parse(window.localStorage.getItem('cart') || '');
+  }
+
+  if (cartValues.find((item) => item.listingId === value.listingId)) {
+    openToast('Item already in cart', 'error');
+    return;
+  }
+
+  cartValues.push(value);
+  window.localStorage.setItem('cart', JSON.stringify(cartValues));
+
+  openToast('Add to cart successfully', 'success');
 }

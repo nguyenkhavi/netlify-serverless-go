@@ -1,8 +1,8 @@
 'use client';
 //THIRD PARTY MODULES
+import dayjs from 'dayjs';
 import classcat from 'classcat';
 import { useState } from 'react';
-import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
 import { usePathname, useRouter } from 'next/navigation';
 //LAYOUT, COMPONENTS
@@ -68,10 +68,11 @@ export default function ProfileHistory() {
                     {date?.from ? (
                       date.to ? (
                         <>
-                          {format(date.from, 'LLL dd, y')} - {format(date.to, 'LLL dd, y')}
+                          {dayjs(date.from).format('MMM DD, YYYY')} -{' '}
+                          {dayjs(date.to).format('MMM DD, YYYY')}
                         </>
                       ) : (
-                        format(date.from, 'LLL dd, y')
+                        dayjs(date.from).format('MMM DD, YYYY')
                       )
                     ) : (
                       <span>Pick a date</span>

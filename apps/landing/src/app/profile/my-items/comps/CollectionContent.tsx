@@ -2,7 +2,7 @@
 import classcat from 'classcat';
 import { useSearchParams } from 'next/navigation';
 import { pageSize } from '_@landing/utils/constants';
-import { ICollectionCard } from '_@landing/utils/type';
+import { TCollectionCard } from '_@landing/utils/type';
 import { getCollectionsByOwner } from '_@landing/services';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,7 +17,7 @@ import BasePagination from '_@shared/components/pagination/BasePagination';
 export default function CollectionContent() {
   const { user } = useAuthStore();
   const query = useSearchParams();
-  const [data, setData] = useState<ICollectionCard[]>([]);
+  const [data, setData] = useState<TCollectionCard[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const { db } = useIndexedDBContext();
 
@@ -29,7 +29,7 @@ export default function CollectionContent() {
       page: page - 1,
       pageSize: pageSize,
     }).then((res) => {
-      setData(res.data as ICollectionCard[]);
+      setData(res.data as TCollectionCard[]);
       setTotalItems(res.total);
     });
   }, [user, db, page]);

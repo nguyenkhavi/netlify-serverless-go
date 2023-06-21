@@ -2,13 +2,14 @@
 import classcat from 'classcat';
 import { useSearchParams } from 'next/navigation';
 import { pageSize } from '_@landing/utils/constants';
-import { ICollectionCard } from '_@landing/utils/type';
+import { TCollectionCard } from '_@landing/utils/type';
 import { useCallback, useEffect, useState } from 'react';
 import { getTrendingCollectionsByCategory } from '_@landing/services';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
+import NoData from '_@landing/components/NoData';
 import CollectionCard from '_@landing/components/card/CollectionCard';
 import BasePagination from '_@shared/components/pagination/BasePagination';
 
@@ -22,7 +23,7 @@ export default function TabContentCollection({
   categoryId: string;
 }) {
   const query = useSearchParams();
-  const [data, setData] = useState<ICollectionCard[]>([]);
+  const [data, setData] = useState<TCollectionCard[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const { db } = useIndexedDBContext();
 
@@ -34,7 +35,7 @@ export default function TabContentCollection({
       page: page - 1,
       pageSize: pageSize,
     }).then((res) => {
-      setData(res.data as ICollectionCard[]);
+      setData(res.data as TCollectionCard[]);
       setTotalItems(res.total);
     });
   }, [categoryId, db, page]);
@@ -45,6 +46,9 @@ export default function TabContentCollection({
 
   return (
     <div>
+      <Show when={data.length === 0}>
+        <NoData />
+      </Show>
       <div className={classcat(['grid', view === 'grid' ? gridViewClasses : 'gap-4'])}>
         {data.map((item, index) => (
           <CollectionCard key={index} value={item} view={view} />

@@ -1,7 +1,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useSearchParams } from 'next/navigation';
-import { IItemsStore } from '_@landing/utils/type';
+import { TItemStore } from '_@landing/utils/type';
 import { getItemByOwner } from '_@landing/services';
 import { pageSize } from '_@landing/utils/constants';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
@@ -17,7 +17,7 @@ import BasePagination from '_@shared/components/pagination/BasePagination';
 export default function ItemContent() {
   const { user } = useAuthStore();
   const query = useSearchParams();
-  const [data, setData] = useState<IItemsStore[]>([]);
+  const [data, setData] = useState<TItemStore>([]);
   const [totalItems, setTotalItems] = useState(0);
   const { db } = useIndexedDBContext();
 
@@ -29,7 +29,7 @@ export default function ItemContent() {
       page: page - 1,
       pageSize: pageSize,
     }).then((res) => {
-      setData(res.data as IItemsStore[]);
+      setData(res.data as TItemStore);
       setTotalItems(res.total);
     });
   }, [user, db, page]);
