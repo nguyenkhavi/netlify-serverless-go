@@ -13,15 +13,20 @@ type Props = {
   name: string;
   placeholder?: string;
   type?: string;
+  required?: boolean;
+  labelClasses?: string;
 };
 
 export const Root = (props: PropsWithChildren<Props>) => (
   <FormItem
     key={props.title}
-    className={classcat([props.description ? 'ow:gap-4' : 'ow:gap-1.25'])}
+    labelClasses={props.labelClasses}
     label={
-      <div className="grid gap-1.25">
-        <h5 className="title">{props.title}</h5>
+      <div className="grid gap-1">
+        <h5 className="title">
+          {props.title}
+          {props.required && <span className="text-error">*</span>}
+        </h5>
         <Show when={props.description}>
           <p className="description">{props.description}</p>
         </Show>
@@ -33,20 +38,18 @@ export const Root = (props: PropsWithChildren<Props>) => (
   </FormItem>
 );
 
-export const Input = (props: Props & { inputProps?: ComponentProps<typeof FormInput> }) => (
-  <FormInput
-    tag={(props?.type || 'input') as TagInput}
-    name={props.name}
-    className={classcat([props?.type === 'textarea' ? 'input-md' : 'input-md'])}
-    placeholder={props.placeholder}
-    {...(props?.type === 'textarea'
-      ? {
-          rows: 4,
-        }
-      : {})}
-    {...props.inputProps}
-  />
-);
+export const Input = (props: Props & { inputProps?: ComponentProps<typeof FormInput> }) => {
+  const { className, ...inputProps } = props.inputProps || {};
+  return (
+    <FormInput
+      tag={(props?.type || 'input') as TagInput}
+      name={props.name}
+      className={classcat([props?.type === 'textarea-md' ? '' : 'input-md', className])}
+      placeholder={props.placeholder}
+      {...inputProps}
+    />
+  );
+};
 
 function BaseInput(props: Props & { inputProps?: ComponentProps<typeof FormInput> }) {
   return (

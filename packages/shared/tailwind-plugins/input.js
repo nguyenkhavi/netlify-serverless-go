@@ -6,7 +6,7 @@ module.exports = plugin(({ addComponents, theme }) => {
       height: '3.5rem',
       paddingLeft: '1rem',
       paddingRight: '1rem',
-      borderRadius: '.875rem',
+      borderRadius: '.5rem',
       fontSize: '.875rem',
       lineHeight: '1.375rem',
 
@@ -29,9 +29,9 @@ module.exports = plugin(({ addComponents, theme }) => {
 
     '.input-md': {
       height: '4.0625rem',
-      paddingLeft: '1.5625rem',
-      paddingRight: '1.5625rem',
-      borderRadius: '.4375rem',
+      paddingLeft: '1rem',
+      paddingRight: '1rem',
+      borderRadius: '.5rem',
       fontSize: '1rem',
       lineHeight: '1.5rem',
 
@@ -54,15 +54,15 @@ module.exports = plugin(({ addComponents, theme }) => {
 
     '.textarea-sm': {
       height: '16.1875rem',
-      padding: '.875rem 1.25rem',
-      borderRadius: '.3125rem',
+      padding: '.5rem 1rem',
+      borderRadius: '.5rem',
       resize: 'vertical',
     },
 
     '.textarea-md': {
       height: '6.5625rem',
-      padding: '.875rem 1.25rem',
-      borderRadius: '.3125rem',
+      padding: '.5rem 1rem',
+      borderRadius: '.5rem',
       resize: 'vertical',
     },
   });

@@ -21,18 +21,20 @@ import { PROFILE_NAV } from './ProfileNav';
 
 type ProfileNavMobileProps = {
   title: string;
+  isBorder?: boolean;
 };
 
-export default function ProfileNavMobile({ title }: ProfileNavMobileProps) {
+export default function ProfileNavMobile({ title, isBorder = true }: ProfileNavMobileProps) {
   const [openProfileDropdown, setOpenProfileDropdown] = useState(false);
   const [openStatus, setOpenStatus] = useState(false);
 
   return (
     <div
       className={classcat([
-        'flex items-center border-b border-text-10 py-4',
+        'flex items-center py-4',
         'mx-[calc(var(--px)*-1)] px-[--px]',
         'lg:hidden',
+        isBorder && 'border-b border-text-10',
       ])}
     >
       <h2 className="mr-auto text-subtitle1 text-text-80">{title}</h2>

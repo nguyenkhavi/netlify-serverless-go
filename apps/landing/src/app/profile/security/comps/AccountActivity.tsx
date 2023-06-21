@@ -2,7 +2,6 @@
 //THIRD PARTY MODULES
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import getTimeZone from '_@landing/utils/getTimeZone';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { RouterOutputs, api } from '_@landing/utils/api';
 import {
@@ -46,7 +45,8 @@ const browserCol = columnHelper.accessor((row) => row['browser'], {
 });
 const ipCol = columnHelper.accessor((row) => row['ipAddress'], {
   id: 'ipAddress',
-  header: 'IP Address',
+  header: () => <p className="text-center">IP Address</p>,
+  cell: (cell) => <p className="text-center">{cell.getValue()}</p>,
 });
 const locationCol = columnHelper.accessor((row) => row['location'], {
   id: 'location',
@@ -71,7 +71,6 @@ const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
 export default function AccountActivity() {
   const { hasNextPage, data, fetchNextPage, isFetching } = useInfiniteQuery({
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
     queryKey: ['myActivities'],
     queryFn: async ({ pageParam = 1 }) => {
       return await api.myActivities.query({

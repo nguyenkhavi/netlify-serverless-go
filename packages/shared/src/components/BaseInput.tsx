@@ -22,7 +22,7 @@ import type { Assign } from '_@shared/utils/type';
 const baseClasses = [
   'transition-colors',
   'focus-visible:outline-none',
-  'border-[.5px] border-text-10',
+  'border-[.5px] border-text-50',
   'bg-secondary/70 w-full',
   'text-text-50 placeholder:text-text-20',
   'data-[valid="false"]:shadow-error',
@@ -39,6 +39,7 @@ export type BaseInputProps = Assign<
     trailingComponent?: ReactNode;
     isValid?: boolean;
     showEyeIcon?: boolean;
+    containerClasses?: string;
   }
 >;
 
@@ -52,6 +53,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
       isValid = true,
       className = '',
       showEyeIcon = true,
+      containerClasses = '',
       ...props
     },
     forwardedRef,
@@ -68,7 +70,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
     useImperativeHandle(forwardedRef, () => inputRef.current as TElement);
 
     return (
-      <div className="relative">
+      <div className={classcat(['relative', containerClasses])}>
         <Tag
           {...(props as any)}
           ref={inputRef}

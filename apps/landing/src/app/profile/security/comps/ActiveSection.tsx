@@ -4,7 +4,6 @@
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import getTimeZone from '_@landing/utils/getTimeZone';
 import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 import {
@@ -42,11 +41,12 @@ const browserCol = columnHelper.accessor((row) => row['userAgent'], {
 });
 const ipCol = columnHelper.accessor((row) => row['ipAddress'], {
   id: 'ipAddress',
-  header: 'IP Address',
+  header: () => <p className="text-center">IP Address</p>,
+  cell: (cell) => <p className="text-center">{cell.getValue()}</p>,
 });
 const locationCol = columnHelper.accessor((row) => row['location'], {
   id: 'location',
-  header: 'Location',
+  header: () => <p className="text-center">Location</p>,
   cell: (cell) => {
     const value = cell.getValue() || 'N/A';
     return <p className="text-center">{value}</p>;
@@ -54,15 +54,15 @@ const locationCol = columnHelper.accessor((row) => row['location'], {
 });
 const currentCol = columnHelper.accessor((row) => row['ext'], {
   id: 'ext',
-  header: 'Current',
+  header: () => <p className="text-center">Current</p>,
   cell: (cell) => {
     const expTime = (cell.getValue() || 0) * 1000;
     const isExpired = expTime < Date.now();
     if (isExpired) {
-      return <p className="inline-flex items-center text-error">Inactive</p>;
+      return <p className="text-center text-error">Inactive</p>;
     } else {
       return (
-        <p className="inline-flex items-center text-primary">
+        <p className="flex items-center justify-center text-primary">
           <span className="mr-1 grid h-3 w-3 place-items-center rounded-full bg-primary">
             <CheckIcon className="h-2.5 w-2.5 text-black" />
           </span>
@@ -76,7 +76,9 @@ const currentCol = columnHelper.accessor((row) => row['ext'], {
 const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
 
 export default function ActiveSection() {
-  const { data: listSession, isFetching } = nextApi.listSession.useQuery();
+  const { data: listSession, isFetching } = nextApi.listSession.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
   const { logout } = useAuthStoreAction();
   const [isLoading, setIsLoading] = useState(false);
   const { mutate: closeSession } = nextApi.revokeAllSession.useMutation({});
