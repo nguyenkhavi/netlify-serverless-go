@@ -49,7 +49,7 @@ export default function ProfileAddress() {
         <div
           className={classcat([
             'flex items-center',
-            'pb-0 pt-7 lg:pb-5 lg:pt-0',
+            'pb-0 pt-7 lg:pb-6 lg:pt-0',
             'lg:border-b lg:border-text-10',
           ])}
         >
@@ -58,7 +58,7 @@ export default function ProfileAddress() {
             Add new Address
           </Button>
         </div>
-        <div className="mt-7 grid gap-5 md:mt-13 lg:grid-cols-2 lg:gap-6">
+        <div className="mt-7 grid gap-5 md:mt-10 lg:grid-cols-2 lg:gap-6">
           {MOCK_DATA.map((item, i) => (
             <div
               key={i}
@@ -70,7 +70,7 @@ export default function ProfileAddress() {
                   className={classcat([
                     '[&_p]:max-w-[180px]',
                     '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
-                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[175px]',
+                    '[&_li:not(:last-child)]:mb-1.75 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[175px]',
                   ])}
                 >
                   <li>

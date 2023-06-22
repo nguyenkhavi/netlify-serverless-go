@@ -7,6 +7,7 @@ import Select from '_@landing/app/profile/create/comps/Select';
 import Breadcrumb from '_@landing/app/profile/create/comps/Breadcrumb';
 import ProfileNavMobile from '_@landing/app/profile/comps/ProfileNavMobile';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
@@ -28,7 +29,7 @@ const blockchainOptions: { value: keyof typeof Icons; label: string }[] = [
 
 export default function CreateCollectionPage() {
   const methods = useForm();
-  const { handleSubmit } = methods;
+  const { handleSubmit, watch } = methods;
 
   const onSubmit = handleSubmit((data) => {
     console.log(data);
@@ -221,12 +222,14 @@ export default function CreateCollectionPage() {
                           </div>
                           <FormSwitch name="externalWallet" className="shrink-0" />
                         </div>
-                        <Input
-                          name="walletAddress"
-                          placeholder="Wallet address"
-                          title=""
-                          labelClasses="hidden"
-                        />
+                        <Show when={watch('externalWallet')}>
+                          <Input
+                            name="walletAddress"
+                            placeholder="Wallet address"
+                            title=""
+                            labelClasses="hidden"
+                          />
+                        </Show>
                       </div>
                     </div>
                   </div>

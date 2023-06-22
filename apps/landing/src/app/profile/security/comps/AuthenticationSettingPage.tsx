@@ -29,7 +29,7 @@ export default function AuthenticationSettingPage() {
               {nav.label}
             </div>
             {nav.isActive ? (
-              <p className="ml-auto mr-3 text-body2 text-primary">Active</p>
+              <p className="ml-auto text-body2 text-primary">Active</p>
             ) : (
               <p className="ml-auto text-body2 text-text-50">Inactive</p>
             )}

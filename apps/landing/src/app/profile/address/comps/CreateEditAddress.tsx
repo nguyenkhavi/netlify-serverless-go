@@ -83,7 +83,7 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
               'mb-6 p-4 pb-0 lg:mb-4 lg:px-10 lg:pb-4',
             ])}
           >
-            Shipping information
+            {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
           </h2>
           <div className="grid gap-2.5 px-4 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-1 lg:px-10">
             <FormItem label="Country" name="country" className="ow:gap-1">

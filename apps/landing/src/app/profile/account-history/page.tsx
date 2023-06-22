@@ -45,7 +45,7 @@ export default function ProfileHistory() {
                 key={index}
                 value={tab.value}
                 className={classcat([
-                  'w-39 data-[state=active]:text-subtitle2 ow:text-subtitle2 lg:data-[state=active]:text-subtitle1 ow:lg:text-subtitle1',
+                  'w-39 data-[state=active]:text-subtitle2 ow:text-subtitle2 lg:data-[state=active]:text-xl ow:lg:text-xl',
                   'px-0 pb-2 pt-6 lg:px-8 ow:lg:[&:not(:first-child)]:ml-0',
                   // 'before:absolute before:bottom-2 before:right-0 before:w-[1px] lg:before:h-7',
                   // 'before:bg-text-20',
@@ -93,7 +93,7 @@ export default function ProfileHistory() {
             </div>
           </Tab.List>
           {TABS.map((tab, index) => (
-            <Tab.Content key={index} value={tab.value} className="ow:mt-0">
+            <Tab.Content key={index} value={tab.value} className="ow:mt-0 ow:lg:mt-0">
               {tab.content}
             </Tab.Content>
           ))}
