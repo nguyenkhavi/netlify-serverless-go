@@ -56,7 +56,7 @@ export default function SignIn() {
     } catch (err: any) {
       if (err.message === 'BAD_REQUEST') {
         setError('phone.phoneNumber', {
-          message: 'Invalid phone number',
+          message: 'The phone number does not exist.',
           type: 'manual',
         });
       } else {

@@ -91,7 +91,7 @@ export default function ActiveSection() {
 
   const onCloseSession = async () => {
     setIsLoading(true);
-    await closeSession({});
+    await closeSession();
     await logout();
   };
 

@@ -33,8 +33,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <ClientProvider>
       <ThirdwebProvider>
-        <IndexedDBProvider>
-          <AuthProvider user={user}>
+        <AuthProvider user={user}>
+          <IndexedDBProvider>
             {/* <AnimationProvider> */}
             <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
               <body>
@@ -46,8 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </body>
             </html>
             {/* </AnimationProvider> */}
-          </AuthProvider>
-        </IndexedDBProvider>
+          </IndexedDBProvider>
+        </AuthProvider>
       </ThirdwebProvider>
     </ClientProvider>
   );
