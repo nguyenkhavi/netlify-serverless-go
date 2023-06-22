@@ -10,7 +10,7 @@ export default function MyItemCard({ value }: Props) {
   const { user } = useAuthStore();
 
   return (
-    <div className="rounded-[10px] border border-[#303030] px-2.25 py-3.75 xlg:px-3.75 xlg:py-5">
+    <div className="rounded-[10px] border border-[#303030] p-4 xlg:px-3.75 xlg:py-5">
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         <img
           src={value.metadata.image ? value.metadata.image : '/images/marketplace/trending.png'}
@@ -29,7 +29,7 @@ export default function MyItemCard({ value }: Props) {
       <div className="flex items-center justify-between text-caption text-text-70 xlg:text-body3">
         <span>{value.market.length > 0 ? 'Price' : 'Not Listed'}</span>
 
-        {value.market.length > 0 ? <span>{value.market[0].price}</span> : null}
+        {value.market.length > 0 ? <span>{value.market[0].price} BUSD</span> : null}
       </div>
     </div>
   );

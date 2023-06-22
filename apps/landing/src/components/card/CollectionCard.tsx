@@ -38,7 +38,7 @@ function GridView({ value, owner, ...props }: CollectionCardProps) {
       <hr className="my-2 h-[0.5px] border-none bg-text-10" />
       <div className="flex items-center justify-between text-caption text-text-70 xlg:text-body3">
         <span className="mr-2 w-12.5">Volume</span>
-        <span>{value.volume}</span>
+        <span>{value.volume} BUSD</span>
       </div>
     </Link>
   );

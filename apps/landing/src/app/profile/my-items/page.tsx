@@ -22,12 +22,12 @@ export default function MyItems() {
   };
 
   return (
-    <div className="rounded-lg bg-secondary-200 p-4">
+    <div className="rounded-lg lg:bg-secondary-200 lg:p-4">
       <ProfileNavMobile title="My Items" isBorder={false} />
       <Tab.Root value={tabActive} onValueChange={_handleTabChange}>
-        <Tab.List className="items-center">
+        <Tab.List className="relative items-center pt-5.25 lg:pt-7.75">
           {TABS.map((tab, index) => (
-            <Tab.Trigger key={index} value={tab.value} className="pb-2.75 pt-0.25">
+            <Tab.Trigger key={index} value={tab.value} className="px-1 pb-2.75 pt-0.25">
               {tab.label}
             </Tab.Trigger>
           ))}
@@ -35,7 +35,7 @@ export default function MyItems() {
             <Button
               as={Link}
               href="/profile/create/collection"
-              className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5"
+              className="btnsm absolute bottom-2.75 right-0 ml-auto w-max px-2 lg:btnmd lg:px-5 lg:[&>span]:text-xs"
             >
               Create Collection
             </Button>
@@ -43,7 +43,7 @@ export default function MyItems() {
             <Button
               as={Link}
               href="/profile/create/nft"
-              className="btnsm ml-auto w-max px-2 lg:btnmd lg:px-5"
+              className="btnsm absolute bottom-2.75 right-0 ml-auto w-max px-2 lg:btnmd lg:px-5 lg:[&>span]:text-xs"
             >
               Create NFT
             </Button>

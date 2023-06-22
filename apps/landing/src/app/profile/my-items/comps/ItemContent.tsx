@@ -41,7 +41,7 @@ export default function ItemContent() {
   return (
     <>
       <Show when={data.length > 0}>
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-4 md:gap-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
           {data.map((item, index) => (
             <React.Fragment key={index}>
               <MyItemCard value={item} />

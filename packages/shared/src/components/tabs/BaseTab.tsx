@@ -48,7 +48,7 @@ function Trigger({ className, children, ...props }: TabTriggerProps) {
     <TabsPrimitive.Trigger
       className={classcat([
         lineTabClasses,
-        'bg-transparent py-2 text-body3 text-text-50 data-[state=active]:text-gradient-pr data-[state=active]:text-body3',
+        'bg-transparent py-2 text-body3 text-text-50 data-[state=active]:text-gradient-pr data-[state=active]:text-body3 data-[state=active]:font-bold',
         'font-normal [&:not(:first-child)]:ml-10',
         'lg:text-h5 lg:data-[state=active]:text-h5-bold lg:[&:not(:first-child)]:ml-16',
         className,
@@ -62,7 +62,7 @@ function Trigger({ className, children, ...props }: TabTriggerProps) {
 
 function Content({ className, children, ...props }: TabContentProps) {
   return (
-    <TabsPrimitive.Content className={classcat(['mt-6', className])} {...props}>
+    <TabsPrimitive.Content className={classcat(['mt-6 lg:mt-10', className])} {...props}>
       {children}
     </TabsPrimitive.Content>
   );

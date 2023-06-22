@@ -7,8 +7,8 @@ import PenIcon from '_@shared/icons/PenIcon';
 import MailIcon from '_@shared/icons/MailIcon';
 import MobilePhoneIcon from '_@shared/icons/MobilePhoneIcon';
 
-const boxClasses = ['px-4.5 py-7.5 md:py4.5 rounded-[10px] border border-text-10 bg-secondary-300'];
-const titleClasses = ['mb-2.5 text-body2'];
+const boxClasses = ['p-4 md:p-6 rounded-[10px] border border-text-10 bg-secondary-300'];
+const titleClasses = ['mb-2 text-body2'];
 const contentClasses = ['text-body3 text-text-50'];
 export function ProfileInfoDetail() {
   const { user } = useAuthStore();
@@ -25,10 +25,10 @@ export function ProfileInfoDetail() {
       </div>
       <div className={classcat([boxClasses, 'p-6'])}>
         <h2 className={classcat([titleClasses])}>Contact Info</h2>
-        <p className="text-gradient-pr flex items-center">
+        <p className="text-gradient-pr flex items-center text-sm">
           <MobilePhoneIcon className="mr-1.25" /> {phone}
         </p>
-        <p className="text-gradient-pr mt-2.5 flex items-center">
+        <p className="text-gradient-pr mt-2.5 flex items-center text-sm">
           <MailIcon className="mr-1.25" color="default" /> {user?.profile.email}
         </p>
       </div>
@@ -43,7 +43,7 @@ export function ProfileInfoDetail() {
       <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses, 'flex items-center justify-between'])}>
           Shipping Information{' '}
-          <Link href="/profile/address" className="flex items-center text-primary">
+          <Link href="/profile/address" className="flex items-center text-sm text-primary">
             Edit <PenIcon className="ml-2" />
           </Link>
         </h2>
@@ -55,15 +55,15 @@ export function ProfileInfoDetail() {
         >
           <li>
             <span>Country Name:</span>
-            <p>United Arab Emirates</p>
+            <p className="text-right">United Arab Emirates</p>
           </li>
           <li>
             <span>State:</span>
-            <p>Abu Dabi</p>
+            <p className="text-right">Abu Dabi</p>
           </li>
           <li>
             <span>Street Address:</span>
-            <p>9540 N. Marconi CourtDes Plaines, IL 60016</p>
+            <p className="text-right">9540 N. Marconi CourtDes Plaines, IL 60016</p>
           </li>
         </ul>
       </div>
