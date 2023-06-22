@@ -15,7 +15,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  productionBrowserSourceMaps: true,
+  // productionBrowserSourceMaps: true,
 };
 
 const plugins = [
