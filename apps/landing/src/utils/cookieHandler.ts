@@ -32,7 +32,7 @@ const cookieHandler = {
     if (cookiesInstance.isWindow) {
       return cookiesInstance.cookies[key];
     }
-    return cookiesInstance.cookies.get(key);
+    return cookiesInstance.cookies.get(key)?.value;
   },
   set: (key: string, value: string) => {
     const cookiesInstance = cookiesFactory();

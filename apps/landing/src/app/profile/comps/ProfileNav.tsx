@@ -3,17 +3,18 @@
 import React from 'react';
 import Link from 'next/link';
 import classcat from 'classcat';
+import { nextApi } from '_@landing/utils/api';
 import { usePathname } from 'next/navigation';
 import { feedbackStore } from '_@landing/stores/feedbackStore';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
-import LockIcon from '_@shared/icons/LockIcon';
 import BookIcon from '_@shared/icons/BookIcon';
-import MyItemIcon from '_@shared/icons/MyItemIcon';
+import LockIcon from '_@shared/icons/LockIcon';
 import FolderIcon from '_@shared/icons/FolderIcon';
 import LogoutIcon from '_@shared/icons/LogoutIcon';
+import MyItemIcon from '_@shared/icons/MyItemIcon';
 import UserBarIcon from '_@shared/icons/UserBarIcon';
 import FeedbackIcon from '_@shared/icons/FeedbackIcon';
 import UserProfileIcon from '_@shared/icons/UserProfileIcon';
@@ -22,8 +23,9 @@ export default function ProfileNav() {
   const { logout } = useAuthStoreAction();
   const { setOpen } = feedbackStore();
   const pathname = usePathname();
+  const { data } = nextApi.userVerifiedPercentage.useQuery();
+  const process = Number(`${data?.percentage || 0}`.toFixed(2));
 
-  const process = ((5 / 6) * 100).toFixed(2);
   return (
     <div>
       <nav
@@ -54,16 +56,17 @@ export default function ProfileNav() {
         <div className="mt-11.5 rounded-[5px] border border-text-10 bg-secondary-300 px-4.5 pb-8 pt-9.5">
           <div className="mb-1.5">
             <span
+              style={{ '--process': `${process * 100}%` } as React.CSSProperties}
               className={classcat([
                 'relative h-3 w-full overflow-hidden rounded-3xl bg-white',
-                'after:absolute after:left-0 after:top-0 after:h-full after:w-3/4 after:bg-primary',
+                'after:absolute after:left-0 after:top-0 after:h-full after:w-[--process] after:bg-primary',
                 'after:rounded-3xl',
               ])}
             ></span>
             <p className="text-end text-caption">{process}%</p>
           </div>
           <h2 className="text-subtitle2">Complete your account</h2>
-          <p className="text-body3 text-[#7F7A7A] text-text-60">
+          <p className="text-body3 text-text-60">
             Personalize your account by adding your details.
           </p>
           <div className="flex items-center text-subtitle2">

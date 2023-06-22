@@ -3,7 +3,7 @@ import { HmacSHA1, enc } from 'crypto-js';
 
 const consumerKey = process.env.TWITTER_CONSUMER_KEY || '';
 const consumerSecret = process.env.TWITTER_CONSUMER_SECRET || '';
-const twitterApiBaseUrl = process.env.TWITTER_API_BASE_URL || '';
+const twitterApiBaseUrl = 'https://api.twitter.com';
 
 const twitterAxiosInstance = axios.create({
   baseURL: twitterApiBaseUrl,

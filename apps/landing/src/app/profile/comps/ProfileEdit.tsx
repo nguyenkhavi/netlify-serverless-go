@@ -2,12 +2,15 @@
 import { z } from 'zod';
 import classcat from 'classcat';
 import { useState } from 'react';
+import { nextApi } from '_@landing/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
+import ConnectTwitterBtn from '_@landing/components/provider/ConnectTwitter';
+import { ConnectInstagram } from '_@landing/components/provider/instagram/ConnectInstagram';
 //SHARED
 import CameraIcon from '_@shared/icons/CameraIcon';
 import { TwitterLightIcon } from '_@shared/icons/TwitterIcon';
@@ -27,7 +30,7 @@ type ProfileEditProps = {
 
 export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
   const { openToast } = toastStore();
-
+  const { mutate: contentInstagram } = nextApi.userConnectInstagram.useMutation();
   const [coverUrl, setCoverUrl] = useState('/images/profile/cover.jpeg');
   const [avatarUrl, setAvatarUrl] = useState('/images/profile/avatar-default.webp');
 
@@ -54,6 +57,13 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
     const file = e.target.files[0];
     const url = URL.createObjectURL(file);
     setAvatarUrl(url);
+  };
+
+  const _handleSuccess = (code: string | null) => {
+    if (!code) return;
+    contentInstagram({
+      code,
+    });
   };
 
   return (
@@ -133,14 +143,34 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
                   <TwitterLightIcon className="mr-2" />
                   Twitter
                 </p>
-                <Button className="btnsm w-max">Connect</Button>
+                <div className="relative">
+                  <Button className="btnsm w-max">Connect</Button>
+                  <div
+                    className={classcat([
+                      '[&>button]:absolute [&>button]:h-full [&>button]:w-full',
+                      '[&>button]:-translate-x-1/2 [&>button]:-translate-y-1/2 ',
+                      '[&>button]:left-1/2 [&>button]:top-1/2',
+                      '[&>button]:opacity-0',
+                    ])}
+                  >
+                    <ConnectTwitterBtn />
+                  </div>
+                </div>
               </div>
               <div className="flex items-center justify-between ">
                 <p className="flex items-center">
                   <InstagramLightIcon className="mr-2" />
                   Instagram
                 </p>
-                <Button className="btnsm w-max">Connect</Button>
+                <div className="relative">
+                  <ConnectInstagram
+                    onSuccess={_handleSuccess}
+                    onFailure={(e) => {
+                      console.log(e);
+                    }}
+                    clientId={process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID as string}
+                  />
+                </div>
               </div>
             </div>
           </div>
