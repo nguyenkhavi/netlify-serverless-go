@@ -61,7 +61,7 @@ export default function MyPortfolioPage() {
   }, [data]);
   return (
     <>
-      <ProfileNavMobile title="My Portfolio" />
+      <ProfileNavMobile title="My Portfolio" isBorder={false} />
       <h2 className="pt-6 text-h4 lg:pt-0 lg:text-h3">My Portfolio distribution</h2>
       <div
         className={classcat([

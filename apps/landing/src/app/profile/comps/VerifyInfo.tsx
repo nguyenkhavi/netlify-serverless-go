@@ -20,7 +20,7 @@ export default function VerifyInfo() {
         className={classcat([
           'grid place-items-center justify-center py-6',
           'rounded-[10px] border border-text-10',
-          'mr-6.25 max-w-[330px] grow',
+          'mr-4 max-w-[330px] grow',
         ])}
       >
         <p className="mb-1 text-h6">Verification Level : 2</p>

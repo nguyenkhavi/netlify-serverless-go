@@ -31,7 +31,7 @@ export default function VerifyPage() {
 
   return (
     <>
-      <ProfileNavMobile title="Compete KFC" />
+      <ProfileNavMobile title="Compete KFC" isBorder={false} />
       <div className="md:flex">
         <div className="rounded-[10px] bg-secondary-200 px-9.5 pb-10 pt-14 md:w-89">
           <p className="mb-1.5 text-center text-h6">Verify your account</p>

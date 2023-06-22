@@ -8,7 +8,7 @@ import AuthenticationSettingPage from './comps/AuthenticationSettingPage';
 export default function SecurityPage() {
   return (
     <>
-      <ProfileNavMobile title="Security" />
+      <ProfileNavMobile title="Security" isBorder={false} />
       <div className="grid gap-6.25">
         <AuthenticationSettingPage />
         <ActiveSection />

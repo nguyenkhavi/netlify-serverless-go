@@ -45,12 +45,12 @@ export default function CollectionContent() {
           {data.map((item, index) => (
             <React.Fragment key={index}>
               <CollectionCard value={item} view="grid" />
-              {(index + 1) % 6 === 0 ? (
+              {/* <Show when={(index + 1) % 6 === 0}>
                 <HomeAdvHorizontal
                   className={classcat(['col-span-full md:hidden'])}
                   isHome={false}
                 />
-              ) : null}
+              </Show> */}
             </React.Fragment>
           ))}
         </div>

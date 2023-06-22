@@ -44,7 +44,7 @@ export default function ProfileAddress() {
 
   return (
     <div>
-      <ProfileNavMobile title={'Address(2)'} />
+      <ProfileNavMobile title={'Address(2)'} isBorder={false} />
       <Show when={!type}>
         <div
           className={classcat([
@@ -58,11 +58,11 @@ export default function ProfileAddress() {
             Add new Address
           </Button>
         </div>
-        <div className="mt-7 grid gap-10 md:mt-13 lg:grid-cols-2">
+        <div className="mt-7 grid gap-5 md:mt-13 lg:grid-cols-2 lg:gap-6">
           {MOCK_DATA.map((item, i) => (
             <div
               key={i}
-              className="flex flex-col rounded-[10px] border border-text-10 bg-secondary-200 px-3 pt-7"
+              className="flex flex-col rounded-[10px] border border-text-10 bg-secondary-200 px-6 pt-6"
             >
               <div>
                 <p className="mb-2.5 text-body2">{item.name}</p>
@@ -70,24 +70,24 @@ export default function ProfileAddress() {
                   className={classcat([
                     '[&_p]:max-w-[180px]',
                     '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
-                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr]',
+                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[175px]',
                   ])}
                 >
                   <li>
                     <span>Country Name:</span>
-                    <p>{item.country}</p>
+                    <p className="text-left">{item.country}</p>
                   </li>
                   <li>
                     <span>State:</span>
-                    <p>{item.state}</p>
+                    <p className="text-left">{item.state}</p>
                   </li>
                   <li>
                     <span>Street Address:</span>
-                    <p>{item.streetAddress}</p>
+                    <p className="text-left">{item.streetAddress}</p>
                   </li>
                 </ul>
                 <Show when={item.isDefault}>
-                  <p className="mb-7 mt-5.5 text-body3 text-success">Default address</p>
+                  <p className="mb-6 mt-2 text-body3 text-success lg:mb-4">Default address</p>
                 </Show>
               </div>
               <div className="-mx-3 mt-auto flex items-center border-t border-text-10 px-3 pb-4 pt-5">
@@ -98,7 +98,7 @@ export default function ProfileAddress() {
                 )}
                 <div className="ml-auto flex items-center">
                   <button className="mr-4" onClick={() => _handleEditAddress(item.id)}>
-                    <PenIcon />
+                    <PenIcon width={15} height={15} />
                   </button>
                   <button onClick={() => _handleOpenDialog(item.id)}>
                     <TrashCanIcon />

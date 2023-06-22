@@ -36,7 +36,7 @@ export default function ProfileHistory() {
 
   return (
     <>
-      <ProfileNavMobile title={'Account History'} />
+      <ProfileNavMobile title={'Account History'} isBorder={false} />
       <div className="rounded-[10px] border-text-10 lg:border">
         <Tab.Root defaultValue={TABS[0].value} onValueChange={_handleTabChange}>
           <Tab.List className="items-center bg-secondary-200">
@@ -45,10 +45,10 @@ export default function ProfileHistory() {
                 key={index}
                 value={tab.value}
                 className={classcat([
-                  'data-[state=active]:text-subtitle2 ow:text-subtitle2 lg:data-[state=active]:text-subtitle1 ow:lg:text-subtitle1',
+                  'w-39 data-[state=active]:text-subtitle2 ow:text-subtitle2 lg:data-[state=active]:text-subtitle1 ow:lg:text-subtitle1',
                   'px-0 pb-2 pt-6 lg:px-8 ow:lg:[&:not(:first-child)]:ml-0',
-                  'before:absolute before:bottom-2 before:right-0 before:w-[1px] lg:before:h-7',
-                  'before:bg-text-20',
+                  // 'before:absolute before:bottom-2 before:right-0 before:w-[1px] lg:before:h-7',
+                  // 'before:bg-text-20',
                 ])}
               >
                 {tab.label}

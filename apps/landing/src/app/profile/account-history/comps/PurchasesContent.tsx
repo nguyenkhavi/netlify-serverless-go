@@ -22,20 +22,24 @@ const columnHelper = createColumnHelper<TData>();
 const statusCol = columnHelper.accessor((row) => row['status'], {
   id: 'status',
   header: 'Status',
+  size: 248,
 });
 
 const amountCol = columnHelper.accessor((row) => row['amount'], {
   id: 'amount',
   header: 'Amount',
+  size: 248,
 });
 
 const recipientCol = columnHelper.accessor((row) => row['recipient'], {
   id: 'recipient',
   header: 'Recipient',
+  size: 248,
 });
 const balanceCol = columnHelper.accessor((row) => row['balance'], {
   id: 'balance',
   header: 'Balance',
+  size: 248,
 });
 
 const columns = [statusCol, amountCol, recipientCol, balanceCol];
@@ -50,7 +54,7 @@ export default function PurchasesContent() {
 
   return (
     <div className="[&>div]:rounded-none [&>div]:lg:border-none">
-      <T.Table>
+      <T.Table className="table-fixed">
         <T.TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <T.TableRow key={headerGroup.id}>
