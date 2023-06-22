@@ -61,7 +61,7 @@ export default function AllContent() {
             <T.TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <T.TableHead key={header.id} className="whitespace-nowrap">
+                  <T.TableHead key={header.id} className="whitespace-nowrap text-center">
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -77,7 +77,7 @@ export default function AllContent() {
               {table.getRowModel().rows.map((row) => (
                 <T.TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                   {row.getVisibleCells().map((cell) => (
-                    <T.TableCell key={cell.id}>
+                    <T.TableCell key={cell.id} className="text-center">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </T.TableCell>
                   ))}

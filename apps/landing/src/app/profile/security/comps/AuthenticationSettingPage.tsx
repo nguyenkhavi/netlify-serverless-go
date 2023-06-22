@@ -11,9 +11,8 @@ export default function AuthenticationSettingPage() {
       <div
         className={classcat([
           'rounded-[10px] border border-text-10',
-          'bg-secondary-200 px-6 py-9',
-          'grid gap-5',
-          'md:px-36.25',
+          'bg-secondary-200 p-4 md:p-6',
+          'grid gap-6',
         ])}
       >
         {AUTHENTICATION_SETTING_NAV.map((nav, i) => (
@@ -43,17 +42,17 @@ export default function AuthenticationSettingPage() {
 const AUTHENTICATION_SETTING_NAV = [
   {
     label: 'Phone number',
-    icon: <MobilePhone2Icon className="mr-3 text-current" />,
+    icon: <MobilePhone2Icon className="mr-2 text-current" />,
     isActive: true,
   },
   {
     label: 'Email',
-    icon: <MailFilledIcon className="mr-3 text-current" />,
+    icon: <MailFilledIcon className="mr-2 text-current" />,
     isActive: true,
   },
   {
     label: 'Google 2FA',
-    icon: <MobilePhone2Icon className="mr-3 text-current" />,
+    icon: <MobilePhone2Icon className="mr-2 text-current" />,
     isActive: false,
   },
 ];

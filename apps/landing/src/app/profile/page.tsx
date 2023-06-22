@@ -16,7 +16,11 @@ const Profile = () => {
   const [isEdit, setIsEdit] = useState(false);
   return (
     <div>
-      <ProfileNavMobile title={isEdit ? 'Profile Edit' : 'Profile View'} />
+      <ProfileNavMobile
+        className="mb-6"
+        title={isEdit ? 'Profile Edit' : 'Profile View'}
+        isBorder={false}
+      />
       <Show when={!isEdit}>
         <VerifyInfo />
         <div className="md:rounded-b-lg md:bg-secondary-200">
@@ -30,8 +34,8 @@ const Profile = () => {
       </Show>
 
       <Show when={!isEdit}>
-        <div className="mt-8 flex justify-center lg:justify-end">
-          <Button className="btnsm w-max lg:btnmd" onClick={() => setIsEdit(true)}>
+        <div className="mt-6 flex justify-center lg:mt-2 lg:justify-end">
+          <Button className="btnsm w-full lg:btnmd lg:w-max" onClick={() => setIsEdit(true)}>
             Edit
           </Button>
         </div>

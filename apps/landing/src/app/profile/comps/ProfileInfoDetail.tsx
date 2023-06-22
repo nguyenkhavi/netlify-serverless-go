@@ -23,7 +23,7 @@ export function ProfileInfoDetail() {
           a galley of type and scrambled it to make a type specimen book.
         </p>
       </div>
-      <div className={classcat([boxClasses, 'p-6'])}>
+      <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses])}>Contact Info</h2>
         <p className="text-gradient-pr flex items-center text-sm">
           <MobilePhoneIcon className="mr-1.25" /> {phone}

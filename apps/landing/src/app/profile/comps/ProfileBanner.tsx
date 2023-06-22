@@ -26,7 +26,7 @@ export default function ProfileBanner() {
       <div
         className={classcat([
           'overflow-hidden rounded-full',
-          'mx-auto mb-2 lg:mx-0',
+          'mx-auto mb-4 lg:mx-0',
           'h-15 w-15 md:h-30 md:w-30 lg:h-42 lg:w-42',
           '-mt-7.5 md:-mt-15 lg:-mt-21 lg:ml-[29px]',
           'relative z-[2] lg:absolute',
@@ -43,7 +43,7 @@ export default function ProfileBanner() {
         <h1 className="mb-2.5 text-center text-h6 lg:mb-0 lg:mr-16 lg:text-h5-bold">
           {user?.profile.firstName + ' ' + user?.profile.lastName}
         </h1>
-        <div className="mb-12.5 flex justify-center text-caption lg:mb-0 lg:mr-auto">
+        <div className="mb-14 flex justify-center text-caption lg:mb-0 lg:mr-auto">
           <p className="mr-[14px] flex items-center lg:mr-[23px] lg:text-sm">
             <VerifyIcon className="mr-[2px] h-[18px] w-[18px] shrink-0 lg:mr-1" />
             ID Verified

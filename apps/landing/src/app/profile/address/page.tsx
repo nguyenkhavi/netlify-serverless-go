@@ -62,7 +62,7 @@ export default function ProfileAddress() {
           {MOCK_DATA.map((item, i) => (
             <div
               key={i}
-              className="flex flex-col rounded-[10px] border border-text-10 bg-secondary-200 px-6 pt-6"
+              className="flex flex-col rounded-[10px] border border-text-10 bg-secondary-200 px-4 pt-4 lg:px-6 lg:pt-6"
             >
               <div>
                 <p className="mb-2.5 text-body2">{item.name}</p>
@@ -70,20 +70,20 @@ export default function ProfileAddress() {
                   className={classcat([
                     '[&_p]:max-w-[180px]',
                     '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
-                    '[&_li:not(:last-child)]:mb-1.75 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[175px]',
+                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[80px] [&_li]:lg:gap-[175px]',
                   ])}
                 >
                   <li>
                     <span>Country Name:</span>
-                    <p className="text-left">{item.country}</p>
+                    <p className="text-right lg:text-left">{item.country}</p>
                   </li>
                   <li>
                     <span>State:</span>
-                    <p className="text-left">{item.state}</p>
+                    <p className="text-right lg:text-left">{item.state}</p>
                   </li>
                   <li>
                     <span>Street Address:</span>
-                    <p className="text-left">{item.streetAddress}</p>
+                    <p className="text-right lg:text-left">{item.streetAddress}</p>
                   </li>
                 </ul>
                 <Show when={item.isDefault}>
@@ -92,9 +92,9 @@ export default function ProfileAddress() {
               </div>
               <div className="-mx-3 mt-auto flex items-center border-t border-text-10 px-3 pb-4 pt-5">
                 {item.isDefault ? (
-                  <p>DEFAULT ADDRESS</p>
+                  <p className="font-medium text-text-50">DEFAULT ADDRESS</p>
                 ) : (
-                  <button className="text-primary">SET AS DEFAULT</button>
+                  <button className="font-medium text-primary">SET AS DEFAULT</button>
                 )}
                 <div className="ml-auto flex items-center">
                   <button className="mr-4" onClick={() => _handleEditAddress(item.id)}>
