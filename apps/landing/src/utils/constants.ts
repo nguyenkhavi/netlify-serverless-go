@@ -95,7 +95,7 @@ export function formatNumberToBigNumberWithDecimal(quantity: number, decimal: nu
   return BigNumber.from(new Decimal(quantity).mul(new Decimal(10).pow(decimal)).toHex());
 }
 
-export const pageSize = 20;
+export const pageSize = 16;
 
 export const maxRetries = 5;
 

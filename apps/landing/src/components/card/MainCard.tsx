@@ -73,6 +73,10 @@ function ListView({ value, ...props }: MainCardProps) {
   const { owner } = useGetOwnerByWallet(value.item.owner);
   const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
 
+  const _handleAddToCart = () => {
+    openToast('Add to cart successfully', 'success');
+  };
+
   return (
     <div
       className={classcat([

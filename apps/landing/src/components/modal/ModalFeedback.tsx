@@ -2,6 +2,8 @@
 //THIRD PARTY MODULES
 import { z } from 'zod';
 import classcat from 'classcat';
+import { nextApi } from '_@landing/utils/api';
+import { SuggestionType } from '_@rpc/drizzle/enum';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { feedbackStore } from '_@landing/stores/feedbackStore';
@@ -11,31 +13,45 @@ import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
 import FormRadioGroup from '_@shared/components/radio/FormRadioGroup';
 import { Dialog, DialogContent } from '_@shared/components/dialog/BaseDialog';
+//SHARED
+import { toastStore } from '_@shared/stores/toast/toastStore';
 
 const schema = z.object({
   type: z.string().trim(),
-  content: z.string().trim().min(1, 'This field is required.'),
+  detail: z.string().trim().min(1, 'This field is required.'),
 });
 
 const OPTIONS = [
-  { value: 'suggestion', label: 'Suggestion' },
-  { value: 'report', label: 'Report' },
+  { value: SuggestionType.SUGGESTION, label: 'Suggestion' },
+  { value: SuggestionType.REPORT, label: 'Report' },
 ];
 
 type FormValues = z.infer<typeof schema>;
 
 export default function ModalFeedback() {
+  const { openToast } = toastStore();
+  const { mutateAsync } = nextApi.userCreateSuggestion.useMutation();
   const { open, setOpen } = feedbackStore();
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { type: 'suggestion' },
+    defaultValues: { type: SuggestionType.SUGGESTION },
   });
 
   const { handleSubmit } = methods;
 
   const onSubmit = (values: FormValues) => {
-    console.log(values);
+    mutateAsync({
+      type: values.type as SuggestionType,
+      detail: values.detail,
+    })
+      .then(() => {
+        openToast('Thank you for your feedback!', 'success');
+        setOpen(false);
+      })
+      .catch(() => {
+        openToast('Something went wrong. Please try again.', 'error');
+      });
   };
 
   return (
@@ -55,7 +71,7 @@ export default function ModalFeedback() {
             <FormItem label="" name="type">
               <FormRadioGroup options={OPTIONS} ariaLabel="Choose type" className="gap-2" />
             </FormItem>
-            <FormItem label="Tell us about it in a few words:" name="content" className="mt-10">
+            <FormItem label="Tell us about it in a few words:" name="detail" className="mt-10">
               <FormInput
                 tag="textarea"
                 placeholder="Text here...."

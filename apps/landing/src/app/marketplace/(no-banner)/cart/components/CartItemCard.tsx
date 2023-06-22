@@ -20,7 +20,12 @@ export default function CartItemCard({ value, onClickRemove }: Props) {
         'xlg:grid xlg:grid-cols-[200px_1fr_38px] xlg:gap-8',
       ])}
     >
-      <div className="mx-auto h-50 w-50 overflow-hidden rounded-[10px] border border-text-10 xlg:border-none">
+      <div
+        className={classcat([
+          'mx-auto overflow-hidden rounded-[10px] ring-1 ring-text-10 xlg:border-none',
+          'h-50 w-50 xlg:h-51 xlg:w-51',
+        ])}
+      >
         <img
           src={value.item ? value.item.metadata.image : '/images/marketplace/trending.png'}
           alt=""
@@ -29,7 +34,7 @@ export default function CartItemCard({ value, onClickRemove }: Props) {
       </div>
       <div className="mt-4 grid h-max gap-1 text-center xlg:mt-0 xlg:text-left">
         <p className="text-body2 xlg:text-h5-bold">{value.item ? value.item.name : ''}</p>
-        <p className="text-body3 text-text-60">
+        <p className="text-body3 text-text-60 dot-para-3 xlg:dot-para-2">
           {value.item ? value.item.metadata.description : ''}
         </p>
         <p className="text-subtitle2 text-primary">By {owner}</p>
@@ -38,7 +43,7 @@ export default function CartItemCard({ value, onClickRemove }: Props) {
             <span className="text-body3 text-text-60 xlg:hidden">Volume</span>{' '}
             {`${value.price} ${value.token.symbol}`}
           </p>
-          <span className="ml-1.25 text-text-60">${value.price}</span>
+          <span className="ml-1.25 text-body3 text-text-60 xlg:text-subtitle2">${value.price}</span>
         </div>
       </div>
       <div className="mt-6 flex justify-center xlg:mt-0 xlg:items-center">

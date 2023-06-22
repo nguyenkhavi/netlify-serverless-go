@@ -1,5 +1,6 @@
 'use client';
 //THIRD PARTY MODULES
+import Link from 'next/link';
 import classcat from 'classcat';
 import Decimal from 'decimal.js';
 import { TItemCard } from '_@landing/utils/type';
@@ -58,10 +59,12 @@ export default function CartPage() {
 
         <div>
           <div className="rounded-[10px] bg-secondary-200 p-4 xlg:p-6">
-            <p className="text-h6">
+            <p className="text-center text-body2 xlg:text-h6">
               Subtotal ({data.length} items): {totalPrices} BUSD
             </p>
-            <Button className="btnlg mt-9">Proceed to checkout</Button>
+            <Button as={Link} href="/marketplace/cart/checkout" className="btnlg mt-9">
+              Proceed to checkout
+            </Button>
           </div>
           <HomeAdvVertical
             className="relative h-auto w-full py-8 ow:top-6 ow:px-15 xl:grid"
