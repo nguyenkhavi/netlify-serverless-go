@@ -4,10 +4,17 @@
   "sourceRoot": "apps/landing",
   "projectType": "application",
   "targets": {
+    "prebuild": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node prebuild.js"
+      }
+    },
     "build": {
       "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
+      "dependsOn": ["prebuild"],
       "options": {
         "root": "apps/landing",
         "outputPath": "dist/apps/landing",
