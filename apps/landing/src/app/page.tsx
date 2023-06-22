@@ -8,7 +8,6 @@ import ExchangeSection from './comps/ExchangeSection';
 import PartnersSection from './comps/PartnersSection';
 import HomeAdvHorizontal from './comps/HomeAdvHorizontal';
 import MarketplaceSection from './comps/MarketplaceSection';
-import AnimationProvider from './provider/AnimationProvider';
 import AchievementsSection from './comps/AchievementsSection';
 import SocialNetworkSection from './comps/SocialNetworkSection';
 import FinanceVenturesSection from './comps/FinanceVenturesSection';
@@ -23,22 +22,20 @@ export default function Home() {
         '2xl:pb-[235px]',
       ])}
     >
-      <AnimationProvider>
-        <Ellipse />
-        <WelcomeSection />
-        <MarketplaceSection />
-        <HomeAdvHorizontal />
-        <ExchangeSection />
-        <HomeAdvHorizontal />
-        <SocialNetworkSection />
-        <HomeAdvHorizontal />
-        <FinanceVenturesSection />
-        <HomeAdvHorizontal />
-        <AchievementsSection />
-        <ClientsSection />
-        <PartnersSection />
-        <HomeAdvHorizontal className="2xl:ow:hidden" />
-      </AnimationProvider>
+      <Ellipse />
+      <WelcomeSection />
+      <MarketplaceSection />
+      <HomeAdvHorizontal />
+      <ExchangeSection />
+      <HomeAdvHorizontal />
+      <SocialNetworkSection />
+      <HomeAdvHorizontal />
+      <FinanceVenturesSection />
+      <HomeAdvHorizontal />
+      <AchievementsSection />
+      <ClientsSection />
+      <PartnersSection />
+      <HomeAdvHorizontal className="2xl:ow:hidden" />
     </main>
   );
 }
