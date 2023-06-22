@@ -1,17 +1,16 @@
 import { sql } from 'drizzle-orm';
-import { datetime, mysqlTable, varchar, index } from 'drizzle-orm/mysql-core';
+import { serial, timestamp, mysqlTable, varchar, index, text } from 'drizzle-orm/mysql-core';
 import { SuggestionTypeValues } from './enum';
 
-export const suggestion = mysqlTable(
+export const suggestionTable = mysqlTable(
   'suggestion',
   {
-    id: varchar('id', { length: 32 }).primaryKey(),
-    createdAt: datetime('created_at').default(sql`NOW()`),
-    updatedAt: datetime('updated_at'),
+    id: serial('id').primaryKey(),
+    createdAt: timestamp('created_at').default(sql`NOW()`),
 
-    userId: varchar('user_id', { length: 32 }),
+    userId: varchar('user_id', { length: 52 }),
     type: varchar('type', { length: 32, enum: SuggestionTypeValues }),
-    detail: varchar('detail', { length: 256 }),
+    detail: text('detail'),
   },
   (table) => ({
     suggestionUserIdIndex: index('suggestion_user_id_idx').on(table.userId),

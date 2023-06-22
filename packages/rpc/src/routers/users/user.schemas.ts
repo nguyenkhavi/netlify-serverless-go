@@ -1,3 +1,4 @@
+import { SuggestionType } from '_@rpc/drizzle/enum';
 import { z } from 'zod';
 
 export const verifyInquirySchema = z
@@ -115,3 +116,10 @@ export const updateUserInformationSchema = z.object({
 });
 
 export type UpdateUserInformation = z.infer<typeof updateUserInformationSchema>;
+
+export const createSuggestionSchema = z.object({
+  type: z.nativeEnum(SuggestionType),
+  detail: z.string().nonempty(),
+});
+
+export type CreateSuggestionInput = z.infer<typeof createSuggestionSchema>;

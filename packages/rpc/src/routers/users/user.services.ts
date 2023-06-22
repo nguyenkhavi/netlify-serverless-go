@@ -5,6 +5,7 @@ import {
   UpdateShippingAddress,
   TUserByWallet,
   UpdateUserInformation,
+  CreateSuggestionInput,
 } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '_@rpc/services/instagram';
@@ -14,6 +15,7 @@ import { and, eq } from 'drizzle-orm';
 import { TProfile } from '_@rpc/drizzle/userProfile';
 import { verifyInquiryId } from '_@rpc/services';
 import { MySqlUpdateSetSource } from 'drizzle-orm/mysql-core';
+import { suggestionTable } from '_@rpc/drizzle/suggestion';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -171,4 +173,18 @@ export const userUpdateShippingAddressById = async (
 
 export const userDeleteShippingAddressById = async (id: number) => {
   return db.delete(addressTable).where(eq(addressTable.id, id)).execute();
+};
+
+export const userCreateSuggestion = async (input: CreateSuggestionInput, userId: string) => {
+  const { type, detail } = input;
+
+  const suggestion = await db
+    .insert(suggestionTable)
+    .values({
+      userId,
+      detail,
+      type,
+    })
+    .execute();
+  return suggestion.insertId;
 };

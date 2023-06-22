@@ -9,6 +9,7 @@ import {
   createShippingAddressSchema,
   updateShippingAddressSchema,
   userDeleteShippingAddressSchema,
+  createSuggestionSchema,
 } from '_@rpc/routers/users/user.schemas';
 
 import {
@@ -22,6 +23,7 @@ import {
   userUpdateShippingAddressById,
   userGetShippingAddressByUserId,
   userDeleteShippingAddressById,
+  userCreateSuggestion,
 } from '_@rpc/routers/users/user.services';
 
 import { getQuery } from '_@rpc/config';
@@ -73,6 +75,10 @@ export const userRouters = router({
   userDeleteShippingAddress: protectedRouter
     .input(userDeleteShippingAddressSchema)
     .mutation(({ input }) => userDeleteShippingAddressById(input.id)),
+
+  userCreateSuggestion: protectedRouter
+    .input(createSuggestionSchema)
+    .mutation(({ input, ctx }) => userCreateSuggestion(input, ctx.profile.userId)),
 });
 
 export type UserRouter = typeof userRouters;
