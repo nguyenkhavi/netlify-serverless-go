@@ -1,10 +1,9 @@
 //THIRD PARTY MODULES
-import { IDBPDatabase } from 'idb'
-import { dbIndex, dbOS } from '_@landing/utils/constants'
-import { ActivityType, ICollection, IPaging } from '_@landing/utils/type'
+import { IDBPDatabase } from 'idb';
+import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { ActivityType, ICollection, IPaging } from '_@landing/utils/type';
 //RELATIVE MODULES
-import { getTokenByAddress } from './token'
-import { getAllActivitiesByCollectionAddress } from './activity'
+import { getAllActivitiesByCollectionAddress } from './activity';
 
 export async function addCollection(db: IDBPDatabase, data: ICollection) {
   try {

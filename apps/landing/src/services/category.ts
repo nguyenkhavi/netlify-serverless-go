@@ -1,7 +1,6 @@
 //THIRD PARTY MODULES
 import { IDBPDatabase } from 'idb';
 import { ICategory } from '_@landing/utils/type';
-import { P } from 'drizzle-orm/select.types.d-e43b2599';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 
 export async function getAllCategories(db: IDBPDatabase): Promise<ICategory[]> {

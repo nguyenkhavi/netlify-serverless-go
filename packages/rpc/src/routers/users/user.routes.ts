@@ -10,6 +10,7 @@ import {
   updateShippingAddressSchema,
   userDeleteShippingAddressSchema,
   createSuggestionSchema,
+  userWallets,
 } from '_@rpc/routers/users/user.schemas';
 
 import {
@@ -24,6 +25,7 @@ import {
   userGetShippingAddressByUserId,
   userDeleteShippingAddressById,
   userCreateSuggestion,
+  getUsersInFleamint,
 } from '_@rpc/routers/users/user.services';
 
 import { getQuery } from '_@rpc/config';
@@ -53,6 +55,9 @@ export const userRouters = router({
   }),
   getUserByWallet: publicProcedure.input(userByWalletSchema).query(({ input }) => {
     return getUserByWallet(input);
+  }),
+  getUsersInFleamint: publicProcedure.input(userWallets).mutation(({ input }) => {
+    return getUsersInFleamint(input);
   }),
   updatePersonalInfo: protectedRouter
     .input(updateUserInformationSchema)

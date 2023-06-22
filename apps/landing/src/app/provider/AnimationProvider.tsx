@@ -1,10 +1,9 @@
-'use client';
-
+//THIRD PARTY MODULES
+import { PropsWithChildren } from 'react';
 //HOOK
-import useSalAnim from '_@landing/hooks/useSalAnim';
+import useSal from '_@landing/hooks/useSal';
 
-export default function AnimationProvider({ children }: any) {
-  useSalAnim();
-
+export default function AnimationProvider({ children }: PropsWithChildren) {
+  useSal();
   return children;
 }

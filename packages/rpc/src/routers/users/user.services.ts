@@ -6,12 +6,13 @@ import {
   TUserByWallet,
   UpdateUserInformation,
   CreateSuggestionInput,
+  TUserWallets,
 } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '_@rpc/services/instagram';
 
 import { addressTable, db, userProfileTable } from '_@rpc/services/drizzle';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, inArray } from 'drizzle-orm';
 import { TProfile } from '_@rpc/drizzle/userProfile';
 import { verifyInquiryId } from '_@rpc/services';
 import { MySqlUpdateSetSource } from 'drizzle-orm/mysql-core';
@@ -43,6 +44,10 @@ export const setKYCInfo = async (input: TSetKYC, uid: string) => {
 
 export const getUserByWallet = async (input: TUserByWallet) => {
   return db.select().from(userProfileTable).where(eq(userProfileTable.wallet, input.wallet));
+};
+
+export const getUsersInFleamint = async (input: TUserWallets) => {
+  return db.select().from(userProfileTable).where(inArray(userProfileTable.wallet, input.wallets));
 };
 
 export const twitterObtainOauthAccessToken = async (

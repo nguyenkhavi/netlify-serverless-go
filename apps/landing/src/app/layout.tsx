@@ -13,6 +13,7 @@ import ModalFeedback from '_@landing/components/modal/ModalFeedback';
 import getMyProfileOnServer from '_@landing/server/auth';
 //RELATIVE MODULES
 import './globals.css';
+import ThirdwebProvider from './provider/ThirdwebProvider';
 import IndexedDBProvider from './provider/IndexedDBProvider';
 // import AnimationProvider from './provider/AnimationProvider';
 
@@ -31,21 +32,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <ClientProvider>
-      <IndexedDBProvider>
-        <AuthProvider user={user}>
-          {/* <AnimationProvider> */}
-          <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
-            <body>
-              <Header />
-              {children}
-              <Footer />
-              <ModalFeedback />
-              <BaseToast />
-            </body>
-          </html>
-          {/* </AnimationProvider> */}
-        </AuthProvider>
-      </IndexedDBProvider>
+      <ThirdwebProvider>
+        <IndexedDBProvider>
+          <AuthProvider user={user}>
+            {/* <AnimationProvider> */}
+            <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
+              <body>
+                <Header />
+                {children}
+                <Footer />
+                <ModalFeedback />
+                <BaseToast />
+              </body>
+            </html>
+            {/* </AnimationProvider> */}
+          </AuthProvider>
+        </IndexedDBProvider>
+      </ThirdwebProvider>
     </ClientProvider>
   );
 }

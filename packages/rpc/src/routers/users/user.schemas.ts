@@ -57,6 +57,11 @@ export const userByWalletSchema = z.object({
 });
 export type TUserByWallet = z.infer<typeof userByWalletSchema>;
 
+export const userWallets = z.object({
+  wallets: z.array(z.string()),
+});
+export type TUserWallets = z.infer<typeof userWallets>;
+
 export type TConnectIG = z.infer<typeof connectIGSchema>;
 
 export const setKYCSchema = z.object({

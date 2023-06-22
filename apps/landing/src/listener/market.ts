@@ -1,15 +1,15 @@
 //THIRD PARTY MODULES
 import { IDBPDatabase } from 'idb';
 import { BigNumber, constants } from 'ethers';
-import { ContractEvent, ThirdwebSDK } from '@thirdweb-dev/react';
-import { formatBigNumberToNumberWithDecimal, parseJson } from '_@landing/utils/constants';
+import MarketABI from '_@landing/utils/NFTMarket';
+import { formatBigNumberToNumberWithDecimal, maxRetries } from '_@landing/utils/constants';
+import { ContractEvent, DirectListingV3, SmartContract, ThirdwebSDK } from '@thirdweb-dev/react';
 import {
   ActivityType,
   IActivity,
   ICancelListingEventData,
   IChain,
   IMarketData,
-  IMetadata,
   INewBuyEventData,
   INewListingEventData,
 } from '_@landing/utils/type';
@@ -22,9 +22,6 @@ export async function handleListing(
   chain: IChain,
   event: ContractEvent<INewListingEventData>,
 ) {
-  const collectionContract = await sdk.getContract(event.data.assetContract, 'nft-collection');
-  const metadata: IMetadata = await collectionContract.app.metadata.get();
-  const appURI = await parseJson(metadata.app_uri);
   const data: IMarketData = {
     listingId: event.data.listingId.toNumber(),
     assetContract: event.data.assetContract,
@@ -38,7 +35,6 @@ export async function handleListing(
     startTime: event.data.listing.startTimestamp.toNumber(),
     endTime: event.data.listing.endTimestamp.toNumber(),
     tokenType: event.data.listing.tokenType,
-    category: appURI?.category || 1,
     chain: chain.chainId,
   };
   await addMarket(db, data);
@@ -69,13 +65,12 @@ export async function handleListing(
   await addActivity(db, activity);
 }
 export async function handleCancelListing(
-  sdk: ThirdwebSDK,
+  marketContract: SmartContract,
   db: IDBPDatabase,
   chain: IChain,
   event: ContractEvent<ICancelListingEventData>,
 ) {
-  const marketContract = await sdk.getContract(chain.marketContract, 'marketplace-v3');
-  const listing = await marketContract.directListings.getListing(event.data.listingId);
+  const listing = await getListingData(marketContract, chain, event.data.listingId.toNumber());
   await updateMarket(db, {
     listingId: event.data.listingId.toNumber(),
     isAvailable: 0,
@@ -102,14 +97,12 @@ export async function handleCancelListing(
   await addActivity(db, activity);
 }
 export async function handleBuy(
-  sdk: ThirdwebSDK,
+  marketContract: SmartContract,
   db: IDBPDatabase,
   chain: IChain,
   event: ContractEvent<INewBuyEventData>,
 ) {
-  const marketContract = await sdk.getContract(chain.marketContract, 'marketplace-v3');
-  const listing = await marketContract.directListings.getListing(event.data.listingId);
-
+  const listing = await getListingData(marketContract, chain, event.data.listingId.toNumber());
   await updateMarket(db, {
     listingId: event.data.listingId.toNumber(),
     isAvailable: 0,
@@ -136,9 +129,35 @@ export async function handleBuy(
   await addActivity(db, activity);
 }
 
-//to do
-export async function handleBidding(event: ContractEvent) {}
-export async function handleCancelBiding(event: ContractEvent) {}
-export async function handleAcceptBiding(event: ContractEvent) {}
-export async function handleCancelAuction(event: ContractEvent) {}
-export async function handleNewAuction(event: ContractEvent) {}
+// TODO: handleBidding, handleCancelBiding, handleAcceptBiding, handleCancelAuction, handleNewAuction
+// export async function handleBidding(event: ContractEvent) {}
+// export async function handleCancelBiding(event: ContractEvent) {}
+// export async function handleAcceptBiding(event: ContractEvent) {}
+// export async function handleCancelAuction(event: ContractEvent) {}
+// export async function handleNewAuction(event: ContractEvent) {}
+
+export async function getListingData(
+  marketContract: SmartContract,
+  chain: IChain,
+  listingId: number,
+) {
+  let retries = 0;
+
+  async function retrieveData(marketContract: SmartContract): Promise<DirectListingV3> {
+    try {
+      const listing = await marketContract.directListings.getListing(listingId);
+      return listing;
+    } catch (error) {
+      retries++;
+      if (retries <= maxRetries) {
+        const sdk = new ThirdwebSDK(chain.rpc);
+        const marketContract = await sdk.getContract(chain.marketContract, MarketABI);
+        return retrieveData(marketContract);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  return retrieveData(marketContract);
+}

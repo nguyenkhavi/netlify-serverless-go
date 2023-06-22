@@ -8,6 +8,7 @@ import {
   IMarketStatusData,
   IPaging,
   ISorting,
+  TTopSeller,
 } from '_@landing/utils/type';
 //RELATIVE MODULES
 import { getItemById } from './item';
@@ -81,7 +82,10 @@ export async function getAllAvailableMarketByCategory(
       return getMarketByListingId(db, mk.listingId);
     }),
   );
-  return market.filter((mk) => mk.category == category);
+  return market.filter(async (mk) => {
+    const collection = await getCollectionByContract(db, mk.assetContract);
+    return collection?.category == category;
+  });
 }
 
 export async function getMarketsByCollection(db: IDBPDatabase, collection: string) {

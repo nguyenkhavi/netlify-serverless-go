@@ -1,11 +1,13 @@
 'use client';
+
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 //HOOK
-import useSalAnim from '_@landing/hooks/useSalAnim';
+import useSal from '_@landing/hooks/useSal';
 
 export default function WelcomeSection() {
-  useSalAnim();
+  useSal();
+
   return (
     <section
       id="welcome"

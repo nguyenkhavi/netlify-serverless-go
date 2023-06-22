@@ -2,7 +2,6 @@
 
 //THIRD PARTY MODULES
 import { nextApi } from '_@landing/utils/api';
-//HOOK
 
 const Provider = nextApi.withTRPC(({ children }: any) => {
   console.log('version 1.0.0');

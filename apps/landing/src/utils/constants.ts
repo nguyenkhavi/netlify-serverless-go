@@ -63,8 +63,9 @@ export const Chains = {
     marketContract: '0x0a7D39504176eE6de53a6e320fb47c5D44f3666A',
     nftImplementation: '0xfb602877454eA0Ba5de322f32A27262cb0905e37',
     name: 'sepolia',
+    rpc: 'https://eth-sepolia.g.alchemy.com/v2/_8hM_H2lFo-7ub_l5x8x01AhpdUMkRJm',
     chainId: '11155111',
-    genesisBlock: 3455697,
+    genesisBlock: 3455696,
   },
 } as const;
 
@@ -89,14 +90,18 @@ export const ContractEventNames = {
 export function formatBigNumberToNumberWithDecimal(bigNumber: BigNumber, decimal: number) {
   return new Decimal(bigNumber._hex).div(new Decimal(10).pow(decimal)).toNumber();
 }
+
 export function formatNumberToBigNumberWithDecimal(quantity: number, decimal: number) {
   return BigNumber.from(new Decimal(quantity).mul(new Decimal(10).pow(decimal)).toHex());
 }
 
 export const pageSize = 20;
 
-export async function parseJson(jsonString: string) {
+export const maxRetries = 5;
+
+export async function parseJson(jsonString: string | undefined) {
   try {
+    if (!jsonString) return null;
     return JSON.parse(jsonString);
   } catch (e) {
     return null;

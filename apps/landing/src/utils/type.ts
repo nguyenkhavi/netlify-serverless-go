@@ -1,7 +1,5 @@
 //THIRD PARTY MODULES
-import { BoolEnum } from 'sharp';
 import { BigNumber } from 'ethers';
-import { NFTMetadata } from '@thirdweb-dev/react';
 import {
   getBestSeller,
   getItemByOwner,
@@ -22,7 +20,6 @@ export interface IMarketData {
   startTime: number;
   endTime: number;
   tokenType: NFTType;
-  category: number;
   chain: string;
 }
 
@@ -113,6 +110,7 @@ export interface IChain {
   nftImplementation: string;
   name: string;
   chainId: string;
+  rpc: string;
   genesisBlock: number;
 }
 
