@@ -19,7 +19,7 @@ export { marketListing } from './marketListing';
 export { notificationSetting } from './notificationSetting';
 export { securityQuestion } from './securityQuestion';
 export { subscriber } from './subscriber';
-export { suggestion } from './suggestion';
+export { suggestionTable } from './suggestion';
 export { token } from './token';
 export { userActivityTable } from './userActivity';
 export { userAnswer } from './userAnswer';
