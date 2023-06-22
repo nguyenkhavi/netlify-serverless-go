@@ -14,7 +14,7 @@ import getMyProfileOnServer from '_@landing/server/auth';
 //RELATIVE MODULES
 import './globals.css';
 import IndexedDBProvider from './provider/IndexedDBProvider';
-import AnimationProvider from './provider/AnimationProvider';
+// import AnimationProvider from './provider/AnimationProvider';
 
 export const metadata: Metadata = {
   title: 'Fleamint',
@@ -33,15 +33,17 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <ClientProvider>
       <IndexedDBProvider>
         <AuthProvider user={user}>
+          {/* <AnimationProvider> */}
           <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
             <body>
               <Header />
-              <AnimationProvider>{children}</AnimationProvider>
+              {children}
               <Footer />
               <ModalFeedback />
               <BaseToast />
             </body>
           </html>
+          {/* </AnimationProvider> */}
         </AuthProvider>
       </IndexedDBProvider>
     </ClientProvider>

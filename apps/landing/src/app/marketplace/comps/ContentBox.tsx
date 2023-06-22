@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import classcat from 'classcat';
 //HOOK
+import useSalAnim from '_@landing/hooks/useSalAnim';
 
 export type ContentBoxProps = {
   title: string;
@@ -11,6 +12,7 @@ export type ContentBoxProps = {
 };
 
 export default function ContentBox({ title, pathViewAll, children }: ContentBoxProps) {
+  useSalAnim();
   return (
     <div>
       <div className="mb-6 flex h-9 w-[--content-width] items-center justify-between md:w-auto">
