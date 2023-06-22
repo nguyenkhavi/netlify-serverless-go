@@ -24,7 +24,7 @@ export default function ProfileNav() {
   const { setOpen } = feedbackStore();
   const pathname = usePathname();
   const { data } = nextApi.userVerifiedPercentage.useQuery();
-  const process = Number(`${data?.percentage || 0}`.toFixed(2));
+  const process = Number(data?.percentage || 0).toFixed(2);
 
   return (
     <div>
