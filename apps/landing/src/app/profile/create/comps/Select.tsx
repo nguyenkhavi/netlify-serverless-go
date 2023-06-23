@@ -12,7 +12,7 @@ type Props = {
   children?: React.ReactNode;
   required?: boolean;
   labelClasses?: string;
-  selectProps: Pick<React.ComponentProps<typeof FormSelect>, 'triggerRender'>;
+  selectProps?: Pick<React.ComponentProps<typeof FormSelect>, 'triggerRender'>;
 };
 
 export default function Select(props: Props) {

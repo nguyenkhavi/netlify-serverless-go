@@ -26,7 +26,7 @@ type Props = {
   open: boolean;
   onOpen: (state: boolean) => void;
   setValuesProperties: (values: Values['properties']) => void;
-  properties: Values['properties'];
+  properties?: Values['properties'] | null;
 };
 
 const objectKeys = <T extends object>(obj: T) => Object.keys(obj) as (keyof T)[];
@@ -40,7 +40,7 @@ const AddPropertiesModal = ({
   const methods = useForm<Values>({
     resolver: zodResolver(values),
     defaultValues: {
-      properties: _properties,
+      properties: (_properties || {}) as Values['properties'],
     },
   });
   const { handleSubmit, setValue, watch } = methods;

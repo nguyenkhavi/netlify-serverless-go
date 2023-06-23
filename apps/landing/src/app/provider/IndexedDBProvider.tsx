@@ -114,24 +114,14 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
             lastBlock.createIndex(dbIndex.lastBlockIdIndex, 'id');
           }
           if (!db.objectStoreNames.contains(dbOS.items)) {
-            const market = db.createObjectStore(dbOS.items, {
+            const item = db.createObjectStore(dbOS.items, {
               keyPath: ['id'],
             });
-            market.createIndex(dbIndex.itemOwnerIndex, 'owner');
-            market.createIndex(dbIndex.itemAssetContractIndex, 'assetContract');
-            market.createIndex(dbIndex.itemTokenIdIndex, 'tokenId');
+            item.createIndex(dbIndex.itemOwnerIndex, 'owner');
+            item.createIndex(dbIndex.itemAssetContractIndex, 'address');
+            item.createIndex(dbIndex.itemTokenIdIndex, 'tokenId');
             /// create a field = contract address +_+ tokenId
-            market.createIndex(dbIndex.itemIdIndex, 'id');
-          }
-          if (!db.objectStoreNames.contains(dbOS.items)) {
-            const market = db.createObjectStore(dbOS.items, {
-              keyPath: ['id'],
-            });
-            market.createIndex(dbIndex.itemOwnerIndex, 'owner');
-            market.createIndex(dbIndex.itemAssetContractIndex, 'assetContract');
-            market.createIndex(dbIndex.itemTokenIdIndex, 'tokenId');
-            /// create a field = contract address +_+ tokenId
-            market.createIndex(dbIndex.itemIdIndex, 'id');
+            item.createIndex(dbIndex.itemIdIndex, 'id');
           }
           if (!db.objectStoreNames.contains(dbOS.category)) {
             const market = db.createObjectStore(dbOS.category, {

@@ -101,7 +101,7 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
           <Value asChild>
             <div
               className={classcat([
-                'absolute left-3.25 text-subtitle2',
+                'absolute left-3.25 w-full truncate pr-12 text-start text-subtitle2 ',
                 currentValue ? 'text-text-50' : 'text-text-20',
                 fieldLabel ? 'bottom-1.5' : 'top-1/2 -translate-y-1/2',
               ])}
@@ -122,7 +122,9 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
 
         <Portal style={{ zIndex: 20 }}>
           <Content
-            className={classcat(['rounded-[5px] border-[.5px] border-white/20 bg-secondary'])}
+            className={classcat([
+              'max-w-[60vw] rounded-[5px] border-[.5px] border-white/20 bg-secondary',
+            ])}
           >
             <ScrollUpButton className={classcat([scrollButtonClasses])}>
               <ChevronUpIcon />
@@ -139,6 +141,7 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
                     'text-body1 text-text-30',
                     'data-[state="checked"]:bg-secondary-300 data-[state="checked"]:text-text-100',
                     'data-[highlighted]:bg-secondary-300 data-[highlighted]:data-[state="checked"]:bg-secondary-400 data-[highlighted]:outline-none',
+                    '[&_span]:w-full [&_span]:truncate',
                   ])}
                 >
                   <ItemText>{option.label}</ItemText>
