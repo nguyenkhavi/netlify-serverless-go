@@ -17,7 +17,7 @@ const exchangeCodeForAccessToken = async (code: string) => {
   formData.append('grant_type', 'authorization_code');
   return instagramClient
     .post('oauth/access_token', formData)
-    .then((resp) => exchangeCodeForTokenSchema.parseAsync(resp.data.data));
+    .then((resp) => exchangeCodeForTokenSchema.parse(resp.data));
 };
 
 export const queryIGUserNode = async (code: string) => {

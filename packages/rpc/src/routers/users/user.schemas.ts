@@ -39,11 +39,11 @@ export type TVerifyInquiryRes = z.infer<typeof verifyInquirySchema>;
 export const exchangeCodeForTokenSchema = z
   .object({
     access_token: z.string(),
-    user_id: z.string(),
+    user_id: z.number(),
   })
   .transform((data) => ({
     accessToken: data.access_token,
-    instagramUid: data.user_id,
+    instagramUid: `${data.user_id}`,
   }));
 
 export type TExchangeCodeForToken = z.infer<typeof exchangeCodeForTokenSchema>;
