@@ -84,7 +84,10 @@ export default function ActivityCard({ activity }: ActivityProps) {
         <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div>
           <p className="text-h6">
-            @{typeof activity?.actor === 'string' ? activity?.actor : activity?.actor.data.username}
+            @
+            {typeof activity?.actor === 'string'
+              ? activity?.actor
+              : activity?.actor?.data?.username}
           </p>
           <span className="text-body3 text-[#666666]">
             {activity?.time && new Date(activity?.time).toLocaleDateString('en-US')}

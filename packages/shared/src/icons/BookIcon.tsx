@@ -16,3 +16,37 @@ export default function BookIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
     </svg>
   );
 }
+
+export function BookActiveIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="24"
+      fill="none"
+      viewBox="0 0 25 24"
+      {...props}
+    >
+      <path
+        fill="url(#paint0_linear_5790_35625)"
+        d="M16.875 3.875c.344 0 .625.281.625.625v15a.627.627 0 01-.625.625H5.625A.627.627 0 015 19.5v-15c0-.344.281-.625.625-.625h11.25zM5.625 2a2.502 2.502 0 00-2.5 2.5v15c0 1.379 1.121 2.5 2.5 2.5h11.25c1.379 0 2.5-1.121 2.5-2.5v-15c0-1.379-1.121-2.5-2.5-2.5H5.625zm5.625 10a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM10 13.25a3.124 3.124 0 00-3.125 3.125c0 .344.281.625.625.625H15a.627.627 0 00.625-.625A3.124 3.124 0 0012.5 13.25H10zm11.875-8.125a.627.627 0 00-.625-.625.627.627 0 00-.625.625v2.5c0 .344.281.625.625.625a.627.627 0 00.625-.625v-2.5zM21.25 9.5a.627.627 0 00-.625.625v2.5c0 .344.281.625.625.625a.627.627 0 00.625-.625v-2.5a.627.627 0 00-.625-.625zm.625 5.625a.627.627 0 00-.625-.625.627.627 0 00-.625.625v2.5c0 .344.281.625.625.625a.627.627 0 00.625-.625v-2.5z"
+      ></path>
+      <defs>
+        <linearGradient
+          id="paint0_linear_5790_35625"
+          x1="3.125"
+          x2="21.875"
+          y1="12.003"
+          y2="12.003"
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#3EDEB5"></stop>
+          <stop offset="0.16" stopColor="#47DEB8"></stop>
+          <stop offset="0.44" stopColor="#61DFBE"></stop>
+          <stop offset="0.78" stopColor="#8AE0C9"></stop>
+          <stop offset="0.99" stopColor="#A7E1D1"></stop>
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}

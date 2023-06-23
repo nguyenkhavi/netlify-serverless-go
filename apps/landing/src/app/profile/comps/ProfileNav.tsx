@@ -10,14 +10,14 @@ import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
-import BookIcon from '_@shared/icons/BookIcon';
-import LockIcon from '_@shared/icons/LockIcon';
-import FolderIcon from '_@shared/icons/FolderIcon';
 import LogoutIcon from '_@shared/icons/LogoutIcon';
-import MyItemIcon from '_@shared/icons/MyItemIcon';
-import UserBarIcon from '_@shared/icons/UserBarIcon';
 import FeedbackIcon from '_@shared/icons/FeedbackIcon';
-import UserProfileIcon from '_@shared/icons/UserProfileIcon';
+import LockIcon, { LockActiveIcon } from '_@shared/icons/LockIcon';
+import BookIcon, { BookActiveIcon } from '_@shared/icons/BookIcon';
+import FolderIcon, { FolderActiveIcon } from '_@shared/icons/FolderIcon';
+import MyItemIcon, { MyItemActiveIcon } from '_@shared/icons/MyItemIcon';
+import UserBarIcon, { UserBarActiveIcon } from '_@shared/icons/UserBarIcon';
+import UserProfileIcon, { UserProfileActiveIcon } from '_@shared/icons/UserProfileIcon';
 
 export default function ProfileNav() {
   const { logout } = useAuthStoreAction();
@@ -47,7 +47,9 @@ export default function ProfileNav() {
                 ])}
                 href={nav.path}
               >
-                <span className="grid h-6 w-6 place-items-center">{nav.icon}</span>
+                <span className="grid h-6 w-6 place-items-center">
+                  {pathname === nav.path ? nav.iconActive : nav.icon}
+                </span>
                 <span className="ml-2">{nav.label}</span>
               </Link>
             </li>
@@ -97,36 +99,43 @@ type TProfileNav = {
   label: string;
   path: string;
   icon: JSX.Element;
+  iconActive: JSX.Element;
 };
 export const PROFILE_NAV: TProfileNav[] = [
   {
     label: 'Personal Info',
     path: '/profile',
     icon: <UserProfileIcon />,
+    iconActive: <UserProfileActiveIcon />,
   },
   {
     label: 'My Items',
     path: '/profile/my-items',
     icon: <MyItemIcon className="h-5" />,
+    iconActive: <MyItemActiveIcon className="h-5" />,
   },
   {
     label: 'Address Book',
     path: '/profile/address',
     icon: <BookIcon className="h-5" />,
+    iconActive: <BookActiveIcon className="h-5" />,
   },
   {
     label: 'Account History',
     path: '/profile/account-history',
     icon: <UserBarIcon />,
+    iconActive: <UserBarActiveIcon />,
   },
   {
     label: 'My Portfolio',
     path: '/profile/my-portfolio',
     icon: <FolderIcon className="h-4.75" />,
+    iconActive: <FolderActiveIcon className="h-4.75" />,
   },
   {
     label: 'Security',
     path: '/profile/security',
     icon: <LockIcon className="h-5" />,
+    iconActive: <LockActiveIcon className="h-5" />,
   },
 ];

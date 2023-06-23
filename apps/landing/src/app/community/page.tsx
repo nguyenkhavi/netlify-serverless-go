@@ -41,6 +41,7 @@ export default function CommunityPage() {
       })
       .then((response) => {
         console.log('success', response);
+        if (inputRef.current) inputRef.current.value = '';
         createPost({ content: response.content, postId: response.id });
         if (activities.length) {
           _getData();
