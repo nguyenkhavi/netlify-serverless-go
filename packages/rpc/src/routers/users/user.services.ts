@@ -7,6 +7,7 @@ import {
   UpdateUserInformation,
   CreateSuggestionInput,
   TUserWallets,
+  GetPublicProfileInput,
 } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '_@rpc/services/instagram';
@@ -17,6 +18,7 @@ import { TProfile } from '_@rpc/drizzle/userProfile';
 import { verifyInquiryId } from '_@rpc/services';
 import { MySqlUpdateSetSource } from 'drizzle-orm/mysql-core';
 import { suggestionTable } from '_@rpc/drizzle/suggestion';
+import { TRPCError } from '@trpc/server';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -192,4 +194,25 @@ export const userCreateSuggestion = async (input: CreateSuggestionInput, userId:
     })
     .execute();
   return suggestion.insertId;
+};
+
+export const getPublicProfile = async (input: GetPublicProfileInput) => {
+  const userProfiles = await db
+    .select({
+      username: userProfileTable.username,
+      avatarUrl: userProfileTable.avatarUrl,
+      userId: userProfileTable.userId,
+      aboutMe: userProfileTable.aboutMe,
+      description: userProfileTable.description,
+      coverUrl: userProfileTable.coverUrl,
+      firstName: userProfileTable.firstName,
+      lastName: userProfileTable.lastName,
+    })
+    .from(userProfileTable)
+    .where(eq(userProfileTable.userId, input.userId));
+  if (!userProfiles.length) {
+    throw new TRPCError({ code: 'NOT_FOUND' });
+  }
+  const userProfile = userProfiles[0];
+  return { data: userProfile };
 };

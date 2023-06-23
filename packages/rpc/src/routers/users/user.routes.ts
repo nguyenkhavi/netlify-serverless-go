@@ -11,6 +11,7 @@ import {
   userDeleteShippingAddressSchema,
   createSuggestionSchema,
   userWallets,
+  getPublicProfileSchema,
 } from '_@rpc/routers/users/user.schemas';
 
 import {
@@ -26,6 +27,7 @@ import {
   userDeleteShippingAddressById,
   userCreateSuggestion,
   getUsersInFleamint,
+  getPublicProfile,
 } from '_@rpc/routers/users/user.services';
 
 import { getQuery } from '_@rpc/config';
@@ -84,6 +86,9 @@ export const userRouters = router({
   userCreateSuggestion: protectedRouter
     .input(createSuggestionSchema)
     .mutation(({ input, ctx }) => userCreateSuggestion(input, ctx.profile.userId)),
+  getPublicProfile: publicProcedure
+    .input(getPublicProfileSchema)
+    .query(({ input }) => getPublicProfile(input)),
 });
 
 export type UserRouter = typeof userRouters;

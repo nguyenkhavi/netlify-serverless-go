@@ -128,3 +128,9 @@ export const createSuggestionSchema = z.object({
 });
 
 export type CreateSuggestionInput = z.infer<typeof createSuggestionSchema>;
+
+export const getPublicProfileSchema = z.object({
+  userId: z.string(),
+});
+
+export type GetPublicProfileInput = z.infer<typeof getPublicProfileSchema>;
