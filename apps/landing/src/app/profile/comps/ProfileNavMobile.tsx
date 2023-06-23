@@ -104,8 +104,8 @@ function ProfileDropdown() {
         ))}
       </ul>
       <button className="mt-7.5 flex items-center text-body2" onClick={() => setOpen(true)}>
-        <FeedbackIcon className="h-5" />
-        <span className="ml-2.5">Send us Feedback</span>
+        <FeedbackIcon className="h-6" />
+        <span className="ml-2.5 text-text-60">Send us Feedback</span>
       </button>
       <Button
         className={classcat([
@@ -137,8 +137,8 @@ function AccountStatusDropdown() {
       </div>
       <div
         className={classcat([
-          'rounded-[10px] border border-text-10 px-4',
-          'flex max-w-[320px] items-center py-3.75',
+          'rounded-[10px] border border-text-10 p-6',
+          'flex max-w-[320px] items-center',
         ])}
       >
         <VerifyIcon className="mr-4 h-10 w-9 shrink-0" />

@@ -34,7 +34,7 @@ const Profile = () => {
       </Show>
 
       <Show when={!isEdit}>
-        <div className="mt-6 flex justify-center lg:mt-2 lg:justify-end">
+        <div className="mt-6 flex justify-center lg:mt-8 lg:justify-end">
           <Button className="btnsm w-full lg:btnmd lg:w-max" onClick={() => setIsEdit(true)}>
             Edit
           </Button>

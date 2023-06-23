@@ -41,9 +41,9 @@ export default function ProfileNav() {
               <Link
                 data-active={pathname === nav.path}
                 className={classcat([
-                  'flex items-center text-btndefault text-text-50',
-                  'hover:text-primary [&_svg]:hover:text-primary',
-                  'data-[active=true]:text-primary [&_svg]:data-[active=true]:text-primary',
+                  'flex items-center text-btndefault text-text-60',
+                  'hover:text-gradient-pr [&_svg]:hover:text-primary',
+                  'data-[active=true]:text-gradient-pr [&_svg]:data-[active=true]:text-primary',
                 ])}
                 href={nav.path}
               >
@@ -66,7 +66,7 @@ export default function ProfileNav() {
             <p className="text-end text-caption">{process}%</p>
           </div>
           <h2 className="text-subtitle2">Complete your account</h2>
-          <p className="text-body3 text-text-60">
+          <p className="text-body3 text-[#7F7A7A]">
             Personalize your account by adding your details.
           </p>
           <div className="flex items-center text-subtitle2">
@@ -75,13 +75,13 @@ export default function ProfileNav() {
           </div>
         </div>
         <button className="mt-16 flex items-center" onClick={() => setOpen(true)}>
-          <FeedbackIcon className="h-5" />
-          <span className="ml-2.5">Send us Feedback</span>
+          <FeedbackIcon className="h-6" />
+          <span className="ml-2.5 text-text-60">Send us Feedback</span>
         </button>
         <Button
           className={classcat([
-            'mt-2.5 ow:border-text-10 ow:bg-text-10 ow:text-white',
-            'ow:rounded-[30px] [&>svg]:h-4',
+            'mt-2.5 ow:h-14.75 ow:border-text-10 ow:bg-text-10 ow:text-white',
+            'ow:rounded-[30px] [&>span]:text-sm [&>svg]:h-4',
           ])}
           onClick={() => logout()}
           trailingIcon={<LogoutIcon />}

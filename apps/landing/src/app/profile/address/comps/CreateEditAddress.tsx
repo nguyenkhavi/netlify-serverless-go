@@ -75,17 +75,17 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4 lg:mt-0">
-        <div className="rounded-[10px] bg-secondary-200 pb-8">
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-4 bg-secondary-200 lg:mt-0 lg:pb-6 ">
+        <div className="rounded-[10px] pb-8">
           <h2
             className={classcat([
-              'text-h6 lg:border-b lg:border-text-10 lg:text-h5-bold',
-              'mb-6 p-4 pb-0 lg:mb-4 lg:px-10 lg:pb-4',
+              'border-b border-text-10 text-h6 lg:text-h5-bold',
+              'p-4 py-5.25 lg:p-6',
             ])}
           >
             {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
           </h2>
-          <div className="grid gap-2.5 px-4 lg:grid-cols-2 lg:gap-x-6 lg:gap-y-1 lg:px-10">
+          <div className="grid gap-4 p-4 lg:grid-cols-2 lg:gap-8 lg:p-6">
             <FormItem label="Country" name="country" className="ow:gap-1">
               <FormSelect
                 placeholder="Select Country"
@@ -132,12 +132,8 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
             </FormItem>
           </div>
         </div>
-        <div className="mt-4 flex justify-center lg:justify-end">
-          <Button
-            className="btnsm mr-2.5 w-max lg:btnmd"
-            variant="outlined"
-            onClick={_handleCancel}
-          >
+        <div className="flex justify-center lg:justify-end">
+          <Button className="btnsm mr-3 w-max lg:btnmd" variant="outlined" onClick={_handleCancel}>
             Cancel
           </Button>
           <Button className="btnsm w-max lg:btnmd" type="submit">

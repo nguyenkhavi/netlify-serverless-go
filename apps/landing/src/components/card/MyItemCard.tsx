@@ -10,7 +10,7 @@ export default function MyItemCard({ value }: Props) {
   const { user } = useAuthStore();
 
   return (
-    <div className="rounded-[10px] border border-[#303030] p-4 xlg:px-3.75 xlg:py-5">
+    <div className="rounded-[10px] border border-[#303030] p-4">
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         <img
           src={value.metadata.image ? value.metadata.image : '/images/marketplace/trending.png'}

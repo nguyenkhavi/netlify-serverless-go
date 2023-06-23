@@ -18,6 +18,12 @@ module.exports = plugin(({ addComponents }) => {
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
     },
+    '.text-gradient-secondary': {
+      background:
+        'linear-gradient(270deg, #3edeb5 0%, #47deb8 16%, #61dfbe 44%, #8ae0c9 78%, #a7e1d1 99%)',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+    },
     '.text-green-gradient': {
       background:
         'linear-gradient(90deg, #B2F2E1 -0.29%, #BBF4E5 20.77%, #D5F8EF 54.86%, #FEFFFF 97.97%, #FFFFFF 98.97%)',

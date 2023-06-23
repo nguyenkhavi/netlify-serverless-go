@@ -49,7 +49,7 @@ export default function ProfileAddress() {
         <div
           className={classcat([
             'flex items-center',
-            'pb-0 pt-7 lg:pb-6 lg:pt-0',
+            'pb-0 pt-7 lg:px-6 lg:pb-6 lg:pt-0',
             'lg:border-b lg:border-text-10',
           ])}
         >
@@ -68,9 +68,9 @@ export default function ProfileAddress() {
                 <p className="mb-2.5 text-body2">{item.name}</p>
                 <ul
                   className={classcat([
-                    '[&_p]:max-w-[180px]',
+                    '[&_p]:max-w-[180px] [&_p]:md:max-w-full',
                     '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
-                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[80px] [&_li]:lg:gap-[175px]',
+                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[80px] [&_li]:lg:gap-[10px] [&_li]:xl:gap-[175px]',
                   ])}
                 >
                   <li>
