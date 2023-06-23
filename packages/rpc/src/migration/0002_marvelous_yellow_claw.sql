@@ -1,1 +1,0 @@
-DROP INDEX `token_unique_idx` ON `session`;

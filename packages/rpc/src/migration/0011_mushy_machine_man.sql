@@ -1,1 +1,0 @@
-CREATE UNIQUE INDEX `phone_idx` ON `user_profile` (`phone_code`,`phone_number`);

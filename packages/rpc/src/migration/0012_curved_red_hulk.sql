@@ -1,1 +1,0 @@
-ALTER TABLE `user_profile` ADD `request_id` serial AUTO_INCREMENT;

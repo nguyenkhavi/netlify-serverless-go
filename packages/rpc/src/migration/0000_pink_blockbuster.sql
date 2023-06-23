@@ -38,18 +38,20 @@ CREATE TABLE `activity` (
 	`item_id` varchar(32));
 
 CREATE TABLE `address` (
-	`id` varchar(12) PRIMARY KEY NOT NULL,
-	`user_id` varchar(32),
+	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`user_id` varchar(32) NOT NULL,
+	`country` varchar(64) NOT NULL,
+	`state` varchar(64) NOT NULL,
+	`street` varchar(64) NOT NULL,
+	`second_street` varchar(64) NOT NULL,
+	`apartment_number` varchar(10) NOT NULL,
+	`postal_code` varchar(10) NOT NULL,
+	`contact_number` varchar(20) NOT NULL,
+	`dial_code` varchar(10) NOT NULL,
+	`is_default` boolean NOT NULL,
+	`additional_information` varchar(128),
 	`created_at` datetime DEFAULT NOW(),
-	`updated_at` datetime,
-	`country` varchar(64),
-	`state` varchar(64),
-	`street` varchar(64),
-	`secondStreet` varchar(64),
-	`apartment_number` varchar(10),
-	`postal_code` varchar(10),
-	`contact_number` varchar(20),
-	`is_default` boolean);
+	`updated_at` datetime);
 
 CREATE TABLE `bid` (
 	`id` varchar(32) PRIMARY KEY NOT NULL,
@@ -124,11 +126,28 @@ CREATE TABLE `notification_setting` (
 	`replied` boolean,
 	`messaged` boolean);
 
+CREATE TABLE `search_history` (
+	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`user_id` varchar(52) NOT NULL,
+	`keyword` text NOT NULL,
+	`created_at` timestamp DEFAULT NOW());
+
 CREATE TABLE `security_question` (
 	`id` varchar(12) PRIMARY KEY NOT NULL,
 	`created_at` datetime DEFAULT NOW(),
 	`updated_at` datetime,
 	`question` varchar(64));
+
+CREATE TABLE `session` (
+	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`iss` varchar(52) NOT NULL,
+	`created_at` timestamp DEFAULT NOW(),
+	`token` varchar(1000) NOT NULL,
+	`userAgent` varchar(255),
+	`ipAddress` varchar(48),
+	`origin` varchar(255),
+	`location` varchar(128),
+	`ext` int);
 
 CREATE TABLE `subscriber` (
 	`id` varchar(32) PRIMARY KEY NOT NULL,
@@ -137,12 +156,11 @@ CREATE TABLE `subscriber` (
 	`email` varchar(255));
 
 CREATE TABLE `suggestion` (
-	`id` varchar(32) PRIMARY KEY NOT NULL,
-	`created_at` datetime DEFAULT NOW(),
-	`updated_at` datetime,
-	`user_id` varchar(32),
+	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`created_at` timestamp DEFAULT NOW(),
+	`user_id` varchar(52),
 	`type` varchar(32),
-	`detail` varchar(256));
+	`detail` text);
 
 CREATE TABLE `token` (
 	`id` varchar(32) PRIMARY KEY NOT NULL,
@@ -155,10 +173,9 @@ CREATE TABLE `token` (
 	`chain_id` varchar(32));
 
 CREATE TABLE `user_activity` (
-	`id` varchar(32) PRIMARY KEY NOT NULL,
-	`user_id` varchar(32),
-	`created_at` datetime DEFAULT NOW(),
-	`updated_at` datetime,
+	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`user_id` varchar(52) NOT NULL,
+	`created_at` timestamp DEFAULT NOW(),
 	`browser` varchar(32),
 	`ip_address` varchar(32),
 	`location` varchar(128),
@@ -173,6 +190,36 @@ CREATE TABLE `user_answer` (
 	`question_id` varchar(12) NOT NULL,
 	PRIMARY KEY(`question_id`,`user_id`)
 );
+
+CREATE TABLE `user_post` (
+	`id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`user_id` varchar(52) NOT NULL,
+	`post_id` varchar(52) NOT NULL,
+	`getstream_id` varchar(12) NOT NULL,
+	`content` varchar(3072),
+	`created_at` timestamp DEFAULT NOW());
+
+CREATE TABLE `user_profile` (
+	`request_id` serial AUTO_INCREMENT PRIMARY KEY NOT NULL,
+	`created_at` timestamp DEFAULT NOW(),
+	`user_id` varchar(52),
+	`wallet` varchar(52),
+	`first_name` varchar(255) NOT NULL,
+	`last_name` varchar(255) NOT NULL,
+	`username` varchar(255) NOT NULL,
+	`email` varchar(255) NOT NULL,
+	`dob` timestamp NOT NULL,
+	`gender` varchar(8) NOT NULL,
+	`phone_code` varchar(8) NOT NULL,
+	`phone_number` varchar(16) NOT NULL,
+	`getstream_id` varchar(12) NOT NULL,
+	`avatar_url` tinytext,
+	`cover_url` tinytext,
+	`about_me` tinytext,
+	`description` tinytext,
+	`twitter_uid` tinytext,
+	`instagram_uid` tinytext,
+	`persona_inquiry_id` tinytext);
 
 CREATE TABLE `user_wallet` (
 	`user_id` varchar(12),
@@ -193,3 +240,10 @@ CREATE INDEX `suggestion_user_id_idx` ON `suggestion` (`user_id`);
 CREATE INDEX `token_id_idx` ON `token` (`id`);
 CREATE INDEX `activity_user_id_idx` ON `user_activity` (`user_id`);
 CREATE INDEX `activity_action_idx` ON `user_activity` (`action`);
+CREATE INDEX `content_idx` ON `user_post` (`content`);
+CREATE INDEX `getstream_id_idx` ON `user_post` (`content`);
+CREATE INDEX `username_idx` ON `user_profile` (`username`);
+CREATE INDEX `email_idx` ON `user_profile` (`email`);
+CREATE INDEX `phone_idx` ON `user_profile` (`phone_code`,`phone_number`);
+CREATE INDEX `wallet_idx` ON `user_profile` (`wallet`);
+CREATE INDEX `getstream_id_idx` ON `user_profile` (`getstream_id`);
