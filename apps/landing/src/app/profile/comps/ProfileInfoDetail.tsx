@@ -10,9 +10,11 @@ import MobilePhoneIcon from '_@shared/icons/MobilePhoneIcon';
 const boxClasses = ['p-4 md:p-6 rounded-[10px] border border-text-10 bg-secondary-300'];
 const titleClasses = ['mb-2 text-body2'];
 const contentClasses = ['text-body3 text-text-50'];
-export function ProfileInfoDetail() {
+
+export default function ProfileInfoDetail() {
   const { user } = useAuthStore();
   const phone = `+${user?.profile?.phoneCode}${user?.profile?.phoneNumber}`;
+
   return (
     <section className="grid gap-6 md:grid-cols-[1fr_330px] md:px-6 md:pb-6">
       <div className={classcat([boxClasses])}>

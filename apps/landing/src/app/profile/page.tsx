@@ -10,10 +10,11 @@ import VerifyInfo from './comps/VerifyInfo';
 import ProfileEdit from './comps/ProfileEdit';
 import ProfileBanner from './comps/ProfileBanner';
 import ProfileNavMobile from './comps/ProfileNavMobile';
-import { ProfileInfoDetail } from './comps/ProfileInfoDetail';
+import ProfileInfoDetail from './comps/ProfileInfoDetail';
 
-const Profile = () => {
+export default function Page() {
   const [isEdit, setIsEdit] = useState(false);
+
   return (
     <div>
       <ProfileNavMobile
@@ -21,6 +22,7 @@ const Profile = () => {
         title={isEdit ? 'Profile Edit' : 'Profile View'}
         isBorder={false}
       />
+
       <Show when={!isEdit}>
         <VerifyInfo />
         <div className="md:rounded-b-lg md:bg-secondary-200">
@@ -42,6 +44,4 @@ const Profile = () => {
       </Show>
     </div>
   );
-};
-
-export default Profile;
+}

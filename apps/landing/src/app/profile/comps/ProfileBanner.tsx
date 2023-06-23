@@ -10,6 +10,8 @@ import InstagramIcon from '_@shared/icons/InstagramIcon';
 export default function ProfileBanner() {
   const { user } = useAuthStore();
 
+  if (!user) return <div className="mb-7 h-69 animate-pulse bg-secondary-400" />;
+
   return (
     <section
       className={classcat([
