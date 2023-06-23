@@ -4,7 +4,7 @@ import { db, session } from '_@rpc/services/drizzle';
 //HOOK
 import { NextRequest, NextResponse } from 'next/server';
 const loggedList = ['/auth'];
-const authList = ['/profile'];
+const authList = ['/profile', '/community'];
 
 export default async function middleware(request: NextRequest) {
   const url = new URL(request.url);

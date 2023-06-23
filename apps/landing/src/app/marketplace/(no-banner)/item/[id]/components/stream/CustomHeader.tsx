@@ -8,7 +8,7 @@ interface Props {
   title: string;
 }
 
-function CustomChannelHeader({ title }: Props) {
+function CustomHeader({ title }: Props) {
   return (
     <div
       className={classcat([
@@ -21,4 +21,4 @@ function CustomChannelHeader({ title }: Props) {
   );
 }
 
-export default CustomChannelHeader;
+export default CustomHeader;

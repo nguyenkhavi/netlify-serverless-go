@@ -1,0 +1,141 @@
+.str-chat {
+  --str-chat__background-color: #0d0d0d;
+  --str-chat__channel-preview-background-color: #0d0d0d;
+  --str-chat__channel-preview-active-background-color: #023528;
+  --str-chat__channel-preview-hover-background-color: #023528;
+  @apply bg-secondary-200;
+}
+
+.str-chat__channel {
+  @apply min-h-[calc(100vh-var(--header-height)-6rem)] md:min-h-[calc(100vh-var(--header-height)-3rem)];
+}
+
+.str-chat-channel-list {
+  @apply border-none;
+}
+
+.str-chat__channel-list-empty {
+  @apply h-full flex justify-center items-center flex-col [&>p]:text-text-50 [&>p]:text-h5 py-20 md:py-0;
+}
+
+.str-chat__channel-list-empty-v1 {
+  @apply hidden;
+}
+
+.str-chat__empty-channel .str-chat__empty-channel-text {
+  @apply text-h5 text-text-50;
+}
+
+.str-chat__channel-preview {
+  @apply px-6 py-3 pr-27;
+}
+
+.str-chat__message-textarea {
+  @apply w-full p-2 text-body3 text-text-50 bg-black/70
+    focus:outline-none resize-none
+    border-l border-solid border-text-10
+    placeholder:text-text-30 placeholder:truncate placeholder-shown:truncate;
+  @apply md:py-2;
+}
+
+.str-chat__emoji-picker-container {
+  @apply absolute top-0 left-0 -translate-y-90 z-dropdown;
+}
+
+.str-chat__date-separator {
+  @apply p-3 px-2 md:px-0 [&>hr]:bg-text-10;
+}
+
+.str-chat__list-notifications {
+  @apply m-0;
+}
+
+.str-chat__list .str-chat__message-list-scroll .str-chat__ul {
+  @apply h-full flex flex-col justify-end mt-auto;
+}
+
+.str-chat__list .str-chat__message-list-scroll .str-chat__li {
+  @apply px-4 md:px-8;
+}
+
+#inbox .str-chat__message-list-scroll {
+  @apply flex flex-col min-h-[calc(100vh-var(--header-height)-15rem)] max-h-[calc(100vh-var(--header-height)-15rem)];
+  @apply md:min-h-[calc(100vh-var(--header-height)-12rem)] md:max-h-[calc(100vh-var(--header-height)-12rem)];
+}
+
+#request .str-chat__message-list-scroll {
+  @apply flex flex-col;
+}
+
+#request #chat-wrapper .str-chat__list {
+  @apply overflow-visible;
+}
+
+.str-chat__list::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.str-chat__list::-webkit-scrollbar-track {
+  @apply bg-secondary-400;
+}
+
+.str-chat__list::-webkit-scrollbar-thumb {
+  @apply bg-text-20 rounded-[theme(spacing[7.5])];
+}
+
+.str-chat__list::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-10;
+}
+
+/* Vendor prefixes for Firefox */
+.str-chat__list {
+  scrollbar-width: thin;
+  scrollbar-color: #46494f #313130;
+}
+
+.scrollbar::-webkit-scrollbar {
+  @apply w-2;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  @apply bg-secondary-400;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-text-20 rounded-[theme(spacing[7.5])];
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-10;
+}
+
+/* Vendor prefixes for Firefox */
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #46494f #313130;
+}
+
+.str-chat__attachment-list .str-chat__message-attachment {
+  @apply flex justify-start rounded-none bg-transparent;
+}
+
+.str-chat__attachment-list
+  .str-chat__message-attachment--image:not(.str-chat__message-attachment--card)
+  > img {
+  @apply w-auto object-contain rounded-md;
+}
+
+.str-chat__quoted-message-bubble
+  .str-chat__attachment-list
+  .str-chat__message-attachment--image:not(.str-chat__message-attachment--card)
+  > img {
+  @apply w-full;
+}
+
+.str-chat__attachment-preview-list {
+  @apply m-0 p-0 mb-3;
+}
+
+#request .str-chat__main-panel-inner {
+  @apply h-auto;
+}

@@ -1,0 +1,14 @@
+.str-chat__avatar .str-chat__avatar-fallback {
+  @apply bg-[#005fff] rounded-full;
+}
+
+.bg-linear {
+  background: linear-gradient(
+    90deg,
+    #3edeb5 0%,
+    #47deb8 15.99%,
+    #61dfbe 43.97%,
+    #8ae0c9 77.95%,
+    #a7e1d1 98.94%
+  );
+}

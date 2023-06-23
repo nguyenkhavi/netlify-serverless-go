@@ -50,7 +50,7 @@ export const useGetFeedUser = () => {
     )
       return;
 
-    const client = connect<StreamType>(
+    const _client = connect<StreamType>(
       process.env.NEXT_PUBLIC_GETSTREAM_API_KEY,
       token,
       process.env.NEXT_PUBLIC_GETSTREAM_APP_ID,
@@ -58,13 +58,13 @@ export const useGetFeedUser = () => {
 
     if (!user) return;
 
-    client.setUser({
+    _client.setUser({
       username: user.profile.username,
       aboutMe: user?.profile.aboutMe || '',
       avatar: user.profile.avatarUrl || '',
     });
 
-    setClient(client);
+    setClient(_client);
   }, [token, user]);
 
   useEffect(() => {

@@ -16,6 +16,8 @@ const migrateGetstream = async () => {
         'create-reaction',
         'delete-reaction-owner',
         'upload-attachment',
+        'update-channel-members',
+        'mute-channel',
       ],
       guest: ['read-channel'],
       channel_moderator: [],
