@@ -1,5 +1,6 @@
 'use client';
 //THIRD PARTY MODULES
+import { TItemCard } from '_@landing/utils/type';
 import { useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
@@ -16,7 +17,7 @@ type Props = {
 };
 
 function RecentlyViewed({ data }: Props) {
-  const [recentlyItems, setRecentlyItems] = useState<any[]>([]);
+  const [recentlyItems, setRecentlyItems] = useState<TItemCard[]>([]);
 
   const id = useMemo(() => data.listingId.toString(), [data.listingId]);
   const { setItems, getItems } = useCacheLocalStorage<TypeMarketDetail>({
@@ -28,7 +29,9 @@ function RecentlyViewed({ data }: Props) {
     const items = getItems();
 
     if (items) {
-      const itemsNotIncludeCurrent = items.filter((item) => item.__key !== id);
+      const itemsNotIncludeCurrent = items
+        .filter((item) => item.__key !== id)
+        .map((item) => ({ ...item, totalSale: 0, chain: '' }));
 
       setRecentlyItems(itemsNotIncludeCurrent);
     }
@@ -40,15 +43,8 @@ function RecentlyViewed({ data }: Props) {
   return (
     <Show when={recentlyItems.length}>
       <ContentBox title="Recently viewed">
-        {recentlyItems.map((item, index) => (
-          <MainCard
-            data-sal="slide-up"
-            data-sal-duration="800"
-            data-sal-delay={index * 50}
-            key={index}
-            value={item}
-          />
-        ))}
+        {recentlyItems.length &&
+          recentlyItems.map((item, index) => <MainCard key={index} value={item} />)}
       </ContentBox>
     </Show>
   );
