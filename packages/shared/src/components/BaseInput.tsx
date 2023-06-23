@@ -22,7 +22,7 @@ import type { Assign } from '_@shared/utils/type';
 const baseClasses = [
   'transition-colors',
   'focus-visible:outline-none',
-  'border-[.5px] border-text-50',
+  'border-[.5px] border-text-10',
   'bg-secondary/70 w-full',
   'text-text-50 placeholder:text-text-20',
   'data-[valid="false"]:border-error',

@@ -45,7 +45,7 @@ export default function CreateCollectionPage() {
               href: '/profile/my-items',
             },
             {
-              name: 'Create Collection',
+              name: 'Create a Collection',
               href: '/profile/create/collection',
             },
           ]}
@@ -92,7 +92,12 @@ export default function CreateCollectionPage() {
                             </h5>
                             <p className="description">{value.description}</p>
                           </div>
-                          <UploadImage className={value.imageClasses} />
+                          <UploadImage
+                            className={value.imageClasses}
+                            onChangeValue={function (_value: string): void {
+                              throw new Error('Function not implemented.');
+                            }}
+                          />
                         </div>
                       </section>
                     ))}
@@ -186,7 +191,7 @@ export default function CreateCollectionPage() {
                             <Button
                               variant="outlined"
                               color="default"
-                              className="btnxlg ow:w-27.5 [&>span]:font-normal [&>span]:text-text-80"
+                              className="btnxlg ow:w-27.5 [&>span]:text-body1 [&>span]:text-text-80"
                               key={value.value}
                               leadingIcon={Icon}
                             >
@@ -199,7 +204,9 @@ export default function CreateCollectionPage() {
 
                     <div className="grid gap-8 rounded-lg border border-text-10 p-3.75 md:p-5.75">
                       <FormItem
-                        label={<p className="text-body2 md:text-h5-bold">Create earnings</p>}
+                        label={
+                          <p className="text-body2 text-white md:text-h5-bold">Create earnings</p>
+                        }
                         name="createEarnings"
                       >
                         <FormInput

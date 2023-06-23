@@ -2,39 +2,58 @@
 import * as z from 'zod';
 import classcat from 'classcat';
 import * as Dialog from '@radix-ui/react-dialog';
-import { useCallback, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCallback, useId, useRef, useState } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import BrowserOnly from '_@shared/components/BrowserOnly';
 //SHARED
 import CrossIcon from '_@shared/icons/CrossIcon';
-
-type Props = {
-  open: boolean;
-  onOpen: (state: boolean) => void;
-  name: string;
-};
+import { getErrorMessage } from '_@shared/utils/func';
 
 const values = z.object({
-  properties: z.array(
-    z.record(
-      z.object({
-        type: z.string(),
-        name: z.string(),
-      }),
-    ),
+  properties: z.record(
+    z.object({
+      type: z.string().nonempty({ message: 'This field is required' }),
+      name: z.string().nonempty({ message: 'This field is required' }),
+    }),
   ),
 });
 
 type Values = z.infer<typeof values>;
+type Props = {
+  open: boolean;
+  onOpen: (state: boolean) => void;
+  setValuesProperties: (values: Values['properties']) => void;
+  properties: Values['properties'];
+};
+
 const objectKeys = <T extends object>(obj: T) => Object.keys(obj) as (keyof T)[];
 
-const AddPropertiesModal = ({ name, open, onOpen }: Props) => {
-  const methods = useForm<Values>({});
+const AddPropertiesModal = ({
+  properties: _properties,
+  setValuesProperties,
+  open,
+  onOpen,
+}: Props) => {
+  const methods = useForm<Values>({
+    resolver: zodResolver(values),
+    defaultValues: {
+      properties: _properties,
+    },
+  });
   const { handleSubmit, setValue, watch } = methods;
-  const [properties, setProperties] = useState<string[]>([crypto.randomUUID()]);
+  const [properties, setProperties] = useState<string[]>(
+    Object.keys(
+      _properties || {
+        [crypto.randomUUID()]: {
+          type: '',
+          name: '',
+        },
+      },
+    ),
+  );
   const listRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const propertiesData = watch('properties');
@@ -70,7 +89,8 @@ const AddPropertiesModal = ({ name, open, onOpen }: Props) => {
   );
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    setValuesProperties(data.properties);
+    onOpen(false);
   });
 
   return (
@@ -90,6 +110,7 @@ const AddPropertiesModal = ({ name, open, onOpen }: Props) => {
                       <span className="text-h5-bold text-white">Add Properties</span>
                       <Dialog.Close asChild>
                         <button
+                          type="button"
                           onClick={() => onOpen(false)}
                           aria-label="Close"
                           className="relative h-11.25 w-11.25"
@@ -117,11 +138,11 @@ const AddPropertiesModal = ({ name, open, onOpen }: Props) => {
                         ))}
                       </div>
 
-                      <Button onClick={onAdd} className="w-29.25" variant="outlined">
+                      <Button onClick={onAdd} className="ow:w-29.25" variant="outlined">
                         Add More
                       </Button>
                     </div>
-                    <Button type="submit" className="btnlg shrink-0">
+                    <Button type="submit" className="shrink-0 md:btnlg">
                       Save
                     </Button>
                   </div>
@@ -151,40 +172,55 @@ type InputPropertiesProps = {
 };
 
 const InputProperties = ({ remove, name }: InputPropertiesProps) => {
-  const { register } = useFormContext();
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext();
+  const id = useId();
   return (
-    <div className="flex space-x-1">
-      <div className="grid gap-1.25">
-        <label htmlFor="title">Type</label>
-        <div className="flex rounded-l-[10px] border-[1px] border-text-10">
-          <button
-            onClick={remove}
-            className="grid h-12 w-10.5 shrink-0 place-content-center border-r-[1px] border-text-10 md:w-13.5"
-          >
-            <CrossIcon className="h-2.5 w-2.5" />
-          </button>
-          <input
-            type="text"
-            className={classcat([baseClasses])}
-            placeholder="Type"
-            {...register(`${name}.type`)}
-          />
+    <div className="grid gap-1">
+      <div className="flex space-x-1">
+        <div className="grid gap-1.25">
+          <label htmlFor="title">Type</label>
+          <div className="flex rounded-l-[10px] border-[1px] border-text-10">
+            <button
+              type="button"
+              onClick={remove}
+              className="grid h-12 w-10.5 shrink-0 place-content-center border-r-[1px] border-text-10 md:w-13.5"
+            >
+              <CrossIcon className="h-2.5 w-2.5" />
+            </button>
+            <input
+              type="text"
+              className={classcat([baseClasses])}
+              placeholder="Type"
+              {...register(`${name}.type`)}
+            />
+          </div>
+        </div>
+        <div className="grid gap-1.25">
+          <label htmlFor="title">Name</label>
+          <div className="flex rounded-r-[10px] border-[1px] border-text-10">
+            <button
+              // remove tabIndex
+              tabIndex={-1}
+              type="button"
+              className="grid h-12 w-14 shrink-0 place-content-center border-r-[1px] border-text-10 opacity-0"
+            >
+              <CrossIcon className="h-2.5 w-2.5" />
+            </button>
+            <input
+              type="text"
+              className={classcat([baseClasses])}
+              placeholder="Name"
+              {...register(`${name}.name`)}
+            />
+          </div>
         </div>
       </div>
-      <div className="grid gap-1.25">
-        <label htmlFor="title">Name</label>
-        <div className="flex rounded-r-[10px] border-[1px] border-text-10">
-          <button className="grid h-12 w-14 shrink-0 place-content-center border-r-[1px] border-text-10 opacity-0">
-            <CrossIcon className="h-2.5 w-2.5" />
-          </button>
-          <input
-            type="text"
-            className={classcat([baseClasses])}
-            placeholder="Name"
-            {...register(`${name}.name`)}
-          />
-        </div>
-      </div>
+      <p id={`err-${id}`} className="text-body3 text-error">
+        {getErrorMessage(`${name}.type`, errors) || getErrorMessage(`${name}.name`, errors)}
+      </p>
     </div>
   );
 };

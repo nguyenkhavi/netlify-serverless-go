@@ -11,12 +11,14 @@ type Props = {
   data: any;
   children?: React.ReactNode;
   required?: boolean;
+  labelClasses?: string;
 };
 
 export default function Select(props: Props) {
   return (
     <FormItem
       key={props.title}
+      labelClasses={props.labelClasses}
       label={
         <div className="grid gap-1">
           <h5 className="title">
@@ -30,10 +32,10 @@ export default function Select(props: Props) {
       }
       name={props.name}
     >
-      <div className="grid gap-2">
+      <div className="grid gap-1">
         <FormSelect
           owStyles={{
-            triggerClasses: 'ow:h-16.25 rounded-lg',
+            triggerClasses: 'ow:h-16.25 rounded-lg ow:border-text-50',
           }}
           name={props.name}
           options={props.data}

@@ -4,6 +4,6 @@
   }
 
   .description {
-    @apply text-body1 md:text-body2 text-text-50;
+    @apply text-body2 text-text-50;
   }
 }

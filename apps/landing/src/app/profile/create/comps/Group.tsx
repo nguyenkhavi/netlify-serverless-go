@@ -6,7 +6,6 @@ import Show from '_@shared/components/Show';
 //SHARED
 
 type Props = {
-  underline?: boolean;
   title: string;
   description?: string;
   children?: React.ReactNode;
@@ -17,20 +16,20 @@ type Props = {
 export default function Group(props: Props) {
   const icon = props.icon as any;
   return (
-    <div className={classcat(['rounded-[10px] border border-text-10', props.className])}>
-      <div
-        className={classcat([
-          'flex justify-between space-x-10 px-3.5 pb-1.5 pt-5 md:pl-9.5 md:pr-15',
-          props.underline ? 'border-b border-text-10' : '',
-        ])}
-      >
-        <div className="flex space-x-2.5">
+    <div
+      className={classcat([
+        'grid gap-1 rounded-[10px] border border-text-10 py-3.75 md:py-5.75',
+        props.className,
+      ])}
+    >
+      <div className={classcat(['flex justify-between space-x-6 px-3.75 md:px-5.75 '])}>
+        <div className="flex space-x-2">
           {props.icon &&
             cloneElement(icon, {
               className: classcat(['shrink-0', icon.props.className]),
             })}
 
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-1">
             <span className="text-h6">{props.title}</span>
             <span className="text-body2 text-text-50">{props.description}</span>
           </div>
@@ -38,7 +37,7 @@ export default function Group(props: Props) {
 
         <Show when={props.actionRender}>{props.actionRender}</Show>
       </div>
-      <div className="px-3.5 md:pl-9.5 md:pr-15">{props.children}</div>
+      <div className="px-3.75 md:px-5.75">{props.children}</div>
     </div>
   );
 }

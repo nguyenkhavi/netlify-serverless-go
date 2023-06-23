@@ -57,13 +57,12 @@ export default function CountrySelect({ className, onChange: _onChange, value: _
         <Command
           filter={(value, search) => {
             const code = value.toUpperCase() as Country['code'];
-            const name = countryMapping[code]?.name as string;
-
-            if (name === undefined) return 0;
-            if (search.length > 0 && name.toLowerCase().includes(search.toLowerCase())) {
-              return 1;
-            }
-            return 0;
+            const country = countryMapping[code];
+            const searchList = [
+              country.name.toLowerCase(),
+              country.dialCode,
+            ] as unknown as string[];
+            return Number(searchList.some((item) => item.includes(search.toLowerCase())));
           }}
         >
           <CommandInput placeholder="Search Country..." />
