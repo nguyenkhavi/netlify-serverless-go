@@ -37,6 +37,7 @@ export type BaseInputProps = Assign<
     type?: HTMLInputTypeAttribute;
     hint?: string;
     trailingComponent?: ReactNode;
+    leadingComponent?: ReactNode;
     isValid?: boolean;
     showEyeIcon?: boolean;
     containerClasses?: string;
@@ -50,6 +51,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
       type = 'text',
       hint,
       trailingComponent,
+      leadingComponent,
       isValid = true,
       className = '',
       showEyeIcon = true,
@@ -61,6 +63,7 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
     const Tag = tag;
     const inputRef = useRef<TElement>(null);
     const trailingRef = useRef<HTMLDivElement>(null);
+    const leadingRef = useRef<HTMLDivElement>(null);
     const [innerType, toggleInnerType] = useReducer(
       (prevType) => (prevType === 'text' ? 'password' : 'text'),
       // @ts-ignore
@@ -71,6 +74,12 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
 
     return (
       <div className={classcat(['relative', containerClasses])}>
+        {leadingComponent ? (
+          <div ref={leadingRef} className="absolute bottom-1/2 left-4 grid translate-y-1/2">
+            {cloneElement(leadingComponent as ReactElement)}
+          </div>
+        ) : null}
+
         <Tag
           {...(props as any)}
           ref={inputRef}
@@ -87,6 +96,11 @@ const BaseInput = forwardRef<TElement, BaseInputProps>(
               ? {
                   paddingRight:
                     (trailingRef.current.getBoundingClientRect().width + 32) / 16 + 'rem',
+                }
+              : {}),
+            ...(leadingRef.current
+              ? {
+                  paddingLeft: (leadingRef.current.getBoundingClientRect().width + 32) / 16 + 'rem',
                 }
               : {}),
           }}

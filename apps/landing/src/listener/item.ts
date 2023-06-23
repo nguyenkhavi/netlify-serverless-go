@@ -2,7 +2,7 @@
 import { constants } from 'ethers';
 import { IDBPDatabase } from 'idb';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
-import { ContractEvent, ThirdwebSDK } from '@thirdweb-dev/react';
+import { ContractEvent, NFTCollection, ThirdwebSDK, getContract } from '@thirdweb-dev/react';
 import {
   ActivityType,
   IActivity,

@@ -66,7 +66,7 @@ export async function getMarketEvents(
       await Promise.all(
         events?.map((event) => {
           if (event.eventName === ContractEventNames.newListing)
-            handleListing(sdk, db, chain, event as ContractEvent<INewListingEventData>);
+            handleListing(db, chain, event as ContractEvent<INewListingEventData>);
           else if (event.eventName === ContractEventNames.newSale)
             handleBuy(marketContract, db, chain, event as ContractEvent<INewBuyEventData>);
           else if (event.eventName === ContractEventNames.cancelledListing)
@@ -242,7 +242,7 @@ export async function getFactoryEvents(
           if (!collectionContract) return;
           const appURI = await parseJson(metadata?.app_uri);
           // if (!appURI || !appURI.app || appURI.app !== 'Fleamint') return;
-          handleNewCollections(sdk, metadata, appURI, collectionContract, chain, db, event);
+          handleNewCollections(metadata, appURI, collectionContract, chain, db, event);
           getAllNFTsOwners(db, collectionContract, appURI, event.data.proxy, chain);
         }),
       );

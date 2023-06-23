@@ -9,7 +9,6 @@ import { IChain, ICollection, IMetadata, INewProxyDeployed, NFTType } from '_@la
 import { addCollection } from '../services';
 
 export async function handleNewCollections(
-  sdk: ThirdwebSDK,
   metadata: IMetadata | null,
   appURI: any,
   collectionContract: NFTCollection,
@@ -39,7 +38,6 @@ export async function handleNewCollections(
       royaltyRecipient: royalties.fee_recipient,
     };
     await addCollection(db, data);
-    sdk.emit(ContractEventNames.newCollections, event.data.proxy);
   } catch (e) {
     console.log(e);
   }

@@ -30,12 +30,11 @@ const archivo = Archivo({
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const user = await getMyProfileOnServer();
-
   return (
     <ClientProvider>
       <ThirdwebProvider>
-        <AuthProvider user={user}>
-          <IndexedDBProvider>
+        <IndexedDBProvider>
+          <AuthProvider user={user}>
             {/* <AnimationProvider> */}
             <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
               <body>
@@ -47,8 +46,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </body>
             </html>
             {/* </AnimationProvider> */}
-          </IndexedDBProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </IndexedDBProvider>
       </ThirdwebProvider>
     </ClientProvider>
   );

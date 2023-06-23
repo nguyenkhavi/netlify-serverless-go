@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { magicLink, useConnect } from '@thirdweb-dev/react';
 import errorHandler from '_@landing/app/auth/utils/errorHandler';
 import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
@@ -29,6 +30,7 @@ const values = z.object({
 type Values = z.infer<typeof values>;
 
 export default function SignIn() {
+  const connect = useConnect();
   const [isLoading, setIsLoading] = useState(false);
   const { loginWithSMS } = useAuthStoreAction();
   const methods = useForm<Values>({
@@ -52,6 +54,14 @@ export default function SignIn() {
           phoneCode: digital.dialCode,
           phoneNumber: data.phone.phoneNumber,
         },
+      });
+      const magicLinkConfig = magicLink({
+        apiKey: process.env.NEXT_PUBLIC_MAGIC_API_KEY || '',
+      });
+
+      await connect(magicLinkConfig, {
+        phoneNumber: digital.dialCode + data.phone.phoneNumber,
+        chainId: 11155111,
       });
     } catch (err: any) {
       if (err.message === 'BAD_REQUEST') {

@@ -39,7 +39,7 @@ export const Root = (props: PropsWithChildren<Props>) => (
 );
 
 export const Input = (props: Props & { inputProps?: ComponentProps<typeof FormInput> }) => {
-  const { className, ...inputProps } = props.inputProps || {};
+  const { className, ...rest } = props.inputProps || {};
   return (
     <FormInput
       tag={(props?.type || 'input') as TagInput}
@@ -50,7 +50,7 @@ export const Input = (props: Props & { inputProps?: ComponentProps<typeof FormIn
         className,
       ])}
       placeholder={props.placeholder}
-      {...inputProps}
+      {...rest}
     />
   );
 };
@@ -58,7 +58,7 @@ export const Input = (props: Props & { inputProps?: ComponentProps<typeof FormIn
 function BaseInput(props: Props & { inputProps?: ComponentProps<typeof FormInput> }) {
   return (
     <Root {...props}>
-      <Input {...props.inputProps} {...props} />
+      <Input {...props} />
     </Root>
   );
 }

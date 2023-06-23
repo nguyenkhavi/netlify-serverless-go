@@ -12,6 +12,7 @@ type Props = {
   children?: React.ReactNode;
   required?: boolean;
   labelClasses?: string;
+  selectProps: Pick<React.ComponentProps<typeof FormSelect>, 'triggerRender'>;
 };
 
 export default function Select(props: Props) {
@@ -34,6 +35,7 @@ export default function Select(props: Props) {
     >
       <div className="grid gap-1">
         <FormSelect
+          {...props.selectProps}
           owStyles={{
             triggerClasses: 'ow:h-16.25 rounded-lg ow:border-text-50',
           }}

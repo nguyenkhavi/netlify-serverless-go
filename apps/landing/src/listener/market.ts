@@ -17,7 +17,6 @@ import {
 import { addActivity, addMarket, updateMarket } from '../services';
 
 export async function handleListing(
-  sdk: ThirdwebSDK,
   db: IDBPDatabase,
   chain: IChain,
   event: ContractEvent<INewListingEventData>,

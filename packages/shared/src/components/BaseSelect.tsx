@@ -1,7 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import {
   Content,
   Item,
@@ -15,6 +15,8 @@ import {
   Viewport,
   SelectProps,
 } from '@radix-ui/react-select';
+//LAYOUT, COMPONENTS
+import Switch from '_@shared/components/conditions/Switch';
 //SHARED
 import { Assign } from '_@shared/utils/type';
 import ChevronUpIcon from '_@shared/icons/ChevronUpIcon';
@@ -34,7 +36,7 @@ const scrollButtonClasses = ['grid place-items-center'];
 
 export type BaseSelectOption = {
   value: string;
-  label: string;
+  label: React.ReactNode;
 };
 
 export type BaseSelectProps = Assign<
@@ -51,6 +53,7 @@ export type BaseSelectProps = Assign<
     owStyles?: {
       triggerClasses?: string;
     };
+    triggerRender?: (props: any) => React.ReactNode;
   }
 >;
 
@@ -67,13 +70,14 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
       onChange = () => {},
       options = [],
       owStyles,
+      triggerRender,
       ...props
     },
     forwardedRef,
   ) => {
     const currentValue = value || defaultValue;
-    const valueLabel =
-      options.find((option) => option.value === currentValue)?.label || placeholder;
+    const valueSelected = options.find((option) => option.value === currentValue);
+    const valueLabel = valueSelected?.label || placeholder;
 
     return (
       <Root
@@ -95,15 +99,20 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
             </span>
           </Show>
           <Value asChild>
-            <span
+            <div
               className={classcat([
                 'absolute left-3.25 text-subtitle2',
                 currentValue ? 'text-text-50' : 'text-text-20',
                 fieldLabel ? 'bottom-1.5' : 'top-1/2 -translate-y-1/2',
               ])}
             >
-              {valueLabel}
-            </span>
+              <Switch.Root>
+                <Switch.Case when={triggerRender && valueLabel !== placeholder}>
+                  {valueSelected && triggerRender?.(valueSelected)}
+                </Switch.Case>
+                <Switch.Case when={true}>{valueLabel}</Switch.Case>
+              </Switch.Root>
+            </div>
           </Value>
           <ChevronDownIcon
             aria-hidden="true"

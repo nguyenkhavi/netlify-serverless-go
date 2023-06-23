@@ -36,6 +36,12 @@ type IndexedDBContextType = {
   category: TCategoryContext;
 };
 
+type Contracts = {
+  market: SmartContract;
+  factory: SmartContract;
+  collections: SmartContract[] | [];
+} | null;
+
 export const IndexedDBContext = createContext<IndexedDBContextType>({} as IndexedDBContextType);
 
 export const useIndexedDBContext = () => useContext(IndexedDBContext);
@@ -43,15 +49,14 @@ export const useIndexedDBContext = () => useContext(IndexedDBContext);
 export default function IndexedDBProvider({ children }: { children: React.ReactNode }) {
   const sdk = useSDK();
   const chainId = useSDKChainId();
-
   const [chain, setChain] = useState<IChain>();
   const [db, setDB] = useState<IDBPDatabase | null>(null);
   const [bestSeller, setBestSeller] = useState<TTopSeller>([]);
-  const [marketContract, setMarketContract] = useState<SmartContract>();
-  const [factoryContract, setFactoryContract] = useState<SmartContract>();
-  const [collectionsContract, setCollectionsContract] = useState<SmartContract[]>([]);
   const [category, setCategory] = useState<TCategoryContext>({ loading: true, data: [] });
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInitContract, setIsInitContract] = useState<boolean>(false);
+  const [isEventRegister, setIsEventRegister] = useState<boolean>(false);
+  const [contracts, setContracts] = useState<Contracts>();
   const { mutateAsync: getUsersInFleamint } = nextApi.getUsersInFleamint.useMutation();
 
   useEffect(() => {
@@ -164,6 +169,7 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
   }, []);
 
   useEffect(() => {
+    if (contracts || isInitContract) return;
     const initContract = async () => {
       const chain = Object.values(Chains).find((chain) => chain.chainId === chainId?.toString());
       if (!sdk || !chainId || !chain || !db) return;
@@ -177,31 +183,40 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
       ]);
 
       setChain(chain);
-      setMarketContract(_marketContract);
-      setFactoryContract(_factoryContract);
-      setCollectionsContract(collectionsContracts);
+      setContracts({
+        market: _marketContract,
+        factory: _factoryContract,
+        collections: collectionsContracts,
+      });
+      setIsInitContract(true);
     };
 
     initContract();
-  }, [sdk, chainId, db]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sdk, chainId, db, contracts]);
 
   useEffect(() => {
-    if (!sdk || !db || !chain || !marketContract || !factoryContract) return;
-    marketContract.events.listenToAllEvents((event) => {
-      if (event.eventName === ContractEventNames.newListing)
-        handleListing(sdk, db, chain, event as ContractEvent<INewListingEventData>);
-      else if (event.eventName === ContractEventNames.newSale)
-        handleBuy(marketContract, db, chain, event as ContractEvent<INewBuyEventData>);
-      else if (event.eventName === ContractEventNames.cancelledListing)
+    if (isEventRegister || !contracts || !sdk || !db || !chain) return;
+    console.log('event registered');
+    contracts.market.events.listenToAllEvents((event) => {
+      if (event.eventName === ContractEventNames.newListing) {
+        handleListing(db, chain, event as ContractEvent<INewListingEventData>);
+        updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
+      } else if (event.eventName === ContractEventNames.newSale) {
+        handleBuy(contracts.market, db, chain, event as ContractEvent<INewBuyEventData>);
+        updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
+      } else if (event.eventName === ContractEventNames.cancelledListing) {
         handleCancelListing(
-          marketContract,
+          contracts.market,
           db,
           chain,
           event as ContractEvent<ICancelListingEventData>,
         );
+        updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
+      }
     });
     sdk.addListener(ContractEventNames.newCollections, async (proxy) => {
-      const contract = await sdk.getContract(proxy, NFTABI);
+      const contract = await sdk.getContract(proxy, 'nft-collection');
       contract.events.addEventListener<ITransferEventData>('Transfer', async (event) => {
         handleTransferItem(db, sdk, chain, event);
         updateLastBlock(
@@ -212,14 +227,16 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
         );
       });
     });
-    factoryContract.events.addEventListener<INewProxyDeployed>('ProxyDeployed', async (event) => {
+    contracts.factory.events.addEventListener<INewProxyDeployed>('ProxyDeployed', async (event) => {
       const collectionContract = await sdk.getContract(event.data.proxy, 'nft-collection');
       const metadata: IMetadata = await collectionContract.app.metadata.get();
       const appURI = await parseJson(metadata.app_uri);
       if (!appURI || !appURI.app || appURI.app !== 'Fleamint') return;
-      handleNewCollections(sdk, metadata, appURI, collectionContract, chain, db, event);
+      handleNewCollections(metadata, appURI, collectionContract, chain, db, event);
+      updateLastBlock(db, ListenerService.Factory, event.transaction.blockNumber, chain.chainId);
+      sdk.emit(ContractEventNames.newCollections, event.data.proxy);
     });
-    collectionsContract.map((contract) => {
+    contracts.collections.map((contract) => {
       contract.events.addEventListener<ITransferEventData>('Transfer', async (event) => {
         handleTransferItem(db, sdk, chain, event);
         updateLastBlock(
@@ -231,28 +248,33 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
       });
     });
 
+    setIsEventRegister(true);
+
     return () => {
-      marketContract.events.removeAllListeners();
+      if (!contracts) return;
+      contracts.market.events.removeAllListeners();
       sdk.removeAllListeners();
-      factoryContract.events.removeAllListeners();
-      collectionsContract.map((contract) => {
+      contracts.factory.events.removeAllListeners();
+      contracts.collections.map((contract) => {
         contract.events.removeAllListeners();
       });
     };
-  }, [chain, collectionsContract, db, factoryContract, marketContract, sdk]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chain, contracts, db, sdk]);
 
   useEffect(() => {
-    const isReturn =
-      !factoryContract || !marketContract || !sdk || !db || !chain || !getUsersInFleamint;
+    const isReturn = isLoading || !contracts || !sdk || !db || !chain || !getUsersInFleamint;
     if (isReturn) return;
     (async () => {
+      setIsLoading(true);
       await Promise.all([
         getCollectionsEvents(sdk, db, chain),
-        getMarketEvents(marketContract, sdk, db, chain),
-        getFactoryEvents(factoryContract, sdk, db, chain, getUsersInFleamint),
+        getMarketEvents(contracts.market, sdk, db, chain),
+        getFactoryEvents(contracts.factory, sdk, db, chain, getUsersInFleamint),
       ]);
     })();
-  }, [chain, db, factoryContract, getUsersInFleamint, marketContract, sdk]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chain, db, contracts]);
 
   return (
     <IndexedDBContext.Provider value={{ db, bestSeller, category }}>

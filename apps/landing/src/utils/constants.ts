@@ -57,17 +57,31 @@ export const dbOS = {
   category: 'category',
 };
 
-export const Chains = {
+export type Chain = {
+  factoryContract: string;
+  marketContract: string;
+  nftImplementation: string;
+  name: string;
+  icon: string;
+  rpc: string;
+  networkName: string;
+  chainId: string;
+  genesisBlock: number;
+};
+
+export const Chains: Record<string, Chain> = {
   sepolia: {
     factoryContract: '0x76f948e5f13b9a84a81e5681df8682bbf524805e',
     marketContract: '0x0a7D39504176eE6de53a6e320fb47c5D44f3666A',
     nftImplementation: '0xfb602877454eA0Ba5de322f32A27262cb0905e37',
     name: 'sepolia',
     rpc: 'https://eth-sepolia.g.alchemy.com/v2/_8hM_H2lFo-7ub_l5x8x01AhpdUMkRJm',
+    icon: 'https://s1.coincarp.com/logo/1/ethereum.png?style=36',
+    networkName: 'Sepolia Testnet',
     chainId: '11155111',
     genesisBlock: 3455696,
   },
-} as const;
+};
 
 export const ContractEventNames = {
   newCollections: 'newCollections',
