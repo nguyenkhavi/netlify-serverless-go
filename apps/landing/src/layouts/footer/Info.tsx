@@ -119,7 +119,7 @@ export default function Info() {
                 <Link
                   key={link.title}
                   href={link.href}
-                  className="text-body3 text-text-50 hover:underline"
+                  className="pointer-events-none text-body3 text-text-50 hover:underline"
                 >
                   {link.title}
                 </Link>

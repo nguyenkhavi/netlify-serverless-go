@@ -11,6 +11,7 @@ type Props = {
   value: TItemStore[number];
 };
 export default function ItemStoreCard({ value }: Props) {
+  console.log(value);
   return (
     <div className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]">
       <div className="aspect-square overflow-hidden">

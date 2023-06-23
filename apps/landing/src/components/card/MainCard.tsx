@@ -46,23 +46,28 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
         {value.item ? value.item.name : '-'}
       </Link>
       <span className="mt-2 text-body3 text-text-80">{`${value.price} ${value.token.symbol}`}</span>
-      <div className="mt-4 flex">
-        <Button
-          as={Link}
-          href={buyNowLink}
-          className={classcat(['btnmd mr-1 h-10 p-0 ow:rounded-lg'])}
-        >
-          Buy now
-        </Button>
-        <Button
-          className={classcat(['h-10 border-none bg-white p-0 ow:w-12 ow:rounded-lg', 'shrink-0'])}
-          {...(!user
-            ? { as: Link, href: '/auth/sign-in' }
-            : { onClick: () => handleAddToCart(value, openToast) })}
-        >
-          <CartIcon className="h-5 w-5" color="#0A0A0E" />
-        </Button>
-      </div>
+      {!user || user.profile.wallet !== value.item.owner ? (
+        <div className="mt-4 flex">
+          <Button
+            as={Link}
+            href={buyNowLink}
+            className={classcat(['btnmd mr-1 h-10 p-0 ow:rounded-lg'])}
+          >
+            Buy now
+          </Button>
+          <Button
+            className={classcat([
+              'h-10 border-none bg-white p-0 ow:w-12 ow:rounded-lg',
+              'shrink-0',
+            ])}
+            {...(!user
+              ? { as: Link, href: '/auth/sign-in' }
+              : { onClick: () => handleAddToCart(value, openToast) })}
+          >
+            <CartIcon className="h-5 w-5" color="#0A0A0E" />
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }

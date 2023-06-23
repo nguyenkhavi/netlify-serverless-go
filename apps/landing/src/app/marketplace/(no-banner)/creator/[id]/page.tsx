@@ -27,7 +27,7 @@ export default function SellerPage({ params }: { params: { id: string } }) {
       <InfoSection data={dataUser[0] as RouterOutputs['myProfile']['profile']} />
       <FilterBar />
 
-      <div className="flex px-[--px] pb-8.5 pt-6.25">
+      <div className="flex px-[--px] py-6 xlg:pb-24 xlg:pt-8">
         <Show when={view === 'item'}>
           <div className="hidden w-[284px] shrink-0 xlg:block">
             <FilterPrice className="ow:mt-0" />

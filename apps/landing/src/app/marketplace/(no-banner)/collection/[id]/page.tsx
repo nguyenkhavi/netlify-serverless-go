@@ -12,7 +12,7 @@ import MainCardOld from '_@landing/components/card/MainCardOld';
 import BasePagination from '_@shared/components/pagination/BasePagination';
 //RELATIVE MODULES
 import FilterBar from '../../comps/FilterBar';
-import InfoSection from '../../comps/InfoSection';
+import InfoSectionCollection from '../../comps/InfoSectionCollection';
 //RELATIVE MODULES
 
 const DATA_COLLECTION = {
@@ -26,7 +26,7 @@ const DATA_COLLECTION = {
 export default function SellerPage() {
   return (
     <>
-      <InfoSection
+      <InfoSectionCollection
         data={DATA_COLLECTION}
         isCollection={true}
         contentClasses="ow:px-4 ow:md:px-12.5"

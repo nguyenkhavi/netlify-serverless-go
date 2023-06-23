@@ -32,7 +32,7 @@ const inputClasses = [
   'rounded mr-2.5',
 ];
 const buttonFilterClasses = [
-  'ml-2 flex h-full items-center rounded-lg bg-secondary-200 px-3.5 lg:ml-4',
+  'ml-2 flex h-full items-center rounded-lg bg-secondary-200 px-3.5',
   'border border-solid border-text-10',
 ];
 
@@ -56,8 +56,8 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
   return (
     <section
       className={classcat([
-        'mx-auto mt-7.5 w-[--content-width] pb-4',
-        'border-b border-white/[.15]',
+        'mx-auto mt-6 w-[--content-width] pb-4 xlg:mt-12',
+        'xlg:border-b xlg:border-white/[.15]',
         'flex flex-col justify-between md:flex-row',
       ])}
     >
@@ -68,7 +68,7 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
             variant="outlined"
             className={classcat([
               'ow:w-35 ow:rounded-[20px]',
-              'border-text-30 text-text-50 ow:border-[1.5px]',
+              'border-text-30 text-text-50 ow:border-[1.5px] ow:[&>span]:text-subtitle1',
               'hover:bg-transparent [&>span]:hover:text-primary [&>svg]:hover:text-primary',
               'data-[active=true]:border-primary data-[active=true]:text-primary',
             ])}
@@ -80,9 +80,9 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           <button
             data-active={view === 'item'}
             className={classcat([
-              'text-btnmd text-text-50 data-[active=true]:text-gradient-pr',
+              'text-text-50 data-[active=true]:text-gradient-pr',
               'hover:text-gradient-pr',
-              'ml-7.5',
+              'ml-6 text-h5 data-[active=true]:text-h5-bold',
             ])}
             onClick={() => _handleChangeView('item')}
           >
@@ -90,12 +90,12 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           </button>
         </div>
       </Show>
-      <div className="ml-2 mt-4.5 flex grow md:mt-0 md:justify-end">
+      <div className="ml-2 mt-6 flex grow md:mt-0 md:justify-end">
         <SearchInput
           ref={searchText}
           name="search"
           type="text"
-          placeholder="Search by Versace"
+          placeholder="Type here"
           className={classcat([
             'grow ow:h-11.25',
             'border-none ow:bg-secondary-200 md:text-body1',

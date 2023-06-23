@@ -33,7 +33,7 @@ export default function AchievementsSection() {
       <div
         className={classcat([
           'grid justify-items-center gap-4',
-          'xlg:justify-items-stretch xlg:gap-11.5',
+          'xlg:justify-items-stretch xlg:gap-8',
         ])}
       >
         <div
