@@ -1,36 +1,39 @@
 'use client';
 //THIRD PARTY MODULES
-import { create } from 'zustand';
 import { Magic } from 'magic-sdk';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { getQueryKey } from '@trpc/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import cookieHandler from '_@landing/utils/cookieHandler';
 import { RouterInputs, RouterOutputs, nextApi } from '_@landing/utils/api';
 
-type State = {
-  user: RouterOutputs['myProfile'] | null;
-};
+const useAuthStore = () => {
+  const { data } = nextApi.myProfile.useQuery(undefined, {
+    enabled: !!cookieHandler.get('session'),
+    refetchOnWindowFocus: false,
+    staleTime: 30_000,
+  });
+  const queryClient = useQueryClient();
+  const myProfileKey = getQueryKey(nextApi.myProfile);
 
-type Action = {
-  setUser: (user: RouterOutputs['myProfile'] | undefined) => void;
+  return {
+    user: data,
+    setUser: (user: RouterOutputs['myProfile'] | undefined) => {
+      if (user) {
+        queryClient.setQueryData(myProfileKey, user);
+      } else {
+        queryClient.removeQueries(myProfileKey);
+      }
+    },
+  };
 };
-
-const useAuthStore = create<State & Action>((set) => ({
-  user: null,
-  setUser: (user) => {
-    set({ user });
-  },
-}));
 
 export default useAuthStore;
 
-const { setUser } = useAuthStore.getState();
-export const authStoreAction = {
-  setUser,
-};
-
 export const useAuthStoreAction = () => {
   const router = useRouter();
+  const { setUser } = useAuthStore();
   const [magicClient, setMagicClient] = useState<Magic | null>(null);
 
   const { mutateAsync: signUpFn } = nextApi.signup.useMutation({});
