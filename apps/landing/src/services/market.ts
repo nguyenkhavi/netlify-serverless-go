@@ -8,13 +8,13 @@ import {
   IMarketStatusData,
   IPaging,
   ISorting,
-  TTopSeller,
+  IToken,
 } from '_@landing/utils/type';
 //RELATIVE MODULES
 import { getItemById } from './item';
-import { getTokenByAddress } from './token';
 import { getCategoryById } from './category';
 import { getCollectionByContract } from './collection';
+import { getAllToken, getTokenByAddress } from './token';
 import { getAllActivitiesByItem, getAllBuyActivities } from './activity';
 export async function addMarket(db: IDBPDatabase, data: IMarketData) {
   try {
@@ -180,4 +180,42 @@ export async function getBestSeller(db: IDBPDatabase) {
     .sort((a, b) => {
       return b.volume - a.volume;
     });
+}
+
+export async function getItemMarketByCollection(
+  db: IDBPDatabase,
+  address: string,
+  paging: IPaging,
+) {
+  const tokenHashMap: Map<string, IToken> = new Map();
+  const items: IMarketData[] = await db.getAll(dbOS.market);
+  const token = await getAllToken(db);
+  token.map((tokenItem) => tokenHashMap.set(tokenItem.address, tokenItem));
+
+  const itemFilterByCollection = (
+    await Promise.all(
+      items.map(async (item) => {
+        const activities = (await getAllActivitiesByItem(db, item.itemId)).filter(
+          (activity) => activity.type == ActivityType.BUY,
+        );
+        const itemDetail = await getItemById(db, item.itemId);
+
+        return {
+          ...item,
+          token: tokenHashMap.get(item.currency),
+          item: itemDetail,
+          activities,
+          totalSale: activities.length,
+        };
+      }),
+    )
+  ).filter((item) => item.item.address === address);
+
+  return {
+    data: itemFilterByCollection.slice(
+      paging.page * paging.pageSize,
+      (paging.page + 1) * paging.pageSize,
+    ),
+    total: itemFilterByCollection.length,
+  };
 }

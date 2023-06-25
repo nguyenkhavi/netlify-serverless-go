@@ -11,6 +11,10 @@ export async function getTokenByAddress(db: IDBPDatabase, address: string): Prom
   return db.getFromIndex(dbOS.token, dbIndex.tokenAddressIndex, address);
 }
 
+export async function getAllToken(db: IDBPDatabase): Promise<IToken[]> {
+  return db.getAll(dbOS.token);
+}
+
 export async function insertSeedTokenData(db: IDBPDatabase) {
   try {
     db.add(dbOS.token, {

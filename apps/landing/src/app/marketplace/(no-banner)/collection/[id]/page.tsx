@@ -1,66 +1,31 @@
-'use client';
 //THIRD PARTY MODULES
-import React from 'react';
 import classcat from 'classcat';
-import { MOCK_DATA_ITEM } from '_@landing/mock/Item';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
-import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import FilterPrice from '_@landing/app/marketplace/comps/FilterPrice';
-import MarketplaceBox from '_@landing/app/marketplace/comps/MarketplaceBox';
 //LAYOUT, COMPONENTS
-import MainCardOld from '_@landing/components/card/MainCardOld';
-import BasePagination from '_@shared/components/pagination/BasePagination';
+import ContentItems from './components/ContentItems';
+import InfoSectionCollection from './components/InfoSectionCollection';
 //RELATIVE MODULES
 import FilterBar from '../../comps/FilterBar';
-import InfoSectionCollection from '../../comps/InfoSectionCollection';
-//RELATIVE MODULES
-
-const DATA_COLLECTION = {
-  name: 'Golden Hand',
-  image: '/images/marketplace/banner-1.jpeg',
-  description:
-    'Design amazing digital experiences that create more happy in the world.design amazing digital experiences that create more happy in the world.',
-  createdAt: '2021-08-20T07:00:00.000Z',
-};
 
 export default function SellerPage() {
   return (
     <>
-      <InfoSectionCollection
-        data={DATA_COLLECTION}
-        isCollection={true}
-        contentClasses="ow:px-4 ow:md:px-12.5"
-      />
+      <InfoSectionCollection />
       <FilterBar showOptionsLeft={false} />
 
-      <MarketplaceBox
-        leftContent={
-          <>
-            <FilterPrice className="ow:mt-0" />
-            <HomeAdvVertical
-              className="relative mt-7.5 h-auto w-full py-8 ow:top-0 xl:grid"
-              btnClasses="ow:static mt-6.25"
-            />
-          </>
-        }
-      >
-        <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-4 md:gap-x-7.5 xlg:gap-y-5">
-          {MOCK_DATA_ITEM.map((item, index) => (
-            <React.Fragment key={index}>
-              <MainCardOld value={item} />
-              {(index + 1) % 4 === 0 ? (
-                <HomeAdvHorizontal
-                  className={classcat(['col-span-full', (index + 1) % 8 === 0 ? '' : 'md:hidden'])}
-                  isHome={false}
-                />
-              ) : null}
-            </React.Fragment>
-          ))}
+      <div className="flex px-[--px] py-6 xlg:pb-24 xlg:pt-8">
+        <div className="hidden w-[284px] shrink-0 xlg:block">
+          <FilterPrice className="ow:mt-0" />
+          <HomeAdvVertical
+            className="relative mt-7.5 h-auto w-full py-8 ow:top-0 xlg:grid"
+            btnClasses="ow:static mt-6.25"
+          />
         </div>
-        <div className="flex justify-center">
-          <BasePagination perPage={1} totalItems={20} />
+        <div className={classcat(['relative grid h-max grow gap-6.25 xlg:ml-8'])}>
+          <ContentItems />
         </div>
-      </MarketplaceBox>
+      </div>
     </>
   );
 }

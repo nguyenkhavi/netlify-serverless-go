@@ -63,7 +63,6 @@ export default function CheckOutPage() {
   const currency = useMemo(() => {
     if (data.length === 0) return '';
     return data[0].token.symbol;
-    return '';
   }, [data]);
 
   const _getItemDetailByListingId = useCallback(async () => {

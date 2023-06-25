@@ -1,3 +1,4 @@
+'use client';
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useRef, useState } from 'react';

@@ -2,6 +2,7 @@
 import { BigNumber } from 'ethers';
 import {
   getBestSeller,
+  getDetailCollectionByAddress,
   getItemByOwner,
   getTrendingCollectionsByCategory,
   getTrendingMarketByCategory,
@@ -215,3 +216,4 @@ export type TTopSeller = Awaited<ReturnType<typeof getBestSeller>>;
 export type TCollectionCard = Awaited<
   ReturnType<typeof getTrendingCollectionsByCategory>
 >['data'][number];
+export type TCollectionStore = Awaited<ReturnType<typeof getDetailCollectionByAddress>>;

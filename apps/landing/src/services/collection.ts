@@ -1,8 +1,11 @@
 //THIRD PARTY MODULES
+import Decimal from 'decimal.js';
 import { IDBPDatabase } from 'idb';
+import { IMarketData } from '_@landing/utils/type';
 import { dbIndex, dbOS } from '_@landing/utils/constants';
 import { ActivityType, ICollection, IPaging } from '_@landing/utils/type';
 //RELATIVE MODULES
+import { getItemById } from './item';
 import { getAllActivitiesByCollectionAddress } from './activity';
 
 export async function addCollection(db: IDBPDatabase, data: ICollection) {
@@ -106,4 +109,55 @@ export async function getAllRawCollectionByCategory(
   category: number,
 ): Promise<ICollection[]> {
   return db.getAllFromIndex(dbOS.collection, dbIndex.collectionCategoryIndex, category);
+}
+
+export async function getDetailCollectionByAddress(
+  db: IDBPDatabase,
+  address: string,
+): Promise<{
+  collection: ICollection;
+  summary: {
+    volume: number;
+    NFTs: number;
+    totalOwner: number;
+  };
+}> {
+  const collection = await db.getFromIndex(
+    dbOS.collection,
+    dbIndex.collectionAddressIndex,
+    address,
+  );
+  const items: IMarketData[] = await db.getAll(dbOS.market);
+  const itemByCollection = (
+    await Promise.all(
+      items.map(async (mk) => {
+        const item = await getItemById(db, mk.itemId);
+        return {
+          ...mk,
+          item,
+        };
+      }),
+    )
+  ).filter((item) => item.item.address === address);
+
+  const summaryData = itemByCollection.reduce(
+    (prevVal, curVal) => {
+      const price = new Decimal(curVal.price * curVal.quantity);
+
+      return {
+        volume: price.add(prevVal.volume).toNumber(),
+        uniqueOwner: [...prevVal.uniqueOwner, curVal.listingCreator],
+      };
+    },
+    { volume: 0, uniqueOwner: [] } as { volume: number; uniqueOwner: string[] },
+  );
+
+  return {
+    collection,
+    summary: {
+      volume: summaryData.volume,
+      NFTs: itemByCollection.length,
+      totalOwner: [...new Set(summaryData.uniqueOwner)].length,
+    },
+  };
 }
