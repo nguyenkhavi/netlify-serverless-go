@@ -55,7 +55,7 @@ export const useAuthStoreAction = () => {
     if (!magicClient) return;
     await handleLogoutMagic();
     const found = await validateLoginFn(input).catch(() => {
-      throw new Error('User not found');
+      throw new Error('BAD_REQUEST');
     });
     if (found) {
       const didToken = await magicClient.auth.loginWithSMS({
@@ -69,7 +69,7 @@ export const useAuthStoreAction = () => {
         cookieHandler.set('session', resp.accessToken || '');
         const user = await refetch();
         setUser(user.data);
-        router.push('/profile');
+        router.replace('/profile');
       }
     }
   };
@@ -92,7 +92,7 @@ export const useAuthStoreAction = () => {
         const user = await refetch();
         setUser(user.data);
         cookieHandler.set('session', postRes.accessToken || '');
-        router.push('/profile');
+        router.replace('/profile');
       }
     }
   };
@@ -103,7 +103,7 @@ export const useAuthStoreAction = () => {
       await magicClient.user.logout();
       await logoutFn();
       cookieHandler.remove('session');
-      router.push('/auth/sign-in');
+      router.replace('/auth/sign-in');
     } finally {
       setUser(undefined);
     }
