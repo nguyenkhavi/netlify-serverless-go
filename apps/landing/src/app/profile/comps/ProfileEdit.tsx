@@ -2,9 +2,12 @@
 import { z } from 'zod';
 import classcat from 'classcat';
 import { useState } from 'react';
-import { nextApi } from '_@landing/utils/api';
+import { api, nextApi } from '_@landing/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
+import { useStorageUpload } from '@thirdweb-dev/react';
 import { FormProvider, useForm } from 'react-hook-form';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
@@ -18,8 +21,10 @@ import { toastStore } from '_@shared/stores/toast/toastStore';
 import { InstagramLightIcon } from '_@shared/icons/InstagramIcon';
 
 const schema = z.object({
-  about: z.string(),
-  description: z.string(),
+  aboutMe: z.string().nonempty({ message: 'This field is required' }),
+  description: z.string().nonempty({ message: 'This field is required' }),
+  avatarUrl: z.string(),
+  coverUrl: z.string(),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -28,42 +33,95 @@ type ProfileEditProps = {
   setIsEdit: (isEdit: boolean) => void;
 };
 
+const IMAGE_DEFAULT = {
+  avatarImage: '/images/profile/avatar-default.webp',
+  coverImage: '/images/profile/cover.jpeg',
+} as const;
+
 export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
+  const utils = nextApi.useContext();
   const { openToast } = toastStore();
+  const [isLoading, setIsLoading] = useState(false);
   const { mutate: contentInstagram } = nextApi.userConnectInstagram.useMutation();
-  const [coverUrl, setCoverUrl] = useState('/images/profile/cover.jpeg');
-  const [avatarUrl, setAvatarUrl] = useState('/images/profile/avatar-default.webp');
+  const { mutateAsync: upload } = useStorageUpload();
+  const [images, setImages] = useState<{
+    avatarUrl?: File;
+    coverUrl?: File;
+  }>();
+  const { user } = useAuthStore();
+  const { instagramUid, twitterUid } = user?.profile ?? {};
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      coverUrl: user?.profile.coverUrl ?? IMAGE_DEFAULT.coverImage,
+      avatarUrl: user?.profile.avatarUrl ?? IMAGE_DEFAULT.avatarImage,
+      aboutMe: user?.profile.aboutMe ?? '',
+      description: user?.profile.description ?? '',
+    },
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, setValue, watch } = methods;
+  const avatarUrl = watch('avatarUrl');
+  const coverUrl = watch('coverUrl');
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
-    openToast('Incomplete KYC! Click here to complete');
-  };
+  const _handleUploadFile =
+    (name: 'avatarUrl' | 'coverUrl') => (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files?.length) return;
+      const file = e.target.files[0];
+      //file < 15mg
+      if (file.size > 15 * 1024 * 1024) {
+        let message = '';
+        if (name === 'avatarUrl') {
+          message = 'Avatar image must be less than 15MB';
+        } else {
+          message = 'Cover image must be less than 15MB';
+        }
+        openToast(message);
+        return;
+      }
+      const url = URL.createObjectURL(file);
+      setValue(name, url);
+      setImages((prev) => {
+        return { ...prev, [name]: file };
+      });
+    };
 
-  const _handleUploadFileCover = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return;
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
-    setCoverUrl(url);
-  };
-
-  const _handleUploadAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.length) return;
-    const file = e.target.files[0];
-    const url = URL.createObjectURL(file);
-    setAvatarUrl(url);
-  };
-
-  const _handleSuccess = (code: string | null) => {
+  const handleInstagramSuccess = (code: string | null) => {
     if (!code) return;
+    utils.myProfile.invalidate();
     contentInstagram({
       code,
     });
+  };
+
+  const handleTwitterSuccess = () => {
+    utils.myProfile.invalidate();
+  };
+
+  const onSubmit = async (values: FormValues) => {
+    try {
+      setIsLoading(true);
+      const { avatarUrl, coverUrl } = values;
+
+      if (avatarUrl === IMAGE_DEFAULT.avatarImage) values.avatarUrl = '';
+      if (coverUrl === IMAGE_DEFAULT.coverImage) values.coverUrl = '';
+      const [[avatarImageUrl], [coverImageUrl]] = await Promise.all(
+        [images?.avatarUrl, images?.coverUrl].map((url) => {
+          if (!url) return Promise.resolve('');
+          return upload({ data: [url] });
+        }),
+      );
+      if (avatarImageUrl) values.avatarUrl = avatarImageUrl;
+      if (coverImageUrl) values.coverUrl = coverImageUrl;
+      await api.updatePersonalInfo.mutate(values);
+      utils.myProfile.invalidate();
+      openToast('Update profile successfully!');
+    } catch (error) {
+      openToast('Something went wrong!');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -71,7 +129,11 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-7">
         <div className="rounded-[10px] bg-secondary-200 py-3">
           <h2 className="mb-6.5 px-3 text-h6 lg:text-h5-bold">Personal Information</h2>
-          <img className="relative z-[1] h-34 w-full object-cover lg:h-36" src={coverUrl} alt="" />
+          <img
+            className="relative z-[1] h-34 w-full object-cover lg:h-36"
+            src={urlWithIpfs(coverUrl)}
+            alt=""
+          />
           <div className="relative z-[2] -mt-7 grid grid-cols-3 place-items-center px-3 lg:-mt-14.5">
             <div></div>
             <div
@@ -81,20 +143,20 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
                 '[&>button]:hover:flex [&>img]:hover:blur-[1px]',
               ])}
             >
-              <img className="h-full w-full object-cover" src={avatarUrl} alt="" />
+              <img className="h-full w-full object-cover" src={urlWithIpfs(avatarUrl)} alt="" />
               <button
                 type="button"
                 className={classcat([
                   'absolute inset-0',
                   'flex items-center justify-center',
-                  'btn-avt hidden',
+                  'hidden',
                 ])}
               >
                 <CameraIcon className="h-7.5 w-6 cursor-pointer" />
                 <input
                   className="absolute inset-0 z-10 cursor-pointer opacity-0"
                   type="file"
-                  onChange={_handleUploadAvatar}
+                  onChange={_handleUploadFile('avatarUrl')}
                 />
               </button>
             </div>
@@ -111,14 +173,14 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
                 <input
                   className="absolute inset-0 z-10 cursor-pointer opacity-0"
                   type="file"
-                  onChange={_handleUploadFileCover}
+                  onChange={_handleUploadFile('coverUrl')}
                 />
               </Button>
             </div>
           </div>
           <div className="mt-4 grid gap-4 px-3 lg:mt-1 lg:grid-cols-[1fr_333px]">
             <div className="grid gap-4">
-              <FormItem label="About me" name="about">
+              <FormItem label="About me" name="aboutMe">
                 <FormInput
                   tag="textarea"
                   placeholder="Write about yourself.."
@@ -144,7 +206,9 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
                   Twitter
                 </p>
                 <div className="relative">
-                  <Button className="btnsm w-max">Connect</Button>
+                  <Button disabled={!!twitterUid} className="btnsm w-max">
+                    {twitterUid ? 'Connected' : 'Connect'}
+                  </Button>
                   <div
                     className={classcat([
                       '[&>button]:absolute [&>button]:h-full [&>button]:w-full',
@@ -153,7 +217,12 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
                       '[&>button]:opacity-0',
                     ])}
                   >
-                    <ConnectTwitterBtn />
+                    <ConnectTwitterBtn
+                      onFailure={(e) => {
+                        console.log(e);
+                      }}
+                      onSuccess={handleTwitterSuccess}
+                    />
                   </div>
                 </div>
               </div>
@@ -162,15 +231,16 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
                   <InstagramLightIcon className="mr-2" />
                   Instagram
                 </p>
-                <div className="relative">
-                  <ConnectInstagram
-                    onSuccess={_handleSuccess}
-                    onFailure={(e) => {
-                      console.log(e);
-                    }}
-                    clientId={process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID as string}
-                  />
-                </div>
+
+                <ConnectInstagram
+                  disabled={!!instagramUid}
+                  onSuccess={handleInstagramSuccess}
+                  buttonText={instagramUid ? 'Connected' : 'Connect'}
+                  onFailure={(e) => {
+                    console.log(e);
+                  }}
+                  clientId={process.env.NEXT_PUBLIC_INSTAGRAM_CLIENT_ID as string}
+                />
               </div>
             </div>
           </div>
@@ -183,7 +253,7 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
           >
             Cancel
           </Button>
-          <Button className="btnsm w-max lg:btnmd" type="submit">
+          <Button isLoading={isLoading} className="btnsm w-max lg:btnmd" type="submit">
             Update
           </Button>
         </div>

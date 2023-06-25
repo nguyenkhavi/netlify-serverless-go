@@ -22,6 +22,7 @@ interface Props {
   implicitAuth?: boolean;
   onFailure: (error: Error) => void;
   onSuccess: (response: string | null) => void;
+  disabled?: boolean;
 }
 
 export function ConnectInstagram({
@@ -30,6 +31,8 @@ export function ConnectInstagram({
   onFailure,
   onSuccess,
   scope = 'user_profile',
+  buttonText = 'Connect',
+  disabled,
   ...rest
 }: Props) {
   const { width, height, implicitAuth, useRedirect } = {
@@ -121,8 +124,8 @@ export function ConnectInstagram({
   }, [checkInstagramAuthentication]);
 
   return (
-    <Button onClick={onButtonClicked} className="btnsm w-max">
-      Connect
+    <Button disabled={disabled} onClick={onButtonClicked} className="btnsm w-max">
+      {buttonText}
     </Button>
   );
 }

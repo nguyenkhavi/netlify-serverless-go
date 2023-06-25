@@ -40,5 +40,10 @@ module.exports = plugin(({ addComponents }) => {
       background:
         'linear-gradient(theme(colors.secondary.200), theme(colors.secondary.200)) padding-box, linear-gradient(90deg, #3EDEB5 0%, #47DEB8 16%, #61DFBE 44%, #8AE0C9 78%, #A7E1D1 99%) border-box',
     },
+    '.check-gradient': {
+      background:
+        'linear-gradient(90deg, #3EDEB5 0%, #47DEB8 16%, #61DFBE 44%, #8AE0C9 78%, #A7E1D1 99%)',
+      boxShadow: '0px 0px 10px #19CA9B',
+    },
   });
 });

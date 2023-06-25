@@ -17,9 +17,11 @@
     "devkit",
     "fastify",
     "fleamint",
+    "getstream",
     "headlessui",
     "hookform",
     "IDBP",
+    "ipfs",
     "kanit",
     "nextjs",
     "onboarded",
@@ -34,9 +36,7 @@
     "thirdweb",
     "TRPC",
     "webp",
-    "zustand",
-    "cmdk",
-    "getstream"
+    "zustand"
   ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

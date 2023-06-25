@@ -19,11 +19,7 @@ export default function ProfileInfoDetail() {
     <section className="grid gap-6 md:grid-cols-[1fr_330px] md:px-6 md:pb-6">
       <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses])}>About Me</h2>
-        <p className={classcat([contentClasses])}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-          been the industry's standard dummy text ever since the 1500s, when an unknown printer took
-          a galley of type and scrambled it to make a type specimen book.
-        </p>
+        <p className={classcat([contentClasses])}>{user?.profile?.aboutMe || 'No about me'}</p>
       </div>
       <div className={classcat([boxClasses])}>
         <h2 className={classcat([titleClasses])}>Contact Info</h2>
@@ -37,9 +33,7 @@ export default function ProfileInfoDetail() {
       <div className={classcat([boxClasses, 'col-start-1 row-start-2'])}>
         <h2 className={classcat([titleClasses])}>Store description</h2>
         <p className={classcat([contentClasses])}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-          been the industry's standard dummy text ever since the 1500s, when an unknown printer took
-          a galley of type and scrambled it to make a type specimen book.
+          {user?.profile?.description || 'No description'}
         </p>
       </div>
       <div className={classcat([boxClasses])}>

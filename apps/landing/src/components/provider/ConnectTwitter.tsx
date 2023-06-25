@@ -5,7 +5,12 @@ import TwitterLogin from 'react-twitter-auth';
 import React, { useLayoutEffect } from 'react';
 import cookieHandler from '_@landing/utils/cookieHandler';
 
-const ConnectTwitterBtn = () => {
+type Props = {
+  onSuccess?: (data: string) => void;
+  onFailure?: (e: string) => void;
+};
+
+const ConnectTwitterBtn = ({ onSuccess = () => {}, onFailure = () => {} }: Props) => {
   useLayoutEffect(() => {
     const origFetch = window.fetch;
     (window as any).fetch = async (...args: any) => {
@@ -37,12 +42,8 @@ const ConnectTwitterBtn = () => {
   return (
     <TwitterLogin
       loginUrl={process.env.NEXT_PUBLIC_TWITTER_LOGIN_URL as string}
-      onFailure={(e) => {
-        console.log('handle connect fail', e);
-      }}
-      onSuccess={(data) => {
-        console.log('handle connect success', data);
-      }}
+      onFailure={onFailure}
+      onSuccess={onSuccess}
       requestTokenUrl={process.env.NEXT_PUBLIC_TWITTER_REQUEST_TOKEN_URL as string}
     />
   );

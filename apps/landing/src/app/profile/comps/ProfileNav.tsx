@@ -23,7 +23,9 @@ export default function ProfileNav() {
   const { logout } = useAuthStoreAction();
   const { setOpen } = feedbackStore();
   const pathname = usePathname();
-  const { data } = nextApi.userVerifiedPercentage.useQuery();
+  const { data } = nextApi.userVerifiedPercentage.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
   const process = Number((data?.percentage || 0).toFixed(2));
 
   return (
@@ -65,7 +67,7 @@ export default function ProfileNav() {
                 'after:rounded-3xl',
               ])}
             ></span>
-            <p className="text-end text-caption">{process}%</p>
+            <p className="text-end text-caption">{process * 100}%</p>
           </div>
           <h2 className="text-subtitle2">Complete your account</h2>
           <p className="text-body3 text-[#7F7A7A]">
