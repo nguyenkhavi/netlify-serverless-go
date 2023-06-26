@@ -9,6 +9,7 @@ import { getMarketDetailByListingId } from '_@landing/services';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
+import Traits from './components/Traits';
 import Loading from './components/Loading';
 import Show from '_@shared/components/Show';
 import NotFound from './components/NotFound';
@@ -72,6 +73,7 @@ const Page = () => {
         <div className="grid grid-flow-row gap-5 md:gap-8">
           <NFTInfoCard data={state.data} />
           <ItemHistory activities={state.data.activities} token={state.data.token} />
+          <Traits data={state.data.item.metadata.attributes} />
         </div>
         <Show when={user?.profile.userId}>
           <StreamChat />

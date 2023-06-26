@@ -129,7 +129,7 @@ export interface IMetadataNFT {
   description: string;
   background_color: string;
   properties: any[];
-  attributes: any[];
+  attributes: IAttribute[];
   id: string;
   uri: string;
   image: string;
@@ -231,3 +231,8 @@ export type TDataCheckout = Pick<
   TItemCard,
   'price' | 'quantity' | 'item' | 'token' | 'itemId' | 'listingId'
 >;
+
+export type IAttribute = {
+  trait_type: string;
+  value: string;
+};

@@ -39,8 +39,11 @@ export async function getItemById(db: IDBPDatabase, id: string): Promise<IItem> 
   return db.getFromIndex(dbOS.items, dbIndex.itemIdIndex, id);
 }
 
-export async function getAllRawItemByCollection(db: IDBPDatabase, address: string): Promise<IItem> {
-  return db.getFromIndex(dbOS.items, dbIndex.itemAssetContractIndex, address);
+export async function getAllRawItemByCollection(
+  db: IDBPDatabase,
+  address: string,
+): Promise<IItem[]> {
+  return db.getAllFromIndex(dbOS.items, dbIndex.itemAssetContractIndex, address);
 }
 
 export async function getAllRawItemByOwner(db: IDBPDatabase, owner: string): Promise<IItem[]> {

@@ -5,7 +5,9 @@ import { queryItemFactory } from '_@landing/utils/queryFactory';
 import { Chains, dbIndex, dbOS } from '_@landing/utils/constants';
 import {
   ActivityType,
+  IAttribute,
   IFilter,
+  IItem,
   IMarketData,
   IMarketStatusData,
   IPaging,
@@ -13,9 +15,9 @@ import {
   IToken,
 } from '_@landing/utils/type';
 //RELATIVE MODULES
-import { getItemById } from './item';
 import { getCategoryById } from './category';
 import { getAllToken, getTokenByAddress } from './token';
+import { getAllRawItemByCollection, getItemById } from './item';
 import { getAllActivitiesByItem, getAllBuyActivities } from './activity';
 import { getAllRawCollectionByOwner, getCollectionByContract } from './collection';
 export async function addMarket(db: IDBPDatabase, data: IMarketData) {
@@ -167,13 +169,79 @@ export async function getMarketStatusByListingId(
   return db.getFromIndex(dbOS.marketStatus, dbIndex.marketListingIdIndex, listingId);
 }
 
+export const getKeyOfTrait = (attribute: IAttribute) => {
+  return `${attribute.trait_type}_${attribute.value}`;
+};
+
+const getRateOfTraitInCollection = (items: IItem[]) => {
+  const map = new Map();
+
+  items
+    .filter((item) => item.metadata.attributes)
+    .forEach((item) => {
+      item.metadata.attributes.forEach((attribute) => {
+        const key = getKeyOfTrait(attribute);
+        map.set(key, (map.get(key) || 0) + 1);
+      });
+    });
+
+  const totalCount = items.length;
+  const percentMap: { [key: string]: number } = {};
+
+  map.forEach((count, key) => {
+    const percentage = ((count / totalCount) * 100).toFixed(2);
+    percentMap[key] = parseFloat(percentage);
+  });
+
+  return percentMap;
+};
+
+const getFloorOfTrait = (
+  item: IItem,
+  markets: Awaited<ReturnType<typeof getAllRawMarketByCollection>>,
+) => {
+  return item.metadata.attributes?.reduce((obj, attribute) => {
+    return {
+      ...obj,
+      [getKeyOfTrait(attribute)]: markets
+        .filter((market) =>
+          market.item?.metadata?.attributes.find(
+            (item) => item.trait_type === attribute.trait_type && item.value === attribute.value,
+          ),
+        )
+        .sort((a, b) => a.price - b.price)?.[0],
+    };
+  }, {}) as { [key: string]: Awaited<ReturnType<typeof getAllRawMarketByCollection>>[number] };
+};
+
 export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: number) {
+  const status = await getMarketStatusByListingId(db, listingId);
+  if (status.isAvailable !== 1) return undefined;
   const market = await getMarketByListingId(db, listingId);
   const item = await getItemById(db, market.itemId);
   const activities = await getAllActivitiesByItem(db, market.itemId);
   const collection = await getCollectionByContract(db, market.assetContract);
   const category = await getCategoryById(db, collection.category);
   const token = await getTokenByAddress(db, market.currency);
+  const itemsInCollection = await getAllRawItemByCollection(db, collection.address);
+  const marketInCollection = await getAllRawMarketByCollection(db, collection.address);
+  const rateOfTrailInCollection = await getRateOfTraitInCollection(itemsInCollection);
+  const floorOfTrail = await getFloorOfTrait(item, marketInCollection);
+  const itemConvert = {
+    ...item,
+    metadata: {
+      ...item.metadata,
+      attributes: item.metadata.attributes.map((attribute) => {
+        const floor = floorOfTrail?.[getKeyOfTrait(attribute)];
+        return {
+          ...attribute,
+          floor: floor?.price,
+          token: floor?.token,
+          rate: rateOfTrailInCollection?.[getKeyOfTrait(attribute)],
+        };
+      }),
+    },
+  };
   const chain = Object.values(Chains)
     .map((chain) => chain)
     .find((chain) => chain.chainId === item.chain);
@@ -181,7 +249,7 @@ export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: nu
   return {
     ...market,
     token,
-    item,
+    item: itemConvert,
     activities,
     collection,
     category,
@@ -285,4 +353,35 @@ export async function getMarketItemByOwner(
     data: data,
     total: total,
   };
+}
+
+export async function getAllRawMarketByCollection(db: IDBPDatabase, address: string) {
+  const rawMarket: IMarketData[] = await db.getAllFromIndex(
+    dbOS.market,
+    dbIndex.marketAssetContractIndex,
+    address,
+  );
+
+  const marketStatus = await Promise.all(
+    rawMarket.map(async (mk) => {
+      const status = await getMarketStatusByListingId(db, mk.listingId);
+      return {
+        ...mk,
+        status,
+      };
+    }),
+  );
+  const availableMarket = marketStatus.filter((mk) => mk.status.isAvailable == 1);
+
+  return Promise.all(
+    availableMarket.map(async (mk) => {
+      const item = await getItemById(db, mk.itemId);
+      const token = await getTokenByAddress(db, mk.currency);
+      return {
+        ...mk,
+        item,
+        token,
+      };
+    }),
+  );
 }

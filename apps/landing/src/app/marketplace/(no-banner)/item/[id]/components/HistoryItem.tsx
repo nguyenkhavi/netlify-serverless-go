@@ -2,7 +2,6 @@
 import classcat from 'classcat';
 import dayjs, { Dayjs } from 'dayjs';
 import { useSDK } from '@thirdweb-dev/react';
-import getTimeZone from '_@landing/utils/getTimeZone';
 import { IActivity, IToken } from '_@landing/utils/type';
 import { useCallback, useEffect, useState } from 'react';
 //LAYOUT, COMPONENTS
@@ -21,8 +20,7 @@ function HistoryItem({ data, token }: { data: IActivity; token: IToken }) {
     provider
       .getBlock(data.blockNumber)
       .then((block) => {
-        const timeZone = getTimeZone();
-        const time = dayjs.unix(block.timestamp).subtract(timeZone, 'hour');
+        const time = dayjs.unix(block.timestamp);
         setTime(time);
       })
       .catch((error) => {
@@ -42,7 +40,7 @@ function HistoryItem({ data, token }: { data: IActivity; token: IToken }) {
           <User wallet={data.fromAddress} />
         </div>
         <p className={classcat(['text-body2 text-primary-700'])}>
-          {data.price} {token.name}
+          {data.price} {token.symbol}
         </p>
       </div>
       <Show when={time}>

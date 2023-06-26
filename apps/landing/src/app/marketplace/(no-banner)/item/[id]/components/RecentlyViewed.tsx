@@ -13,7 +13,7 @@ import { TypeMarketDetail } from '../type';
 import { MARKET_ITEM_RECENTLY_VIEWED } from '../constants';
 
 type Props = {
-  data: TypeMarketDetail;
+  data: NonNullable<TypeMarketDetail>;
 };
 
 function RecentlyViewed({ data }: Props) {

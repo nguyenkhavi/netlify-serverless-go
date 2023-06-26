@@ -10,7 +10,7 @@ import { NFT_TYPES } from '../constants';
 import { TypeMarketDetail } from '../type';
 
 type Props = {
-  data: TypeMarketDetail;
+  data: NonNullable<TypeMarketDetail>;
 };
 
 function NFTInfoCard({ data }: Props) {

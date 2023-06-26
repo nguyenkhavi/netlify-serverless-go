@@ -1,6 +1,11 @@
 .str-chat {
   --str-chat__background-color: #0d0d0d;
 }
+
+.str-chat__channel {
+  @apply max-h-[1004px];
+}
+
 .str-chat__message-list-scroll {
   @apply max-h-175;
 }

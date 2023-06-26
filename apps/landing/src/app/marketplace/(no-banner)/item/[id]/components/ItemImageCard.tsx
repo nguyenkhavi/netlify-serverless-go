@@ -24,7 +24,7 @@ function ItemImageCard({ image, name, category }: Props) {
           'md:left-3 md:top-3 ow:md:h-11.25 ow:md:w-29.25 [&>span]:truncate',
         ])}
       >
-        {category.name}
+        {category?.name}
       </Button>
     </div>
   );

@@ -14,7 +14,7 @@ import Seller from './Seller';
 import { TypeMarketDetail } from '../type';
 
 type Props = {
-  data: TypeMarketDetail;
+  data: NonNullable<TypeMarketDetail>;
 };
 
 function ItemInfoCard({ data }: Props) {
@@ -43,7 +43,7 @@ function ItemInfoCard({ data }: Props) {
                 ])}
                 leadingIcon={<ImageArtIcon />}
               >
-                <span className="text-gradient-pr">{data.category.name}</span>
+                <span className="text-gradient-pr">{data.category?.name}</span>
               </Button>
               <Button
                 className={classcat([
