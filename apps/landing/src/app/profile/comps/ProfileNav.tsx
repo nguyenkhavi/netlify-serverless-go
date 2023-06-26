@@ -37,9 +37,9 @@ export default function ProfileNav() {
           'hidden shrink-0 py-8 pl-15 pr-6 lg:block',
         ])}
       >
-        <ul className="grid gap-11">
+        <ul className="grid gap-10">
           {PROFILE_NAV.map((nav, i) => (
-            <li key={i}>
+            <li key={i} className="py-2">
               <Link
                 data-active={pathname === nav.path}
                 className={classcat([
@@ -57,12 +57,12 @@ export default function ProfileNav() {
             </li>
           ))}
         </ul>
-        <div className="mt-11.5 rounded-[5px] border border-text-10 bg-secondary-300 px-4.5 pb-8 pt-9.5">
-          <div className="mb-1.5">
+        <div className="mt-10 rounded-[5px] border border-text-10 bg-secondary-300 px-4 py-5">
+          <div className="mb-1">
             <span
               style={{ '--process': `${process * 100}%` } as React.CSSProperties}
               className={classcat([
-                'relative h-3 w-full overflow-hidden rounded-3xl bg-white',
+                'relative mb-1.25 block h-3 w-full overflow-hidden rounded-3xl bg-white',
                 'after:absolute after:left-0 after:top-0 after:h-full after:w-[--process] after:bg-primary',
                 'after:rounded-3xl',
               ])}
@@ -70,11 +70,11 @@ export default function ProfileNav() {
             <p className="text-end text-caption">{process * 100}%</p>
           </div>
           <h2 className="text-subtitle2">Complete your account</h2>
-          <p className="text-body3 text-[#7F7A7A]">
+          <p className="mb-4 text-body3 text-[#7F7A7A]">
             Personalize your account by adding your details.
           </p>
           <div className="flex items-center text-subtitle2">
-            <button className="mr-9">Dismiss</button>
+            <button className="mr-6">Dismiss</button>
             <button>Add Detail</button>
           </div>
         </div>

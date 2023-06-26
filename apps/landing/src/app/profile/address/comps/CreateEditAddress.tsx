@@ -29,7 +29,7 @@ const schema = z.object({
   additionalInfo: z.string(),
 });
 
-const inputClasses = 'h-11.25 ow:rounded lg:h-15';
+const inputClasses = 'h-11.25 ow:rounded lg:h-15 ow:text-base ow:text-text-80';
 export type FormValues = z.infer<typeof schema> & { id: string | number; isDefault: boolean };
 type CreateEditAddress = {
   id?: string | number;
@@ -75,7 +75,7 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4 bg-secondary-200 lg:mt-0 lg:pb-6 ">
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-4 bg-secondary-200 pb-6 lg:mt-0 ">
         <div className="rounded-[10px] pb-8">
           <h2
             className={classcat([
@@ -85,19 +85,25 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
           >
             {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
           </h2>
-          <div className="grid gap-4 p-4 lg:grid-cols-2 lg:gap-8 lg:p-6">
+          <div className="grid gap-4 p-4 pb-0 lg:grid-cols-2 lg:gap-8 lg:p-6 lg:pb-0">
             <FormItem label="Country" name="country" className="ow:gap-1">
               <FormSelect
                 placeholder="Select Country"
                 options={OPTIONS}
-                owStyles={{ triggerClasses: 'ow:h-11.25 ow:lg:h-15' }}
+                owStyles={{
+                  triggerClasses:
+                    'ow:h-11.25 ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
+                }}
               />
             </FormItem>
             <FormItem label="State" name="state" className="ow:gap-1">
               <FormSelect
                 placeholder="Select State"
                 options={OPTIONS}
-                owStyles={{ triggerClasses: 'ow:h-11.25 ow:lg:h-15' }}
+                owStyles={{
+                  triggerClasses:
+                    'ow:h-11.25 ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
+                }}
               />
             </FormItem>
             <FormItem label="Street Address" name="streetAddress" className="ow:gap-1">
@@ -133,10 +139,14 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
           </div>
         </div>
         <div className="flex justify-center lg:justify-end">
-          <Button className="btnsm mr-3 w-max lg:btnmd" variant="outlined" onClick={_handleCancel}>
+          <Button
+            className="btnsm mr-3 w-max lg:btnmd lg:[&>span]:text-xs"
+            variant="outlined"
+            onClick={_handleCancel}
+          >
             Cancel
           </Button>
-          <Button className="btnsm w-max lg:btnmd" type="submit">
+          <Button className="btnsm w-max lg:btnmd lg:[&>span]:text-xs" type="submit">
             {type === 'create' ? 'Create' : 'Save'}
           </Button>
         </div>

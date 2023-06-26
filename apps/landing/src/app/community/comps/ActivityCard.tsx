@@ -62,7 +62,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
   const handleLikeActivity = async () => {
     try {
       if (!isLiked) {
-        await client?.reactions.add('like', activity.id, {});
+        await client?.reactions.add('like', activity.id);
         setIsLiked(true);
       } else {
         await client?.reactions.delete(likes?.find((r) => r?.user_id === clientId)?.id || '');
@@ -177,8 +177,10 @@ function Comment({ activityId }: { activityId: string }) {
               <EmojiPicker
                 className="[&>div:last-of-type]:opacity-0"
                 onSelect={(emoji) => {
-                  const emojiValue = emoji.native;
-                  if (inputRef.current) inputRef.current.value += emojiValue;
+                  if (!inputRef.current) return;
+                  if ('native' in emoji) {
+                    inputRef.current.value += emoji.native;
+                  }
                 }}
               />
             </div>

@@ -9,7 +9,7 @@ export default function SecurityPage() {
   return (
     <>
       <ProfileNavMobile title="Security" isBorder={false} />
-      <div className="grid gap-6 lg:gap-10">
+      <div className="mt-6 grid gap-6 lg:mb-1.5 lg:mt-0 lg:gap-10">
         <AuthenticationSettingPage />
         <ActiveSection />
         <AccountActivity />
