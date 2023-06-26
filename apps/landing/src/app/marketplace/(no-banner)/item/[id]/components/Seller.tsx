@@ -1,12 +1,13 @@
 //THIRD PARTY MODULES
-import classcat from 'classcat';
-import { nextApi } from '_@landing/utils/api';
-import { formatAddress } from '_@landing/utils/format';
+import Link from 'next/link'
+import classcat from 'classcat'
+import { nextApi } from '_@landing/utils/api'
+import { formatAddress } from '_@landing/utils/format'
 //LAYOUT, COMPONENTS
-import Button from '_@shared/components/Button';
+import Button from '_@shared/components/Button'
 //SHARED
-import CheckIcon from '_@shared/icons/CheckIcon';
-import StoreIcon from '_@shared/icons/StoreIcon';
+import CheckIcon from '_@shared/icons/CheckIcon'
+import StoreIcon from '_@shared/icons/StoreIcon'
 
 type Props = {
   address: string;
@@ -34,6 +35,8 @@ function Seller({ address }: Props) {
           </p>
         </div>
         <Button
+          as={Link}
+          href={`/marketplace/creator/${address}`}
           className={classcat(['ow:w-fit ow:px-3 [&>svg]:hover:text-secondary'])}
           variant="outlined"
           leadingIcon={<StoreIcon />}

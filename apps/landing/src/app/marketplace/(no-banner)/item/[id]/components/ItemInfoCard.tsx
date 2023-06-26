@@ -1,10 +1,14 @@
 //THIRD PARTY MODULES
+import Link from 'next/link';
 import classcat from 'classcat';
+import { handleAddToCart } from '_@landing/utils/NFTItem';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
 import ShareIcon from '_@shared/icons/ShareIcon';
 import ImageArtIcon from '_@shared/icons/ImageArtIcon';
+import { toastStore } from '_@shared/stores/toast/toastStore';
 //RELATIVE MODULES
 import Seller from './Seller';
 import { TypeMarketDetail } from '../type';
@@ -14,6 +18,9 @@ type Props = {
 };
 
 function ItemInfoCard({ data }: Props) {
+  const { openToast } = toastStore();
+  const { user } = useAuthStore();
+  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + data.listingId : '/auth/sign-in';
   return (
     <div className={classcat(['flex flex-col justify-between space-y-6'])}>
       <div className={classcat(['grid grid-flow-row gap-4'])}>
@@ -55,8 +62,16 @@ function ItemInfoCard({ data }: Props) {
       <div className={classcat(['grid grid-flow-row gap-6'])}>
         <Seller address={data.item.owner} />
         <div className={classcat(['grid grid-flow-row gap-4', 'md:grid-flow-col'])}>
-          <Button className={classcat(['btnlg'])}>Buy Now</Button>
-          <Button className={classcat(['btnlg'])} variant="outlined">
+          <Button as={Link} href={buyNowLink} className={classcat(['btnlg'])}>
+            Buy Now
+          </Button>
+          <Button
+            className={classcat(['btnlg'])}
+            variant="outlined"
+            {...(!user
+              ? { as: Link, href: '/auth/sign-in' }
+              : { onClick: () => handleAddToCart(data, openToast) })}
+          >
             Add to Cart
           </Button>
         </div>

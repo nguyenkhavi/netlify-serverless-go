@@ -3,11 +3,11 @@
 import { z } from 'zod';
 import classcat from 'classcat';
 import Decimal from 'decimal.js';
-import { TItemCard } from '_@landing/utils/type';
 import { useSearchParams } from 'next/navigation';
 import { Root } from '@radix-ui/react-radio-group';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
+import { TDataCheckout, TItemCard } from '_@landing/utils/type';
 import { getMarketDetailByListingId } from '_@landing/services';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -29,11 +29,6 @@ const schema = z.object({
 });
 
 type FormValues = z.infer<typeof schema>;
-
-type TDataCheckout = Pick<
-  TItemCard,
-  'price' | 'quantity' | 'item' | 'token' | 'itemId' | 'listingId'
->;
 
 export default function CheckOutPage() {
   const { user } = useAuthStore();

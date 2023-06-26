@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import classcat from 'classcat';
 import { TItemCard } from '_@landing/utils/type';
+import { handleAddToCart } from '_@landing/utils/NFTItem';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
 import CartIcon from '_@shared/icons/CartIcon';
-import { ToastProps, toastStore } from '_@shared/stores/toast/toastStore';
+import { toastStore } from '_@shared/stores/toast/toastStore';
 //HOOK
 import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
 
@@ -77,10 +78,6 @@ function ListView({ value, ...props }: MainCardProps) {
   const { user } = useAuthStore();
   const { owner } = useGetOwnerByWallet(value.item.owner);
   const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
-
-  const _handleAddToCart = () => {
-    openToast('Add to cart successfully', 'success');
-  };
 
   return (
     <div
@@ -168,25 +165,4 @@ function GridViewOnly({ value, ...props }: MainCardProps) {
       </div>
     </div>
   );
-}
-
-function handleAddToCart(
-  value: TItemCard,
-  openToast: (message: string, type: ToastProps['type']) => void,
-) {
-  let cartValues: TItemCard[] = [];
-
-  if (window.localStorage.getItem('cart')) {
-    cartValues = JSON.parse(window.localStorage.getItem('cart') || '');
-  }
-
-  if (cartValues.find((item) => item.listingId === value.listingId)) {
-    openToast('Item already in cart', 'error');
-    return;
-  }
-
-  cartValues.push(value);
-  window.localStorage.setItem('cart', JSON.stringify(cartValues));
-
-  openToast('Add to cart successfully', 'success');
 }

@@ -54,7 +54,7 @@ export default function FinanceVenturesSection() {
           data-sal-duration="800"
           data-sal-delay="100"
           as={Link}
-          href="/finance-ventures"
+          href="/venture"
           className="btnlg mt-10 lg:ow:w-62.5"
         >
           Go to ventures

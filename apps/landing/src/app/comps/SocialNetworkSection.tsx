@@ -53,7 +53,7 @@ export default function SocialNetworkSection() {
           data-sal-duration="800"
           data-sal-delay="100"
           as={Link}
-          href="/social-network"
+          href="/community"
           className="btnlg mt-10 lg:ow:w-62.5"
         >
           Join our community

@@ -1,13 +1,13 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { TItemCard } from '_@landing/utils/type';
+import { TDataCheckout } from '_@landing/utils/type';
 //SHARED
 import TrashCanIcon from '_@shared/icons/TrashCanIcon';
 //HOOK
 import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
 
 type Props = {
-  value: TItemCard;
+  value: TDataCheckout;
   onClickRemove?: (listingId: number) => void;
 };
 export default function CartItemCard({ value, onClickRemove }: Props) {

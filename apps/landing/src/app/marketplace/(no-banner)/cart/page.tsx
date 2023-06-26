@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import classcat from 'classcat';
 import Decimal from 'decimal.js';
-import { TItemCard } from '_@landing/utils/type';
+import { TDataCheckout } from '_@landing/utils/type';
 import { useEffect, useMemo, useState } from 'react';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
@@ -14,7 +14,7 @@ import NoData from '_@landing/components/NoData';
 import CartItemCard from './components/CartItemCard';
 
 export default function CartPage() {
-  const [data, setData] = useState<TItemCard[]>([]);
+  const [data, setData] = useState<TDataCheckout[]>([]);
 
   const totalPrices = useMemo(
     () =>
