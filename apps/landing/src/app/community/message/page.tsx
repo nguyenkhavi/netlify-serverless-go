@@ -1,7 +1,6 @@
 'use client';
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import 'stream-chat-react/dist/css/v2/index.css';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Channel, Chat, MessageInput, MessageList, Thread, Window } from 'stream-chat-react';
 //LAYOUT, COMPONENTS

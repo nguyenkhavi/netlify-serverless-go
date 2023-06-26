@@ -27,7 +27,7 @@
 
 .str-chat__list .str-chat__message-list-scroll .str-chat__li {
   padding-inline: 0;
-  @apply first-of-type:pt-0;
+  @apply px-0 first-of-type:pt-0;
 }
 
 .quoted-message-preview-header {
@@ -59,6 +59,18 @@
   .str-chat__message-attachment--image:not(.str-chat__message-attachment--card)
   > img {
   @apply w-auto object-contain rounded-md;
+}
+
+.str-chat__attachment-preview-file-name {
+  @apply text-text-50;
+}
+
+.str-chat__attachment-list .str-chat__message-attachment-file--item {
+  @apply bg-secondary-300 border border-solid border-text-10 text-text-50;
+}
+
+.str-chat__message-attachment-file--item-download .str-chat__message-attachment-download-icon {
+  @apply [&>path]:fill-text-50;
 }
 
 .str-chat__quoted-message-bubble

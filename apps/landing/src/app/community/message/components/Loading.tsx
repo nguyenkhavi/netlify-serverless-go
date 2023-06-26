@@ -1,6 +1,5 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import 'stream-chat-react/dist/css/v2/index.css';
 //SHARED
 import LoadingIcon from '_@shared/icons/LoadingIcon';
 //RELATIVE MODULES

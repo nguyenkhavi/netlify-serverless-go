@@ -1,21 +1,22 @@
 //THIRD PARTY MODULES
-import classcat from 'classcat';
-import { Metadata } from 'next';
-import { Archivo } from 'next/font/google';
-import AuthProvider from '_@landing/stores/auth/AuthProvider';
-import ClientProvider from '_@landing/app/provider/ClientProvider';
+import classcat from 'classcat'
+import { Metadata } from 'next'
+import { Archivo } from 'next/font/google'
+// import AnimationProvider from './provider/AnimationProvider'
+import 'stream-chat-react/dist/css/v2/index.css'
+import AuthProvider from '_@landing/stores/auth/AuthProvider'
+import ClientProvider from '_@landing/app/provider/ClientProvider'
 //LAYOUT, COMPONENTS
-import Header from '_@landing/layouts/Header';
-import Footer from '_@landing/layouts/footer/Footer';
-import BaseToast from '_@shared/components/toast/BaseToast';
-import ModalFeedback from '_@landing/components/modal/ModalFeedback';
+import Header from '_@landing/layouts/Header'
+import Footer from '_@landing/layouts/footer/Footer'
+import BaseToast from '_@shared/components/toast/BaseToast'
+import ModalFeedback from '_@landing/components/modal/ModalFeedback'
 //HOOK
-import getMyProfileOnServer from '_@landing/server/auth';
+import getMyProfileOnServer from '_@landing/server/auth'
 //RELATIVE MODULES
-import './globals.css';
-import ThirdwebProvider from './provider/ThirdwebProvider';
-import IndexedDBProvider from './provider/IndexedDBProvider';
-// import AnimationProvider from './provider/AnimationProvider';
+import './globals.css'
+import ThirdwebProvider from './provider/ThirdwebProvider'
+import IndexedDBProvider from './provider/IndexedDBProvider'
 
 export const metadata: Metadata = {
   title: 'Fleamint',

@@ -2,7 +2,6 @@
 //THIRD PARTY MODULES
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import 'stream-chat-react/dist/css/v2/index.css';
 import { Channel as StreamChannel } from 'stream-chat';
 import { Channel, Chat, MessageInput, MessageList, Thread, Window } from 'stream-chat-react';
 //HOOK
