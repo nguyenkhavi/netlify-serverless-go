@@ -19,8 +19,11 @@ export default function ProfilePage() {
   const pathname = usePathname();
   const type = searchParams.get('type') || 'post';
   const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [followerNumbers, setFollowerNumbers] = useState(0);
+  const [followingNumbers, setFollowingNumbers] = useState(0);
 
   const timelineFeed = useMemo(() => client?.feed('timeline'), [client]);
+  const userFeed = useMemo(() => client?.feed('user'), [client]);
 
   const getPost = useCallback(() => {
     if (!timelineFeed) return;
@@ -40,11 +43,25 @@ export default function ProfilePage() {
     console.log('Get collection');
   }, []);
 
+  const getFollowers = useCallback(async () => {
+    const result = await userFeed?.followers();
+    setFollowerNumbers(result?.results.length || 0);
+  }, [userFeed]);
+  const getFollowings = useCallback(async () => {
+    const result = await userFeed?.following();
+    setFollowingNumbers(result?.results.length || 0);
+  }, [userFeed]);
+
   useEffect(() => {
     if (type === 'post') getPost();
     if (type === 'likes') getLikes();
     if (type === 'collection') getCollection();
   }, [getCollection, getLikes, getPost, type]);
+
+  useEffect(() => {
+    getFollowers();
+    getFollowings();
+  }, [getFollowers, getFollowings]);
 
   return (
     <div>
@@ -66,10 +83,10 @@ export default function ProfilePage() {
           <p className="mb-2 text-sm text-text-30 lg:text-base">{user?.profile.description}</p>
           <div className="flex justify-center lg:justify-start">
             <p className="mr-4 text-sm font-semibold">
-              128 <span className="text-text-30">Followers</span>
+              {followerNumbers} <span className="text-text-30">Followers</span>
             </p>
             <p className="text-sm font-semibold">
-              123 <span className="text-text-30">Following</span>
+              {followingNumbers} <span className="text-text-30">Following</span>
             </p>
           </div>
         </div>
