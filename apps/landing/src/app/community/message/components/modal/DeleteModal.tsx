@@ -26,10 +26,7 @@ function DeleteModal() {
   const onClose = () => {
     setOpenLeave(false);
   };
-  console.log('🚀 ~ onDelete ~ user?.profile.getstreamId:', {
-    channel,
-    user: user?.profile.getstreamId,
-  });
+
   const onDelete = () => {
     if (!user?.profile.getstreamId) return;
 

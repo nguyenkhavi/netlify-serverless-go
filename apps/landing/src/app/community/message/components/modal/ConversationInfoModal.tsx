@@ -13,6 +13,8 @@ import { Modal } from '_@shared/components/dialog/Modal';
 import BaseSwitch from '_@shared/components/switch/BaseSwitch';
 //SHARED
 import ChevronLeftIcon from '_@shared/icons/ChevronLeftIcon';
+//HOOK
+import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import './popup.css';
 import FollowStatus from '../FollowStatus';
@@ -30,6 +32,7 @@ function ConversationInfoModal() {
   const [members, setMembers] = useState<ChannelMemberResponse<DefaultStreamChatGenerics>[]>([]);
   const [notify, setNotify] = useState(false);
   const { user } = useAuthStore();
+  const { client } = useGetFeedUser();
   const { channel } = useChatContext();
   const { openInfo, setOpenInfo } = useModalContext();
   const { setOpenBlock, setOpenLeave, setOpenReport } = useModalContext();
@@ -129,7 +132,7 @@ function ConversationInfoModal() {
                       <Avatar name={item.user?.name} image={item.user?.image} size={40} />
                       <p className={classcat(['text-body2 text-primary-700'])}>{item.user?.name}</p>
                     </div>
-                    <FollowStatus />
+                    <FollowStatus client={client} id={item.user_id} />
                   </div>
                 ))}
               </div>

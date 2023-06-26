@@ -5,7 +5,7 @@ import { Combobox } from '@headlessui/react';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { Avatar, useChatContext } from 'stream-chat-react';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
-import { createChannel1vs1 } from '_@landing/utils/roomChat1vs1';
+import { createRequestChannel1vs1 } from '_@landing/utils/roomChat1vs1';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { DefaultStreamChatGenerics } from 'stream-chat-react/dist/types/types';
 //LAYOUT, COMPONENTS
@@ -71,7 +71,7 @@ function AddChatModal({ onSuccess }: Props) {
     if (!value || !user?.profile.getstreamId) return;
     if (value === user.profile.getstreamId) return;
     setIsCreating(true);
-    createChannel1vs1(client, user.profile.getstreamId, value)
+    createRequestChannel1vs1(client, user.profile.getstreamId, value)
       .then((result) => {
         if (result) {
           setActiveChannel(result);
@@ -107,7 +107,7 @@ function AddChatModal({ onSuccess }: Props) {
           {},
           //stupid type
           {
-            limit: 4,
+            limit: 100,
             ...(lastId ? { id_lt: lastId } : {}),
           } as any,
         )

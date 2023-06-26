@@ -22,15 +22,21 @@ export const checkChannelExistById = async (
   }
 };
 
-export const createChannel1vs1 = async (
+export const createRequestChannel1vs1 = async (
   client: StreamChat<DefaultStreamChatGenerics>,
   createdUser: string,
   inviteUser: string,
 ) => {
   try {
-    // const roomId = generateRoomIdChat1vs1(createdUser, inviteUser);
-    const roomId = `${CHAT_1VS1_PREFIX}TEST_1`;
+    const roomId = generateRoomIdChat1vs1(createdUser, inviteUser);
     const existedChannel = await checkChannelExistById(client, roomId);
+    const members = await existedChannel?.queryMembers({});
+    const inviteUserInRoom = await members?.members.find((item) => item.user_id === inviteUser);
+
+    if (!inviteUserInRoom && existedChannel) {
+      await existedChannel.inviteMembers([inviteUser]);
+    }
+
     if (existedChannel) return existedChannel;
     const channel = await client.channel('messaging', roomId, {
       members: [createdUser],

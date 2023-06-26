@@ -110,7 +110,7 @@ export default function CommunityPage() {
               'flex flex-col overflow-hidden md:border-r md:border-solid md:border-text-10',
             ])}
           >
-            <MenuMobile onShowChannel={onShowChannel} />
+            <MenuMobile />
             <Show when={showChannel}>
               <CustomSearchBar
                 search={search}
@@ -147,7 +147,7 @@ export default function CommunityPage() {
                 EmptyPlaceholder={isRequest ? <EmptyPlaceholderRequest /> : undefined}
               >
                 <Window>
-                  <CustomHeader />
+                  <CustomHeader onShowChannel={onShowChannel} />
                   <Wrapper show={isRequest}>
                     <Show when={isRequest}>
                       <RequestAbout />
