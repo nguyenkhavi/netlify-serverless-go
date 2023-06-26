@@ -140,7 +140,11 @@ export default function Header() {
                 >
                   My Profile
                 </Link>
-                <Link className={itemDropdownClasses} href="#" onClick={_handleCloseDropdown}>
+                <Link
+                  className={itemDropdownClasses}
+                  href="/profile/account-history"
+                  onClick={_handleCloseDropdown}
+                >
                   Purchase History
                 </Link>
                 <button
