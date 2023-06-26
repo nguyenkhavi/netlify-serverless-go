@@ -1,16 +1,16 @@
 //THIRD PARTY MODULES
+import Link from 'next/link';
 import classcat from 'classcat';
-import { useState } from 'react';
-import React, { useCallback, useEffect } from 'react';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
+import React, { useCallback, useEffect, useState } from 'react';
 import { EnrichedUser, EnrichedReaction, FlatActivityEnriched } from 'getstream';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
-import ShareIcon from '_@shared/icons/ShareIcon';
 import RetweetIcon from '_@shared/icons/RetweetIcon';
 import ImageArtIcon from '_@shared/icons/ImageArtIcon';
+import { BareShareIcon } from '_@shared/icons/ShareIcon';
 import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
 import HeartIcon, { HeartActiveIcon } from '_@shared/icons/HeartIcon';
 import CommentIcon, { CommentActiveIcon } from '_@shared/icons/CommentIcon';
@@ -83,12 +83,21 @@ export default function ActivityCard({ activity }: ActivityProps) {
       <div className="grid grid-flow-col justify-start gap-2.5">
         <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div>
-          <p className="text-h6">
+          <Link
+            href={
+              typeof activity.actor === 'string'
+                ? '/community'
+                : clientId === activity.actor.id
+                ? '/community/profile'
+                : `/community/profile/${activity.actor.id}`
+            }
+            className="block text-h6"
+          >
             @
             {typeof activity?.actor === 'string'
               ? activity?.actor
               : activity?.actor?.data?.username}
-          </p>
+          </Link>
           <span className="text-body3 text-[#666666]">
             {activity?.time && new Date(activity?.time).toLocaleDateString('en-US')}
           </span>
@@ -128,7 +137,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
           <RetweetIcon />
         </button>
         <button>
-          <ShareIcon />
+          <BareShareIcon />
         </button>
       </div>
 

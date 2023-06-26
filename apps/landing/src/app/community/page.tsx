@@ -24,6 +24,7 @@ export default function CommunityPage() {
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
   const userFeed = useMemo(() => client?.feed('user'), [client]);
+  const userTimeline = useMemo(() => client?.feed('timeline'), [client]);
 
   const { mutate: createPost } = nextApi.communityCreatePost.useMutation();
 
@@ -55,16 +56,18 @@ export default function CommunityPage() {
   };
 
   const _getData = useCallback(() => {
-    if (!userFeed) return;
-    userFeed
+    if (!userTimeline) return;
+
+    userTimeline
       .get({ limit: 20 })
       .then((response) => {
+        console.log({ response });
         setActivities(response.results as ActivityType[]);
       })
       .catch((err) => {
         console.log('Failed to get feed', err);
       });
-  }, [userFeed]);
+  }, [userTimeline]);
 
   useEffect(() => {
     _getData();

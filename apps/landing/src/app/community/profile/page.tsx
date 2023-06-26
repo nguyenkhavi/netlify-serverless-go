@@ -26,8 +26,8 @@ export default function ProfilePage() {
   const userFeed = useMemo(() => client?.feed('user'), [client]);
 
   const getPost = useCallback(() => {
-    if (!timelineFeed) return;
-    timelineFeed
+    if (!userFeed) return;
+    userFeed
       .get({ limit: 20 })
       .then((response) => {
         setActivities(response.results as ActivityType[]);
@@ -35,7 +35,7 @@ export default function ProfilePage() {
       .catch((err) => {
         console.log('Failed to get feed', err);
       });
-  }, [timelineFeed]);
+  }, [userFeed]);
   const getLikes = useCallback(() => {
     console.log('Get likes');
   }, []);
