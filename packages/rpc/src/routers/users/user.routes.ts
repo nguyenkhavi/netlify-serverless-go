@@ -39,7 +39,7 @@ export const userRouters = router({
 
   userSetKYC: protectedRouter
     .input(setKYCSchema)
-    .mutation(({ input, ctx }) => setKYCInfo(input, ctx.metadata.issuer || '')),
+    .mutation(({ input, ctx }) => setKYCInfo(input, ctx.metadata.issuer || '', ctx.requestClient)),
 
   userTwitterRequestToken: protectedRouter.mutation(() => requestToken()),
 

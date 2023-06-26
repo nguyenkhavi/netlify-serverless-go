@@ -12,13 +12,16 @@ import {
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '_@rpc/services/instagram';
 
-import { addressTable, db, userProfileTable } from '_@rpc/services/drizzle';
+import { addressTable, db, userActivityTable, userProfileTable } from '_@rpc/services/drizzle';
 import { and, eq, inArray } from 'drizzle-orm';
 import { TProfile } from '_@rpc/drizzle/userProfile';
 import { verifyInquiryId } from '_@rpc/services';
 import { MySqlUpdateSetSource } from 'drizzle-orm/mysql-core';
 import { suggestionTable } from '_@rpc/drizzle/suggestion';
 import { TRPCError } from '@trpc/server';
+import { getLocationDetail } from '_@rpc/services/ip2location/ip2location';
+import { RequestClient } from '_@rpc/config';
+import { ActivityAction } from '_@rpc/drizzle/enum';
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -29,12 +32,30 @@ export const connectInstagram = async (input: TConnectIG, uid: string) => {
   return true;
 };
 
-export const setKYCInfo = async (input: TSetKYC, uid: string) => {
+export const setKYCInfo = async (input: TSetKYC, uid: string, requestClient: RequestClient) => {
   await verifyInquiryId(input.inquiryId);
-  await db
-    .update(userProfileTable)
-    .set({ personaInquiryId: input.inquiryId })
-    .where(eq(userProfileTable.userId, uid));
+  const ip = requestClient.ipAddress;
+  let location = '';
+  if (ip) {
+    const locationDetail = await getLocationDetail(ip);
+    if (locationDetail && 'city' in locationDetail) {
+      location = locationDetail.city;
+    }
+  }
+  await db.transaction(async (ctx) => {
+    await ctx
+      .update(userProfileTable)
+      .set({ personaInquiryId: input.inquiryId })
+      .where(eq(userProfileTable.userId, uid));
+    await ctx.insert(userActivityTable).values({
+      userId: uid,
+      ipAddress: requestClient.ipAddress,
+      browser: requestClient.userAgent.browser.name,
+      action: ActivityAction.SUBMIT_ID_VERIFICATION,
+      location,
+    });
+  });
+
   return true;
 };
 

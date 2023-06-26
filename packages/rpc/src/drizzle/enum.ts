@@ -7,6 +7,7 @@ export enum ActivityAction {
   // CHANGE_PASSWORD = 'CHANGE_PASSWORD',
   LOG_IN = 'LOG_IN',
   SIGN_UP = 'SIGN_UP',
+  SUBMIT_ID_VERIFICATION = 'SUBMIT_ID_VERIFICATION',
 }
 export const ActivityActionValues = Object.values(ActivityAction) as any as ReadOnlyTuple;
 export const ActivityActionEnum = mysqlEnum('activity-action', ActivityActionValues);
