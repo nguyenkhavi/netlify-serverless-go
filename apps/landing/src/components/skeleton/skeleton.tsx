@@ -34,7 +34,11 @@ export function SkeImage({ className }: SkeImageProps) {
 export function SkeLine({ className }: SkeLineProps) {
   return (
     <div
-      className={classcat(['animate-pulse', 'mb-4 h-2.5 w-full rounded-full bg-gray-700', className])}
+      className={classcat([
+        'animate-pulse',
+        'mb-4 h-2.5 w-full rounded-full bg-gray-700',
+        className,
+      ])}
     ></div>
   );
 }
@@ -90,7 +94,7 @@ export function SkeCard({ className, profile, paragraph }: SkeCardProps) {
         </svg>
       </div>
       <Show when={paragraph}>
-        <div className="mb-4 h-2.5 w-48 rounded-full bg-gray-700"></div>
+        <div className="mb-4 h-2.5 max-w-[theme.spacing(48)] rounded-full bg-gray-700"></div>
         <div className="mb-2.5 h-2 rounded-full bg-gray-700"></div>
         <div className="mb-2.5 h-2 rounded-full bg-gray-700"></div>
         <div className="h-2 rounded-full bg-gray-700"></div>

@@ -4,6 +4,7 @@ import { IDBPDatabase } from 'idb';
 import { Chains, dbIndex, dbOS } from '_@landing/utils/constants';
 import {
   ActivityType,
+  IFilter,
   IMarketData,
   IMarketStatusData,
   IPaging,
@@ -50,6 +51,15 @@ export async function getTrendingMarketByCategory(
   return {
     data: markets
       .sort((marketA, marketB) => {
+        if (sort?.price == 'asc') {
+          return marketA.price - marketB.price;
+        } else if (sort?.price == 'desc') {
+          return marketB.price - marketA.price;
+        } else if (sort?.releaseDate == 'asc') {
+          return marketA.startTime - marketB.startTime;
+        } else if (sort?.releaseDate == 'desc') {
+          return marketB.startTime - marketA.startTime;
+        }
         return marketB.totalSale - marketA.totalSale;
       })
       .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
@@ -207,8 +217,9 @@ export async function getBestSeller(db: IDBPDatabase) {
 export async function getItemMarketByCollection(
   db: IDBPDatabase,
   address: string,
-  paging: IPaging,
+  query: IPaging & ISorting & IFilter,
 ) {
+  const { search, page, pageSize, price, releaseDate, minPrice, maxPrice } = query;
   const tokenHashMap: Map<string, IToken> = new Map();
   const items: IMarketData[] = await db.getAll(dbOS.market);
   const token = await getAllToken(db);
@@ -231,13 +242,36 @@ export async function getItemMarketByCollection(
         };
       }),
     )
-  ).filter((item) => item.item.address === address);
+  ).filter((item) => {
+    if (item.item.address !== address) return false;
+    if (search && !item.item.name.toLowerCase().includes(search.toLowerCase())) return false;
+    if (minPrice && maxPrice) {
+      if (item.price < minPrice || item.price > maxPrice) return false;
+    }
+    if (minPrice && !maxPrice) {
+      if (item.price < minPrice) return false;
+    }
+    if (!minPrice && maxPrice) {
+      if (item.price > maxPrice) return false;
+    }
+    return true;
+  });
 
   return {
-    data: itemFilterByCollection.slice(
-      paging.page * paging.pageSize,
-      (paging.page + 1) * paging.pageSize,
-    ),
+    data: itemFilterByCollection
+      .sort((marketA, marketB) => {
+        if (price == 'asc') {
+          return marketA.price - marketB.price;
+        } else if (price == 'desc') {
+          return marketB.price - marketA.price;
+        } else if (releaseDate == 'asc') {
+          return marketA.startTime - marketB.startTime;
+        } else if (releaseDate == 'desc') {
+          return marketB.startTime - marketA.startTime;
+        }
+        return marketB.totalSale - marketA.totalSale;
+      })
+      .slice(page * pageSize, (page + 1) * pageSize),
     total: itemFilterByCollection.length,
   };
 }

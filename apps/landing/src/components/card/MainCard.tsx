@@ -106,7 +106,7 @@ function ListView({ value, ...props }: MainCardProps) {
         >
           {value.item ? value.item.name : ''}
         </Link>
-        <p className="mt-1 text-body3 text-text-60 dot-para-2">
+        <p className="mt-1 line-clamp-2 text-body3 text-text-60">
           {value.item ? value.item.metadata.description : ''}
         </p>
         <div className="mt-1 flex items-center justify-center text-h6 text-text-100 md:justify-start md:text-h5">

@@ -194,6 +194,12 @@ export interface ISorting {
   releaseDate?: 'asc' | 'desc';
 }
 
+export interface IFilter {
+  search?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
+
 export interface IToken {
   chain: string;
   address: string;

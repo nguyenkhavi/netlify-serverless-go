@@ -1,23 +1,51 @@
+'use client';
 //THIRD PARTY MODULES
+import { z } from 'zod';
 import classcat from 'classcat';
+import { useSearchParams } from 'next/navigation';
+import { Controller, useForm } from 'react-hook-form';
+import { PRICE_FILTER } from '_@landing/utils/constants';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
+//SHARED
+import { enterNumberOnly } from '_@shared/utils/checkNumberInputOnly';
+//HOOK
+import useFilterQueryString from '_@landing/hooks/useFilterQueryString';
 
-const MOCK_PRICE = [
-  { label: 'Under $100', path: '100' },
-  { label: '$100 to $500', path: '100-500' },
-  { label: '$500 to $1000', path: '500-1000' },
-  { label: '$1000 to $5000', path: '1000-5000' },
-];
+const schema = z.object({
+  minPrice: z.string().optional(),
+  maxPrice: z.string().optional(),
+  minMaxPrice: z.string().optional(),
+});
 
-const inputClasses = [
-  'h-10 w-21 bg-black text-text-50 outline-none',
-  'py-2 px-4 text-base font-normal placeholder:text-text-30',
-  'rounded mr-1',
-];
+type FormValues = z.infer<typeof schema>;
+
 export default function FilterPrice({ className = '' }: { className?: string }) {
+  const filter = useFilterQueryString();
+  const query = useSearchParams();
+
+  const { handleSubmit, register, control, setValue } = useForm<FormValues>({
+    defaultValues: {
+      minPrice: query.get('minPrice') || '',
+      maxPrice: query.get('maxPrice') || '',
+      minMaxPrice: query.get('minMaxPrice') || '',
+    },
+  });
+
+  const _onSubmit = handleSubmit((value) => {
+    if (value.minPrice || value.maxPrice) {
+      value.minMaxPrice = '';
+    }
+    filter({ ...value, page: 1 });
+  });
+
+  const _handleReset = () => {
+    filter({ minPrice: undefined, maxPrice: undefined, minMaxPrice: undefined });
+  };
+
   return (
-    <div
+    <form
+      onSubmit={_onSubmit}
       className={classcat([
         'bg-secondary-300 p-6',
         'mt-6 rounded-[15px] ring-1 ring-text-20 ring-offset-[-0.5px]',
@@ -26,20 +54,65 @@ export default function FilterPrice({ className = '' }: { className?: string }) 
     >
       <h3 className="mb-4 mt-2 text-h5 text-text-100">Price:</h3>
       <div className="flex flex-col [&>button:not(:last-child)]:mb-4">
-        {MOCK_PRICE.map((price, i) => (
-          <button type="button" key={i} className="w-max text-body2 text-text-50">
-            {price.label}
-          </button>
-        ))}
+        <Controller
+          name="minMaxPrice"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <>
+              {PRICE_FILTER.map((price, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  className={classcat([
+                    'w-max text-body2 hover:text-primary',
+                    value === price.path ? 'text-primary' : 'text-text-50',
+                  ])}
+                  onClick={() => {
+                    onChange(price.path);
+                    setValue('minPrice', '');
+                    setValue('maxPrice', '');
+                    _onSubmit();
+                  }}
+                >
+                  {price.label}
+                </button>
+              ))}
+            </>
+          )}
+        />
       </div>
       <div className="mt-2 flex py-2">
-        <input type="text" className={classcat([inputClasses])} placeholder="$ Min" />
-        <input type="text" className={classcat([inputClasses])} placeholder="$ Max" />
-        <Button className="btnmd h-10 px-0 ow:rounded-lg">Go</Button>
+        <input
+          {...register('minPrice')}
+          type="text"
+          className={classcat([inputClasses])}
+          placeholder="$ Min"
+          onKeyDown={enterNumberOnly}
+        />
+        <input
+          {...register('maxPrice')}
+          type="text"
+          className={classcat([inputClasses])}
+          placeholder="$ Max"
+          onKeyDown={enterNumberOnly}
+        />
+        <Button className="btnmd h-10 px-0 ow:rounded-lg" type="submit">
+          Go
+        </Button>
       </div>
-      <button className="mx-auto mt-8 block cursor-pointer text-center text-underline underline ow:border-none">
+      <button
+        className="mx-auto mt-8 block cursor-pointer text-center text-underline underline ow:border-none"
+        onClick={_handleReset}
+        type="button"
+      >
         Clear filters
       </button>
-    </div>
+    </form>
   );
 }
+
+const inputClasses = [
+  'h-10 w-21 bg-black text-text-50 outline-none',
+  'py-2 px-4 text-base font-normal placeholder:text-text-30',
+  'rounded mr-1',
+];

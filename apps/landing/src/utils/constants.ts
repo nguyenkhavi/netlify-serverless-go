@@ -121,3 +121,18 @@ export async function parseJson(jsonString: string | undefined) {
     return null;
   }
 }
+
+export const PRICE_FILTER = [
+  { label: 'Under $100', path: '0:100' },
+  { label: '$100 to $500', path: '100:500' },
+  { label: '$500 to $1000', path: '500:1000' },
+  { label: '$1000 to $5000', path: '1000:5000' },
+];
+
+export const FILTER_ITEMS = [
+  { value: 'hot-product', label: 'Hot Products 💥' },
+  { value: 'price:asc', label: 'Price: Low to High' },
+  { value: 'price:desc', label: 'Price: High to Low' },
+  { value: 'date:desc', label: 'Release Date: Latest' },
+  { value: 'date:asc', label: 'Release Date: Oldest' },
+];

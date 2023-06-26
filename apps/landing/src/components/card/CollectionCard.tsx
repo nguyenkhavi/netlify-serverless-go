@@ -68,7 +68,7 @@ function ListView({ value, owner, ...props }: CollectionCardProps) {
       </div>
       <div className="text-center md:text-start">
         <p className="mt-2 text-h6 xlg:mt-4 xlg:text-h5-bold">{value.name}</p>
-        <p className="mt-1 text-body3 text-text-60 dot-para-2">{value.metadata.description}</p>
+        <p className="mt-1 line-clamp-2 text-body3 text-text-60">{value.metadata.description}</p>
         <p className="mt-1 text-subtitle2 text-primary">Created by: @{owner}</p>
         <div className="mt-1.5 flex items-center justify-center text-h6 text-text-100 md:justify-start md:text-h5">
           <p>

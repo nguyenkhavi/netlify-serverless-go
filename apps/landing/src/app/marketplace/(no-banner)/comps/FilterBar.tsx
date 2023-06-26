@@ -1,8 +1,11 @@
 'use client';
 //THIRD PARTY MODULES
+import { z } from 'zod';
 import classcat from 'classcat';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import { FILTER_ITEMS, PRICE_FILTER } from '_@landing/utils/constants';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Control, Controller, UseFormRegister, useForm } from 'react-hook-form';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
@@ -11,47 +14,57 @@ import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/pop
 //SHARED
 import MenuIcon from '_@shared/icons/MenuIcon';
 import FilterIcon from '_@shared/icons/FilterIcon';
-
-const FILTER_PRICE = [
-  { label: 'Under $100', path: '100' },
-  { label: '$100 to $500', path: '100-500' },
-  { label: '$500 to $1000', path: '500-1000' },
-  { label: '$1000 to $5000', path: '1000-5000' },
-];
-
-const FILTER_ITEMS = [
-  { value: 'hot-product', label: 'Hot Products 💥' },
-  { value: 'low-to-high', label: 'Price: Low to High' },
-  { value: 'high-to-low', label: 'Price: High to Low' },
-  { value: 'latest', label: 'Release Date: Latest' },
-  { value: 'oldest', label: 'Release Date: Oldest' },
-];
-
-const inputClasses = [
-  'h-7.5 w-17.5 bg-black text-text-50 outline-none',
-  'py-[3px] px-3 text-btnmd placeholder:text-text-30',
-  'rounded mr-2.5',
-];
-const buttonFilterClasses = [
-  'ml-2 flex h-full items-center rounded-lg bg-secondary-200 px-3.5',
-  'border border-solid border-text-10',
-];
+//HOOK
+import useFilterQueryString from '_@landing/hooks/useFilterQueryString';
 
 type FilterItemProps = {
   showOptionsLeft?: boolean;
 };
+
+const schema = z.object({
+  k: z.string().optional(),
+  sort: z.string().optional(),
+  minPrice: z.string().optional(),
+  maxPrice: z.string().optional(),
+  minMaxPrice: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof schema>;
+
 export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
+  const filter = useFilterQueryString();
+
   const [openFilter, setOpenFilter] = useState(false);
   const [openFilterItems, setOpenFilterItems] = useState(false);
-  const searchText = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
-  const params = useSearchParams();
+  const query = useSearchParams();
   const router = useRouter();
 
-  const view = params.get('view') || 'item';
+  const view = query.get('view') || 'item';
+
+  const { handleSubmit, register, control } = useForm<FormValues>({
+    defaultValues: {
+      k: query.get('k') || '',
+      sort: query.get('sort') || '',
+      minPrice: query.get('minPrice') || '',
+      maxPrice: query.get('maxPrice') || '',
+      minMaxPrice: query.get('minMaxPrice') || '',
+    },
+  });
+
+  const onSubmit = handleSubmit((value) => {
+    if (value.minPrice || value.maxPrice) {
+      value.minMaxPrice = '';
+    }
+    filter({ ...value, page: 1 });
+  });
 
   const _handleChangeView = (view: string) => {
     router.push(`${pathname}?view=${view}`);
+  };
+
+  const handleResetFilter = () => {
+    filter({ minPrice: undefined, maxPrice: undefined, minMaxPrice: undefined });
   };
 
   return (
@@ -91,15 +104,14 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           </button>
         </div>
       </Show>
-      <div className="ml-2 mt-6 flex grow md:mt-0 md:justify-end">
+      <form onSubmit={onSubmit} className="ml-2 mt-6 flex grow md:mt-0 md:justify-end">
         <SearchInput
-          ref={searchText}
-          name="search"
+          {...register('k')}
           type="text"
           placeholder="Type here"
           className={classcat([
             'grow ow:h-11.25',
-            'border-none ow:bg-secondary-200 md:text-body1',
+            'ow:bg-secondary-200 ow:text-caption',
             'sm:h-11.25',
           ])}
           boxClasses="max-w-[324px] md:w-full"
@@ -114,8 +126,14 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
               <span className="ml-1 whitespace-nowrap text-body3 text-text-50">Filter search</span>
             </div>
           </PopoverTrigger>
-          <PopoverContent>
-            <FilterPrice setOpenFilter={setOpenFilter} />
+          <PopoverContent className="rounded-[15px] ow:px-6 ow:py-8">
+            <FilterPrice
+              setOpenFilter={setOpenFilter}
+              onSubmit={onSubmit}
+              register={register}
+              handleResetFilter={handleResetFilter}
+              control={control}
+            />
           </PopoverContent>
         </Popover>
         <Popover open={openFilterItems} onOpenChange={(open) => setOpenFilterItems(open)}>
@@ -129,59 +147,133 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
             </div>
           </PopoverTrigger>
           <PopoverContent className="ow:px-0 ow:py-2.5">
-            <FilterItem setOpenFilter={setOpenFilterItems} />
+            <FilterItem setOpenFilter={setOpenFilterItems} control={control} onSubmit={onSubmit} />
           </PopoverContent>
         </Popover>
-      </div>
+      </form>
     </section>
   );
 }
 
-function FilterPrice({ setOpenFilter }: { setOpenFilter: (open: boolean) => void }) {
-  const _handleClick = () => {
-    setOpenFilter(false);
-  };
+function FilterPrice({
+  setOpenFilter,
+  onSubmit,
+  register,
+  handleResetFilter,
+  control,
+}: {
+  setOpenFilter: (open: boolean) => void;
+  onSubmit: () => void;
+  register: UseFormRegister<FormValues>;
+  handleResetFilter: () => void;
+  control: Control<FormValues>;
+}) {
   return (
     <div>
-      <h3 className="mb-1 text-h5 text-text-100">Price:</h3>
-      <div className="flex flex-col [&>button:not(:last-child)]:mb-2">
-        {FILTER_PRICE.map((price, i) => (
-          <button
-            type="button"
-            key={i}
-            className="w-max text-body1 text-text-50"
-            onClick={_handleClick}
-          >
-            {price.label}
-          </button>
-        ))}
+      <h3 className="mb-2 py-2 text-h5 text-text-100">Price:</h3>
+      <div className="grid gap-1">
+        <Controller
+          name="minMaxPrice"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <>
+              {PRICE_FILTER.map((price, i) => (
+                <button
+                  type="button"
+                  key={i}
+                  className={classcat([
+                    'w-max py-2 text-body2',
+                    value === price.path ? 'text-primary' : 'text-text-50',
+                  ])}
+                  onClick={() => {
+                    onChange(price.path);
+                    setOpenFilter(false);
+                    onSubmit();
+                  }}
+                >
+                  {price.label}
+                </button>
+              ))}
+            </>
+          )}
+        />
       </div>
-      <div className="mt-3.75 flex">
-        <input type="text" className={classcat([inputClasses])} placeholder="$ Min" />
-        <input type="text" className={classcat([inputClasses])} placeholder="$ Max" />
-        <Button className="btnmd h-7.5 px-0 ow:w-14.75 ow:rounded" onClick={_handleClick}>
+      <div className="mt-2 flex py-2">
+        <input
+          {...register('minPrice')}
+          type="text"
+          className={classcat([inputClasses])}
+          placeholder="$ Min"
+        />
+        <input
+          {...register('maxPrice')}
+          type="text"
+          className={classcat([inputClasses])}
+          placeholder="$ Max"
+        />
+        <Button
+          className="btnmd h-10 px-0 ow:w-15 ow:rounded-lg"
+          onClick={() => {
+            setOpenFilter(false);
+            onSubmit();
+          }}
+        >
           Go
         </Button>
       </div>
+      <button
+        className="mx-auto mt-6 block cursor-pointer text-center text-underline text-text-80 underline ow:border-none"
+        onClick={handleResetFilter}
+        type="button"
+      >
+        Clear filters
+      </button>
     </div>
   );
 }
 
-function FilterItem({ setOpenFilter }: { setOpenFilter: (open: boolean) => void }) {
-  const _handleClick = () => {
-    setOpenFilter(false);
-  };
+function FilterItem({
+  setOpenFilter,
+  onSubmit,
+  control,
+}: {
+  setOpenFilter: (open: boolean) => void;
+  onSubmit: () => void;
+  control: Control<FormValues>;
+}) {
   return (
     <ul>
-      {FILTER_ITEMS.map((item, i) => (
-        <li
-          key={i}
-          className="cursor-pointer px-4.5 py-1 text-caption text-text-60 hover:bg-[#19CA9B]/[.21]"
-          onClick={_handleClick}
-        >
-          {item.label}
-        </li>
-      ))}
+      <Controller
+        control={control}
+        name="sort"
+        render={({ field: { onChange } }) => (
+          <>
+            {FILTER_ITEMS.map((item, i) => (
+              <li
+                key={i}
+                className="cursor-pointer px-4.5 py-1 text-caption text-text-60 hover:bg-[#19CA9B]/[.21]"
+                onClick={() => {
+                  onChange(item.value);
+                  setOpenFilter(false);
+                  onSubmit();
+                }}
+              >
+                {item.label}
+              </li>
+            ))}
+          </>
+        )}
+      />
     </ul>
   );
 }
+
+const inputClasses = [
+  'h-10 w-21 bg-black text-text-50 outline-none',
+  'py-2 px-4 text-body1 placeholder:text-text-20',
+  'rounded mr-1',
+];
+const buttonFilterClasses = [
+  'ml-2 flex h-full items-center rounded-lg bg-secondary-200 px-3.5',
+  'border border-solid border-text-10',
+];

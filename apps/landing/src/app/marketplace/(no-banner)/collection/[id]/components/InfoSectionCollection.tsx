@@ -73,7 +73,7 @@ export default function InfoSectionCollection() {
           ) : (
             <div>
               <h1 className="mb-2 text-h5-bold md:text-h4">@{data?.name}</h1>
-              <p className="max-w-[31.5rem] text-body3 text-text-70 md:text-body1 ">
+              <p className="line-clamp-3 max-w-[31.5rem] text-body3 text-text-70 md:text-body1">
                 {data?.metadata.description || ''}
               </p>
               <p className="mt-4 text-body3 text-text-50 md:mt-6 md:text-body2">
@@ -81,11 +81,21 @@ export default function InfoSectionCollection() {
                 {/* <span className="text-text-100">{dayjs(data.dateCreated).format('MMM D, YYYY')}</span> */}
                 <span className="text-text-100">{'--'}</span>
               </p>
+              <Button
+                className={classcat([
+                  'w-max border-none bg-secondary-400',
+                  'ow:w-29.25  [&>svg]:h-3.75',
+                  'mt-12 lg:mt-6',
+                ])}
+                leadingIcon={<ShareIcon />}
+              >
+                <span className="text-gradient-pr">Share</span>
+              </Button>
             </div>
           )}
           <ul
             className={classcat([
-              'mt-4 grid gap-2 rounded-[10px] bg-secondary-300 p-4 lg:mt-0 lg:p-6',
+              'mt-4 grid gap-2 rounded-[10px] bg-secondary-300 p-4 lg:-mt-1.25 lg:p-6',
               'border border-text-10',
             ])}
           >
@@ -94,7 +104,7 @@ export default function InfoSectionCollection() {
                 .fill(1)
                 .map((_, index) => (
                   <li key={index} className="w-50 not-last:mb-4">
-                    <SkeLine className="mb-0" />
+                    <SkeLine className="ow:mb-0" />
                   </li>
                 ))
             ) : (
@@ -119,16 +129,6 @@ export default function InfoSectionCollection() {
             )}
           </ul>
         </div>
-        <Button
-          className={classcat([
-            'w-max border-none bg-secondary-400',
-            'ow:w-29.25  [&>svg]:h-3.75',
-            'mt-12 lg:mt-6',
-          ])}
-          leadingIcon={<ShareIcon />}
-        >
-          <span className="text-gradient-pr">Share</span>
-        </Button>
       </div>
     </section>
   );

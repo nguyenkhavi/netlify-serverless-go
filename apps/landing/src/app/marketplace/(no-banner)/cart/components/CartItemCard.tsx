@@ -34,7 +34,7 @@ export default function CartItemCard({ value, onClickRemove }: Props) {
       </div>
       <div className="mt-4 grid h-max gap-1 text-center xlg:mt-0 xlg:text-left">
         <p className="text-body2 xlg:text-h5-bold">{value.item ? value.item.name : ''}</p>
-        <p className="text-body3 text-text-60 dot-para-3 xlg:dot-para-2">
+        <p className="line-clamp-3 text-body3 text-text-60 xlg:line-clamp-2">
           {value.item ? value.item.metadata.description : ''}
         </p>
         <p className="text-subtitle2 text-primary">By {owner}</p>
