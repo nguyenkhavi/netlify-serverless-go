@@ -7,7 +7,9 @@ import MobilePhone2Icon from '_@shared/icons/MobilePhone2Icon';
 export default function AuthenticationSettingPage() {
   return (
     <section>
-      <h1 className="mb-4 text-h5-bold text-primary">Two-factor authentication (2FA) settings</h1>
+      <h1 className="mb-4 text-lg text-primary lg:text-h5-bold">
+        Two-factor authentication (2FA) settings
+      </h1>
       <div
         className={classcat([
           'rounded-[10px] border border-text-10',

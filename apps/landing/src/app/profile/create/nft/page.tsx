@@ -193,11 +193,13 @@ export default function CreateCollectionPage() {
                       }
                       icon={<PadlockIcon />}
                     >
-                      <Input
-                        title=""
-                        name={'content.value'}
-                        placeholder="Digital key, link to a file....."
-                      />
+                      <Show when={watch('content.status')}>
+                        <Input
+                          title=""
+                          name={'content.value'}
+                          placeholder="Digital key, link to a file....."
+                        />
+                      </Show>
                     </Group>
                     <Group
                       title="Properties"

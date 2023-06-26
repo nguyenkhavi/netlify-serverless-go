@@ -97,7 +97,7 @@ export default function ActiveSection() {
 
   return (
     <section>
-      <h1 className="mb-4 text-h5-bold text-primary">Active Session</h1>
+      <h1 className="mb-4 text-lg text-primary lg:text-h5-bold">Active Session</h1>
       <div className="w-[--content-width] md:w-auto">
         <T.Table>
           <T.TableHeader>

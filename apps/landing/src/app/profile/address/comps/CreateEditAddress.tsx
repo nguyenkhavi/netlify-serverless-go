@@ -29,7 +29,8 @@ const schema = z.object({
   additionalInfo: z.string(),
 });
 
-const inputClasses = 'h-11.25 ow:rounded lg:h-15 ow:text-base ow:text-text-80';
+const formItemClasses = 'ow:gap-1 ow:flex ow:flex-col';
+const inputClasses = 'h-11.25 ow:rounded lg:h-15 ow:text-base ow:text-text-80 ow:rounded-lg';
 export type FormValues = z.infer<typeof schema> & { id: string | number; isDefault: boolean };
 type CreateEditAddress = {
   id?: string | number;
@@ -86,50 +87,50 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
             {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
           </h2>
           <div className="grid gap-4 p-4 pb-0 lg:grid-cols-2 lg:gap-8 lg:p-6 lg:pb-0">
-            <FormItem label="Country" name="country" className="ow:gap-1">
+            <FormItem label="Country" name="country" className={formItemClasses}>
               <FormSelect
                 placeholder="Select Country"
                 options={OPTIONS}
                 owStyles={{
                   triggerClasses:
-                    'ow:h-11.25 ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
+                    'ow:h-11.25 ow:rounded-lg ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
                 }}
               />
             </FormItem>
-            <FormItem label="State" name="state" className="ow:gap-1">
+            <FormItem label="State" name="state" className={formItemClasses}>
               <FormSelect
                 placeholder="Select State"
                 options={OPTIONS}
                 owStyles={{
                   triggerClasses:
-                    'ow:h-11.25 ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
+                    'ow:h-11.25 ow:rounded-lg ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
                 }}
               />
             </FormItem>
-            <FormItem label="Street Address" name="streetAddress" className="ow:gap-1">
+            <FormItem label="Street Address" name="streetAddress" className={formItemClasses}>
               <FormInput className={inputClasses} placeholder="Street Address" />
             </FormItem>
-            <FormItem label="Street Address 2" name="streetAddress2" className="ow:gap-1">
+            <FormItem label="Street Address 2" name="streetAddress2" className={formItemClasses}>
               <FormInput className={inputClasses} placeholder="Street address 2" />
             </FormItem>
-            <FormItem label="Apartment Number" name="apartmentNumber" className="ow:gap-1">
+            <FormItem label="Apartment Number" name="apartmentNumber" className={formItemClasses}>
               <FormInput className={inputClasses} placeholder="Apartment Number" />
             </FormItem>
-            <FormItem label="Postcode" name="postcode" className="ow:gap-1">
+            <FormItem label="Postcode" name="postcode" className={formItemClasses}>
               <FormInput
                 className={inputClasses}
                 placeholder="Postcode"
                 onKeyDown={enterNumberOnly}
               />
             </FormItem>
-            <FormItem label="Contact number" name="contactNumber" className="ow:gap-1">
+            <FormItem label="Contact number" name="contactNumber" className={formItemClasses}>
               <FormInput
                 className={inputClasses}
                 placeholder="34535464454"
                 onKeyDown={enterNumberOnly}
               />
             </FormItem>
-            <FormItem label="Additional info" name="additionalInfo" className="ow:gap-1">
+            <FormItem label="Additional info" name="additionalInfo" className={formItemClasses}>
               <FormInput
                 tag="textarea"
                 placeholder="Info..."
