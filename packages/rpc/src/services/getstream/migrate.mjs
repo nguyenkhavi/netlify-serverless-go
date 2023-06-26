@@ -7,7 +7,6 @@ const getstreamClient = StreamChat.getInstance(
     timeout: 30000,
   },
 );
-console.log(process.env.GETSTREAM_API_KEY, process.env.GETSTREAM_API_SECRET);
 
 const migrateGetstream = async () => {
   await getstreamClient.updateChannelType('messaging', {

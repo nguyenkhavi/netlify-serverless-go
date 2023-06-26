@@ -38,3 +38,9 @@ export const communityCreatePostSchema = z.object({
 });
 
 export type CommunityCreatePostInput = z.infer<typeof communityCreatePostSchema>;
+
+export const communityGetstreamIdSchema = z.object({
+  targetGetstreamId: z.string(),
+});
+
+export type CommunityGetstreamIdInput = z.infer<typeof communityGetstreamIdSchema>;

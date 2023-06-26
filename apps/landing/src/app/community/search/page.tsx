@@ -4,9 +4,9 @@ import { z } from 'zod';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import classcat from 'classcat';
-import { useRef, useState } from 'react';
 import { Avatar } from 'react-activity-feed';
 import { DateRange } from 'react-day-picker';
+import { useMemo, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { api, RouterOutputs } from '_@landing/utils/api';
@@ -22,6 +22,8 @@ import FormRadioGroup from '_@shared/components/radio/FormRadioGroup';
 import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import CalendarIcon from '_@shared/icons/CalendarIcon';
+//HOOK
+import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import ActivityCard from '../comps/ActivityCard';
 
@@ -69,10 +71,10 @@ export default function SearchPage() {
     // FE use this api to integrate
     api.communitySearchUserOrPost
       .query({
-        type: 'POST',
+        type: 'ALL',
         keyword: searchText.current.value,
         paging: { page: 1, pageSize: 4 },
-        peopleFilter: 'FOLLOWING',
+        peopleFilter: 'ANYONE',
       })
       .then((data) => {
         console.log({ data });
@@ -140,6 +142,7 @@ export default function SearchPage() {
                   aboutMe={user.aboutMe}
                   avatar={user.avatar}
                   following={user.following}
+                  getstreamId={user.getstreamId}
                 />
               ))}
           </div>
@@ -218,13 +221,44 @@ export default function SearchPage() {
 
 type AccountCompProps = {
   name: string;
+  getstreamId: string;
   aboutMe: string | null;
   avatar: string | null;
   following: boolean;
 };
 
-function AccountComp({ name, aboutMe, avatar, following }: AccountCompProps) {
+function AccountComp({ name, aboutMe, avatar, following, getstreamId }: AccountCompProps) {
+  const { client } = useGetFeedUser();
+  const [follow, setFollow] = useState(following);
+
+  const timelineFeed = useMemo(() => client?.feed('timeline'), [client]);
+
   const avtUrl = avatar ?? 'https://getstream.imgix.net/images/random_svg/A.png';
+
+  const followUser = () => {
+    if (!timelineFeed) return;
+
+    api.communityFollowUser.mutate({ targetGetstreamId: getstreamId }).then((data) => {
+      if (data.success) {
+        setFollow(true);
+      }
+    });
+  };
+
+  const unfollowUser = () => {
+    if (!timelineFeed) return;
+
+    api.communityUnfollowUser.mutate({ targetGetstreamId: getstreamId }).then((data) => {
+      if (data.success) {
+        setFollow(false);
+      }
+    });
+  };
+
+  const toggleFollow = (follow: boolean) => () => {
+    if (follow) return unfollowUser();
+    return followUser();
+  };
 
   return (
     <div className="mb-6 flex items-start border-b-[1px] border-solid border-text-10 pb-8">
@@ -239,7 +273,9 @@ function AccountComp({ name, aboutMe, avatar, following }: AccountCompProps) {
             'border-green-gradient relative z-[1] mr-auto h-fit rounded-full px-[33.5px] py-[9.5px] text-body1 font-bold md:ml-auto md:mr-0',
           ])}
         >
-          <span className="text-gradient-pr">{following ? 'Following' : 'Follow'}</span>
+          <span onClick={toggleFollow(follow)} className="text-gradient-pr">
+            {follow ? 'Following' : 'Follow'}
+          </span>
         </button>
       </div>
     </div>

@@ -1,21 +1,25 @@
-import { searchHistory } from './../../drizzle/searchHistory';
-import { userPostTable } from './../../drizzle/userPost';
-import { getstreamFeedClient } from '_@rpc/services/getstream/getstream-client';
-import { ilike, inArray, and, gte, lte, sql, isNotNull } from 'drizzle-orm';
+import { followTable } from '_@rpc/drizzle/follow';
+import { searchHistory } from '_@rpc/drizzle/searchHistory';
+import { userPostTable } from '_@rpc/drizzle/userPost';
+import { getstreamClient } from '_@rpc/services/getstream/getstream-client';
+import { inArray, and, gte, lte, sql, isNotNull, eq } from 'drizzle-orm';
 import { db, userProfileTable } from '_@rpc/services/drizzle';
 import { CommunitySearchUserOrPostInput, CommunityCreatePostInput } from './community.schema';
+import { TRPCError } from '@trpc/server';
 
-export const communityCreatePost = (
+export const communityCreatePost = async (
   input: CommunityCreatePostInput,
   getstreamId: string,
   userId: string,
 ) => {
-  db.insert(userPostTable).values({
-    userId,
-    getstreamId,
-    content: input.content,
-    postId: input.postId,
-  });
+  db.insert(userPostTable)
+    .values({
+      userId,
+      getstreamId,
+      content: input.content,
+      postId: input.postId,
+    })
+    .execute();
 };
 
 export const communitySearchUserOrPost = async (
@@ -59,12 +63,13 @@ const searchUser = async (input: CommunitySearchUserOrPostInput, getstreamUserId
 
   const parsedKeyword = `%${keyword}%`;
 
-  const { results: followingFeed } = await getstreamFeedClient
-    .feed('timeline', getstreamUserId)
-    .following();
+  const followedUserIdsResult = await db
+    .select({ followedUserIds: followTable.followedUserId })
+    .from(followTable)
+    .where(eq(followTable.followingUserId, getstreamUserId))
+    .execute();
 
-  //target_id have pattern {feed_group}:{getstream_id} exp: user:0x44258F4fA6c767dB5907bE6Cec9270843916BF36, split target_id to take the getstream_id
-  const followingIds = followingFeed.map((item) => item.target_id.split(':')[1]);
+  const followedUserIds = followedUserIdsResult.map((item) => item.followedUserIds);
 
   const qb = db
     .select({
@@ -89,7 +94,8 @@ const searchUser = async (input: CommunitySearchUserOrPostInput, getstreamUserId
     // suggest create a `follow` table in database to get following, or followed user instead of using sdk to call
     return users.map((u) => {
       if (
-        u.getstreamId === followingIds.find((id) => id === u.getstreamId && id !== getstreamUserId)
+        u.getstreamId ===
+        followedUserIds.find((id) => id === u.getstreamId && id !== getstreamUserId)
       ) {
         return { ...u, following: true };
       }
@@ -98,7 +104,7 @@ const searchUser = async (input: CommunitySearchUserOrPostInput, getstreamUserId
   } else {
     qb.where(
       and(
-        inArray(userProfileTable.getstreamId, followingIds),
+        inArray(userProfileTable.getstreamId, followedUserIds as Array<string>),
         sql`lower(${userProfileTable.username}) like ${parsedKeyword}`,
         isNotNull(userProfileTable.userId),
       ),
@@ -106,15 +112,12 @@ const searchUser = async (input: CommunitySearchUserOrPostInput, getstreamUserId
 
     const users = await qb.offset(paging.page - 1).limit(paging.pageSize);
 
-    return users.map((u) => {
-      return { ...u, following: true };
-    });
+    return users.map((u) => ({ ...u, following: true }));
   }
 };
 
 const searchPost = async (input: CommunitySearchUserOrPostInput, getstreamUserId: string) => {
   const { keyword, paging, peopleFilter, startDate, endDate } = input;
-  const parsedKeyword = `${keyword}%`;
 
   const qb = db.select({ postId: userPostTable.postId }).from(userPostTable);
 
@@ -127,31 +130,190 @@ const searchPost = async (input: CommunitySearchUserOrPostInput, getstreamUserId
   }
 
   if (peopleFilter === 'FOLLOWING') {
-    const { results: followingFeed } = await getstreamFeedClient
-      .feed('timeline', getstreamUserId)
-      .following();
+    const followedUserIdsResult = await db
+      .select({ followedUserIds: followTable.followedUserId })
+      .from(followTable)
+      .where(eq(followTable.followingUserId, getstreamUserId))
+      .execute();
 
-    //target_id have pattern {feed_group}:{getstream_id} exp: user:0x44258F4fA6c767dB5907bE6Cec9270843916BF36, split target_id to take the getstream_id
-    const followingIds = followingFeed.map((item) => item.target_id.split(':')[1]);
+    const followedUserIds = followedUserIdsResult.map((item) => item.followedUserIds);
 
     qb.where(
       and(
-        sql`lower(${userPostTable.content}) like ${parsedKeyword}`,
-        inArray(userPostTable.getstreamId, followingIds),
+        sql`MATCH(content) AGAINST(${keyword})`,
+        inArray(userPostTable.getstreamId, followedUserIds as Array<string>),
       ),
     ).orderBy(userPostTable.createdAt);
   } else {
-    qb.where(sql`lower(${userPostTable.content}) like ${parsedKeyword}`).orderBy(
-      userPostTable.createdAt,
-    );
+    qb.where(sql`MATCH(content) AGAINST(${keyword})`).orderBy(userPostTable.createdAt);
   }
 
   const data = await qb.offset(paging.page - 1).limit(paging.pageSize);
 
-  const { results: posts } = await getstreamFeedClient.getActivities({
+  if (!data.length) return [];
+
+  const { results: posts } = await getstreamClient.getActivities({
     ids: data.map((post) => post.postId),
     enrich: true,
   });
 
   return posts;
+};
+
+export const communityFollowUser = async (getstreamId: string, targetGetstreamId: string) => {
+  await db.transaction(async (tx) => {
+    const data = await tx
+      .insert(followTable)
+      .values({ followingUserId: getstreamId, followedUserId: targetGetstreamId })
+      .execute();
+
+    if (!data.rowsAffected) {
+      throw new TRPCError({ message: 'Something was wrong', code: 'BAD_REQUEST' });
+    }
+
+    await getstreamClient
+      .feed('timeline', getstreamId)
+      .follow('user', targetGetstreamId)
+      .catch(() => {
+        throw new TRPCError({ message: 'Something was wrong', code: 'BAD_REQUEST' });
+      });
+  });
+
+  return { success: true };
+};
+
+export const communityUnfollowUser = async (getstreamId: string, targetGetstreamId: string) => {
+  await db.transaction(async (tx) => {
+    const data = await tx
+      .delete(followTable)
+      .where(
+        and(
+          eq(followTable.followingUserId, getstreamId),
+          eq(followTable.followedUserId, targetGetstreamId),
+        ),
+      )
+      .execute();
+
+    if (!data.rowsAffected) {
+      throw new TRPCError({ message: 'Something was wrong', code: 'BAD_REQUEST' });
+    }
+
+    await getstreamClient
+      .feed('timeline', getstreamId)
+      .unfollow('user', targetGetstreamId)
+      .catch(() => {
+        throw new TRPCError({ message: 'Something was wrong', code: 'BAD_REQUEST' });
+      });
+  });
+
+  return { success: true };
+};
+
+export const communityCountMutualFollow = async (
+  getstreamId: string,
+  targetGetstreamId: string,
+) => {
+  const followedUserId = await db
+    .select({ followedUserId: followTable.followedUserId })
+    .from(followTable)
+    .where(eq(followTable.followingUserId, getstreamId))
+    .execute();
+
+  if (!followedUserId.length) return { mutualFollowingNumber: 0 };
+
+  const result = await db
+    .select({ mutualFollowingNumber: sql`count(*)` })
+    .from(followTable)
+    .where(
+      and(
+        eq(followTable.followedUserId, targetGetstreamId),
+        inArray(
+          followTable.followingUserId,
+          followedUserId.map((item) => item.followedUserId) as Array<string>,
+        ),
+      ),
+    );
+
+  return { mutualFollowingNumber: result[0].mutualFollowingNumber as number };
+};
+
+export const communityGetFollowingEachOtherInfo = async (
+  getstreamId: string,
+  targetGetstreamId: string,
+) => {
+  const [followingData, followedData] = await Promise.all([
+    db
+      .select({ id: followTable.followedUserId })
+      .from(followTable)
+      .where(
+        and(
+          eq(followTable.followingUserId, getstreamId),
+          eq(followTable.followedUserId, targetGetstreamId),
+        ),
+      )
+      .execute(),
+    db
+      .select({ id: followTable.followedUserId })
+      .from(followTable)
+      .where(
+        and(
+          eq(followTable.followingUserId, targetGetstreamId),
+          eq(followTable.followedUserId, getstreamId),
+        ),
+      )
+      .execute(),
+  ]);
+
+  return {
+    following: Boolean(followingData.length),
+    followed: Boolean(followedData.length),
+  };
+};
+
+export const getGetstreamUserInfo = async (getstreamId: string) => {
+  const [following, follower, userResult] = await Promise.all([
+    communityGetUserFollowingNumber(getstreamId),
+    communityGetUserFollowerNumber(getstreamId),
+    db
+      .select({
+        userId: userProfileTable.userId,
+        username: userProfileTable.username,
+        aboutMe: userProfileTable.aboutMe,
+        avatarUrl: userProfileTable.avatarUrl,
+        coverUrl: userProfileTable.coverUrl,
+      })
+      .from(userProfileTable)
+      .where(eq(userProfileTable.getstreamId, getstreamId))
+      .execute(),
+  ]);
+
+  return {
+    ...userResult[0],
+    followingNumber: following.followingNumber,
+    followerNumber: follower.followerNumber,
+  };
+};
+
+export const communityGetUserFollowerNumber = async (getstreamId: string) => {
+  const result = await db
+    .select({ followerNumber: sql`count(*)` })
+    .from(followTable)
+    .where(eq(followTable.followedUserId, getstreamId))
+    .execute();
+
+  return {
+    followerNumber: result[0].followerNumber as number,
+  };
+};
+
+export const communityGetUserFollowingNumber = async (getstreamId: string) => {
+  const result = await db
+    .select({ followingNumber: sql`count(*)` })
+    .from(followTable)
+    .where(eq(followTable.followingUserId, getstreamId))
+    .execute();
+
+  return {
+    followingNumber: result[0].followingNumber as number,
+  };
 };

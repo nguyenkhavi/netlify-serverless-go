@@ -1,4 +1,4 @@
-import { timestamp, index, mysqlTable, serial, varchar } from 'drizzle-orm/mysql-core';
+import { timestamp, index, mysqlTable, serial, varchar, text } from 'drizzle-orm/mysql-core';
 import { sql } from 'drizzle-orm';
 
 export const userPostTable = mysqlTable(
@@ -8,11 +8,10 @@ export const userPostTable = mysqlTable(
     userId: varchar('user_id', { length: 52 }).notNull(),
     postId: varchar('post_id', { length: 52 }).notNull(),
     getstreamId: varchar('getstream_id', { length: 12 }).notNull(),
-    content: varchar('content', { length: 3072 }),
+    content: text('content'),
     createdAt: timestamp('created_at').default(sql`NOW()`),
   },
   (userPost) => ({
-    contentIndex: index('content_idx').on(userPost.content),
-    getstreamIdIndex: index('getstream_id_idx').on(userPost.content),
+    getstreamIdIndex: index('getstream_id_idx').on(userPost.getstreamId),
   }),
 );

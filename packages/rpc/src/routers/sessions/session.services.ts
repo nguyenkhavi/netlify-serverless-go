@@ -1,4 +1,4 @@
-import { getstreamFeedClient } from '_@rpc/services/getstream/getstream-client';
+import { getstreamClient } from '_@rpc/services/getstream/getstream-client';
 import { magicAdmin } from '_@rpc/services/magic.link';
 import { db, session, userActivityTable, userProfileTable } from '_@rpc/services/drizzle';
 import { and, eq, isNotNull, or, sql } from 'drizzle-orm';
@@ -139,11 +139,11 @@ export const signUp = async (input: SignUpInput) => {
 
   const getstreamId = generateNanoid();
 
-  getstreamFeedClient.user(getstreamId).create({
+  getstreamClient.user(getstreamId).create({
     username: input.username,
   });
 
-  getstreamFeedClient.feed('timeline', getstreamId).follow('user', getstreamId);
+  getstreamClient.feed('timeline', getstreamId).follow('user', getstreamId);
 
   const userProfile = await db
     .insert(userProfileTable)

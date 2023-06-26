@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "cc39679c-9cd3-421c-977f-896420dabe07",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "fb44d5fd-1c6d-4e9d-b4fd-3c190c27908b",
+  "prevId": "30c99971-b236-4df3-9ed3-0e9141944bc9",
   "tables": {
     "kyc_info": {
       "name": "kyc_info",
@@ -110,12 +110,16 @@
       "indexes": {
         "kyc_id_idx": {
           "name": "kyc_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": true
         },
         "kyc_persona_id_idx": {
           "name": "kyc_persona_id_idx",
-          "columns": ["persona_inquiry_id"],
+          "columns": [
+            "persona_inquiry_id"
+          ],
           "isUnique": true
         }
       },
@@ -179,7 +183,9 @@
       "indexes": {
         "suggestion_user_id_idx": {
           "name": "suggestion_user_id_idx",
-          "columns": ["project"],
+          "columns": [
+            "project"
+          ],
           "isUnique": false
         }
       },
@@ -278,7 +284,9 @@
       "indexes": {
         "collection_id_idx": {
           "name": "collection_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         }
       },
@@ -449,7 +457,9 @@
       "indexes": {
         "bid_id_idx": {
           "name": "bid_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         }
       },
@@ -484,7 +494,9 @@
       "indexes": {
         "kyc_id_idx": {
           "name": "kyc_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": true
         }
       },
@@ -576,12 +588,44 @@
       "indexes": {
         "collection_id_idx": {
           "name": "collection_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         }
       },
       "foreignKeys": {},
       "compositePrimaryKeys": {}
+    },
+    "follow": {
+      "name": "follow",
+      "columns": {
+        "followed_user_id": {
+          "name": "followed_user_id",
+          "type": "varchar(12)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "following_user_id": {
+          "name": "following_user_id",
+          "type": "varchar(12)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {
+        "follow_followed_user_id_following_user_id": {
+          "name": "follow_followed_user_id_following_user_id",
+          "columns": [
+            "followed_user_id",
+            "following_user_id"
+          ]
+        }
+      }
     },
     "item": {
       "name": "item",
@@ -661,12 +705,16 @@
       "indexes": {
         "item_id_idx": {
           "name": "item_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         },
         "item_user_id_idx": {
           "name": "item_user_id_idx",
-          "columns": ["user_id"],
+          "columns": [
+            "user_id"
+          ],
           "isUnique": false
         }
       },
@@ -786,7 +834,9 @@
       "indexes": {
         "market_listing_id_idx": {
           "name": "market_listing_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         }
       },
@@ -1089,7 +1139,9 @@
       "indexes": {
         "email_idx": {
           "name": "email_idx",
-          "columns": ["email"],
+          "columns": [
+            "email"
+          ],
           "isUnique": false
         }
       },
@@ -1139,7 +1191,9 @@
       "indexes": {
         "suggestion_user_id_idx": {
           "name": "suggestion_user_id_idx",
-          "columns": ["user_id"],
+          "columns": [
+            "user_id"
+          ],
           "isUnique": false
         }
       },
@@ -1210,7 +1264,9 @@
       "indexes": {
         "token_id_idx": {
           "name": "token_id_idx",
-          "columns": ["id"],
+          "columns": [
+            "id"
+          ],
           "isUnique": false
         }
       },
@@ -1274,12 +1330,16 @@
       "indexes": {
         "activity_user_id_idx": {
           "name": "activity_user_id_idx",
-          "columns": ["user_id"],
+          "columns": [
+            "user_id"
+          ],
           "isUnique": false
         },
         "activity_action_idx": {
           "name": "activity_action_idx",
-          "columns": ["action"],
+          "columns": [
+            "action"
+          ],
           "isUnique": false
         }
       },
@@ -1338,7 +1398,10 @@
       "compositePrimaryKeys": {
         "user_answer_question_id_user_id": {
           "name": "user_answer_question_id_user_id",
-          "columns": ["question_id", "user_id"]
+          "columns": [
+            "question_id",
+            "user_id"
+          ]
         }
       }
     },
@@ -1392,7 +1455,9 @@
       "indexes": {
         "getstream_id_idx": {
           "name": "getstream_id_idx",
-          "columns": ["getstream_id"],
+          "columns": [
+            "getstream_id"
+          ],
           "isUnique": false
         }
       },
@@ -1547,27 +1612,38 @@
       "indexes": {
         "username_idx": {
           "name": "username_idx",
-          "columns": ["username"],
+          "columns": [
+            "username"
+          ],
           "isUnique": false
         },
         "email_idx": {
           "name": "email_idx",
-          "columns": ["email"],
+          "columns": [
+            "email"
+          ],
           "isUnique": false
         },
         "phone_idx": {
           "name": "phone_idx",
-          "columns": ["phone_code", "phone_number"],
+          "columns": [
+            "phone_code",
+            "phone_number"
+          ],
           "isUnique": false
         },
         "wallet_idx": {
           "name": "wallet_idx",
-          "columns": ["wallet"],
+          "columns": [
+            "wallet"
+          ],
           "isUnique": false
         },
         "getstream_id_idx": {
           "name": "getstream_id_idx",
-          "columns": ["getstream_id"],
+          "columns": [
+            "getstream_id"
+          ],
           "isUnique": false
         }
       },

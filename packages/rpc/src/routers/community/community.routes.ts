@@ -1,6 +1,20 @@
-import { communitySearchUserOrPostSchema, communityCreatePostSchema } from './community.schema';
+import {
+  communitySearchUserOrPostSchema,
+  communityCreatePostSchema,
+  communityGetstreamIdSchema,
+} from './community.schema';
 import { router, protectedRouter } from '_@rpc/config/router';
-import { communitySearchUserOrPost, communityCreatePost } from './community.services';
+import {
+  communitySearchUserOrPost,
+  communityCreatePost,
+  communityFollowUser,
+  communityUnfollowUser,
+  communityCountMutualFollow,
+  communityGetUserFollowerNumber,
+  communityGetUserFollowingNumber,
+  getGetstreamUserInfo,
+  communityGetFollowingEachOtherInfo,
+} from './community.services';
 
 export const communityRouters = router({
   communityCreatePost: protectedRouter
@@ -13,6 +27,42 @@ export const communityRouters = router({
     .input(communitySearchUserOrPostSchema)
     .query(({ input, ctx }) =>
       communitySearchUserOrPost(input, ctx.profile.getstreamId, ctx.profile.userId),
+    ),
+
+  communityFollowUser: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .mutation(({ input, ctx }) =>
+      communityFollowUser(ctx.profile.getstreamId, input.targetGetstreamId),
+    ),
+
+  communityUnfollowUser: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .mutation(({ input, ctx }) =>
+      communityUnfollowUser(ctx.profile.getstreamId, input.targetGetstreamId),
+    ),
+
+  communityCountMutualFollow: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .query(({ input, ctx }) =>
+      communityCountMutualFollow(ctx.profile.getstreamId, input.targetGetstreamId),
+    ),
+
+  communityGetUserFollowerNumber: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .query(({ input }) => communityGetUserFollowerNumber(input.targetGetstreamId)),
+
+  communityGetUserFollowingNumber: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .query(({ input }) => communityGetUserFollowingNumber(input.targetGetstreamId)),
+
+  getGetstreamUserInfo: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .query(({ input }) => getGetstreamUserInfo(input.targetGetstreamId)),
+
+  communityGetFollowingEachOtherInfo: protectedRouter
+    .input(communityGetstreamIdSchema)
+    .query(({ input, ctx }) =>
+      communityGetFollowingEachOtherInfo(ctx.profile.getstreamId, input.targetGetstreamId),
     ),
 });
 

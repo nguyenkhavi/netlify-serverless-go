@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "cc39679c-9cd3-421c-977f-896420dabe07",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "30c99971-b236-4df3-9ed3-0e9141944bc9",
+  "prevId": "cc39679c-9cd3-421c-977f-896420dabe07",
   "tables": {
     "kyc_info": {
       "name": "kyc_info",
@@ -577,6 +577,54 @@
         "collection_id_idx": {
           "name": "collection_id_idx",
           "columns": ["id"],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {}
+    },
+    "follow": {
+      "name": "follow",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "followed_user_id": {
+          "name": "followed_user_id",
+          "type": "varchar(12)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "following_user_id": {
+          "name": "following_user_id",
+          "type": "varchar(12)",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "NOW()"
+        }
+      },
+      "indexes": {
+        "followed_user_id_idx": {
+          "name": "followed_user_id_idx",
+          "columns": ["followed_user_id"],
+          "isUnique": false
+        },
+        "following_user_id_idx": {
+          "name": "following_user_id_idx",
+          "columns": ["following_user_id"],
           "isUnique": false
         }
       },
