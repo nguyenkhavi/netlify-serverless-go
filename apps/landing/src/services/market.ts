@@ -88,6 +88,28 @@ export async function getAllAvailableMarketByCategory(
   });
 }
 
+export async function getSearchMarket(db: IDBPDatabase, search: string): Promise<IMarketData[]> {
+  const available: IMarketStatusData[] = await getAllAvailableMarket(db);
+  const market = await Promise.all(
+    available.map(async (mk) => {
+      const market = await getMarketByListingId(db, mk.listingId);
+      const collection = await getCollectionByContract(db, market.assetContract);
+      const item = await getItemById(db, market.itemId);
+      return {
+        ...market,
+        collection,
+        item,
+      };
+    }),
+  );
+  return market.filter((mk) => {
+    return (
+      mk.item.name.toLowerCase().includes(search.toLowerCase()) ||
+      mk.collection.name.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+}
+
 export async function getMarketsByCollection(db: IDBPDatabase, collection: string) {
   return db.getAllFromIndex(dbOS.market, dbIndex.marketAssetContractIndex, collection);
 }
