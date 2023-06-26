@@ -1,5 +1,9 @@
 //THIRD PARTY MODULES
+import { ChannelMemberResponse } from 'stream-chat';
 import { PropsWithChildren, createContext, useContext, useState } from 'react';
+import { DefaultStreamChatGenerics } from 'stream-chat-react/dist/types/types';
+
+type BlockUser = ChannelMemberResponse<DefaultStreamChatGenerics> | undefined;
 
 type ModalType = {
   openSetting: boolean;
@@ -14,6 +18,8 @@ type ModalType = {
   setOpenReport: (value: boolean) => void;
   openLeave: boolean;
   setOpenLeave: (value: boolean) => void;
+  blockUser: BlockUser;
+  setBlockUser: (value: BlockUser) => void;
 };
 
 const ModalContext = createContext<ModalType>({
@@ -29,6 +35,8 @@ const ModalContext = createContext<ModalType>({
   setOpenReport: (_: boolean) => {},
   openLeave: false,
   setOpenLeave: (_: boolean) => {},
+  blockUser: undefined,
+  setBlockUser: (_: BlockUser) => {},
 });
 
 export const useModalContext = () => useContext(ModalContext);
@@ -40,6 +48,7 @@ const ModalContextProvider = ({ children }: PropsWithChildren) => {
   const [openBlock, setOpenBlock] = useState<boolean>(false);
   const [openReport, setOpenReport] = useState<boolean>(false);
   const [openLeave, setOpenLeave] = useState<boolean>(false);
+  const [blockUser, setBlockUser] = useState<BlockUser>(undefined);
 
   return (
     <ModalContext.Provider
@@ -56,6 +65,8 @@ const ModalContextProvider = ({ children }: PropsWithChildren) => {
         setOpenAddChat,
         openInfo,
         setOpenInfo,
+        blockUser,
+        setBlockUser,
       }}
     >
       {children}

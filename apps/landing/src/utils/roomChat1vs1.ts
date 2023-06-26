@@ -1,5 +1,5 @@
 //THIRD PARTY MODULES
-import { StreamChat } from 'stream-chat';
+import { Channel, StreamChat } from 'stream-chat';
 import { DefaultStreamChatGenerics } from 'stream-chat-react/dist/types/types';
 
 export const CHAT_1VS1_PREFIX = 'CHAT_1VS1_';
@@ -48,4 +48,10 @@ export const createRequestChannel1vs1 = async (
     console.log(error);
     return undefined;
   }
+};
+
+export const shouldDeleteChannel = async (channel: Channel<DefaultStreamChatGenerics>) => {
+  if (!channel) return;
+  const members = await channel.queryMembers({});
+  return members.members.length === 1;
 };

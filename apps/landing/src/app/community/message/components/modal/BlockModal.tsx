@@ -1,6 +1,5 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { useChatContext } from 'stream-chat-react';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import { Modal } from '_@shared/components/dialog/Modal';
@@ -16,11 +15,15 @@ const classBtnError = classcat([
 ]);
 
 function BlockModal() {
-  const { openBlock, setOpenBlock } = useModalContext();
-  const { channel } = useChatContext();
+  const { openBlock, setOpenBlock, blockUser, setBlockUser } = useModalContext();
 
   const onClose = () => {
     setOpenBlock(false);
+    setBlockUser(undefined);
+  };
+
+  const onBlock = () => {
+    console.log('🚀 ~ onBlock ~ onBlock:');
   };
 
   return (
@@ -35,12 +38,15 @@ function BlockModal() {
       >
         <div className="grid justify-items-center gap-10 p-6">
           <p className={classcat(['text-body2 text-primary-700'])}>
-            Block {(channel?.data?.created_by as any).name} will no longer be able to follow or
-            message you, and you will not see notifications from{' '}
-            {(channel?.data?.created_by as any).name}
+            Block {blockUser?.user?.name} will no longer be able to follow or message you, and you
+            will not see notifications from {blockUser?.user?.name}
           </p>
           <div className={classcat(['grid w-full gap-4'])}>
-            <Button className={classcat([classBtnError, 'btnmd'])} variant="outlined">
+            <Button
+              onClick={onBlock}
+              className={classcat([classBtnError, 'btnmd'])}
+              variant="outlined"
+            >
               Yes
             </Button>
             <Button

@@ -35,7 +35,7 @@ function ConversationInfoModal() {
   const { client } = useGetFeedUser();
   const { channel } = useChatContext();
   const { openInfo, setOpenInfo } = useModalContext();
-  const { setOpenBlock, setOpenLeave, setOpenReport } = useModalContext();
+  const { setOpenBlock, setOpenLeave, setOpenReport, setBlockUser } = useModalContext();
 
   const onClose = () => {
     setOpenInfo(false);
@@ -55,6 +55,7 @@ function ConversationInfoModal() {
 
   const onBlock = () => {
     setOpenBlock(true);
+    setBlockUser(members?.[0]);
   };
 
   const onDelete = () => {

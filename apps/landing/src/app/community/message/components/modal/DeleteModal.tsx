@@ -3,6 +3,7 @@ import classcat from 'classcat';
 import { useState } from 'react';
 import { useChatContext } from 'stream-chat-react';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
+import { shouldDeleteChannel } from '_@landing/utils/roomChat1vs1';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import { Modal } from '_@shared/components/dialog/Modal';
@@ -27,19 +28,41 @@ function DeleteModal() {
     setOpenLeave(false);
   };
 
-  const onDelete = () => {
-    if (!user?.profile.getstreamId) return;
-
+  const removeUserFromChannel = (userId: string) => {
     setIsDeleting(true);
     channel
-      ?.removeMembers([user?.profile.getstreamId])
+      ?.removeMembers([userId])
       .then(() => {
-        setOpenLeave(false);
         setOpenInfo(false);
         setActiveChannel(undefined);
       })
       .catch((err) => console.log(err))
-      .finally(() => setIsDeleting(false));
+      .finally(() => {
+        setOpenLeave(false);
+        setIsDeleting(false);
+      });
+  };
+
+  const deleteChannel = () => {
+    setIsDeleting(true);
+    channel
+      ?.delete()
+      .then(() => {
+        setOpenInfo(false);
+        setActiveChannel(undefined);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setOpenLeave(false);
+        setIsDeleting(false);
+      });
+  };
+
+  const onDelete = async () => {
+    if (!user?.profile.getstreamId || !channel) return;
+    const shouldDelete = await shouldDeleteChannel(channel);
+    if (shouldDelete) deleteChannel();
+    else removeUserFromChannel(user.profile.getstreamId);
   };
 
   return (

@@ -120,7 +120,6 @@ export default function CommunityPage() {
                 onCreateChat={onCreateChat}
               />
               <CustomChannelList
-                key={`${isRequest}`}
                 refresh={refreshList.toString()}
                 isRequest={isRequest}
                 search={debounceSearch}
