@@ -1,28 +1,42 @@
 'use client';
 //THIRD PARTY MODULES
 import classcat from 'classcat';
+import { useState } from 'react';
+import { Country, State } from 'country-state-city';
 import { dialogStore } from '_@landing/stores/dialogStore';
+import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
 import PenIcon from '_@shared/icons/PenIcon';
+import LoadingIcon from '_@shared/icons/LoadingIcon';
 import TrashCanIcon from '_@shared/icons/TrashCanIcon';
 //RELATIVE MODULES
+import ModalAddress from './comps/CreateEditAddress';
 import ProfileNavMobile from '../comps/ProfileNavMobile';
-import ModalAddress, { FormValues } from './comps/CreateEditAddress';
 
 export default function ProfileAddress() {
+  const [loadingOfDelete, setLoadingOfDelete] = useState(false);
+  const [loadingOfSetDefault, setLoadingOfSetDefault] = useState(false);
   const { openDialog, hideDialog } = dialogStore();
-
+  const utils = nextApi.useContext();
+  const { data } = nextApi.userGetAllShippingAddress.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
+  });
+  const { mutateAsync: updateAddress } = nextApi.userUpdateShippingAddressById.useMutation({});
+  const { mutateAsync: deleteAddress } = nextApi.userDeleteShippingAddress.useMutation({});
   const router = useRouter();
   const pathname = usePathname();
   const query = useSearchParams();
+  const [idSelected, setIdSelected] = useState<number | string | undefined>(undefined);
 
   const type =
     query.get('t') === 'create' ? 'create' : query.get('t') === 'edit' ? 'edit' : undefined;
   const id = query.get('id') || '';
+  const itemSelected = data?.find((item) => item.id === Number(id));
 
   const _handleOpenDialog = (id: number | string) => {
     openDialog({
@@ -42,9 +56,51 @@ export default function ProfileAddress() {
     router.push(`${pathname}?t=edit&id=${id}`);
   };
 
+  const _handleSetDefault =
+    (data: RouterOutputs['userGetAllShippingAddress'][number]) => async () => {
+      try {
+        setIdSelected(data.id);
+        setLoadingOfSetDefault(true);
+        await updateAddress({
+          id: data.id,
+          isDefault: true,
+          apartmentNumber: data.apartmentNumber,
+          contactNumber: data.contactNumber,
+          additionalInformation: data.additionalInformation ?? undefined,
+          street: data.street,
+          secondStreet: data.secondStreet,
+          postalCode: data.postalCode,
+          dialCode: data.dialCode,
+          country: data.country,
+          state: data.state,
+        });
+
+        await utils.userGetAllShippingAddress.invalidate();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoadingOfSetDefault(false);
+        setIdSelected(undefined);
+      }
+    };
+
+  const _handleDeleteAddress = (id: number | string) => async () => {
+    try {
+      setIdSelected(id);
+      setLoadingOfDelete(true);
+      await deleteAddress({ id: Number(id) });
+      await utils.userGetAllShippingAddress.invalidate();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingOfDelete(false);
+      setIdSelected(undefined);
+    }
+  };
+
   return (
     <div>
-      <ProfileNavMobile title={'Address(2)'} isBorder={false} />
+      <ProfileNavMobile title={`Address(${data?.length || 0})`} isBorder={false} />
       <Show when={!type}>
         <div
           className={classcat([
@@ -53,55 +109,71 @@ export default function ProfileAddress() {
             'lg:border-b lg:border-text-10',
           ])}
         >
-          <p className="hidden text-h4 lg:block">Address(2)</p>
+          <p className="hidden text-h4 lg:block">Address({data?.length || 0})</p>
           <Button className="btnsm ml-auto w-max lg:btnlg" onClick={_handleCreateAddress}>
             Add new Address
           </Button>
         </div>
         <div className="mt-7 grid gap-5 md:mt-10 lg:grid-cols-2 lg:gap-6">
-          {MOCK_DATA.map((item, i) => (
+          {data?.map((item, i) => (
             <div
               key={i}
-              className="flex flex-col rounded-[10px] border border-text-10 bg-secondary-200 px-4 pt-4 lg:px-6 lg:pt-6"
+              className={classcat([
+                'h-77.5 lg:h-77 ',
+                'flex flex-col bg-secondary-200',
+                'rounded-[10px] border border-text-10',
+              ])}
             >
-              <div>
-                <p className="mb-2.5 text-body2">{item.name}</p>
-                <ul
-                  className={classcat([
-                    '[&_p]:max-w-[180px] [&_p]:md:max-w-full',
-                    '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
-                    '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[80px] [&_li]:lg:gap-[10px] [&_li]:xl:gap-[175px]',
-                  ])}
-                >
-                  <li>
-                    <span>Country Name:</span>
-                    <p className="text-right lg:text-left">{item.country}</p>
-                  </li>
-                  <li>
-                    <span>State:</span>
-                    <p className="text-right lg:text-left">{item.state}</p>
-                  </li>
-                  <li>
-                    <span>Street Address:</span>
-                    <p className="text-right lg:text-left">{item.streetAddress}</p>
-                  </li>
-                </ul>
+              <div className="flex grow flex-col p-6">
+                <div className="grow">
+                  <ul
+                    className={classcat([
+                      '[&_p]:max-w-[180px] [&_p]:md:max-w-full',
+                      '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
+                      '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[80px] [&_li]:lg:gap-[10px] [&_li]:xl:gap-[175px]',
+                    ])}
+                  >
+                    <li>
+                      <span>Country Name:</span>
+                      <p className="w-38.25 text-right lg:text-left">
+                        {Country.getCountryByCode(item.country)?.name}
+                      </p>
+                    </li>
+                    <li>
+                      <span>State:</span>
+                      <p className="w-38.25 text-right lg:text-left">
+                        {State.getStateByCodeAndCountry(item.state, item.country)?.name}
+                      </p>
+                    </li>
+                    <li>
+                      <span>Street Address:</span>
+                      <p className="w-38.25 text-right lg:text-left">{item.street}</p>
+                    </li>
+                  </ul>
+                </div>
+
                 <Show when={item.isDefault}>
-                  <p className="mb-6 mt-2 text-body3 text-success lg:mb-4">Default address</p>
+                  <p className="text-body3 text-success">Default address</p>
                 </Show>
               </div>
-              <div className="-mx-3 mt-auto flex items-center border-t border-text-10 px-3 pb-4 pt-5">
+              <div className="mt-auto flex items-center border-t border-text-10 p-6 pt-5.75">
                 {item.isDefault ? (
                   <p className="font-medium text-text-50">DEFAULT ADDRESS</p>
                 ) : (
-                  <button className="font-medium text-primary">SET AS DEFAULT</button>
+                  <button onClick={_handleSetDefault(item)} className="font-medium text-primary">
+                    {loadingOfSetDefault && idSelected === item.id ? (
+                      <LoadingIcon />
+                    ) : (
+                      'Set as default'
+                    )}
+                  </button>
                 )}
                 <div className="ml-auto flex items-center">
                   <button className="mr-4" onClick={() => _handleEditAddress(item.id)}>
                     <PenIcon width={15} height={15} />
                   </button>
-                  <button onClick={() => _handleOpenDialog(item.id)}>
-                    <TrashCanIcon />
+                  <button onClick={_handleDeleteAddress(item.id)}>
+                    {loadingOfDelete && idSelected === item.id ? <LoadingIcon /> : <TrashCanIcon />}
                   </button>
                 </div>
               </div>
@@ -111,36 +183,8 @@ export default function ProfileAddress() {
       </Show>
 
       <Show when={!!type}>
-        <ModalAddress id={id} type={type} />
+        <ModalAddress id={id} type={type} defaultData={itemSelected} />
       </Show>
     </div>
   );
 }
-
-export const MOCK_DATA: FormValues[] = [
-  {
-    id: 1,
-    name: 'Syed Asad Hussain',
-    country: 'United Arab Emirates',
-    state: 'Abu Dabi',
-    streetAddress: '9540 N. Marconi CourtDes Plaines, IL 60016',
-    streetAddress2: '9540 N. Marconi CourtDes Plaines, IL 60016',
-    isDefault: true,
-    apartmentNumber: 'Apartment 7',
-    postcode: '581234',
-    contactNumber: '34535464454',
-    additionalInfo: 'Info..',
-  },
-  {
-    id: 2,
-    name: 'Syed Asad Hussain',
-    country: 'United Arab Emirates',
-    state: 'Abu Dabi',
-    streetAddress: '9540 N. Marconi CourtDes Plaines, IL 60016',
-    isDefault: false,
-    apartmentNumber: 'data',
-    postcode: '123',
-    contactNumber: '123',
-    additionalInfo: 'Info',
-  },
-];

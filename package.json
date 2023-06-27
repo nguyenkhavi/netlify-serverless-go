@@ -40,6 +40,7 @@
     "classcat": "^5.0.4",
     "cmdk": "^0.2.0",
     "cookie": "^0.5.0",
+    "country-state-city": "^3.1.4",
     "crypto-js": "^4.1.1",
     "dayjs": "^1.11.7",
     "decimal.js": "^10.4.3",

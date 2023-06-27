@@ -157,6 +157,10 @@ export const userGetShippingAddressByUserId = async (userId: string) => {
   return data[0];
 };
 
+export const userGetAllShippingAddress = async (userId: string) => {
+  return await db.select().from(addressTable).where(eq(addressTable.userId, userId));
+};
+
 export const userCreateShippingAddress = async (input: CreateShippingAddress, userId: string) => {
   const { isDefault } = input;
 

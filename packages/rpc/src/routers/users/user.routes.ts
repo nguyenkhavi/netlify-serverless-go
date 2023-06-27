@@ -28,6 +28,7 @@ import {
   userCreateSuggestion,
   getUsersInFleamint,
   getPublicProfile,
+  userGetAllShippingAddress,
 } from '_@rpc/routers/users/user.services';
 
 import { getQuery } from '_@rpc/config';
@@ -69,6 +70,9 @@ export const userRouters = router({
 
   userGetShippingAddressByUserId: protectedRouter.query(({ ctx }) =>
     userGetShippingAddressByUserId(ctx.profile.userId),
+  ),
+  userGetAllShippingAddress: protectedRouter.query(({ ctx }) =>
+    userGetAllShippingAddress(ctx.profile.userId),
   ),
 
   userCreateShippingAddress: protectedRouter

@@ -98,7 +98,7 @@ export const updateShippingAddressSchema = z.object({
   street: z.string(),
   secondStreet: z.string(),
   apartmentNumber: z.string(),
-  postCode: z.string(),
+  postalCode: z.string(),
   contactNumber: z.string(),
   dialCode: z.string(),
   additionalInformation: z.string().optional(),

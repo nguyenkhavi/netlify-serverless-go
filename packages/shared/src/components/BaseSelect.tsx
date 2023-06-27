@@ -90,7 +90,7 @@ const BaseSelect = forwardRef<HTMLButtonElement, BaseSelectProps>(
         <Trigger
           ref={forwardedRef}
           id={id}
-          className={classcat([triggerClasses, owStyles?.triggerClasses])}
+          className={classcat(['select-sm', triggerClasses, owStyles?.triggerClasses])}
           data-valid={isValid}
         >
           <Show when={fieldLabel}>

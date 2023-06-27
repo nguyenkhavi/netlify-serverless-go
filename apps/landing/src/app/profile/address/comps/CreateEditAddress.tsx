@@ -2,57 +2,105 @@
 //THIRD PARTY MODULES
 import { z } from 'zod';
 import classcat from 'classcat';
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { Country, State } from 'country-state-city';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { RouterOutputs, api, nextApi } from '_@landing/utils/api';
+import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
 import FormSelect from '_@shared/components/FormSelect';
+import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
 //SHARED
-import { toastStore } from '_@shared/stores/toast/toastStore';
+import { toastAction } from '_@shared/stores/toast/toastStore';
 import { enterNumberOnly } from '_@shared/utils/checkNumberInputOnly';
-//RELATIVE MODULES
-import { MOCK_DATA } from '../page';
 
 const schema = z.object({
-  name: z.string().optional(),
-  country: z.string(),
-  state: z.string(),
-  streetAddress: z.string().nonempty('This field is required'),
-  streetAddress2: z.string().optional(),
+  country: z.string({
+    required_error: 'This field is required',
+  }),
+  state: z.string({
+    required_error: 'This field is required',
+  }),
+  street: z.string().nonempty('This field is required'),
+  secondStreet: z.string().nonempty('This field is required'),
   apartmentNumber: z.string().nonempty('This field is required'),
-  postcode: z.string().nonempty('This field is required'),
+  postalCode: z.string().nonempty('This field is required'),
+  dialCode: z.string().nonempty('This field is required'),
   contactNumber: z.string().nonempty('This field is required'),
-  additionalInfo: z.string(),
+  additionalInformation: z.string(),
 });
 
-const formItemClasses = 'ow:gap-1 ow:flex ow:flex-col';
-const inputClasses = 'h-11.25 ow:rounded lg:h-15 ow:text-base ow:text-text-80 ow:rounded-lg';
 export type FormValues = z.infer<typeof schema> & { id: string | number; isDefault: boolean };
 type CreateEditAddress = {
   id?: string | number;
   type?: 'create' | 'edit';
+  defaultData?: RouterOutputs['userGetAllShippingAddress'][number];
 };
 
-export default function CreateEditAddress({ id, type }: CreateEditAddress) {
-  const { openToast } = toastStore();
-  const router = useRouter();
+const FormItemWithSchema = (
+  props: Omit<ComponentPropsWithoutRef<typeof FormItem>, 'name'> & { name: keyof FormValues },
+) => {
+  return <FormItem {...props} name={props.name} />;
+};
 
+export default function CreateEditAddress({ id, type, defaultData }: CreateEditAddress) {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const utils = nextApi.useContext();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
+    defaultValues: defaultData
+      ? {
+          additionalInformation: defaultData.additionalInformation || '',
+          apartmentNumber: defaultData.apartmentNumber || '',
+          contactNumber: defaultData.contactNumber || '',
+          country: defaultData.country || '',
+          state: defaultData.state || '',
+          street: defaultData.street || '',
+          secondStreet: defaultData.secondStreet || '',
+          postalCode: defaultData.postalCode || '',
+          dialCode: defaultData.dialCode || 'GB',
+        }
+      : { dialCode: 'GB' },
   });
 
-  const { handleSubmit } = form;
+  const { handleSubmit, watch } = form;
 
-  const onSubmit = (values: FormValues) => {
-    console.log(id, values);
-    type === 'create'
-      ? openToast('Create address successfully')
-      : openToast('Update address successfully');
-  };
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      setLoading(true);
+
+      if (type === 'create') {
+        await api.userCreateShippingAddress.mutate({
+          ...values,
+          secondStreet: values.secondStreet || '',
+          isDefault: false,
+        });
+      } else if (id) {
+        await api.userUpdateShippingAddressById.mutate({
+          ...values,
+          secondStreet: values.secondStreet || '',
+          isDefault: defaultData?.isDefault || false,
+          id: Number(id),
+        });
+      }
+      await utils.userGetAllShippingAddress.invalidate();
+      router.push('/profile/address');
+      toastAction.openToast(
+        type === 'create' ? 'Create address successfully' : 'Update address successfully',
+        'success',
+      );
+    } catch (err) {
+      console.log(err);
+      toastAction.openToast('Something went wrong', 'error');
+    } finally {
+      setLoading(false);
+    }
+  });
 
   const _handleCancel = () => {
     form.reset();
@@ -60,24 +108,15 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
   };
 
   useEffect(() => {
-    if (type === 'edit' && id) {
-      const data = MOCK_DATA.find((item) => +item.id === +id);
-      form.setValue('name', data?.name || '');
-      form.setValue('streetAddress', data?.streetAddress || '');
-      form.setValue('country', data?.country || '');
-      form.setValue('state', data?.state || '');
-      form.setValue('streetAddress2', data?.streetAddress2 || '');
-      form.setValue('apartmentNumber', data?.apartmentNumber || '');
-      form.setValue('postcode', data?.postcode || '');
-      form.setValue('contactNumber', data?.contactNumber || '');
-      form.setValue('additionalInfo', data?.additionalInfo || '');
+    if (type === 'edit' && !defaultData) {
+      router.push('/profile/address');
     }
-  }, [id, type, form]);
+  }, [defaultData, router, type]);
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-4 bg-secondary-200 pb-6 lg:mt-0 ">
-        <div className="rounded-[10px] pb-8">
+      <form onSubmit={onSubmit} className="bg-secondary-200">
+        <div className="rounded-[10px]">
           <h2
             className={classcat([
               'border-b border-text-10 text-h6 lg:text-h5-bold',
@@ -86,87 +125,93 @@ export default function CreateEditAddress({ id, type }: CreateEditAddress) {
           >
             {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
           </h2>
-          <div className="grid gap-4 p-4 pb-0 lg:grid-cols-2 lg:gap-8 lg:p-6 lg:pb-0">
-            <FormItem label="Country" name="country" className={formItemClasses}>
-              <FormSelect
-                placeholder="Select Country"
-                options={OPTIONS}
-                owStyles={{
-                  triggerClasses:
-                    'ow:h-11.25 ow:rounded-lg ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
-                }}
-              />
-            </FormItem>
-            <FormItem label="State" name="state" className={formItemClasses}>
-              <FormSelect
-                placeholder="Select State"
-                options={OPTIONS}
-                owStyles={{
-                  triggerClasses:
-                    'ow:h-11.25 ow:rounded-lg ow:lg:h-15 ow:[&>span]:text-base ow:[&>span]:text-text-80',
-                }}
-              />
-            </FormItem>
-            <FormItem label="Street Address" name="streetAddress" className={formItemClasses}>
-              <FormInput className={inputClasses} placeholder="Street Address" />
-            </FormItem>
-            <FormItem label="Street Address 2" name="streetAddress2" className={formItemClasses}>
-              <FormInput className={inputClasses} placeholder="Street address 2" />
-            </FormItem>
-            <FormItem label="Apartment Number" name="apartmentNumber" className={formItemClasses}>
-              <FormInput className={inputClasses} placeholder="Apartment Number" />
-            </FormItem>
-            <FormItem label="Postcode" name="postcode" className={formItemClasses}>
-              <FormInput
-                className={inputClasses}
-                placeholder="Postcode"
-                onKeyDown={enterNumberOnly}
-              />
-            </FormItem>
-            <FormItem label="Contact number" name="contactNumber" className={formItemClasses}>
-              <FormInput
-                className={inputClasses}
-                placeholder="34535464454"
-                onKeyDown={enterNumberOnly}
-              />
-            </FormItem>
-            <FormItem label="Additional info" name="additionalInfo" className={formItemClasses}>
-              <FormInput
-                tag="textarea"
-                placeholder="Info..."
-                className="block h-22 resize-none ow:rounded lg:h-15 lg:pt-4"
-              />
-            </FormItem>
+          <div className="grid gap-8 p-4 lg:p-6">
+            <div className="grid gap-4 lg:grid-cols-2 lg:gap-8 ">
+              <FormItemWithSchema label="Country" name="country" className="auto-rows-min">
+                <FormSelect
+                  placeholder="Select Country"
+                  owStyles={{
+                    triggerClasses: 'select-md',
+                  }}
+                  options={Country.getAllCountries().map((item) => ({
+                    value: item.isoCode,
+                    label: item.name,
+                  }))}
+                />
+              </FormItemWithSchema>
+              <FormItemWithSchema label="State" name="state" className="auto-rows-min">
+                <FormSelect
+                  placeholder="Select State"
+                  owStyles={{
+                    triggerClasses: 'select-md',
+                  }}
+                  options={State.getStatesOfCountry(watch('country')).map((item) => ({
+                    label: item.name,
+                    value: item.isoCode,
+                  }))}
+                />
+              </FormItemWithSchema>
+              <FormItemWithSchema label="Street Address" name="street" className="auto-rows-min">
+                <FormInput className="input-md" placeholder="Street Address" />
+              </FormItemWithSchema>
+              <FormItemWithSchema
+                label="Street Address 2"
+                name="secondStreet"
+                className="auto-rows-min"
+              >
+                <FormInput className="input-md" placeholder="Street address 2" />
+              </FormItemWithSchema>
+              <FormItemWithSchema
+                label="Apartment Number"
+                name="apartmentNumber"
+                className="auto-rows-min"
+              >
+                <FormInput className="input-md" placeholder="Apartment Number" />
+              </FormItemWithSchema>
+              <FormItemWithSchema label="Postcode" name="postalCode" className="auto-rows-min">
+                <FormInput
+                  className="input-md"
+                  placeholder="Postcode"
+                  onKeyDown={enterNumberOnly}
+                />
+              </FormItemWithSchema>
+              <FormItemWithSchema
+                label="Contact number"
+                name="contactNumber"
+                className="auto-rows-min"
+              >
+                <>
+                  <FormPhoneInput
+                    name={{
+                      digitalCode: 'dialCode',
+                      phoneNumber: 'contactNumber',
+                    }}
+                  />
+                </>
+              </FormItemWithSchema>
+              <FormItemWithSchema
+                label="Additional info"
+                name="additionalInformation"
+                className="auto-rows-min"
+              >
+                <FormInput placeholder="Info" className="input-md" />
+              </FormItemWithSchema>
+            </div>
+            <div className="grid grid-flow-col grid-cols-2 justify-center gap-3 lg:mb-0 lg:grid-cols-none lg:justify-end">
+              <Button
+                className="btnsm w-full lg:w-29.25"
+                variant="outlined"
+                onClick={_handleCancel}
+              >
+                Cancel
+              </Button>
+              <Button isLoading={loading} className="btnsm w-full lg:w-34.75" type="submit">
+                {type === 'create' ? 'Create' : 'Save'}
+              </Button>
+            </div>
           </div>
-        </div>
-        <div className="flex justify-center lg:justify-end">
-          <Button
-            className="btnsm mr-3 w-max lg:btnmd lg:[&>span]:text-xs"
-            variant="outlined"
-            onClick={_handleCancel}
-          >
-            Cancel
-          </Button>
-          <Button className="btnsm w-max lg:btnmd lg:[&>span]:text-xs" type="submit">
-            {type === 'create' ? 'Create' : 'Save'}
-          </Button>
         </div>
       </form>
     </FormProvider>
   );
 }
-
-const OPTIONS = [
-  { value: '1', label: 'January' },
-  { value: '2', label: 'February' },
-  { value: '3', label: 'March' },
-  { value: '4', label: 'April' },
-  { value: '5', label: 'May' },
-  { value: '6', label: 'June' },
-  { value: '7', label: 'July' },
-  { value: '8', label: 'August' },
-  { value: '9', label: 'September' },
-  { value: '10', label: 'October' },
-  { value: '11', label: 'November' },
-  { value: '12', label: 'December' },
-];
