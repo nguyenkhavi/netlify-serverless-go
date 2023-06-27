@@ -14,6 +14,9 @@ import { UserCircleIcon } from '_@shared/icons/UserIcon';
 import QuestionCircleIcon from '_@shared/icons/QuestionCircleIcon';
 
 export default function VerifyInfo() {
+  const { user } = useAuthStore();
+  const { personaInquiryId } = user?.profile ?? {};
+  const verificationLevel = [true, personaInquiryId, false].filter(Boolean).length;
   return (
     <section className="mb-8 hidden justify-center lg:flex">
       <div
@@ -23,7 +26,7 @@ export default function VerifyInfo() {
           'mr-4 max-w-[330px] grow',
         ])}
       >
-        <p className="mb-1 text-h6">Verification Level : 2</p>
+        <p className="mb-1 text-h6">Verification Level : {verificationLevel}</p>
         <Popover>
           <PopoverTrigger>
             <div className="grid place-items-center">

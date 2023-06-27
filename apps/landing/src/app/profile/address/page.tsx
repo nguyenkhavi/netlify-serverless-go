@@ -2,13 +2,17 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useState } from 'react';
+import { getQueryKey } from '@trpc/react-query';
 import { Country, State } from 'country-state-city';
+import { useQueryClient } from '@tanstack/react-query';
 import { dialogStore } from '_@landing/stores/dialogStore';
 import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
+import NoData from '_@landing/components/NoData';
+import { DialogConfirm } from '_@landing/components/dialog/DialogConfirm';
 //SHARED
 import PenIcon from '_@shared/icons/PenIcon';
 import LoadingIcon from '_@shared/icons/LoadingIcon';
@@ -21,7 +25,7 @@ export default function ProfileAddress() {
   const [loadingOfDelete, setLoadingOfDelete] = useState(false);
   const [loadingOfSetDefault, setLoadingOfSetDefault] = useState(false);
   const { openDialog, hideDialog } = dialogStore();
-  const utils = nextApi.useContext();
+  const queryClient = useQueryClient();
   const { data } = nextApi.userGetAllShippingAddress.useQuery(undefined, {
     refetchOnWindowFocus: false,
     staleTime: Infinity,
@@ -42,7 +46,7 @@ export default function ProfileAddress() {
     openDialog({
       type: 'delete-address',
       callback: () => {
-        console.log('delete', id);
+        _handleDeleteAddress(id);
         hideDialog();
       },
     });
@@ -75,7 +79,7 @@ export default function ProfileAddress() {
           state: data.state,
         });
 
-        await utils.userGetAllShippingAddress.invalidate();
+        await queryClient.invalidateQueries(getQueryKey(nextApi.userGetAllShippingAddress));
       } catch (error) {
         console.log(error);
       } finally {
@@ -84,12 +88,12 @@ export default function ProfileAddress() {
       }
     };
 
-  const _handleDeleteAddress = (id: number | string) => async () => {
+  const _handleDeleteAddress = async (id: number | string) => {
     try {
       setIdSelected(id);
       setLoadingOfDelete(true);
       await deleteAddress({ id: Number(id) });
-      await utils.userGetAllShippingAddress.invalidate();
+      await queryClient.invalidateQueries(getQueryKey(nextApi.userGetAllShippingAddress));
     } catch (error) {
       console.log(error);
     } finally {
@@ -119,7 +123,7 @@ export default function ProfileAddress() {
             <div
               key={i}
               className={classcat([
-                'h-77.5 lg:h-77 ',
+                'min-h-[theme(spacing[77.5])] lg:min-h-[theme(spacing[77])]',
                 'flex flex-col bg-secondary-200',
                 'rounded-[10px] border border-text-10',
               ])}
@@ -130,24 +134,27 @@ export default function ProfileAddress() {
                     className={classcat([
                       '[&_p]:max-w-[180px] [&_p]:md:max-w-full',
                       '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3 [&_span]:text-text-30',
-                      '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr] [&_li]:gap-[80px] [&_li]:lg:gap-[10px] [&_li]:xl:gap-[175px]',
+                      'grid gap-2',
+                      '[&_li]:flex [&_li]:items-start [&_li]:justify-between',
                     ])}
                   >
                     <li>
                       <span>Country Name:</span>
-                      <p className="w-38.25 text-right lg:text-left">
+                      <p className="line-clamp-5 w-33.25 text-right lg:w-38.25 lg:text-left">
                         {Country.getCountryByCode(item.country)?.name}
                       </p>
                     </li>
                     <li>
                       <span>State:</span>
-                      <p className="w-38.25 text-right lg:text-left">
+                      <p className="line-clamp-5 w-33.25 text-right lg:w-38.25 lg:text-left">
                         {State.getStateByCodeAndCountry(item.state, item.country)?.name}
                       </p>
                     </li>
                     <li>
                       <span>Street Address:</span>
-                      <p className="w-38.25 text-right lg:text-left">{item.street}</p>
+                      <p className="line-clamp-5 w-33.25 text-right lg:w-38.25 lg:text-left">
+                        {item.street}
+                      </p>
                     </li>
                   </ul>
                 </div>
@@ -172,7 +179,7 @@ export default function ProfileAddress() {
                   <button className="mr-4" onClick={() => _handleEditAddress(item.id)}>
                     <PenIcon width={15} height={15} />
                   </button>
-                  <button onClick={_handleDeleteAddress(item.id)}>
+                  <button onClick={() => _handleOpenDialog(item.id)}>
                     {loadingOfDelete && idSelected === item.id ? <LoadingIcon /> : <TrashCanIcon />}
                   </button>
                 </div>
@@ -181,10 +188,13 @@ export default function ProfileAddress() {
           ))}
         </div>
       </Show>
-
+      <Show when={data?.length === 0 && !type}>
+        <NoData />
+      </Show>
       <Show when={!!type}>
         <ModalAddress id={id} type={type} defaultData={itemSelected} />
       </Show>
+      <DialogConfirm />
     </div>
   );
 }

@@ -3,8 +3,10 @@
 import { z } from 'zod';
 import classcat from 'classcat';
 import { useRouter } from 'next/navigation';
+import { getQueryKey } from '@trpc/react-query';
 import { Country, State } from 'country-state-city';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { RouterOutputs, api, nextApi } from '_@landing/utils/api';
 import { ComponentPropsWithoutRef, useEffect, useState } from 'react';
@@ -50,7 +52,7 @@ const FormItemWithSchema = (
 export default function CreateEditAddress({ id, type, defaultData }: CreateEditAddress) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const utils = nextApi.useContext();
+  const queryClient = useQueryClient();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: defaultData
@@ -88,7 +90,7 @@ export default function CreateEditAddress({ id, type, defaultData }: CreateEditA
           id: Number(id),
         });
       }
-      await utils.userGetAllShippingAddress.invalidate();
+      await queryClient.invalidateQueries(getQueryKey(nextApi.userGetAllShippingAddress));
       router.push('/profile/address');
       toastAction.openToast(
         type === 'create' ? 'Create address successfully' : 'Update address successfully',

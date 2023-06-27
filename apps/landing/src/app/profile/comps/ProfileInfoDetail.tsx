@@ -1,6 +1,8 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
+import { nextApi } from '_@landing/utils/api';
+import { Country, State } from 'country-state-city';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //SHARED
 import PenIcon from '_@shared/icons/PenIcon';
@@ -14,6 +16,15 @@ const contentClasses = ['text-body3 text-text-50'];
 export default function ProfileInfoDetail() {
   const { user } = useAuthStore();
   const phone = `+${user?.profile?.phoneCode}${user?.profile?.phoneNumber}`;
+
+  const { data: [defaultDataAddress] = [] } = nextApi.userGetAllShippingAddress.useQuery(
+    undefined,
+    {
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+      select: (data) => data.filter((item) => item.isDefault),
+    },
+  );
 
   return (
     <section className="grid gap-6 md:grid-cols-[1fr_330px] md:px-6 md:pb-6">
@@ -36,33 +47,44 @@ export default function ProfileInfoDetail() {
           {user?.profile?.description || 'No description'}
         </p>
       </div>
-      <div className={classcat([boxClasses])}>
-        <h2 className={classcat([titleClasses, 'flex items-center justify-between'])}>
-          Shipping Information{' '}
-          <Link href="/profile/address" className="flex items-center text-sm text-primary">
-            Edit <PenIcon className="ml-2" />
-          </Link>
-        </h2>
-        <ul
-          className={classcat([
-            '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3  [&_span]:text-text-30',
-            '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr]',
-          ])}
-        >
-          <li>
-            <span>Country Name:</span>
-            <p className="text-right">United Arab Emirates</p>
-          </li>
-          <li>
-            <span>State:</span>
-            <p className="text-right">Abu Dabi</p>
-          </li>
-          <li>
-            <span>Street Address:</span>
-            <p className="text-right">9540 N. Marconi CourtDes Plaines, IL 60016</p>
-          </li>
-        </ul>
-      </div>
+      {defaultDataAddress ? (
+        <div className={classcat([boxClasses])}>
+          <h2 className={classcat([titleClasses, 'flex items-center justify-between'])}>
+            Shipping Information{' '}
+            <Link href="/profile/address" className="flex items-center text-sm text-primary">
+              Edit <PenIcon className="ml-2" />
+            </Link>
+          </h2>
+          <ul
+            className={classcat([
+              '[&_p]:text-body3 [&_p]:text-text-60 [&_span]:text-body3  [&_span]:text-text-30',
+              '[&_li:not(:last-child)]:mb-2 [&_li]:grid [&_li]:grid-cols-[108px_1fr]',
+            ])}
+          >
+            <li>
+              <span>Country Name:</span>
+              <p className="text-right">
+                {Country.getCountryByCode(defaultDataAddress.country)?.name}
+              </p>
+            </li>
+            <li>
+              <span>State:</span>
+              <p className="text-right">
+                {
+                  State.getStateByCodeAndCountry(
+                    defaultDataAddress.state,
+                    defaultDataAddress.country,
+                  )?.name
+                }
+              </p>
+            </li>
+            <li>
+              <span>Street Address:</span>
+              <p className="text-right">{defaultDataAddress.street}</p>
+            </li>
+          </ul>
+        </div>
+      ) : null}
     </section>
   );
 }
