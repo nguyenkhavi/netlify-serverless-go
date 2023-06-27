@@ -111,6 +111,13 @@ export async function getAllRawCollectionByCategory(
   return db.getAllFromIndex(dbOS.collection, dbIndex.collectionCategoryIndex, category);
 }
 
+export async function getAllRawCollectionByOwner(
+  db: IDBPDatabase,
+  owner: string,
+): Promise<ICollection[]> {
+  return db.getAllFromIndex(dbOS.collection, dbIndex.collectionOwnerIndex, owner);
+}
+
 export async function getDetailCollectionByAddress(
   db: IDBPDatabase,
   address: string,

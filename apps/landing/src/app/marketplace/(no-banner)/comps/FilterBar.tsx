@@ -104,7 +104,7 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           </button>
         </div>
       </Show>
-      <form onSubmit={onSubmit} className="ml-2 mt-6 flex grow md:mt-0 md:justify-end">
+      <form onSubmit={onSubmit} className="ml-0 mt-6 flex grow md:ml-2 md:mt-0 md:justify-end">
         <SearchInput
           {...register('k')}
           type="text"

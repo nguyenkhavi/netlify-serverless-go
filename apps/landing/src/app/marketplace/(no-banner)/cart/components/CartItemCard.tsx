@@ -41,7 +41,7 @@ export default function CartItemCard({ value, onClickRemove }: Props) {
         <div className="flex items-center justify-center xlg:justify-start">
           <p className="text-h5">
             <span className="text-body3 text-text-60 xlg:hidden">Volume</span>{' '}
-            {`${value.price} ${value.token.symbol}`}
+            {`${value.price} ${value.token?.symbol || ''}`}
           </p>
           <span className="ml-1.25 text-body3 text-text-60 xlg:text-subtitle2">${value.price}</span>
         </div>

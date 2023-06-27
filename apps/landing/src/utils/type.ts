@@ -5,7 +5,6 @@ import {
   getDetailCollectionByAddress,
   getItemByOwner,
   getTrendingCollectionsByCategory,
-  getTrendingMarketByCategory,
 } from '_@landing/services';
 
 export interface IMarketData {
@@ -215,8 +214,13 @@ export interface ICategory {
   description: string;
   image: string;
 }
-
-export type TItemCard = Awaited<ReturnType<typeof getTrendingMarketByCategory>>['data'][number];
+export type TItemCard = IMarketData & {
+  item: IItem;
+  token: IToken | undefined;
+  activities: IActivity[];
+  status: IMarketStatusData;
+  totalSale: number;
+};
 export type TItemStore = Awaited<ReturnType<typeof getItemByOwner>>['data'];
 export type TTopSeller = Awaited<ReturnType<typeof getBestSeller>>;
 export type TCollectionCard = Awaited<

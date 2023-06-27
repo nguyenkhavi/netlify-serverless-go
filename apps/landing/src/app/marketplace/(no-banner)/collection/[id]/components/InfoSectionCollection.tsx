@@ -56,7 +56,7 @@ export default function InfoSectionCollection() {
             <img
               className={classcat([
                 'rounded-full border-2 border-solid border-primary',
-                'h-30.5 w-30.5',
+                'h-30.5 w-30.5 object-cover',
               ])}
               src={data?.metadata.image || '/images/marketplace/collection.png'}
               alt=""

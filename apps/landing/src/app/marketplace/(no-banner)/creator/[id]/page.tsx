@@ -2,29 +2,23 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useSearchParams } from 'next/navigation';
-import { RouterOutputs, nextApi } from '_@landing/utils/api';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import FilterPrice from '_@landing/app/marketplace/comps/FilterPrice';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 //RELATIVE MODULES
-import ItemContent from './comps/ItemContent';
 import FilterBar from '../../comps/FilterBar';
+import ItemContent from './comps/ItemContent';
 import InfoSection from '../../comps/InfoSection';
 import CategoryContent from './comps/CategoryContent';
 
 export default function SellerPage({ params }: { params: { id: string } }) {
-  const { data: dataUser } = nextApi.getUserByWallet.useQuery(
-    { wallet: params.id },
-    { enabled: !!params.id },
-  );
   const queryParams = useSearchParams();
   const view = queryParams.get('view') || 'item';
-  if (!dataUser) return null;
-  if (dataUser.length === 0) return null;
+
   return (
     <>
-      <InfoSection data={dataUser[0] as RouterOutputs['myProfile']['profile']} />
+      <InfoSection userWalletId={params.id} />
       <FilterBar />
 
       <div className="flex px-[--px] py-6 xlg:pb-24 xlg:pt-8">
@@ -39,11 +33,15 @@ export default function SellerPage({ params }: { params: { id: string } }) {
         </Show>
         <div
           className={classcat([
-            'relative grid h-max grow gap-6.25',
+            'relative grid h-max grow gap-10',
             view === 'item' ? 'xlg:ml-8' : '',
           ])}
         >
-          {view === 'item' ? <ItemContent userWalletId={params.id} /> : <CategoryContent />}
+          {view === 'item' ? (
+            <ItemContent userWalletId={params.id} />
+          ) : (
+            <CategoryContent userWalletId={params.id} />
+          )}
         </div>
       </div>
     </>

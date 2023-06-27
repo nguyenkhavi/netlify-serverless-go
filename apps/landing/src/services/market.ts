@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import Decimal from 'decimal.js';
 import { IDBPDatabase } from 'idb';
+import { queryItemFactory } from '_@landing/utils/queryFactory';
 import { Chains, dbIndex, dbOS } from '_@landing/utils/constants';
 import {
   ActivityType,
@@ -14,9 +15,9 @@ import {
 //RELATIVE MODULES
 import { getItemById } from './item';
 import { getCategoryById } from './category';
-import { getCollectionByContract } from './collection';
 import { getAllToken, getTokenByAddress } from './token';
 import { getAllActivitiesByItem, getAllBuyActivities } from './activity';
+import { getAllRawCollectionByOwner, getCollectionByContract } from './collection';
 export async function addMarket(db: IDBPDatabase, data: IMarketData) {
   try {
     await db.add(dbOS.market, data);
@@ -25,46 +26,50 @@ export async function addMarket(db: IDBPDatabase, data: IMarketData) {
   }
 }
 
-export async function getTrendingMarketByCategory(
-  db: IDBPDatabase,
-  category: number,
-  paging: IPaging,
-  sort?: ISorting,
-) {
-  const availableMarket = await getAllAvailableMarketByCategory(db, category);
-  const markets = await Promise.all(
-    availableMarket.map(async (mk) => {
-      const activities = (await getAllActivitiesByItem(db, mk.itemId)).filter((activity) => {
-        return activity.type == ActivityType.BUY;
-      });
-      const token = await getTokenByAddress(db, mk.currency);
-      const item = await getItemById(db, mk.itemId);
+export async function generateStandardMarketAvailable(db: IDBPDatabase, dataMarket: IMarketData[]) {
+  const tokenHashMap: Map<string, IToken> = new Map();
+  const token = await getAllToken(db);
+  token.map((tokenItem) => tokenHashMap.set(tokenItem.address, tokenItem));
+
+  const marketStatus = Promise.all(
+    dataMarket.map(async (mk) => {
+      const status = await getMarketStatusByListingId(db, mk.listingId);
       return {
         ...mk,
-        item,
+        status,
+      };
+    }),
+  );
+  const availableMarket = (await marketStatus).filter((mk) => mk.status?.isAvailable === 1);
+
+  return Promise.all(
+    availableMarket.map(async (item) => {
+      const activities = (await getAllActivitiesByItem(db, item.itemId)).filter(
+        (activity) => activity.type == ActivityType.BUY,
+      );
+      const itemDetail = await getItemById(db, item.itemId);
+
+      return {
+        ...item,
+        token: tokenHashMap.get(item.currency),
+        item: itemDetail,
         activities,
-        token,
         totalSale: activities.length,
       };
     }),
   );
-  return {
-    data: markets
-      .sort((marketA, marketB) => {
-        if (sort?.price == 'asc') {
-          return marketA.price - marketB.price;
-        } else if (sort?.price == 'desc') {
-          return marketB.price - marketA.price;
-        } else if (sort?.releaseDate == 'asc') {
-          return marketA.startTime - marketB.startTime;
-        } else if (sort?.releaseDate == 'desc') {
-          return marketB.startTime - marketA.startTime;
-        }
-        return marketB.totalSale - marketA.totalSale;
-      })
-      .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
-    total: markets.length,
-  };
+}
+
+export async function getTrendingMarketByCategory(
+  db: IDBPDatabase,
+  category: number,
+  query: IPaging & ISorting & IFilter,
+) {
+  const availableMarket = await getAllAvailableMarketByCategory(db, category);
+  const markets = await generateStandardMarketAvailable(db, availableMarket);
+
+  const { data, total } = queryItemFactory(markets, query);
+  return { data, total };
 }
 
 export async function updateMarket(db: IDBPDatabase, data: IMarketStatusData) {
@@ -219,59 +224,65 @@ export async function getItemMarketByCollection(
   address: string,
   query: IPaging & ISorting & IFilter,
 ) {
-  const { search, page, pageSize, price, releaseDate, minPrice, maxPrice } = query;
-  const tokenHashMap: Map<string, IToken> = new Map();
-  const items: IMarketData[] = await db.getAll(dbOS.market);
-  const token = await getAllToken(db);
-  token.map((tokenItem) => tokenHashMap.set(tokenItem.address, tokenItem));
-
-  const itemFilterByCollection = (
-    await Promise.all(
-      items.map(async (item) => {
-        const activities = (await getAllActivitiesByItem(db, item.itemId)).filter(
-          (activity) => activity.type == ActivityType.BUY,
-        );
-        const itemDetail = await getItemById(db, item.itemId);
-
-        return {
-          ...item,
-          token: tokenHashMap.get(item.currency),
-          item: itemDetail,
-          activities,
-          totalSale: activities.length,
-        };
-      }),
-    )
-  ).filter((item) => {
-    if (item.item.address !== address) return false;
-    if (search && !item.item.name.toLowerCase().includes(search.toLowerCase())) return false;
-    if (minPrice && maxPrice) {
-      if (item.price < minPrice || item.price > maxPrice) return false;
-    }
-    if (minPrice && !maxPrice) {
-      if (item.price < minPrice) return false;
-    }
-    if (!minPrice && maxPrice) {
-      if (item.price > maxPrice) return false;
-    }
-    return true;
-  });
+  const marketByCollection: IMarketData[] = await getMarketsByCollection(db, address);
+  const itemFilterByCollection = await generateStandardMarketAvailable(db, marketByCollection);
+  const { data, total } = queryItemFactory(itemFilterByCollection, query);
 
   return {
-    data: itemFilterByCollection
-      .sort((marketA, marketB) => {
-        if (price == 'asc') {
-          return marketA.price - marketB.price;
-        } else if (price == 'desc') {
-          return marketB.price - marketA.price;
-        } else if (releaseDate == 'asc') {
-          return marketA.startTime - marketB.startTime;
-        } else if (releaseDate == 'desc') {
-          return marketB.startTime - marketA.startTime;
-        }
-        return marketB.totalSale - marketA.totalSale;
-      })
-      .slice(page * pageSize, (page + 1) * pageSize),
-    total: itemFilterByCollection.length,
+    data: data,
+    total: total,
+  };
+}
+
+export async function getCategoryByUser(
+  db: IDBPDatabase,
+  owner: string,
+  query: IPaging & ISorting & IFilter,
+) {
+  const { search, page, pageSize } = query;
+
+  const collections = await getAllRawCollectionByOwner(db, owner);
+  const categoryIds: number[] = Array.from(
+    new Set(collections.map((collection) => collection.category)),
+  );
+
+  let categories = await Promise.all(
+    categoryIds.map(async (id) => {
+      const category = await getCategoryById(db, id);
+      return category;
+    }),
+  );
+
+  if (search) {
+    categories = categories.filter((category) =>
+      category.name.toLowerCase().includes(search.toLowerCase()),
+    );
+  }
+
+  return {
+    data: categories.slice(page * pageSize, (page + 1) * pageSize),
+    total: categoryIds.length,
+  };
+}
+
+export async function getRawMarketItemByOwner(
+  db: IDBPDatabase,
+  owner: string,
+): Promise<IMarketData[]> {
+  return db.getAllFromIndex(dbOS.market, dbIndex.marketCreatorIndex, owner);
+}
+
+export async function getMarketItemByOwner(
+  db: IDBPDatabase,
+  owner: string,
+  query: IPaging & ISorting & IFilter,
+) {
+  const marketByOwner = await getRawMarketItemByOwner(db, owner);
+  const marketFilterByCollection = await generateStandardMarketAvailable(db, marketByOwner);
+  const { data, total } = queryItemFactory(marketFilterByCollection, query);
+
+  return {
+    data: data,
+    total: total,
   };
 }

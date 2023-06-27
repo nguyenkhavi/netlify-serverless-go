@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import { TTopSeller } from '_@landing/utils/type';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 //HOOK
 import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
 
@@ -20,7 +21,7 @@ export default function SellerCard({ value, view, ...props }: SellerCardProps) {
 }
 
 function ViewFull({ value, owner, showName, ...props }: SellerCardProps) {
-  const avatar = owner?.avatarUrl || '/images/profile/avatar-default.webp';
+  const avatar = urlWithIpfs(owner?.avatarUrl || '/images/profile/avatar-default.webp');
   return (
     <Link href={'/marketplace/creator/' + value.seller} {...props}>
       <div className="aspect-square overflow-hidden rounded-[10px]">
@@ -32,7 +33,7 @@ function ViewFull({ value, owner, showName, ...props }: SellerCardProps) {
 }
 
 function ViewBox({ value, owner, showName, ...props }: SellerCardProps) {
-  const avatar = owner?.avatarUrl || '/images/profile/avatar-default.webp';
+  const avatar = urlWithIpfs(owner?.avatarUrl || '/images/profile/avatar-default.webp');
 
   return (
     <Link

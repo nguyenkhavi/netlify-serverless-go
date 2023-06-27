@@ -1,20 +1,21 @@
 'use client';
 //THIRD PARTY MODULES
-import Link from 'next/link';
-import classcat from 'classcat';
-import { useMemo, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import useAuthStore, { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
+import Link from 'next/link'
+import classcat from 'classcat'
+import { useMemo, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import urlWithIpfs from '_@landing/utils/urlWithIpfs'
+import useAuthStore, { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore'
 //LAYOUT, COMPONENTS
-import Show from '_@shared/components/Show';
-import Button from '_@shared/components/Button';
-import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
+import Show from '_@shared/components/Show'
+import Button from '_@shared/components/Button'
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover'
 //SHARED
-import MenuIcon from '_@shared/icons/MenuIcon';
-import CartIcon from '_@shared/icons/CartIcon';
-import WalletIcon from '_@shared/icons/WalletIcon';
-import MenuCloseIcon from '_@shared/icons/MenuCloseIcon';
-import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
+import MenuIcon from '_@shared/icons/MenuIcon'
+import CartIcon from '_@shared/icons/CartIcon'
+import WalletIcon from '_@shared/icons/WalletIcon'
+import MenuCloseIcon from '_@shared/icons/MenuCloseIcon'
+import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon'
 
 export default function Header() {
   const { user } = useAuthStore();
@@ -125,7 +126,9 @@ export default function Header() {
             <PopoverTrigger>
               <div className="h-10 w-10 overflow-auto rounded-full">
                 <img
-                  src="/images/profile/avatar.png"
+                  src={urlWithIpfs(
+                    user?.profile.avatarUrl || '/images/profile/avatar-default.webp',
+                  )}
                   alt=""
                   className="h-full w-full object-cover"
                 />

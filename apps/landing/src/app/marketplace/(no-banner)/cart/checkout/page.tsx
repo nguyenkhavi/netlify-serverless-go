@@ -5,9 +5,9 @@ import classcat from 'classcat';
 import Decimal from 'decimal.js';
 import { useSearchParams } from 'next/navigation';
 import { Root } from '@radix-ui/react-radio-group';
+import { TDataCheckout } from '_@landing/utils/type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
-import { TDataCheckout, TItemCard } from '_@landing/utils/type';
 import { getMarketDetailByListingId } from '_@landing/services';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -57,7 +57,7 @@ export default function CheckOutPage() {
 
   const currency = useMemo(() => {
     if (data.length === 0) return '';
-    return data[0].token.symbol;
+    return data[0].token?.symbol || '';
   }, [data]);
 
   const _getItemDetailByListingId = useCallback(async () => {

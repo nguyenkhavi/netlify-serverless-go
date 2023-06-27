@@ -17,7 +17,7 @@ import getMyProfileOnServer from '_@landing/server/auth';
 import './globals.css';
 import ThirdwebProvider from './provider/ThirdwebProvider';
 import IndexedDBProvider from './provider/IndexedDBProvider';
-import ConnectWalletProvider from './provider/ConnectWalletProvider';
+// import ConnectWalletProvider from './provider/ConnectWalletProvider';
 
 export const metadata: Metadata = {
   title: 'Fleamint',

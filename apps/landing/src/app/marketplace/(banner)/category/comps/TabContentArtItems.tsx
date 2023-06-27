@@ -35,7 +35,7 @@ export default function TabContentArtItems({ view, categoryId }: IPropsComp) {
       page: page - 1,
       pageSize: pageSize,
     }).then((res) => {
-      setData(res.data as TItemCard[]);
+      setData(res.data);
       setTotalItems(res.total);
     });
   }, [categoryId, db, page]);

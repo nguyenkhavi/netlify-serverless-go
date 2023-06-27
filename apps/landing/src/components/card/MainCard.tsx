@@ -46,7 +46,9 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
       >
         {value.item ? value.item.name : '-'}
       </Link>
-      <span className="mt-2 text-body3 text-text-80">{`${value.price} ${value.token.symbol}`}</span>
+      <span className="mt-2 text-body3 text-text-80">{`${value.price} ${
+        value.token?.symbol || ''
+      }`}</span>
       {!user || user.profile.wallet !== value.item.owner ? (
         <div className="mt-4 flex">
           <Button
@@ -110,7 +112,7 @@ function ListView({ value, ...props }: MainCardProps) {
           {value.item ? value.item.metadata.description : ''}
         </p>
         <div className="mt-1 flex items-center justify-center text-h6 text-text-100 md:justify-start md:text-h5">
-          <span>{`${value.price} ${value.token.symbol}`}</span>
+          <span>{`${value.price} ${value.token?.symbol || ''}`}</span>
           <span className="ml-1.25 text-subtitle2 text-text-50">{`$${value.price}`}</span>
         </div>
         <p className="mt-1 text-subtitle2 text-primary">By {owner}</p>
