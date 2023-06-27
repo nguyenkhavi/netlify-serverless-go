@@ -161,5 +161,6 @@
     "os": false,
     "net": false,
     "tls": false
-  }
+  },
+  "packageManager": "pnpm@8.5.1"
 }
