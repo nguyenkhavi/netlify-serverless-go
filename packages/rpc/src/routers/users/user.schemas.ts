@@ -134,3 +134,10 @@ export const getPublicProfileSchema = z.object({
 });
 
 export type GetPublicProfileInput = z.infer<typeof getPublicProfileSchema>;
+
+export const closeAccountRequestSchema = z.object({
+  tellUs: z.string(),
+  tellUsMore: z.string().optional(),
+});
+
+export type CloseAccountRequestInput = z.infer<typeof closeAccountRequestSchema>;

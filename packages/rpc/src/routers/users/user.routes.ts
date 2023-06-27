@@ -12,6 +12,7 @@ import {
   createSuggestionSchema,
   userWallets,
   getPublicProfileSchema,
+  closeAccountRequestSchema,
 } from '_@rpc/routers/users/user.schemas';
 
 import {
@@ -29,6 +30,7 @@ import {
   getUsersInFleamint,
   getPublicProfile,
   userGetAllShippingAddress,
+  closeAccount,
 } from '_@rpc/routers/users/user.services';
 
 import { getQuery } from '_@rpc/config';
@@ -93,6 +95,9 @@ export const userRouters = router({
   getPublicProfile: publicProcedure
     .input(getPublicProfileSchema)
     .query(({ input }) => getPublicProfile(input)),
+  closeAccount: protectedRouter
+    .input(closeAccountRequestSchema)
+    .mutation(({ ctx, input }) => closeAccount(ctx.profile, input)),
 });
 
 export type UserRouter = typeof userRouters;

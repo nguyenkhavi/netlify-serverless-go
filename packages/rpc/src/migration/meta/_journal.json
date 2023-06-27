@@ -22,6 +22,20 @@
       "when": 1687838565729,
       "tag": "0002_lethal_magneto",
       "breakpoints": false
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1687856194884,
+      "tag": "0003_young_steel_serpent",
+      "breakpoints": false
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1687860844068,
+      "tag": "0004_aberrant_sue_storm",
+      "breakpoints": false
     }
   ]
 }

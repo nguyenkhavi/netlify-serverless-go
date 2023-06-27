@@ -8,11 +8,21 @@ import {
   CreateSuggestionInput,
   TUserWallets,
   GetPublicProfileInput,
+  CloseAccountRequestInput,
 } from './user.schemas';
 import { obtainOauthAccessToken } from '_@rpc/services/twitter';
 import { queryIGUserNode } from '_@rpc/services/instagram';
 
-import { addressTable, db, userActivityTable, userProfileTable } from '_@rpc/services/drizzle';
+import {
+  addressTable,
+  closeAccountRequestTable,
+  db,
+  searchHistory,
+  session,
+  userActivityTable,
+  userPostTable,
+  userProfileTable,
+} from '_@rpc/services/drizzle';
 import { and, eq, inArray } from 'drizzle-orm';
 import { TProfile } from '_@rpc/drizzle/userProfile';
 import { verifyInquiryId } from '_@rpc/services';
@@ -22,6 +32,11 @@ import { TRPCError } from '@trpc/server';
 import { getLocationDetail } from '_@rpc/services/ip2location/ip2location';
 import { RequestClient } from '_@rpc/config';
 import { ActivityAction } from '_@rpc/drizzle/enum';
+
+const hasPendingTransaction = (profile: TProfile) => {
+  // TODO: implement later
+  return false;
+};
 
 export const connectInstagram = async (input: TConnectIG, uid: string) => {
   const instagramUser = await queryIGUserNode(input.code);
@@ -240,4 +255,26 @@ export const getPublicProfile = async (input: GetPublicProfileInput) => {
   }
   const userProfile = userProfiles[0];
   return { data: userProfile };
+};
+
+export const closeAccount = (profile: TProfile, input: CloseAccountRequestInput) => {
+  if (hasPendingTransaction(profile)) {
+    throw new TRPCError({
+      code: 'PRECONDITION_FAILED',
+      message: 'Account is having pending transactions!',
+    });
+  }
+  return db.transaction(async (tx) => {
+    await tx.insert(closeAccountRequestTable).values({
+      wallet: profile.wallet,
+      tellUs: input.tellUs,
+      tellUsMore: input.tellUsMore,
+    });
+    await tx.delete(userProfileTable).where(eq(userProfileTable.userId, profile.userId));
+    await tx.delete(session).where(eq(session.iss, profile.userId));
+    await tx.delete(userActivityTable).where(eq(userActivityTable.userId, profile.userId));
+    await tx.delete(userPostTable).where(eq(userPostTable.userId, profile.userId));
+    await tx.delete(searchHistory).where(eq(searchHistory.userId, profile.userId));
+    await tx.delete(addressTable).where(eq(addressTable.userId, profile.userId));
+  });
 };
