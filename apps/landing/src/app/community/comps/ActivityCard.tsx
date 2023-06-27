@@ -21,8 +21,9 @@ export type ActivityType = FlatActivityEnriched<StreamType>;
 
 type ActivityProps = {
   activity: ActivityType;
+  className?: string;
 };
-export default function ActivityCard({ activity }: ActivityProps) {
+export default function ActivityCard({ activity, className }: ActivityProps) {
   const { client } = useGetFeedUser();
   const clientId = client?.userId;
   const [openComment, setOpenComment] = useState(false);
@@ -79,7 +80,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
   }, [getComments, getLikes]);
 
   return (
-    <div className={classcat(['rounded-[10px] bg-secondary-200 p-6'])}>
+    <div className={classcat(['rounded-[10px] bg-secondary-200 p-6', className])}>
       <div className="grid grid-flow-col justify-start gap-2.5">
         <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div>

@@ -2,7 +2,7 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
-import useAuthStore from '_@landing/stores/auth/useAuthStore';
+import { nextApi } from '_@landing/utils/api';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
@@ -14,16 +14,16 @@ import ActivityCard, { ActivityType } from '../comps/ActivityCard';
 
 export default function ProfilePage() {
   const { client } = useGetFeedUser();
-  const { user } = useAuthStore();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const type = searchParams.get('type') || 'post';
   const [activities, setActivities] = useState<ActivityType[]>([]);
-  const [followerNumbers, setFollowerNumbers] = useState(0);
-  const [followingNumbers, setFollowingNumbers] = useState(0);
 
-  const timelineFeed = useMemo(() => client?.feed('timeline'), [client]);
+  // const timelineFeed = useMemo(() => client?.feed('timeline'), [client]);
   const userFeed = useMemo(() => client?.feed('user'), [client]);
+  const { data: userInfo } = nextApi.getGetstreamUserInfo.useQuery({
+    targetGetstreamId: client?.userId || '',
+  });
 
   const getPost = useCallback(() => {
     if (!userFeed) return;
@@ -43,50 +43,36 @@ export default function ProfilePage() {
     console.log('Get collection');
   }, []);
 
-  const getFollowers = useCallback(async () => {
-    const result = await userFeed?.followers();
-    setFollowerNumbers(result?.results.length || 0);
-  }, [userFeed]);
-  const getFollowings = useCallback(async () => {
-    const result = await userFeed?.following();
-    setFollowingNumbers(result?.results.length || 0);
-  }, [userFeed]);
-
   useEffect(() => {
     if (type === 'post') getPost();
     if (type === 'likes') getLikes();
     if (type === 'collection') getCollection();
   }, [getCollection, getLikes, getPost, type]);
 
-  useEffect(() => {
-    getFollowers();
-    getFollowings();
-  }, [getFollowers, getFollowings]);
-
   return (
     <div>
       <section className="relative mb-6.25 rounded-lg bg-secondary-300 lg:mb-6">
         <img
           className="relative z-[1] h-20 w-full object-cover lg:h-23.75"
-          src={user?.profile.coverUrl || '/images/profile/cover.jpeg'}
+          src={userInfo?.coverUrl || '/images/profile/cover.jpeg'}
           alt=""
         />
         <img
           className="absolute left-1/2 top-12.5 z-[1] h-15 w-15 -translate-x-1/2 rounded-full object-cover lg:left-6 lg:top-11.25 lg:h-25 lg:w-25 lg:translate-x-0"
-          src={user?.profile.avatarUrl || '/images/profile/avatar-default.webp'}
+          src={userInfo?.avatarUrl || '/images/profile/avatar-default.webp'}
           alt=""
         />
         <div className="px-6 pb-14 pt-11.5 text-center lg:pb-23.25 lg:pl-33.5 lg:pt-4 lg:text-left">
           <p className="mb-2 text-base font-medium lg:text-xl lg:font-bold">
-            @{user?.profile.username}
+            @{userInfo?.username}
           </p>
-          <p className="mb-2 text-sm text-text-30 lg:text-base">{user?.profile.description}</p>
+          <p className="mb-2 text-sm text-text-30 lg:text-base">{userInfo?.aboutMe}</p>
           <div className="flex justify-center lg:justify-start">
             <p className="mr-4 text-sm font-semibold">
-              {followerNumbers} <span className="text-text-30">Followers</span>
+              {userInfo?.followerNumber} <span className="text-text-30">Followers</span>
             </p>
             <p className="text-sm font-semibold">
-              {followingNumbers} <span className="text-text-30">Following</span>
+              {userInfo?.followingNumber} <span className="text-text-30">Following</span>
             </p>
           </div>
         </div>
