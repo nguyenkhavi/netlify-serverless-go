@@ -100,8 +100,8 @@ export const useAuthStoreAction = () => {
   const _handleLogout = async () => {
     if (!magicClient) return;
     try {
-      await magicClient.user.logout();
-      await logoutFn();
+      await magicClient.user.logout().catch(() => {});
+      await logoutFn().catch(() => {});
       cookieHandler.remove('session');
       router.replace('/auth/sign-in');
     } finally {

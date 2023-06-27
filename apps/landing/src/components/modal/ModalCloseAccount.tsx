@@ -1,8 +1,10 @@
 'use client';
 //THIRD PARTY MODULES
 import { z } from 'zod';
+import { nextApi } from '_@landing/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
@@ -12,6 +14,7 @@ import FormRadioGroup from '_@shared/components/radio/FormRadioGroup';
 import { Dialog, DialogContent } from '_@shared/components/dialog/BaseDialog';
 //SHARED
 import InfoIcon from '_@shared/icons/InfoIcon';
+import { toastAction } from '_@shared/stores/toast/toastStore';
 
 const schema = z.object({
   reason: z.string().nonempty('This field is required'),
@@ -28,6 +31,9 @@ export default function ModalCloseAccount({
   open: boolean;
   setOpen: (open: boolean) => void;
 }) {
+  const { logout } = useAuthStoreAction();
+  const { mutateAsync: closeAccount, isLoading: isCloseAccountLoading } =
+    nextApi.closeAccount.useMutation();
   const methods = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: { reason: '', content: '', isAccept: true },
@@ -35,8 +41,17 @@ export default function ModalCloseAccount({
 
   const { handleSubmit } = methods;
 
-  const onSubmit = (values: FormValues) => {
-    console.log(values);
+  const onSubmit = async (values: FormValues) => {
+    try {
+      await closeAccount({
+        tellUs: OPTIONS.find((item) => item.value === values.reason)?.label || '',
+        tellUsMore: values.content,
+      });
+      logout();
+    } catch (err) {
+      console.log(err);
+      toastAction.openToast('Something went wrong, please try again later', 'error');
+    }
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -75,7 +90,13 @@ export default function ModalCloseAccount({
               <Button className="btnsm mr-3 w-max" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button className="btnsm w-max" color="error" variant="outlined" type="submit">
+              <Button
+                isLoading={isCloseAccountLoading}
+                className="btnsm w-max"
+                color="error"
+                variant="outlined"
+                type="submit"
+              >
                 Deactivate
               </Button>
             </div>
