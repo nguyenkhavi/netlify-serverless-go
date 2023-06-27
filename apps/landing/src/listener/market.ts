@@ -14,7 +14,7 @@ import {
   INewListingEventData,
 } from '_@landing/utils/type';
 //RELATIVE MODULES
-import { addActivity, addMarket, updateMarket } from '../services';
+import { addActivity, addMarket, updateMarketStatus, updateMarket } from '../services';
 
 export async function handleListing(
   db: IDBPDatabase,
@@ -38,7 +38,7 @@ export async function handleListing(
   };
   await addMarket(db, data);
 
-  await updateMarket(db, {
+  await updateMarketStatus(db, {
     listingId: event.data.listingId.toNumber(),
     isAvailable: 1,
     isCanceled: 0,
@@ -70,12 +70,6 @@ export async function handleCancelListing(
   event: ContractEvent<ICancelListingEventData>,
 ) {
   const listing = await getListingData(marketContract, chain, event.data.listingId.toNumber());
-  await updateMarket(db, {
-    listingId: event.data.listingId.toNumber(),
-    isAvailable: 0,
-    isCanceled: 1,
-    isBought: 0,
-  });
 
   const activity: IActivity = {
     type: ActivityType.CANCELED_LISTING,
@@ -93,7 +87,15 @@ export async function handleCancelListing(
     toAddress: constants.AddressZero,
     chain: chain.chainId,
   };
-  await addActivity(db, activity);
+  await Promise.all([
+    addActivity(db, activity),
+    updateMarketStatus(db, {
+      listingId: event.data.listingId.toNumber(),
+      isAvailable: 0,
+      isCanceled: 1,
+      isBought: 0,
+    }),
+  ]);
 }
 export async function handleBuy(
   marketContract: SmartContract,
@@ -102,12 +104,6 @@ export async function handleBuy(
   event: ContractEvent<INewBuyEventData>,
 ) {
   const listing = await getListingData(marketContract, chain, event.data.listingId.toNumber());
-  await updateMarket(db, {
-    listingId: event.data.listingId.toNumber(),
-    isAvailable: 0,
-    isCanceled: 0,
-    isBought: 1,
-  });
 
   const activity: IActivity = {
     type: ActivityType.BUY,
@@ -125,7 +121,15 @@ export async function handleBuy(
     toAddress: listing.creatorAddress,
     chain: chain.chainId,
   };
-  await addActivity(db, activity);
+  await Promise.all([
+    addActivity(db, activity),
+    updateMarketStatus(db, {
+      listingId: event.data.listingId.toNumber(),
+      isAvailable: 0,
+      isCanceled: 0,
+      isBought: 1,
+    }),
+  ]);
 }
 
 // TODO: handleBidding, handleCancelBiding, handleAcceptBiding, handleCancelAuction, handleNewAuction
@@ -159,4 +163,46 @@ export async function getListingData(
   }
 
   return retrieveData(marketContract);
+}
+
+export async function handleUpdateListing(
+  marketContract: SmartContract,
+  db: IDBPDatabase,
+  chain: IChain,
+  event: ContractEvent<INewListingEventData>,
+) {
+  const listing = await getListingData(marketContract, chain, event.data.listingId.toNumber());
+  const data: IMarketData = {
+    listingId: event.data.listingId.toNumber(),
+    assetContract: event.data.assetContract,
+    tokenId: event.data.listing.tokenId.toNumber(),
+    listingCreator: event.data.listingCreator,
+    itemId: event.data.assetContract + '_' + event.data.listing.tokenId.toNumber(),
+    blockNumber: event.transaction.blockNumber,
+    price: formatBigNumberToNumberWithDecimal(event.data.listing.pricePerToken, 18),
+    currency: event.data.listing.currency,
+    quantity: event.data.listing.quantity.toNumber(),
+    startTime: event.data.listing.startTimestamp.toNumber(),
+    endTime: event.data.listing.endTimestamp.toNumber(),
+    tokenType: event.data.listing.tokenType,
+    chain: chain.chainId,
+  };
+
+  const activity: IActivity = {
+    type: ActivityType.UPDATE_LISTING,
+    transactionHash: event.transaction.transactionHash,
+    transactionIndex: event.transaction.transactionIndex,
+    blockNumber: event.transaction.blockNumber,
+    assetContract: listing.assetContractAddress,
+    itemId: listing.assetContractAddress + '_' + listing.tokenId,
+    tokenId: Number(listing.tokenId),
+    listingId: event.data.listingId.toNumber(),
+    price: formatBigNumberToNumberWithDecimal(BigNumber.from(listing.pricePerToken), 18),
+    currency: listing.currencyContractAddress,
+    quantity: 0,
+    fromAddress: event.data.listingCreator,
+    toAddress: constants.AddressZero,
+    chain: chain.chainId,
+  };
+  await Promise.all([addActivity(db, activity), updateMarket(db, data)]);
 }

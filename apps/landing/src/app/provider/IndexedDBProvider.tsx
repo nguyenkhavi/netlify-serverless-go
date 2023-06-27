@@ -12,10 +12,15 @@ import { handleNewCollections } from '_@landing/listener/collection';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAllCategories, insertSeedCategoryData } from '_@landing/services/category';
 import { ContractEvent, SmartContract, useSDK, useSDKChainId } from '@thirdweb-dev/react';
-import { handleBuy, handleCancelListing, handleListing } from '_@landing/listener/market';
 import { getCollectionsEvents, getFactoryEvents, getMarketEvents } from '_@landing/listener';
 import { getAllCollectionByChain, getBestSeller, updateLastBlock } from '_@landing/services';
 import { Chains, ContractEventNames, dbIndex, dbOS, parseJson } from '_@landing/utils/constants';
+import {
+  handleBuy,
+  handleCancelListing,
+  handleListing,
+  handleUpdateListing,
+} from '_@landing/listener/market';
 import {
   ICancelListingEventData,
   ICategory,
@@ -197,6 +202,13 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
           chain,
           event as ContractEvent<ICancelListingEventData>,
         );
+      } else if (event.eventName === ContractEventNames.updateListing) {
+        handleUpdateListing(
+          contracts.market,
+          db,
+          chain,
+          event as ContractEvent<INewListingEventData>,
+        );
       }
       updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
     });
@@ -249,11 +261,15 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
     if (isReturn) return;
     (async () => {
       setIsLoading(true);
-      await Promise.all([
-        getCollectionsEvents(sdk, db, chain),
-        getMarketEvents(contracts.market, sdk, db, chain),
-        getFactoryEvents(contracts.factory, sdk, db, chain, getUsersInFleamint),
-      ]);
+      try {
+        await Promise.all([
+          getCollectionsEvents(sdk, db, chain),
+          getMarketEvents(contracts.market, sdk, db, chain),
+          getFactoryEvents(contracts.factory, sdk, db, chain, getUsersInFleamint),
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
     })();
     setIsLoading(false);
 

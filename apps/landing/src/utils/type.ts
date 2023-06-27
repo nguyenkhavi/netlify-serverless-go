@@ -85,6 +85,7 @@ export enum ActivityType {
   CANCELED_LISTING,
   MINT,
   TRANSFER,
+  UPDATE_LISTING,
 }
 
 export interface IActivity {

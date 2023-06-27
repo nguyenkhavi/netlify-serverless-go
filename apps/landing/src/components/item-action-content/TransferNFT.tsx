@@ -2,13 +2,21 @@
 //THIRD PARTY MODULES
 import { z } from 'zod';
 import classcat from 'classcat';
+import NFTABI from '_@landing/utils/NFTABI';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { useSDK, useSigner } from '@thirdweb-dev/react';
+import { useTransferNFT, useContract } from '@thirdweb-dev/react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { dialogMyItemCardStore } from '_@landing/stores/dialogStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
+//SHARED
+import { toastAction } from '_@shared/stores/toast/toastStore';
+//RELATIVE MODULES
+import { NFTDataProps } from './type';
 
 const schema = z.object({
   isTransfer: z.boolean(),
@@ -16,9 +24,14 @@ const schema = z.object({
 });
 type FormValues = z.infer<typeof schema>;
 
-export default function TransferNFT() {
+export default function TransferNFT({ assetContract, tokenId }: NFTDataProps) {
+  const queryClient = useQueryClient();
   const { hideDialog } = dialogMyItemCardStore();
+  const sdk = useSDK();
+  const { contract } = useContract(assetContract, 'nft-collection');
+  const { mutateAsync: transfer, isLoading } = useTransferNFT(contract);
 
+  const signer = useSigner();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -28,8 +41,11 @@ export default function TransferNFT() {
   });
   const { handleSubmit, control, watch } = form;
 
-  const _onsubmit = (values: FormValues) => {
-    console.log(values);
+  const _onsubmit = async (values: FormValues) => {
+    if (!sdk || !signer || !assetContract || tokenId == undefined || !transfer) return;
+    await transfer({ to: values.walletId, tokenId });
+    queryClient.invalidateQueries(['getItemByOwner']);
+    toastAction.openToast('Transfer NFT success', 'success');
     hideDialog();
   };
 
@@ -73,7 +89,7 @@ export default function TransferNFT() {
           <FormInput placeholder="Please enter wallet address" className="input-md" />
         </FormItem>
         <div className="mt-10 flex justify-end">
-          <Button className="btnmd ow:w-34.5" type="submit">
+          <Button isLoading={isLoading} className="btnmd ow:w-34.5" type="submit">
             Transfer
           </Button>
         </div>

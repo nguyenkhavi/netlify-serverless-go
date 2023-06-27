@@ -1,8 +1,8 @@
 //THIRD PARTY MODULES
-import Decimal from 'decimal.js'
-import { IDBPDatabase } from 'idb'
-import { queryItemFactory } from '_@landing/utils/queryFactory'
-import { Chains, dbIndex, dbOS } from '_@landing/utils/constants'
+import Decimal from 'decimal.js';
+import { IDBPDatabase } from 'idb';
+import { queryItemFactory } from '_@landing/utils/queryFactory';
+import { Chains, dbIndex, dbOS } from '_@landing/utils/constants';
 import {
   ActivityType,
   IAttribute,
@@ -25,6 +25,13 @@ export async function addMarket(db: IDBPDatabase, data: IMarketData) {
     await db.add(dbOS.market, data);
   } catch (e) {
     console.log('market ignore duplicate data', { data });
+  }
+}
+export async function updateMarket(db: IDBPDatabase, data: IMarketData) {
+  try {
+    await db.put(dbOS.market, data);
+  } catch (e) {
+    console.log('ignore duplicate data');
   }
 }
 
@@ -74,7 +81,7 @@ export async function getTrendingMarketByCategory(
   return { data, total };
 }
 
-export async function updateMarket(db: IDBPDatabase, data: IMarketStatusData) {
+export async function updateMarketStatus(db: IDBPDatabase, data: IMarketStatusData) {
   await db.put(dbOS.marketStatus, data);
 }
 
@@ -147,13 +154,15 @@ export async function getAllRawMarketsByItem(
 
 export async function getAvailableMarketByItem(db: IDBPDatabase, itemId: string) {
   const market = await getAllRawMarketsByItem(db, itemId);
-  const marketStatus = await Promise.all(market.map(async (mk) => {
-    const status = await getMarketStatusByListingId(db, mk.listingId);
-    return {
-      ...mk,
-      status
-    }
-  }));
+  const marketStatus = await Promise.all(
+    market.map(async (mk) => {
+      const status = await getMarketStatusByListingId(db, mk.listingId);
+      return {
+        ...mk,
+        status,
+      };
+    }),
+  );
   const availableMarket = marketStatus.filter((mk) => mk.status?.isAvailable === 1);
   return Promise.all(
     availableMarket.map(async (mk) => {

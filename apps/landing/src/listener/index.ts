@@ -21,7 +21,7 @@ import {
 } from '_@landing/utils/type';
 //RELATIVE MODULES
 import { handleTransferItem } from './item';
-import { handleBuy, handleCancelListing, handleListing } from './market';
+import { handleBuy, handleCancelListing, handleListing, handleUpdateListing } from './market';
 import {
   fetchAllNFTOwners,
   fetchCountNFT,
@@ -38,6 +38,7 @@ import {
   updateItem,
   updateLastBlock,
   updateMarket,
+  updateMarketStatus,
 } from '../services';
 
 type TUsersInFleamintFnc = typeof nextApi.getUsersInFleamint.useMutation;
@@ -75,6 +76,13 @@ export async function getMarketEvents(
               db,
               chain,
               event as ContractEvent<ICancelListingEventData>,
+            );
+          else if (event.eventName === ContractEventNames.updateListing)
+            handleUpdateListing(
+              marketContract,
+              db,
+              chain,
+              event as ContractEvent<INewListingEventData>,
             );
         }),
       );
@@ -335,7 +343,7 @@ export async function getAllNFTsOwners(
             const marketStatus = await getMarketStatusByListingId(db, mk.listingId);
             if (marketStatus.isAvailable !== 1) return;
 
-            updateMarket(db, {
+            updateMarketStatus(db, {
               listingId: mk.listingId,
               isAvailable: 0,
               isBought: 0,

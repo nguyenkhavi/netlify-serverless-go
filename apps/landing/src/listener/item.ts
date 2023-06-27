@@ -23,7 +23,7 @@ import {
   getMarketStatusByListingId,
   getAllRawMarketsByItem,
   updateItem,
-  updateMarket,
+  updateMarketStatus,
 } from '../services';
 
 export async function handleTransferItem(
@@ -88,7 +88,7 @@ export async function handleTransferItem(
     const status: IMarketStatusData = await getMarketStatusByListingId(db, mk.listingId);
     if (status.isAvailable !== 1) return;
 
-    updateMarket(db, { listingId: mk.listingId, isAvailable: 0, isBought: 0, isCanceled: 1 });
+    updateMarketStatus(db, { listingId: mk.listingId, isAvailable: 0, isBought: 0, isCanceled: 1 });
 
     const activity: IActivity = {
       type: ActivityType.CANCELED_LISTING,

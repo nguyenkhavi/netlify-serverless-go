@@ -10,10 +10,11 @@ import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/pop
 import ThreeDotIcon from '_@shared/icons/ThreeDotIcon';
 //RELATIVE MODULES
 import BurnNFT from '../item-action-content/BurnNFT';
+import SellNFT from '../item-action-content/SellNFT';
 import DelistNFT from '../item-action-content/DelistNFT';
+import ConfirmAddress from '../item-action-content/SellNFT';
 import TransferNFT from '../item-action-content/TransferNFT';
 import ChangePrice from '../item-action-content/ChangePrice';
-import ConfirmAddress from '../item-action-content/ConfirmAddress';
 
 type Props = {
   value: TItemStore[number];
@@ -41,7 +42,12 @@ export default function MyItemCard({ value }: Props) {
             </div>
           </PopoverTrigger>
           <PopoverContent align="end" className="rounded ow:px-2.5 ow:py-2">
-            <ContentOption isListing={value.market.length > 0} />
+            <ContentOption
+              assetContract={value.address}
+              tokenId={value.tokenId}
+              isListing={value.market.length > 0}
+              listingId={value.market.length > 0 ? value.market[0].listingId : undefined}
+            />
           </PopoverContent>
         </Popover>
       </div>
@@ -65,31 +71,65 @@ export default function MyItemCard({ value }: Props) {
 
 type ContentOptionProps = {
   isListing: boolean;
+  assetContract: string;
+  tokenId: number;
+  listingId: number | undefined;
 };
-function ContentOption({ isListing }: ContentOptionProps) {
+function ContentOption({ isListing, assetContract, tokenId, listingId }: ContentOptionProps) {
   const { openDialog } = dialogMyItemCardStore();
 
   return (
     <ul className="grid">
       <li className={classcat([itemClasses])}>Share</li>
-      <li className={classcat([itemClasses])} onClick={() => openDialog(<BurnNFT />)}>
+      <li
+        className={classcat([itemClasses])}
+        onClick={() => openDialog(<BurnNFT assetContract={assetContract} tokenId={tokenId} />)}
+      >
         Burn
       </li>
       {isListing ? (
         <>
-          <li className={classcat([itemClasses])} onClick={() => openDialog(<DelistNFT />)}>
+          <li
+            className={classcat([itemClasses])}
+            onClick={() =>
+              openDialog(
+                <DelistNFT listingId={listingId} assetContract={assetContract} tokenId={tokenId} />,
+              )
+            }
+          >
             Delist item
           </li>
-          <li className={classcat([itemClasses])} onClick={() => openDialog(<ChangePrice />)}>
+          <li
+            className={classcat([itemClasses])}
+            onClick={() =>
+              openDialog(
+                <ChangePrice
+                  listingId={listingId}
+                  assetContract={assetContract}
+                  tokenId={tokenId}
+                />,
+              )
+            }
+          >
             Change Price
           </li>
         </>
       ) : (
-        <li className={classcat([itemClasses])} onClick={() => openDialog(<ConfirmAddress />)}>
+        <li
+          className={classcat([itemClasses])}
+          onClick={() =>
+            openDialog(
+              <SellNFT listingId={listingId} assetContract={assetContract} tokenId={tokenId} />,
+            )
+          }
+        >
           Sell
         </li>
       )}
-      <li className={classcat([itemClasses])} onClick={() => openDialog(<TransferNFT />)}>
+      <li
+        className={classcat([itemClasses])}
+        onClick={() => openDialog(<TransferNFT assetContract={assetContract} tokenId={tokenId} />)}
+      >
         Transfer
       </li>
     </ul>
