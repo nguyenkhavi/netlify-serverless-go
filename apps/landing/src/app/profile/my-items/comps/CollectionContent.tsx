@@ -1,12 +1,11 @@
 //THIRD PARTY MODULES
-import classcat from 'classcat';
+import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { pageSize } from '_@landing/utils/constants';
 import { TCollectionCard } from '_@landing/utils/type';
 import { getCollectionsByOwner } from '_@landing/services';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
-import React, { useCallback, useEffect, useState } from 'react';
-import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
@@ -17,27 +16,23 @@ import BasePagination from '_@shared/components/pagination/BasePagination';
 export default function CollectionContent() {
   const { user } = useAuthStore();
   const query = useSearchParams();
-  const [data, setData] = useState<TCollectionCard[]>([]);
-  const [totalItems, setTotalItems] = useState(0);
   const { db } = useIndexedDBContext();
+  const page = +(query.get('page') || 0);
 
-  const page = +(query.get('page') || 1);
-
-  const _getData = useCallback(() => {
-    if (!user?.profile.wallet || !db) return;
-    getCollectionsByOwner(db, user.profile.wallet, {
-      page: page - 1,
-      pageSize: pageSize,
-    }).then((res) => {
-      setData(res.data as TCollectionCard[]);
-      setTotalItems(res.total);
-    });
-  }, [user, db, page]);
-
-  useEffect(() => {
-    _getData();
-  }, [_getData]);
-
+  const { data: collectionsByOwner } = useQuery({
+    enabled: !!user?.profile.wallet && !!db,
+    queryKey: ['collectionsByOwner', user?.profile.wallet],
+    queryFn: () => {
+      if (!user?.profile.wallet || !db) return undefined;
+      return getCollectionsByOwner(db, user.profile.wallet, {
+        page: page,
+        pageSize: pageSize,
+      });
+    },
+    refetchOnWindowFocus: false,
+  });
+  if (!collectionsByOwner?.data || !collectionsByOwner.total) return null;
+  const data = collectionsByOwner.data as TCollectionCard[];
   return (
     <>
       <Show when={data.length > 0}>
@@ -58,9 +53,9 @@ export default function CollectionContent() {
       <Show when={data.length === 0}>
         <NoData />
       </Show>
-      <Show when={totalItems > pageSize}>
+      <Show when={collectionsByOwner.total > pageSize}>
         <div className="mt-10 flex justify-center">
-          <BasePagination perPage={pageSize} totalItems={totalItems} />
+          <BasePagination perPage={pageSize} totalItems={collectionsByOwner.total} />
         </div>
       </Show>
     </>

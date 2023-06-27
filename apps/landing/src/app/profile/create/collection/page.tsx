@@ -4,9 +4,11 @@ import * as z from 'zod';
 import classcat from 'classcat';
 import { constants } from 'ethers';
 import { IDBPDatabase } from 'idb';
+import { useRouter } from 'next/navigation';
 import { ICategory } from '_@landing/utils/type';
 import { Chains } from '_@landing/utils/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useAddress, useSDK } from '@thirdweb-dev/react';
 import { useCallback, useEffect, useState } from 'react';
@@ -25,6 +27,7 @@ import FormSwitch from '_@shared/components/switch/FormSwitch';
 //SHARED
 import PadlockIcon from '_@shared/icons/PadlockIcon';
 import PercentIcon from '_@shared/icons/PercentIcon';
+import { getErrorMessage } from '_@shared/utils/func';
 import { toastAction } from '_@shared/stores/toast/toastStore';
 //HOOK
 import useGetData from '_@landing/hooks/useGetData';
@@ -48,26 +51,28 @@ const values = z
       })
       .nonempty('This field is required'),
     blockchain: z.string(),
-    createEarnings: z.string(),
+    seller_fee_basis_points: z.string(),
     externalWallet: z.boolean(),
-    walletAddress: z.string().optional(),
+    fee_recipient: z.string().optional(),
   })
   .refine(
     (data) => {
       if (data.externalWallet) {
-        return data.walletAddress !== '';
+        return data.fee_recipient !== '';
       }
       return true;
     },
     {
       message: 'This field is required',
-      path: ['walletAddress'],
+      path: ['fee_recipient'],
     },
   );
 
 type Values = z.infer<typeof values>;
 const nameToSlug = (name: string) => name.toLowerCase().replace(/\s/g, '-');
 export default function CreateCollectionPage() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const methods = useForm<Values>({
     mode: 'onChange',
     resolver: zodResolver(values),
@@ -76,7 +81,14 @@ export default function CreateCollectionPage() {
       blockchain: Chains['sepolia'].chainId,
     },
   });
-  const { handleSubmit, setValue, watch } = methods;
+  const {
+    handleSubmit,
+    setValue,
+    setError,
+    watch,
+    formState: { errors },
+  } = methods;
+
   const sdk = useSDK();
   const address = useAddress();
   const [loading, setLoading] = useState(false);
@@ -110,13 +122,27 @@ export default function CreateCollectionPage() {
         external_link: `https://fleamint.com/marketplace/collection/${data.url}`,
         symbol: generateSymbol(data.collectionName),
         primary_sale_recipient: address || constants.AddressZero,
-        fee_recipient: data.walletAddress,
-        seller_fee_basis_points: Number(data.createEarnings),
+        fee_recipient: data.externalWallet ? data.fee_recipient : undefined,
+        seller_fee_basis_points: Number(data.seller_fee_basis_points),
         app_uri: JSON.stringify(appUri),
       });
+      await queryClient.invalidateQueries(['collectionsByOwner']);
+      router.push('/profile/my-items');
       toastAction.openToast('Create collection successfully', 'success');
     } catch (error: any) {
-      toastAction.openToast(error.reason || error.message || 'Something went wrong', 'error');
+      const errorJson = await new Promise<{ message: string; path: [string] }[]>((resolve) => {
+        return resolve(JSON.parse(error.message));
+      }).catch(() => undefined);
+      if (errorJson) {
+        errorJson.forEach((item) => {
+          setError(item.path[0] as any, {
+            type: 'manual',
+            message: item.message,
+          });
+        });
+      } else {
+        toastAction.openToast(error.reason || error.message || 'Something went wrong', 'error');
+      }
     } finally {
       setLoading(false);
     }
@@ -182,20 +208,25 @@ export default function CreateCollectionPage() {
                       },
                     ].map((item) => (
                       <section key={item.title}>
-                        <div className="grid gap-4">
-                          <div className="grid gap-1">
-                            <h5 className="title">
-                              {item.title}
-                              {item.required && <span className="text-error">*</span>}
-                            </h5>
-                            <p className="description">{item.description}</p>
+                        <div className="grid gap-1">
+                          <div className="grid gap-4">
+                            <div className="grid gap-1">
+                              <h5 className="title">
+                                {item.title}
+                                {item.required && <span className="text-error">*</span>}
+                              </h5>
+                              <p className="description">{item.description}</p>
+                            </div>
+                            <UploadImage
+                              onChangeValue={(src) => {
+                                setValue(item.name as any, src);
+                              }}
+                              className={item.imageClasses}
+                            />
                           </div>
-                          <UploadImage
-                            onChangeValue={(src) => {
-                              setValue(item.name as any, src);
-                            }}
-                            className={item.imageClasses}
-                          />
+                          <p className="text-body3 text-error">
+                            {getErrorMessage(item.name, errors)}
+                          </p>
                         </div>
                       </section>
                     ))}
@@ -216,7 +247,7 @@ export default function CreateCollectionPage() {
                         placeholder: 'enter-your-value',
                         leadingComponent: (
                           <span className="text-text-50">
-                            https//:fleamint.com/marketplace/collection/
+                            https://fleamint.com/marketplace/collection/
                           </span>
                         ),
                       },
@@ -304,7 +335,7 @@ export default function CreateCollectionPage() {
                         label={
                           <p className="text-body2 text-white md:text-h5-bold">Create earnings</p>
                         }
-                        name="createEarnings"
+                        name="seller_fee_basis_points"
                       >
                         <FormInput
                           className="input-md"
@@ -328,7 +359,7 @@ export default function CreateCollectionPage() {
                         </div>
                         <Show when={watch('externalWallet')}>
                           <Input
-                            name="walletAddress"
+                            name="fee_recipient"
                             placeholder="Wallet address"
                             title=""
                             labelClasses="hidden"

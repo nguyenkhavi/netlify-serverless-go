@@ -23,5 +23,5 @@ export default function ConnectWalletProvider({ children }: PropsWithChildren) {
     })();
   }, [signer, chainId, user, connect]);
 
-  return children;
+  return <>{children}</>;
 }
