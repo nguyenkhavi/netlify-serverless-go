@@ -60,7 +60,10 @@ export default function PurchasesContent() {
             <T.TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
                 return (
-                  <T.TableHead key={header.id} className="whitespace-nowrap text-center">
+                  <T.TableHead
+                    key={header.id}
+                    className="w-[248px] whitespace-nowrap text-center lg:w-0"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}

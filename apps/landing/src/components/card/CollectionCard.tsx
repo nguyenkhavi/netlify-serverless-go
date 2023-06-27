@@ -31,7 +31,7 @@ function GridView({ value, owner, ...props }: CollectionCardProps) {
           className="h-full w-full object-cover"
         />
       </div>
-      <p className="mt-3 text-body3 xlg:text-body2">{value.name}</p>
+      <p className="mt-3 line-clamp-1 text-body3 xlg:text-body2">{value.name}</p>
       <p className="mt-2 overflow-hidden text-caption text-text-50 xlg:text-body3">
         Creator: <span className="text-text-80">@{owner}</span>
       </p>

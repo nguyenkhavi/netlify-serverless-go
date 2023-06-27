@@ -15,10 +15,10 @@ import FormInput from '_@shared/components/FormInput';
 import ConnectTwitterBtn from '_@landing/components/provider/ConnectTwitter';
 import { ConnectInstagram } from '_@landing/components/provider/instagram/ConnectInstagram';
 //SHARED
-import CameraIcon from '_@shared/icons/CameraIcon';
 import { TwitterLightIcon } from '_@shared/icons/TwitterIcon';
 import { toastStore } from '_@shared/stores/toast/toastStore';
 import { InstagramLightIcon } from '_@shared/icons/InstagramIcon';
+import CameraIcon, { CameraGradientIcon } from '_@shared/icons/CameraIcon';
 
 const schema = z.object({
   aboutMe: z.string().nonempty({ message: 'This field is required' }),
@@ -164,12 +164,12 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
               <Button
                 variant="outlined"
                 className={classcat([
-                  'w-max text-[10px] ow:h-6 ow:rounded-3xl ow:bg-black/[.66] ow:px-3 [&>svg]:h-3 [&>svg]:w-3',
-                  'relative ow:lg:h-10 ow:lg:px-5 ow:lg:text-subtitle2 [&>svg]:lg:h-5 [&>svg]:lg:w-5',
+                  'border-green-gradient w-max text-[10px] ow:h-6.5 ow:gap-1 ow:rounded-3xl ow:bg-black/[.66] ow:px-2 [&>svg]:h-3 [&>svg]:w-3',
+                  'relative ow:lg:h-10 ow:lg:px-4 ow:lg:py-2 ow:lg:text-subtitle2 [&>svg]:lg:h-5 [&>svg]:lg:w-5',
                 ])}
-                leadingIcon={<CameraIcon />}
+                leadingIcon={<CameraGradientIcon />}
               >
-                Edit Cover
+                <span className="text-gradient-pr text-[10px] lg:text-subtitle2">Edit Cover</span>
                 <input
                   className="absolute inset-0 z-10 cursor-pointer opacity-0"
                   type="file"
@@ -197,7 +197,7 @@ export default function ProfileEdit({ setIsEdit }: ProfileEditProps) {
             </div>
             <div>
               <p className="mb-1 text-body1">Social Connection</p>
-              <span className="mb-2.5 text-body3 text-text-30">
+              <span className="mb-2.5 text-body3 text-text-50">
                 Help collector verify your account by connecting social account
               </span>
               <div className="mb-4 flex items-center justify-between">

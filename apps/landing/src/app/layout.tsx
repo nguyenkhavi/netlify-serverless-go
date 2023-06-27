@@ -36,19 +36,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <ThirdwebProvider>
         <IndexedDBProvider>
           <AuthProvider user={user}>
-            <ConnectWalletProvider>
-              {/* <AnimationProvider> */}
-              <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
-                <body>
-                  <Header />
-                  {children}
-                  <Footer />
-                  <ModalFeedback />
-                  <BaseToast />
-                </body>
-              </html>
-              {/* </AnimationProvider> */}
-            </ConnectWalletProvider>
+            {/* <ConnectWalletProvider> */}
+            {/* <AnimationProvider> */}
+            <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
+              <body>
+                <Header />
+                {children}
+                <Footer />
+                <ModalFeedback />
+                <BaseToast />
+              </body>
+            </html>
+            {/* </AnimationProvider> */}
+            {/* </ConnectWalletProvider> */}
           </AuthProvider>
         </IndexedDBProvider>
       </ThirdwebProvider>

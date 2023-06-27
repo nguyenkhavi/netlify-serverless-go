@@ -113,7 +113,9 @@ export default function ActivityCard({ activity }: ActivityProps) {
           )}
           <p
             className={classcat([
-              isLiked ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn' : '',
+              isLiked
+                ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn'
+                : 'text-text-50',
             ])}
           >
             {likes?.length || 0}
@@ -127,7 +129,9 @@ export default function ActivityCard({ activity }: ActivityProps) {
           )}
           <p
             className={classcat([
-              openComment ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn' : '',
+              openComment
+                ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn'
+                : 'text-text-50',
             ])}
           >
             {comments?.length || 0}
@@ -258,7 +262,9 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
               )}
               <p
                 className={classcat([
-                  isLiked ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn' : '',
+                  isLiked
+                    ? 'bg-main-gradient bg-clip-text text-transparent drop-shadow-btn'
+                    : 'text-text-50',
                 ])}
               >
                 {comment.children_counts?.like}
