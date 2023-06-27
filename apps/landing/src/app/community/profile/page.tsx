@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import classcat from 'classcat';
 import { nextApi } from '_@landing/utils/api';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 //LAYOUT, COMPONENTS
@@ -54,12 +55,12 @@ export default function ProfilePage() {
       <section className="relative mb-6.25 rounded-lg bg-secondary-300 lg:mb-6">
         <img
           className="relative z-[1] h-20 w-full object-cover lg:h-23.75"
-          src={userInfo?.coverUrl || '/images/profile/cover.jpeg'}
+          src={urlWithIpfs(userInfo?.coverUrl) || '/images/profile/cover.jpeg'}
           alt=""
         />
         <img
           className="absolute left-1/2 top-12.5 z-[1] h-15 w-15 -translate-x-1/2 rounded-full object-cover lg:left-6 lg:top-11.25 lg:h-25 lg:w-25 lg:translate-x-0"
-          src={userInfo?.avatarUrl || '/images/profile/avatar-default.webp'}
+          src={urlWithIpfs(userInfo?.avatarUrl) || '/images/profile/avatar-default.webp'}
           alt=""
         />
         <div className="px-6 pb-14 pt-11.5 text-center lg:pb-23.25 lg:pl-33.5 lg:pt-4 lg:text-left">

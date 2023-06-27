@@ -8,6 +8,7 @@ import { Avatar } from 'react-activity-feed';
 import { DateRange } from 'react-day-picker';
 import { useMemo, useRef, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { api, RouterOutputs } from '_@landing/utils/api';
 import { usePathname, useSearchParams } from 'next/navigation';
@@ -266,7 +267,7 @@ function AccountComp({ name, aboutMe, avatar, following, getstreamId }: AccountC
 
   return (
     <div className="mb-6 flex items-start border-b-[1px] border-solid border-text-10 pb-8">
-      <Avatar image={avtUrl} size={46} circle className="mr-2 rounded-full" />
+      <Avatar image={urlWithIpfs(avtUrl)} size={46} circle className="mr-2 rounded-full" />
       <div className="flex grow flex-col justify-between md:flex-row">
         <div className=" mb-8 w-[273px] md:mb-0">
           <p className="mb-2 text-lg">@{name}</p>

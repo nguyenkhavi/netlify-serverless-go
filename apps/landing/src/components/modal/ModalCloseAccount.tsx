@@ -59,11 +59,8 @@ export default function ModalCloseAccount({
         <p className="bg-secondary-200 px-4 py-5 text-h6 md:px-9">Request to close account</p>
         <FormProvider {...methods}>
           <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-9 md:px-8">
-            <FormItem
-              label="Tell us why you are leaving"
-              name="reason"
-              className="[&>label]:text-text-100"
-            >
+            <p className="mb-8">Tell us why you are leaving</p>
+            <FormItem label="" name="reason" className="[&>label]:text-text-100">
               <FormRadioGroup options={OPTIONS} ariaLabel="Choose type" className="gap-3 pl-4.5" />
             </FormItem>
             <FormItem label="Tell us More" name="content" className="mt-5 [&>label]:text-text-100">

@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
 import React, { useCallback, useEffect, useState } from 'react';
 import { EnrichedUser, EnrichedReaction, FlatActivityEnriched } from 'getstream';
@@ -26,6 +27,7 @@ type ActivityProps = {
 };
 export default function ActivityCard({ activity, className }: ActivityProps) {
   const { client } = useGetFeedUser();
+
   const clientId = client?.userId;
   const [openComment, setOpenComment] = useState(false);
   const [isLiked, setIsLiked] = useState(false); //get this info from api
@@ -83,11 +85,20 @@ export default function ActivityCard({ activity, className }: ActivityProps) {
   return (
     <div className={classcat(['rounded-[10px] bg-secondary-200 p-6', className])}>
       <div className="grid grid-flow-col justify-start gap-2.5">
-        <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
+        <Avatar
+          image={
+            typeof activity.actor !== 'string'
+              ? urlWithIpfs(activity?.actor?.data?.avatar)
+              : 'https://getstream.imgix.net/images/random_svg/A.png'
+          }
+          size={40}
+          circle
+        />
+
         <div>
           <Link
             href={
-              typeof activity.actor === 'string'
+              typeof activity?.actor === 'string'
                 ? '/community'
                 : clientId === activity.actor?.id
                 ? '/community/profile'

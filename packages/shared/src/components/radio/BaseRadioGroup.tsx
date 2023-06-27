@@ -65,9 +65,7 @@ const BaseRadioGroup = forwardRef<HTMLDivElement, BaseRadioGroupProps>(
                 ])}
               />
             </Item>
-            <span className="text-subtitle2 text-text-60 group-hover:text-text-100">
-              {option.label}
-            </span>
+            <span className="text-base text-text-80 group-hover:text-text-100">{option.label}</span>
           </label>
         ))}
       </Root>

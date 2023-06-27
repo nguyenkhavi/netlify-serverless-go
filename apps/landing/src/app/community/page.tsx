@@ -4,6 +4,7 @@
 import classcat from 'classcat';
 import 'react-activity-feed/dist/index.css';
 import { nextApi } from '_@landing/utils/api';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 //LAYOUT, COMPONENTS
@@ -77,7 +78,15 @@ export default function CommunityPage() {
     <div className="grid gap-6 lg:grid-cols-[1fr_17.5rem]">
       <div>
         <div className="flex rounded-[10px] bg-secondary-200 p-6">
-          <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
+          <Avatar
+            image={
+              urlWithIpfs(client?.currentUser?.data?.avatar) ||
+              'https://getstream.imgix.net/images/random_svg/A.png'
+            }
+            size={40}
+            circle
+          />
+
           <div className="ml-2 grow">
             <form>
               <textarea
