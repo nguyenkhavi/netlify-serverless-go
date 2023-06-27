@@ -89,9 +89,9 @@ export default function ActivityCard({ activity, className }: ActivityProps) {
             href={
               typeof activity.actor === 'string'
                 ? '/community'
-                : clientId === activity.actor.id
+                : clientId === activity.actor?.id
                 ? '/community/profile'
-                : `/community/profile/${activity.actor.id}`
+                : `/community/profile/${activity.actor?.id}`
             }
             className="block text-h6"
           >

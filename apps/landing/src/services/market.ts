@@ -121,8 +121,8 @@ export async function getSearchMarket(db: IDBPDatabase, search: string): Promise
   );
   return market.filter((mk) => {
     return (
-      mk.item.name.toLowerCase().includes(search.toLowerCase()) ||
-      mk.collection.name.toLowerCase().includes(search.toLowerCase())
+      mk.item?.name.toLowerCase().includes(search.toLowerCase()) ||
+      mk.collection?.name.toLowerCase().includes(search.toLowerCase())
     );
   });
 }
