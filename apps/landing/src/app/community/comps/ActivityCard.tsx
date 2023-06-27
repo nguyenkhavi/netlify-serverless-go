@@ -8,6 +8,7 @@ import { EnrichedUser, EnrichedReaction, FlatActivityEnriched } from 'getstream'
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
+import ReplyIcon from '_@shared/icons/ReplyIcon';
 import RetweetIcon from '_@shared/icons/RetweetIcon';
 import ImageArtIcon from '_@shared/icons/ImageArtIcon';
 import { BareShareIcon } from '_@shared/icons/ShareIcon';
@@ -245,7 +246,7 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
       <div className="flex justify-start [&>*:not(:last-child)]:mr-2">
         <Avatar image="https://getstream.imgix.net/images/random_svg/A.png" size={40} circle />
         <div className="grow">
-          <div className="rounded-lg bg-black/[.7] px-4 py-[7px]">
+          <div className="mb-2 rounded-lg bg-black/[.7] px-4 py-[7px]">
             <p className="text-sm">
               @{typeof user?.data?.username === 'string' ? user?.data?.username : ''}
             </p>
@@ -268,8 +269,11 @@ function UserComment({ comment }: { comment: EnrichedReaction }) {
                     : 'text-text-50',
                 ])}
               >
-                {comment.children_counts?.like}
+                {comment.children_counts?.like || 0}
               </p>
+            </button>
+            <button className="flex items-center text-[#666666]">
+              <ReplyIcon className="mr-1" /> Reply
             </button>
           </div>
         </div>

@@ -26,16 +26,17 @@ import CalendarIcon from '_@shared/icons/CalendarIcon';
 import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import ActivityCard from '../comps/ActivityCard';
+import MobileSearchFilter from '../comps/MobileFilter';
 
-const schema = z.object({
+export const schema = z.object({
   people: z.string().trim(),
 });
 
-const OPTIONS = [
+export const OPTIONS = [
   { value: 'anyone', label: 'From anyone' },
   { value: 'peopleYouFollow', label: 'People you follow' },
 ];
-type FormValues = z.infer<typeof schema>;
+export type FormValues = z.infer<typeof schema>;
 
 export default function SearchPage() {
   const [date, setDate] = useState<DateRange | undefined>({
@@ -96,22 +97,25 @@ export default function SearchPage() {
   return (
     <div className="grid gap-6 lg:grid-cols-[1fr_17.5rem]">
       <div>
-        <div className="mb-6">
-          <SearchInput
-            ref={searchText}
-            name="search"
-            type="text"
-            placeholder="Search"
-            className={classcat([
-              'h-10  md:text-body1',
-              'ow:border-[.5px] ow:border-text-10 ow:bg-secondary-300',
-            ])}
-            iconPosition="right"
-            onKeyDown={(e: KeyboardEvent) => {
-              e.key === 'Enter' && _handleSearch();
-            }}
-            onClickIcon={_handleSearch}
-          />
+        <div className="mb-6 flex justify-between">
+          <div className="mr-2 flex-1 lg:mr-0">
+            <SearchInput
+              ref={searchText}
+              name="search"
+              type="text"
+              placeholder="Search"
+              className={classcat([
+                'h-10 md:text-body1',
+                'ow:border-[.5px] ow:border-text-10 ow:bg-secondary-300',
+              ])}
+              iconPosition="right"
+              onKeyDown={(e: KeyboardEvent) => {
+                e.key === 'Enter' && _handleSearch();
+              }}
+              onClickIcon={_handleSearch}
+            />
+          </div>
+          <MobileSearchFilter />
         </div>
         <div className="border-b-[1px] border-solid border-text-10">
           {TAB_MENU.map((tab, idx) => (
@@ -161,7 +165,7 @@ export default function SearchPage() {
             searchedPosts.map((post) => <ActivityCard key={post.id} activity={post} />)}
         </div>
       </div>
-      <div className="h-fit rounded-[10px] bg-secondary-300 p-4">
+      <div className="hidden h-fit rounded-[10px] bg-secondary-300 p-4 lg:block">
         <h2 className="mb-4 text-xl">Search Filter</h2>
         <h3 className="mb-1.25 text-base">People</h3>
 
