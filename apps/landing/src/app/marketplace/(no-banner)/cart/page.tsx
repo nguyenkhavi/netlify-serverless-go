@@ -12,9 +12,13 @@ import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 import NoData from '_@landing/components/NoData';
 import CartItemCard from './components/CartItemCard';
+import Switch from '_@shared/components/conditions/Switch';
+import CartItemSke from '_@landing/app/marketplace/(no-banner)/cart/components/CartItemSke';
+import delay from '_@landing/utils/delay';
 
 export default function CartPage() {
   const [data, setData] = useState<TDataCheckout[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const totalPrices = useMemo(
     () =>
@@ -32,9 +36,14 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    if (!window) return;
-    const dataStorage = window.localStorage.getItem('cart') || '';
-    setData(JSON.parse(dataStorage));
+    setLoading(true);
+    delay(() => JSON.parse(window.localStorage.getItem('cart') || '[]') as TDataCheckout[], 500)
+      .then((data) => {
+        setData(data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -46,23 +55,31 @@ export default function CartPage() {
           'grid gap-6 xlg:grid-cols-[1fr_theme(spacing[71])] xlg:gap-8',
         ])}
       >
-        <Show when={data.length === 0}>
-          <NoData />
-        </Show>
-        <Show when={data.length}>
-          <div className="grid h-max gap-4 rounded-lg bg-secondary-200 xlg:gap-6 xlg:p-6">
-            {data.map((item) => (
-              <CartItemCard key={item.listingId} value={item} onClickRemove={_handleRemoveItem} />
-            ))}
-          </div>
-        </Show>
+        <Switch.Root>
+          <Switch.Case when={loading}>
+            <div className="grid h-max gap-4 rounded-lg bg-secondary-200 xlg:gap-6 xlg:p-6">
+              <CartItemSke />
+              <CartItemSke />
+            </div>
+          </Switch.Case>
+          <Switch.Case when={data.length === 0}>
+            <NoData />
+          </Switch.Case>
+          <Show when={true}>
+            <div className="grid h-max gap-4 rounded-lg bg-secondary-200 xlg:gap-6 xlg:p-6">
+              {data.map((item) => (
+                <CartItemCard key={item.listingId} value={item} onClickRemove={_handleRemoveItem} />
+              ))}
+            </div>
+          </Show>
+        </Switch.Root>
 
         <div>
           <div className="rounded-[10px] bg-secondary-200 p-4 xlg:p-6">
             <p className="text-center text-body2 xlg:text-h6">
               Subtotal ({data.length} items): {totalPrices} BUSD
             </p>
-            <Button as={Link} href="/marketplace/cart/checkout" className="btnlg mt-9">
+            <Button as={Link} href="/marketplace/checkout" className="btnlg mt-9">
               Proceed to checkout
             </Button>
           </div>

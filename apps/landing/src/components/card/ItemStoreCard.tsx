@@ -16,7 +16,7 @@ type Props = {
 export default function ItemStoreCard({ value }: Props) {
   const { openToast } = toastStore();
   const { user } = useAuthStore();
-  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
+  const buyNowLink = user ? '/marketplace/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
     <div className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]">

@@ -24,7 +24,7 @@ export async function addMarket(db: IDBPDatabase, data: IMarketData) {
   try {
     await db.add(dbOS.market, data);
   } catch (e) {
-    console.log('ignore duplicate data');
+    console.log('market ignore duplicate data', { data });
   }
 }
 
@@ -99,10 +99,16 @@ export async function getAllAvailableMarketByCategory(
       return getMarketByListingId(db, mk.listingId);
     }),
   );
-  return market.filter(async (mk) => {
-    const collection = await getCollectionByContract(db, mk.assetContract);
-    return collection?.category == category;
-  });
+  const marketWithCollection = await Promise.all(
+    market.map(async (mk) => {
+      const collection = await getCollectionByContract(db, mk.assetContract);
+      return {
+        ...mk,
+        collection,
+      };
+    }),
+  );
+  return marketWithCollection.filter((mk) => mk.collection.category == category);
 }
 
 export async function getSearchMarket(db: IDBPDatabase, search: string): Promise<IMarketData[]> {
@@ -120,6 +126,7 @@ export async function getSearchMarket(db: IDBPDatabase, search: string): Promise
     }),
   );
   return market.filter((mk) => {
+    if (!search) return true;
     return (
       mk.item?.name.toLowerCase().includes(search.toLowerCase()) ||
       mk.collection?.name.toLowerCase().includes(search.toLowerCase())
@@ -217,7 +224,7 @@ const getFloorOfTrait = (
 
 export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: number) {
   const status = await getMarketStatusByListingId(db, listingId);
-  if (status.isAvailable !== 1) return undefined;
+  if (status.isAvailable !== 1) throw new Error('Nft is not available');
   const market = await getMarketByListingId(db, listingId);
   const item = await getItemById(db, market.itemId);
   const activities = await getAllActivitiesByItem(db, market.itemId);
@@ -232,7 +239,7 @@ export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: nu
     ...item,
     metadata: {
       ...item.metadata,
-      attributes: item.metadata.attributes.map((attribute) => {
+      attributes: item.metadata.attributes?.map((attribute) => {
         const floor = floorOfTrail?.[getKeyOfTrait(attribute)];
         return {
           ...attribute,

@@ -22,7 +22,7 @@ export async function handleNewCollections(
       address: event.data.proxy,
       chain: chain.chainId,
       owner: event.data.deployer,
-      category: appURI?.category || 1,
+      category: Number(appURI?.category) || 1,
       name: metadata?.name as string,
       type: NFTType.ERC721,
       metadata: metadata || {
@@ -34,7 +34,7 @@ export async function handleNewCollections(
         symbol: '',
         app_uri: '',
       },
-      royalty: new Decimal(royalties.seller_fee_basis_points).div(10000).toNumber(),
+      royalty: royalties.seller_fee_basis_points,
       royaltyRecipient: royalties.fee_recipient,
     };
     await addCollection(db, data);

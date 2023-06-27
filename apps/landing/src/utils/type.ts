@@ -229,7 +229,7 @@ export type TCollectionCard = Awaited<
 export type TCollectionStore = Awaited<ReturnType<typeof getDetailCollectionByAddress>>;
 export type TDataCheckout = Pick<
   TItemCard,
-  'price' | 'quantity' | 'item' | 'token' | 'itemId' | 'listingId'
+  'price' | 'quantity' | 'item' | 'token' | 'itemId' | 'listingId' | 'listingCreator'
 >;
 
 export type IAttribute = {

@@ -29,7 +29,7 @@ export default function MainCard({ view = 'grid', value, ...props }: MainCardPro
 function GridViewWithBuy({ value, ...props }: MainCardProps) {
   const { openToast } = toastStore();
   const { user } = useAuthStore();
-  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
+  const buyNowLink = user ? '/marketplace/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
     <div className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]" {...props}>
@@ -79,7 +79,7 @@ function ListView({ value, ...props }: MainCardProps) {
   const { openToast } = toastStore();
   const { user } = useAuthStore();
   const { owner } = useGetOwnerByWallet(value.item.owner);
-  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + value.listingId : '/auth/sign-in';
+  const buyNowLink = user ? '/marketplace/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
     <div

@@ -78,8 +78,6 @@ export async function getMarketEvents(
             );
         }),
       );
-      console.log('market events', { fromBlock, toBlock, events });
-
       updateLastBlock(db, ListenerService.Market, toBlock, chain.chainId);
     } catch (e) {
       console.log('market error', { fromBlock, toBlock, e });
@@ -210,7 +208,6 @@ export async function getFactoryEvents(
   const lastBlock = await sdk.getProvider().getBlockNumber();
   const totalPage = Math.ceil((lastBlock - currentBlock) / blockRange);
 
-  console.log('Factory', { currentBlock, lastBlock, totalPage }, new Date());
   for (let currentPage = 0; currentPage < totalPage; currentPage++) {
     const fromBlock = currentBlock + 1 + currentPage * blockRange;
     const toBlock = Math.min(lastBlock, currentBlock + (currentPage + 1) * blockRange);
@@ -265,7 +262,7 @@ export async function getCollectionsEvents(
   const collections = await getAllCollectionByChain(db, chain.chainId);
 
   const currentBlock =
-    (await getLastBlock(db, chain.chainId, ListenerService.Factory)) || chain.genesisBlock;
+    (await getLastBlock(db, chain.chainId, ListenerService.Collection)) || chain.genesisBlock;
 
   const lastBlock = await sdk.getProvider().getBlockNumber();
   const totalPage = Math.ceil((lastBlock - currentBlock) / blockRange);

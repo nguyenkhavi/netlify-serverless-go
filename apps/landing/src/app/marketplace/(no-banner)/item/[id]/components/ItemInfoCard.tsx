@@ -20,7 +20,7 @@ type Props = {
 function ItemInfoCard({ data }: Props) {
   const { openToast } = toastStore();
   const { user } = useAuthStore();
-  const buyNowLink = user ? '/marketplace/cart/checkout?item=' + data.listingId : '/auth/sign-in';
+  const buyNowLink = user ? '/marketplace/checkout?item=' + data.listingId : '/auth/sign-in';
   return (
     <div className={classcat(['flex flex-col justify-between space-y-6'])}>
       <div className={classcat(['grid grow'])}>

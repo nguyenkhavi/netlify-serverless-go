@@ -13,7 +13,7 @@ export async function addCollection(db: IDBPDatabase, data: ICollection) {
   try {
     await db.add(dbOS.collection, data);
   } catch (e) {
-    console.log('ignore duplicate data');
+    console.log('collection ignore duplicate data', { data });
   }
 }
 

@@ -1,8 +1,10 @@
 'use client';
 //THIRD PARTY MODULES
 import * as z from 'zod';
+import dayjs from 'dayjs';
 import classcat from 'classcat';
 import { useState } from 'react';
+import { constants } from 'ethers';
 import { useQuery } from '@tanstack/react-query';
 import { Chains } from '_@landing/utils/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,7 +14,14 @@ import Breadcrumb from '_@landing/app/profile/create/comps/Breadcrumb';
 import ProfileNavMobile from '_@landing/app/profile/comps/ProfileNavMobile';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 import { getCollectionByContract, getCollectionsByOwner } from '_@landing/services';
-import { useContract, useCreateDirectListing, useSDK, useSDKChainId } from '@thirdweb-dev/react';
+import {
+  useAddress,
+  useContract,
+  useCreateDirectListing,
+  useSDK,
+  useSDKChainId,
+  useSigner,
+} from '@thirdweb-dev/react';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
@@ -74,25 +83,27 @@ export default function CreateCollectionPage() {
     resolver: zodResolver(values),
     defaultValues: {
       blockchain: Chains['sepolia'].chainId,
+      supply: '1',
     },
   });
   const {
     handleSubmit,
-    watch,
     setValue,
     formState: { errors },
     getValues,
+    watch,
   } = methods;
   const collection = watch('collection');
   const price = Number(watch('price') || 0);
   const { user } = useAuthStore();
   const { db } = useIndexedDBContext();
   const sdk = useSDK();
+  const signer = useSigner();
   const chainId = useSDKChainId();
   const chain = Object.values(Chains).find((chain) => chain.chainId == chainId?.toString());
   const { contract: marketContract } = useContract(chain?.marketContract, 'marketplace-v3');
   const { mutateAsync: createDirectListing } = useCreateDirectListing(marketContract);
-
+  const address = useAddress();
   const { data: collectionsByOwner } = useQuery({
     enabled: !!user?.profile.wallet && !!db,
     queryKey: ['collectionsByOwner', user?.profile.wallet],
@@ -132,7 +143,7 @@ export default function CreateCollectionPage() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setLoading(true);
-      if (!sdk) return;
+      if (!sdk || !signer) return;
       const contract = await sdk.getContract(data.collection, 'nft-collection');
       const metadata =
         data.content.status == true
@@ -152,13 +163,29 @@ export default function CreateCollectionPage() {
       const tokenId = tx.id; // the id of the NFT minted
 
       if (data.marketplace.status) {
-        await createDirectListing({
+        const approved = await contract.isApproved(
+          address || constants.AddressZero,
+          chain?.marketContract || Chains.sepolia.marketContract,
+        );
+        console.log({ approved });
+        if (!approved) {
+          await contract.setApprovalForAll(
+            chain?.marketContract || Chains.sepolia.marketContract,
+            true,
+          );
+        }
+        const expiration = data.listingExpiration
+          ? dayjs().add(Number(data.listingExpiration), 'day').unix()
+          : undefined;
+        const result = await createDirectListing({
           tokenId,
           /// pass decimal of currency here
           pricePerToken: data.price,
           assetContractAddress: data.collection,
           quantity: 1,
+          endTimestamp: expiration,
         });
+        console.log(`result`, result);
       }
 
       toastAction.openToast('Create NFT success', 'success');
@@ -173,6 +200,7 @@ export default function CreateCollectionPage() {
   const setValuesProperties = (value: Values['properties']) => {
     setValue('properties', value);
   };
+  const listingExpiration = watch('listingExpiration') || undefined;
 
   const totalEstimatedEarnings = price - ((creatorEarning + fleamintFee[1]) * price) / 100;
 
@@ -333,6 +361,9 @@ export default function CreateCollectionPage() {
                     <BaseInput
                       title="Supply"
                       name="supply"
+                      inputProps={{
+                        disabled: true,
+                      }}
                       description="The number of items that can be minted. No gas cost to you"
                       placeholder="Enter number"
                     />
@@ -395,12 +426,17 @@ export default function CreateCollectionPage() {
                           title="Listing expiration"
                           name="listingExpiration"
                           placeholder="Listing expiration"
-                          data={[]}
+                          data={expirationList}
                         >
                           <Show when={!getErrorMessage('listingExpiration', errors)}>
-                            <p className="text-body3 text-text-50">
-                              Expiration at 5/31/2023, 3:31 PM
-                            </p>
+                            {listingExpiration ? (
+                              <p className="text-body3 text-text-50">
+                                Expiration at{' '}
+                                {dayjs()
+                                  .add(Number(watch('listingExpiration')), 'day')
+                                  .format('MM/DD/YYYY, hh:mm A')}
+                              </p>
+                            ) : null}
                           </Show>
                         </Select>
 
@@ -474,3 +510,18 @@ const PropertyItem = ({ name, type }: { name: string; type: string }) => (
     <p className="text-white">{name}</p>
   </div>
 );
+
+const expirationList = [
+  {
+    label: '30 days',
+    value: '30',
+  },
+  {
+    label: '60 days',
+    value: '60',
+  },
+  {
+    label: 'No expiration',
+    value: '0',
+  },
+];

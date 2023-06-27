@@ -55,7 +55,6 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
   const [category, setCategory] = useState<TCategoryContext>({ loading: true, data: [] });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitContract, setIsInitContract] = useState<boolean>(false);
-  const [isEventRegister, setIsEventRegister] = useState<boolean>(false);
   const [contracts, setContracts] = useState<Contracts>();
   const { mutateAsync: getUsersInFleamint } = nextApi.getUsersInFleamint.useMutation();
 
@@ -165,7 +164,6 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
       if (!sdk || !chainId || !chain || !db) return;
 
       const collections = await getAllCollectionByChain(db, chainId.toString());
-
       const [_marketContract, _factoryContract, ...collectionsContracts] = await Promise.all([
         sdk.getContract(chain.marketContract, MarketABI),
         sdk.getContract(chain.factoryContract, NFTFactoryABI),
@@ -186,15 +184,12 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
   }, [sdk, chainId, db, contracts]);
 
   useEffect(() => {
-    if (isEventRegister || !contracts || !sdk || !db || !chain) return;
-    console.log('event registered');
+    if (!contracts || !sdk || !db || !chain) return;
     contracts.market.events.listenToAllEvents((event) => {
       if (event.eventName === ContractEventNames.newListing) {
         handleListing(db, chain, event as ContractEvent<INewListingEventData>);
-        updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
       } else if (event.eventName === ContractEventNames.newSale) {
         handleBuy(contracts.market, db, chain, event as ContractEvent<INewBuyEventData>);
-        updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
       } else if (event.eventName === ContractEventNames.cancelledListing) {
         handleCancelListing(
           contracts.market,
@@ -202,8 +197,8 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
           chain,
           event as ContractEvent<ICancelListingEventData>,
         );
-        updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
       }
+      updateLastBlock(db, ListenerService.Market, event.transaction.blockNumber, chain.chainId);
     });
     sdk.addListener(ContractEventNames.newCollections, async (proxy) => {
       const contract = await sdk.getContract(proxy, 'nft-collection');
@@ -238,15 +233,12 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
       });
     });
 
-    setIsEventRegister(true);
-
     return () => {
-      if (!contracts) return;
       contracts.market.events.removeAllListeners();
       sdk.removeAllListeners();
       contracts.factory.events.removeAllListeners();
-      contracts.collections.map((contract) => {
-        contract.events.removeAllListeners();
+      contracts.collections.map((collection) => {
+        collection.events.removeAllListeners();
       });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -263,6 +255,8 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
         getFactoryEvents(contracts.factory, sdk, db, chain, getUsersInFleamint),
       ]);
     })();
+    setIsLoading(false);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chain, db, contracts]);
 

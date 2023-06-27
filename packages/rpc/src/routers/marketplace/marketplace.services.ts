@@ -22,6 +22,8 @@ export const purchaseSuccess = async (input: PurchaseSuccessInput, profile: TPro
   return Promise.all([
     sendMail({
       from: DEFAULT_MAIL_SENDER,
+      to: profile.email,
+      subject: 'Successfully Purchase',
       templateId: 'SENDGRID_PURCHASE_SUCCESS_TEMPLATE_ID',
       dynamicTemplateData: {
         name: profile.username,
@@ -33,6 +35,8 @@ export const purchaseSuccess = async (input: PurchaseSuccessInput, profile: TPro
     }),
     sendMail({
       from: DEFAULT_MAIL_SENDER,
+      to: saleProfile.email,
+      subject: 'Successfully Sale',
       templateId: 'SENDGRID_SALE_SUCCESS_TEMPLATE_ID',
       dynamicTemplateData: {
         name: saleProfile.username,

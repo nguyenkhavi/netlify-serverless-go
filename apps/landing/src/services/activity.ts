@@ -8,7 +8,7 @@ export async function addActivity(db: IDBPDatabase, data: IActivity) {
   try {
     await db.add(dbOS.activity, data);
   } catch (e) {
-    console.log('ignore duplicate data');
+    //
   }
 }
 export async function getAllActivities(db: IDBPDatabase) {

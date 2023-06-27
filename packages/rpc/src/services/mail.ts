@@ -3,7 +3,7 @@ import * as sgMail from '@sendgrid/mail';
 
 sgMail.setApiKey(`${process.env.SENDGRID_API_KEY}`);
 
-export const DEFAULT_MAIL_SENDER = 'admin@fleamint.co';
+export const DEFAULT_MAIL_SENDER = 'dung.bui@sens-vn.com';
 
 const IDMap = {
   SENDGRID_PURCHASE_SUCCESS_TEMPLATE_ID: process.env.SENDGRID_PURCHASE_SUCCESS_TEMPLATE_ID,
@@ -35,9 +35,13 @@ export type Mail =
   | BaseMail<'SENDGRID_PURCHASE_SUCCESS_TEMPLATE_ID', EmailPurchaseSuccessData>
   | BaseMail<'SENDGRID_SALE_SUCCESS_TEMPLATE_ID', EmailSaleSuccessData>;
 
-export const sendMail = async (mail: Mail) =>
-  sgMail.send({
-    text: '',
-    ...mail,
-    templateId: IDMap[mail.templateId],
-  });
+export const sendMail = async (mail: Mail) => {
+  try {
+    sgMail.send({
+      ...mail,
+      templateId: IDMap[mail.templateId] as string,
+    });
+  } catch (e) {
+    console.log(e);
+  }
+};

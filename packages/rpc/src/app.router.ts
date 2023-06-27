@@ -5,6 +5,7 @@ import {
   getstreamRouters,
   sessionRouter,
   communityRouters,
+  marketplaceRouters,
 } from './routers';
 import { db, subscriber } from './services/drizzle';
 
@@ -29,6 +30,7 @@ export const appRouter = mergeRouter(
   getstreamRouters,
   sessionRouter,
   communityRouters,
+  marketplaceRouters,
 );
 
 export type AppRouter = typeof appRouter;
