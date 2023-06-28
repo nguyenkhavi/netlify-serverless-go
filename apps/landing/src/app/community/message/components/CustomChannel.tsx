@@ -1,12 +1,14 @@
 'use client';
 //THIRD PARTY MODULES
+import { useSearchParams } from 'next/navigation';
+import { checkChannelExistById } from '_@landing/utils/roomChat1vs1';
 import { Channel, ChannelProps, useChatContext } from 'stream-chat-react';
 import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 //RELATIVE MODULES
 import '../style.css';
 import Loading from './Loading';
 import CustomMessage from './CustomMessage';
-import { CustomMessageInput } from './CustomMessageInput';
+import CustomMessageInput from './CustomMessageInput';
 import EmptyPlaceholderRequest from './EmptyPlaceholderRequest';
 import CustomMessageInputRequest from './CustomMessageInputRequest';
 
@@ -26,7 +28,9 @@ function CustomChannel({
   ...props
 }: PropsWithChildren<Props>) {
   const [inviteUserIds, setInviteUserIds] = useState<string[]>([]);
-  const { channel } = useChatContext();
+  const { client, channel, setActiveChannel } = useChatContext();
+  const searchParams = useSearchParams();
+  const channelId = searchParams.get('channelId');
 
   const _queryInviteMembers = useCallback(() => {
     channel
@@ -42,6 +46,13 @@ function CustomChannel({
       .catch((err) => console.log(err));
   }, [channel]);
 
+  const _setChannelByParam = useCallback(async () => {
+    if (!channelId || !client) return;
+    const channel = await checkChannelExistById(client, channelId);
+    if (!channel) return;
+    setActiveChannel(channel);
+  }, [channelId, client, setActiveChannel]);
+
   useEffect(() => {
     _queryInviteMembers();
   }, [_queryInviteMembers]);
@@ -53,6 +64,10 @@ function CustomChannel({
       memberUpdateListener.unsubscribe();
     };
   }, [_queryInviteMembers, channel]);
+
+  useEffect(() => {
+    _setChannelByParam();
+  }, [_setChannelByParam]);
 
   return (
     <Channel

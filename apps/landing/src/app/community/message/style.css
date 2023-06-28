@@ -139,3 +139,11 @@
 #request .str-chat__main-panel-inner {
   @apply h-auto;
 }
+
+.str-chat__avatar {
+  @apply shrink-0;
+}
+
+.str-chat__avatar .str-chat__avatar-image {
+  @apply rounded-full;
+}

@@ -9,8 +9,8 @@ export default function useFilterQueryString() {
   const searchParams = useSearchParams();
 
   const filter = useCallback(
-    (data: Record<any, any>) => {
-      router.push(pathname + '?' + handleFilterQueryString(searchParams, data));
+    (data: Record<any, any>, _pathname?: string) => {
+      router.push((_pathname || pathname) + '?' + handleFilterQueryString(searchParams, data));
     },
     [pathname, router, searchParams],
   );

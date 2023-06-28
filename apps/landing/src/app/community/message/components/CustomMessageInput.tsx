@@ -15,7 +15,7 @@ import Button from '_@shared/components/Button';
 import EmojiIcon2 from '_@shared/icons/EmojiIcon2';
 //HOOK
 
-export const CustomMessageInput = () => {
+const CustomMessageInput = () => {
   const { emojiPickerIsOpen, handleSubmit, closeEmojiPicker, openEmojiPicker } =
     useMessageInputContext();
   const { quotedMessage } = useChannelStateContext();
@@ -61,3 +61,5 @@ export const CustomMessageInput = () => {
     </div>
   );
 };
+
+export default CustomMessageInput;

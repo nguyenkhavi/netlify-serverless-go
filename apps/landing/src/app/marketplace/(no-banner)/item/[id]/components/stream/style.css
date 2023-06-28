@@ -137,3 +137,7 @@
     scrollbar-color: #46494f #313130;
   }
 }
+
+.str-chat__avatar {
+  @apply shrink-0;
+}

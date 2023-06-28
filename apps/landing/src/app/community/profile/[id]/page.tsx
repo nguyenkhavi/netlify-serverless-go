@@ -5,7 +5,9 @@ import classcat from 'classcat';
 import { useEffect, useState } from 'react';
 import { api, nextApi } from '_@landing/utils/api';
 import urlWithIpfs from '_@landing/utils/urlWithIpfs';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
+import { createRequestChannel1vs1 } from '_@landing/utils/roomChat1vs1';
 import { useParams, usePathname, useSearchParams } from 'next/navigation';
 //LAYOUT, COMPONENTS
 import NoData from '_@landing/components/NoData';
@@ -16,19 +18,25 @@ import FollowedIcon from '_@shared/icons/FollowedIcon';
 import { BareShareIcon } from '_@shared/icons/ShareIcon';
 //HOOK
 import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
+import { useGetStreamUser } from '_@landing/hooks/useGetStreamUser';
+import useFilterQueryString from '_@landing/hooks/useFilterQueryString';
 //RELATIVE MODULES
 import ActivityCard, { ActivityType } from '../../comps/ActivityCard';
 
 export default function ProfilePage() {
+  const filter = useFilterQueryString();
   const [isFollow, setIsFollow] = useState(false);
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
   const { client } = useGetFeedUser();
+  const { client: clientMessage } = useGetStreamUser();
+
   const searchParams = useSearchParams();
   const type = searchParams.get('type') || 'post';
   const { id } = useParams();
   const pathname = usePathname();
   const utils = nextApi.useContext();
+  const { user } = useAuthStore();
 
   const { data: userInfo } = nextApi.getGetstreamUserInfo.useQuery({ targetGetstreamId: id });
 
@@ -61,6 +69,13 @@ export default function ProfilePage() {
     return handleFollow();
   };
 
+  const onMessage = async () => {
+    if (!user?.profile.getstreamId || !clientMessage || user.profile.getstreamId === id) return;
+    const channel = await createRequestChannel1vs1(clientMessage, user?.profile.getstreamId, id);
+    if (!channel) return;
+    filter({ channelId: channel.id }, '/community/message');
+  };
+
   useEffect(() => {
     client
       ?.feed('user', id)
@@ -88,7 +103,7 @@ export default function ProfilePage() {
                 @{userInfo?.username}
               </p>
               <div className="flex justify-between lg:justify-center">
-                <p className="mr-6 text-sm text-text-30">
+                <p onClick={onMessage} className="mr-6 cursor-pointer text-sm text-text-30">
                   <MessageIcon className="mr-1 inline-block" /> <span>Message</span>
                 </p>
                 <p className="text-sm text-text-30">

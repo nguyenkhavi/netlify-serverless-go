@@ -44,11 +44,15 @@ function ReportModal() {
                 <p className={classcat(['text-body1 text-text-80 opacity-50'])}>
                   Help us understand the issue.What’s the problem with this Conversation?
                 </p>
-                <button className={classcat(['text-start text-body2 text-white/50'])}>
+                <button
+                  onClick={onClose}
+                  className={classcat(['text-start text-body2 text-white/50'])}
+                >
                   It’s spam
                 </button>
               </div>
               <button
+                onClick={onClose}
                 className={classcat([
                   'border-b border-solid border-text-10 p-4 text-start text-white/50',
                 ])}

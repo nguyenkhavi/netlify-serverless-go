@@ -1,5 +1,6 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import {
@@ -59,7 +60,7 @@ const CustomMessage = ({ inviteUserIds }: { inviteUserIds: string[] }) => {
     >
       <Avatar
         name={message.user?.name || message.user?.username || message.user?.id}
-        image={message.user?.image}
+        image={urlWithIpfs(message.user?.image)}
         size={32}
       />
       <div

@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useMemo } from 'react';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import {
   Attachment,
   Avatar,
@@ -86,7 +87,7 @@ const CustomMessage = () => {
       <div className="h-5 w-5 rounded-full border border-solid border-primary-700 md:h-8 md:w-8">
         <Avatar
           name={message.user?.name || message.user?.username || message.user?.id}
-          image={message.user?.image}
+          image={urlWithIpfs(message.user?.image)}
           size={width < 768 ? 18 : 30}
         />
       </div>

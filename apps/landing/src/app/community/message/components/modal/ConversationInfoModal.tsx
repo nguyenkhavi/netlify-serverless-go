@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { ChannelMemberResponse } from 'stream-chat';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { useCallback, useEffect, useState } from 'react';
 import { Avatar, useChatContext } from 'stream-chat-react';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
@@ -126,7 +127,11 @@ function ConversationInfoModal() {
                     <div
                       className={classcat(['grid grid-flow-col items-center justify-start gap-2'])}
                     >
-                      <Avatar name={item.user?.name} image={item.user?.image} size={40} />
+                      <Avatar
+                        name={item.user?.name}
+                        image={urlWithIpfs(item.user?.image)}
+                        size={40}
+                      />
                       <p className={classcat(['text-body2 text-primary-700'])}>{`@${
                         item.user?.name ?? ''
                       }`}</p>

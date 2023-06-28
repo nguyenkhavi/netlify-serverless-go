@@ -1,5 +1,6 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import {
   Avatar,
   ChannelHeaderProps,
@@ -33,7 +34,7 @@ function CustomHeader(props: CustomHeaderProps) {
         <button className={classcat(['block md:hidden'])} onClick={onShowChannel}>
           <ChevronLeftIcon />
         </button>
-        <Avatar size={40} image={displayImage} name={displayTitle || 'Deleted'} />
+        <Avatar size={40} image={urlWithIpfs(displayImage)} name={displayTitle || 'Deleted'} />
         <p className={classcat(['text-body2 text-primary-700'])}>
           {title || displayTitle ? `@${displayTitle}` : 'Deleted'}
         </p>

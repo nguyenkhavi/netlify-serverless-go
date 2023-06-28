@@ -2,6 +2,7 @@
 import classcat from 'classcat';
 import { UserResponse } from 'stream-chat';
 import { Combobox } from '@headlessui/react';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 import { Avatar, useChatContext } from 'stream-chat-react';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
@@ -214,7 +215,7 @@ function AddChatModal({ onSuccess }: Props) {
                                   >
                                     <Avatar
                                       name={item.name}
-                                      image={item.image}
+                                      image={urlWithIpfs(item.image)}
                                       size={40}
                                       shape="circle"
                                     />
