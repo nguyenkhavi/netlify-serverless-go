@@ -5,7 +5,7 @@ import classcat from 'classcat';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { feedbackStore } from '_@landing/stores/feedbackStore';
-import { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
+import useAuthStore, { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
@@ -18,6 +18,7 @@ import ChevronDownIcon from '_@shared/icons/ChevronDownIcon';
 import QuestionCircleIcon from '_@shared/icons/QuestionCircleIcon';
 //RELATIVE MODULES
 import { PROFILE_NAV } from './ProfileNav';
+import VerificationStep from './VerificationStep';
 
 type ProfileNavMobileProps = {
   title: string;
@@ -122,6 +123,12 @@ function ProfileDropdown() {
 }
 
 function AccountStatusDropdown() {
+  const { user } = useAuthStore();
+  const { personaInquiryId, personaAddressInquiryId } = user?.profile ?? {};
+  const verificationLevel = [true, personaInquiryId, personaAddressInquiryId].filter(
+    Boolean,
+  ).length;
+
   return (
     <div>
       <div
@@ -131,9 +138,18 @@ function AccountStatusDropdown() {
           'mb-6.25 max-w-[330px] grow',
         ])}
       >
-        <p className="text-h6">Verification Level : 2</p>
-        <QuestionCircleIcon className="h-8 w-8" />
-        <p className="text-subtitle2 text-primary">Upgrade</p>
+        <p className="text-h6">Verification Level : {verificationLevel}</p>
+        <Popover>
+          <PopoverTrigger>
+            <div className="grid place-items-center">
+              <QuestionCircleIcon className="h-8 w-8" />
+              <p className="text-subtitle2 text-primary">Upgrade</p>
+            </div>
+          </PopoverTrigger>
+          <PopoverContent>
+            <VerificationStep />
+          </PopoverContent>
+        </Popover>
       </div>
       <div
         className={classcat([

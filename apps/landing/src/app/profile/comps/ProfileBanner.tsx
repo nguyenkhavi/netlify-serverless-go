@@ -12,7 +12,8 @@ import InstagramIcon from '_@shared/icons/InstagramIcon';
 
 export default function ProfileBanner() {
   const { user } = useAuthStore();
-  const { instagramUid, twitterUid, personaInquiryId } = user?.profile ?? {};
+  const { instagramUid, twitterUid, personaInquiryId, personaAddressInquiryId } =
+    user?.profile ?? {};
 
   if (!user) return <div className="mb-7 h-69 animate-pulse bg-secondary-400" />;
 
@@ -26,7 +27,7 @@ export default function ProfileBanner() {
     >
       <img
         className="relative z-[1] h-[137px] w-full object-cover lg:h-36"
-        src={urlWithIpfs(user.profile.coverUrl ?? '/images/profile/cover.jpeg')}
+        src={urlWithIpfs(user.profile.coverUrl ?? '/images/profile/cover-default.webp')}
         alt=""
       />
       <div
@@ -57,11 +58,12 @@ export default function ProfileBanner() {
                 ID Verified
               </p>
             </Show>
-
-            {/* <p className="flex items-center lg:text-sm">
-            <VerifyIcon className="mr-[2px] h-[18px] w-[18px] shrink-0 lg:mr-1" />
-            Address Verified
-          </p> */}
+            <Show when={personaAddressInquiryId}>
+              <p className="flex items-center lg:text-sm">
+                <VerifyIcon className="mr-[2px] h-[18px] w-[18px] shrink-0 lg:mr-1" />
+                Address Verified
+              </p>
+            </Show>
           </div>
         </Show>
         <div className="grid grid-cols-[repeat(2,40px)] justify-center gap-2">
