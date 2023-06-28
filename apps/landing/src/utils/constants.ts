@@ -136,3 +136,11 @@ export const FILTER_ITEMS = [
   { value: 'date:desc', label: 'Release Date: Latest' },
   { value: 'date:asc', label: 'Release Date: Oldest' },
 ];
+
+export const OPTIONS_FILTER = [
+  { label: 'Release Date: Latest', value: 'date:desc' },
+  { label: 'Price: Low to High', value: 'price:asc' },
+  { label: 'Price: High to Low', value: 'price:desc' },
+  { label: 'Release Date: Oldest', value: 'date:asc' },
+  { label: 'Trending', value: 'trending' },
+];

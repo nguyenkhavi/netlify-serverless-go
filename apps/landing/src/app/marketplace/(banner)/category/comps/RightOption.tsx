@@ -1,7 +1,10 @@
 //THIRD PARTY MODULES
+import { z } from 'zod';
 import classcat from 'classcat';
-import { useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { OPTIONS_FILTER, PRICE_FILTER } from '_@landing/utils/constants';
+import { Control, Controller, UseFormRegister, useForm } from 'react-hook-form';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import BaseSelect from '_@shared/components/select/BaseSelect';
@@ -10,44 +13,76 @@ import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/pop
 import GridIcon from '_@shared/icons/GridIcon';
 import FilterIcon from '_@shared/icons/FilterIcon';
 import ListViewIcon from '_@shared/icons/ListViewIcon';
+//HOOK
+import useFilterQueryString from '_@landing/hooks/useFilterQueryString';
 
-const OPTIONS = [
-  { label: 'Release Date: Latest', value: 'release-date-latest' },
-  { label: 'Recommended', value: 'recommended' },
-  { label: 'Price: Low to High', value: 'price-low-to-high' },
-  { label: 'Price: High to Low', value: 'price-low-to-low' },
-  { label: 'Release Date: Oldest', value: 'release-date-oldest' },
-  { label: 'Trending', value: 'trending' },
-];
+const schema = z.object({
+  sort: z.string().optional(),
+  minPrice: z.string().optional(),
+  maxPrice: z.string().optional(),
+  minMaxPrice: z.string().optional(),
+});
+
+type FormValues = z.infer<typeof schema>;
+
 type RightOptionProps = {
   view: string;
 };
 export default function RightOption({ view }: RightOptionProps) {
-  const [openFilter, setOpenFilter] = useState(false);
-
-  const router = useRouter();
-  const pathname = usePathname();
+  const filter = useFilterQueryString();
   const query = useSearchParams();
 
-  const _handleChangeView = (view: string) => {
-    const newQuery = new URLSearchParams(query);
-    newQuery.set('view', view);
-    router.push(pathname + '?' + newQuery.toString());
-  };
+  const [openFilter, setOpenFilter] = useState(false);
 
+  const { handleSubmit, register, control } = useForm<FormValues>({
+    defaultValues: {
+      sort: query.get('sort') || undefined,
+      minPrice: query.get('minPrice') || '',
+      maxPrice: query.get('maxPrice') || '',
+      minMaxPrice: query.get('minMaxPrice') || '',
+    },
+  });
+
+  const onSubmit = handleSubmit((value) => {
+    if (value.minPrice || value.maxPrice) {
+      value.minMaxPrice = '';
+    }
+    filter({ ...value, page: 1 });
+  });
+
+  const handleResetFilter = useCallback(() => {
+    filter({ minMaxPrice: '', minPrice: '', maxPrice: '', sort: '', page: '' });
+  }, [filter]);
+
+  const _handleChangeView = (view: string) => {
+    filter({ view });
+  };
   return (
-    <div className="ml-auto flex items-center lg:mb-2">
-      <BaseSelect
-        name="filter"
-        options={OPTIONS}
-        placeholder="Filters"
-        owStyles={{
-          triggerClasses:
-            'h-full ow:rounded w-auto min-w-[9.625rem] text-caption hidden lg:block ow:text-text-60',
-          itemClasses: 'ow:py-2 ow:my-0 text-base ow:h-auto ow:text-text-50',
-          contentClasses: 'ow:py-2',
-        }}
+    <form className="ml-auto flex items-center lg:mb-2">
+      <Controller
+        name="sort"
+        control={control}
+        render={({ field: { onChange, ...rest } }) => (
+          <>
+            <BaseSelect
+              {...rest}
+              onValueChange={(value) => {
+                onChange(value);
+                onSubmit();
+              }}
+              options={OPTIONS_FILTER}
+              placeholder="Filters"
+              owStyles={{
+                triggerClasses:
+                  'h-full ow:rounded w-auto min-w-[9.625rem] text-caption hidden lg:block ow:text-text-60',
+                itemClasses: 'ow:py-2 ow:my-0 text-base ow:h-auto ow:text-text-50',
+                contentClasses: 'ow:py-2',
+              }}
+            />
+          </>
+        )}
       />
+
       <Popover open={openFilter} onOpenChange={(open) => setOpenFilter(open)}>
         <PopoverTrigger>
           <div
@@ -58,8 +93,14 @@ export default function RightOption({ view }: RightOptionProps) {
             <span className="ml-1 text-body3 text-text-50">Filters</span>
           </div>
         </PopoverTrigger>
-        <PopoverContent>
-          <FilterContent setOpenFilter={setOpenFilter} />
+        <PopoverContent className={classcat(['ow:bg-black ow:px-3 ow:py-2'])}>
+          <FilterContent
+            setOpenFilter={setOpenFilter}
+            control={control}
+            onSubmit={onSubmit}
+            register={register}
+            handleResetFilter={handleResetFilter}
+          />
         </PopoverContent>
       </Popover>
       <div
@@ -68,76 +109,128 @@ export default function RightOption({ view }: RightOptionProps) {
           'ml-2 lg:h-11 lg:w-30.75 lg:border lg:border-text-10 lg:px-7',
         ])}
       >
-        <button onClick={() => _handleChangeView('list')}>
+        <button onClick={() => _handleChangeView('list')} type="button">
           <ListViewIcon
             className="h-3.5 data-[active=true]:text-primary"
             data-active={view === 'list'}
           />
         </button>
-        <button onClick={() => _handleChangeView('grid')}>
+        <button onClick={() => _handleChangeView('grid')} type="button">
           <GridIcon
             className="h-3.5 data-[active=true]:text-primary"
             data-active={view === 'grid'}
           />
         </button>
       </div>
-    </div>
+    </form>
   );
 }
 
-const MOCK_PRICE = [
-  { label: 'Under $100', path: '100' },
-  { label: '$100 to $500', path: '100-500' },
-  { label: '$500 to $1000', path: '500-1000' },
-  { label: '$1000 to $5000', path: '1000-5000' },
-];
-
 const inputClasses = [
-  'h-7.5 w-17.5 bg-black text-text-50 outline-none',
-  'py-[3px] px-3 text-btnmd placeholder:text-text-30',
-  'rounded mr-2.5',
+  'h-10 w-19.5 bg-secondary-300 text-text-20 outline-none',
+  'px-4 text-body1 placeholder:text-text-20',
+  'rounded mr-1',
 ];
 
-function FilterContent({ setOpenFilter }: { setOpenFilter: (open: boolean) => void }) {
-  const _handleClick = () => {
-    setOpenFilter(false);
-  };
+type FilterContentProps = {
+  setOpenFilter: (open: boolean) => void;
+  onSubmit: () => void;
+  handleResetFilter: () => void;
+  register: UseFormRegister<FormValues>;
+  control: Control<FormValues>;
+};
+function FilterContent({
+  setOpenFilter,
+  onSubmit,
+  register,
+  handleResetFilter,
+  control,
+}: FilterContentProps) {
   return (
     <div>
-      <h3 className="mb-1 text-h5 text-text-100">Price:</h3>
-      <div className="flex flex-col [&>button:not(:last-child)]:mb-2">
-        {MOCK_PRICE.map((price, i) => (
-          <button
-            type="button"
-            key={i}
-            className="w-max text-body1 text-text-50"
-            onClick={_handleClick}
-          >
-            {price.label}
-          </button>
-        ))}
+      <h3 className="py-2 text-h5 text-text-100">Price:</h3>
+      <div className="flex flex-col">
+        <Controller
+          name="minMaxPrice"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <>
+              {PRICE_FILTER.map((price, i) => (
+                <button
+                  type="button"
+                  key={i}
+                  className={classcat([
+                    'w-max py-2 text-body2',
+                    value === price.path ? 'text-primary' : 'text-text-50',
+                  ])}
+                  onClick={() => {
+                    onChange(price.path);
+                    onSubmit();
+                    setOpenFilter(false);
+                  }}
+                >
+                  {price.label}
+                </button>
+              ))}
+            </>
+          )}
+        />
       </div>
-      <div className="mt-3.75 flex">
-        <input type="text" className={classcat([inputClasses])} placeholder="$ Min" />
-        <input type="text" className={classcat([inputClasses])} placeholder="$ Max" />
-        <Button className="btnmd h-7.5 px-0 ow:w-14.75 ow:rounded" onClick={_handleClick}>
+      <div className="flex py-2">
+        <input
+          {...register('minPrice')}
+          type="text"
+          className={classcat([inputClasses])}
+          placeholder="$ Min"
+        />
+        <input
+          {...register('maxPrice')}
+          type="text"
+          className={classcat([inputClasses])}
+          placeholder="$ Max"
+        />
+        <Button
+          className="btnmd h-10 px-0 ow:w-14.75 ow:rounded-lg"
+          onClick={() => {
+            onSubmit();
+            setOpenFilter(false);
+          }}
+        >
           Go
         </Button>
       </div>
-      <hr className="my-4 h-[.5px] w-full border-none bg-text-10" />
-      <div className="flex flex-col [&>button:not(:last-child)]:mb-2">
-        {OPTIONS.map((price, i) => (
-          <button
-            type="button"
-            key={i}
-            className="w-max text-body1 text-text-50"
-            onClick={_handleClick}
-          >
-            {price.label}
-          </button>
-        ))}
+      <hr className="my-6 h-[.5px] w-full border-none bg-text-10" />
+      <div className="flex flex-col">
+        <Controller
+          control={control}
+          name="sort"
+          render={({ field: { onChange, value } }) => (
+            <>
+              {OPTIONS_FILTER.map((sort, i) => (
+                <button
+                  type="button"
+                  key={i}
+                  className={classcat([
+                    'w-max py-2 text-body2',
+                    value === sort.value ? 'text-primary' : 'text-text-50',
+                  ])}
+                  onClick={() => {
+                    onChange(sort.value);
+                    onSubmit();
+                    setOpenFilter(false);
+                  }}
+                >
+                  {sort.label}
+                </button>
+              ))}
+            </>
+          )}
+        />
       </div>
-      <button className="mx-auto mt-11 block cursor-pointer text-center text-underline underline">
+      <button
+        className="mx-auto mt-6 block cursor-pointer text-center text-underline text-text-80 underline"
+        onClick={handleResetFilter}
+      >
         Clear filters
       </button>
     </div>

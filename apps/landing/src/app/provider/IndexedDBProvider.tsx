@@ -35,9 +35,10 @@ import {
 } from '_@landing/utils/type';
 
 type TCategoryContext = { loading: boolean; data: ICategory[] };
+type TBestSeller = { loading: boolean; data: TTopSeller };
 type IndexedDBContextType = {
   db: IDBPDatabase | null;
-  bestSeller: TTopSeller;
+  bestSeller: TBestSeller;
   category: TCategoryContext;
 };
 
@@ -56,7 +57,7 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
   const chainId = useSDKChainId();
   const [chain, setChain] = useState<IChain>();
   const [db, setDB] = useState<IDBPDatabase | null>(null);
-  const [bestSeller, setBestSeller] = useState<TTopSeller>([]);
+  const [bestSeller, setBestSeller] = useState<TBestSeller>({ loading: true, data: [] });
   const [category, setCategory] = useState<TCategoryContext>({ loading: true, data: [] });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isInitContract, setIsInitContract] = useState<boolean>(false);
@@ -156,7 +157,10 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
         loading: false,
         data: category,
       });
-      setBestSeller(seller as TTopSeller);
+      setBestSeller({
+        loading: false,
+        data: seller,
+      });
     };
 
     connectDB();

@@ -9,6 +9,8 @@ import Button from '_@shared/components/Button';
 //SHARED
 import CartIcon from '_@shared/icons/CartIcon';
 import { toastStore } from '_@shared/stores/toast/toastStore';
+//RELATIVE MODULES
+import NoImage from '../NoImage';
 
 type Props = {
   value: TItemCard;
@@ -19,20 +21,25 @@ export default function ItemStoreCard({ value }: Props) {
   const buyNowLink = user ? '/marketplace/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
-    <div className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]">
-      <div className="aspect-square overflow-hidden">
-        <img
-          src={
-            value.item?.metadata.image
-              ? value.item.metadata.image
-              : '/images/marketplace/trending.png'
-          }
-          alt="image"
-          className="h-full w-full object-cover"
-        />
-      </div>
-      <p className="mt-3 text-body2">{value.item?.name || ''}</p>
-      <span className="mt-2 text-body3 text-text-80">{value.price}</span>
+    <div className="flex flex-col rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]">
+      <Link
+        href={`/marketplace/item/${value.listingId}`}
+        className="block aspect-square overflow-hidden"
+      >
+        {value.item && value.item.metadata.image ? (
+          <img src={value.item.metadata.image} alt="image" className="h-full w-full object-cover" />
+        ) : (
+          <NoImage />
+        )}
+      </Link>
+      <Link
+        href={`/marketplace/item/${value.listingId}`}
+        className="mt-3 line-clamp-2 text-body2 hover:underline"
+        title={value.item ? value.item.name : ''}
+      >
+        {value.item?.name || ''}
+      </Link>
+      <span className="mb-auto mt-2 text-body3 text-text-80">{value.price}</span>
       <div className="mt-4 flex">
         <Button
           as={Link}

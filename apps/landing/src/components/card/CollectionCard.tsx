@@ -5,6 +5,8 @@ import { cloneElement } from 'react';
 import { TCollectionCard } from '_@landing/utils/type';
 //HOOK
 import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
+//RELATIVE MODULES
+import NoImage from '../NoImage';
 
 export type CollectionCardProps = {
   view?: string;
@@ -29,11 +31,11 @@ function GridView({ value, owner, isMyItem = false, ...props }: CollectionCardPr
     },
     <>
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
-        <img
-          src={value.metadata.image ? value.metadata.image : '/images/marketplace/collection.png'}
-          alt="image"
-          className="h-full w-full object-cover"
-        />
+        {value.metadata.image && value.metadata.image ? (
+          <img src={value.metadata.image} alt="image" className="h-full w-full object-cover" />
+        ) : (
+          <NoImage />
+        )}
       </div>
       <p className="mt-3 line-clamp-1 text-body3 xlg:text-body2">{value.name}</p>
       <p className="mt-2 overflow-hidden text-caption text-text-50 xlg:text-body3">
@@ -67,11 +69,11 @@ function ListView({ value, owner, isMyItem = false, ...props }: CollectionCardPr
           'aspect-square w-[12.5rem] shrink-0 overflow-hidden md:mr-8.75',
         ])}
       >
-        <img
-          src={value.metadata.image ? value.metadata.image : '/images/marketplace/collection.png'}
-          alt="image"
-          className="h-full w-full object-cover"
-        />
+        {value.metadata.image && value.metadata.image ? (
+          <img src={value.metadata.image} alt="image" className="h-full w-full object-cover" />
+        ) : (
+          <NoImage />
+        )}
       </div>
       <div className="text-center md:text-start">
         <p className="mt-2 text-h6 xlg:mt-4 xlg:text-h5-bold">{value.name}</p>

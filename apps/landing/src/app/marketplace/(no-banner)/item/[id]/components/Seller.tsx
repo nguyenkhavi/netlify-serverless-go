@@ -1,13 +1,13 @@
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
-import { nextApi } from '_@landing/utils/api'
-import { formatAddress } from '_@landing/utils/format'
+import Link from 'next/link';
+import classcat from 'classcat';
+import { nextApi } from '_@landing/utils/api';
+import { formatAddress } from '_@landing/utils/format';
 //LAYOUT, COMPONENTS
-import Button from '_@shared/components/Button'
+import Button from '_@shared/components/Button';
 //SHARED
-import CheckIcon from '_@shared/icons/CheckIcon'
-import StoreIcon from '_@shared/icons/StoreIcon'
+import CheckIcon from '_@shared/icons/CheckIcon';
+import StoreIcon from '_@shared/icons/StoreIcon';
 
 type Props = {
   address: string;
@@ -23,7 +23,7 @@ function Seller({ address }: Props) {
           <div className="relative flex h-15 w-15 items-center justify-center rounded-full border border-solid border-primary-700 md:h-15 md:w-15">
             <img
               className="h-15 w-15 rounded-full object-cover md:h-15 md:w-15"
-              src={data?.[0]?.avatarUrl ?? '/images/marketplace/avatar.png'}
+              src={data?.[0]?.avatarUrl ?? '/images/profile/avatar-default.webp'}
               alt={`avatar of ${data?.[0]?.avatarUrl}`}
             />
             <div className="absolute bottom-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary">

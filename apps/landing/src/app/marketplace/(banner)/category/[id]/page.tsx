@@ -43,14 +43,7 @@ export default function FilterByCategory({ params }: { params: { id: string } })
       leftContent={
         <>
           <BrowseCategory />
-          {tabActive === 'item' ? (
-            <HomeAdvVertical
-              className="relative h-auto w-full py-8 ow:top-6 ow:px-15 xlg:grid"
-              btnClasses="ow:static mt-6.25"
-            />
-          ) : (
-            <FilterPrice />
-          )}
+          <FilterPrice />
         </>
       }
     >

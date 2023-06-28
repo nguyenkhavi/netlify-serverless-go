@@ -1,13 +1,12 @@
 //THIRD PARTY MODULES
-import Decimal from 'decimal.js'
-import { IDBPDatabase } from 'idb'
-import { IMarketData } from '_@landing/utils/type'
-import { dbIndex, dbOS } from '_@landing/utils/constants'
-import { ActivityType, ICollection, IPaging } from '_@landing/utils/type'
+import Decimal from 'decimal.js';
+import { IDBPDatabase } from 'idb';
+import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { IFilter, IMarketData, ISorting } from '_@landing/utils/type';
+import { ActivityType, ICollection, IPaging } from '_@landing/utils/type';
 //RELATIVE MODULES
-import { getItemById } from './item'
-import { getAvailableMarketByItem } from './market'
-import { getAllActivitiesByCollectionAddress } from './activity'
+import { getItemById } from './item';
+import { getAllActivitiesByCollectionAddress } from './activity';
 
 export async function addCollection(db: IDBPDatabase, data: ICollection) {
   try {
@@ -20,8 +19,10 @@ export async function addCollection(db: IDBPDatabase, data: ICollection) {
 export async function getTrendingCollectionsByCategory(
   db: IDBPDatabase,
   category: number,
-  paging: IPaging,
+  query: IPaging & ISorting & IFilter,
 ) {
+  const { search, page, pageSize, price, minPrice, maxPrice } = query;
+
   const collections = await getAllRawCollectionByCategory(db, category);
   const collectionsWithVolume = await Promise.all(
     collections.map(async (collection) => {
@@ -35,19 +36,35 @@ export async function getTrendingCollectionsByCategory(
         activities,
         totalSale: activities.length,
         volume: activities.reduce((total, current) => {
-          total = current.price * current.quantity;
+          total = new Decimal(current.price).mul(current.quantity).add(total).toNumber();
           return total;
         }, 0),
       };
     }),
   );
+
+  const collectionWithQuery = collectionsWithVolume
+    .filter((item) => {
+      if (search && !item.name.toLowerCase().includes(search.toLowerCase())) return false;
+      if (minPrice && maxPrice) {
+        if (item.volume < minPrice || item.volume > maxPrice) return false;
+      }
+      if (minPrice && !maxPrice) {
+        if (item.volume < minPrice) return false;
+      }
+      if (!minPrice && maxPrice) {
+        if (item.volume > maxPrice) return false;
+      }
+      return true;
+    })
+    .sort((marketA, marketB) => {
+      if (price == 'asc') {
+        return marketA.volume - marketB.volume;
+      } else return marketB.volume - marketA.volume;
+    });
   return {
-    data: collectionsWithVolume
-      .sort((marketA, marketB) => {
-        return marketB.volume - marketA.volume;
-      })
-      .slice(paging.page * paging.pageSize, (paging.page + 1) * paging.pageSize),
-    total: collections.length,
+    data: collectionWithQuery.slice(page * pageSize, (page + 1) * pageSize),
+    total: collectionWithQuery.length,
   };
 }
 

@@ -19,7 +19,7 @@ export function SkeImage({ className }: SkeImageProps) {
       ])}
     >
       <svg
-        className="h-12 w-12 text-gray-200"
+        className="h-12 w-12 text-gray-600"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
         fill="currentColor"
@@ -82,9 +82,9 @@ export function SkeCard({ className, profile, paragraph }: SkeCardProps) {
     <div
       className={classcat(['animate-pulse rounded border border-gray-700 p-4 shadow', className])}
     >
-      <div className="mb-4 flex h-48 items-center justify-center rounded bg-gray-300 dark:bg-gray-700">
+      <div className="mb-4 flex h-48 items-center justify-center rounded bg-gray-700">
         <svg
-          className="h-12 w-12 text-gray-200 dark:text-gray-600"
+          className="h-12 w-12 text-gray-600"
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
           fill="currentColor"

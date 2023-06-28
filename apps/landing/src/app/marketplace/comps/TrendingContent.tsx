@@ -31,13 +31,12 @@ export default function TrendingContent({ category, ...props }: TrendingContentP
   useEffect(() => {
     _getData();
   }, [_getData]);
-  if (isLoading) return <></>;
+  if (isLoading) return null;
   return (
     <ContentBox {...props}>
       <Show when={data.length === 0}>
         <div className="pointer-events-none h-87.5 opacity-0"></div>
       </Show>
-
       {data.map((item, index) => (
         <MainCard
           data-sal="slide-up"

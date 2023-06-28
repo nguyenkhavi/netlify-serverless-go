@@ -9,6 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/pop
 //SHARED
 import ThreeDotIcon from '_@shared/icons/ThreeDotIcon';
 //RELATIVE MODULES
+import NoImage from '../NoImage';
 import BurnNFT from '../item-action-content/BurnNFT';
 import SellNFT from '../item-action-content/SellNFT';
 import DelistNFT from '../item-action-content/DelistNFT';
@@ -27,11 +28,11 @@ export default function MyItemCard({ value }: Props) {
   return (
     <div className="rounded-[10px] border border-[#303030] p-4">
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
-        <img
-          src={value.metadata.image ? value.metadata.image : '/images/marketplace/trending.png'}
-          alt="image"
-          className="h-full w-full object-cover"
-        />
+        {value.metadata.image ? (
+          <img src={value.metadata.image} alt="image" className="h-full w-full object-cover" />
+        ) : (
+          <NoImage />
+        )}
       </div>
       <div className="mt-3 flex items-center justify-between">
         <p className="text-body3 xlg:text-body2">{value.name}</p>
