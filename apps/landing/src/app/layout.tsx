@@ -11,6 +11,7 @@ import Header from '_@landing/layouts/Header';
 import Footer from '_@landing/layouts/footer/Footer';
 import BaseToast from '_@shared/components/toast/BaseToast';
 import ModalFeedback from '_@landing/components/modal/ModalFeedback';
+import { DialogOptionMyItem } from '_@landing/components/dialog/DialogOptionMyItem';
 //HOOK
 import getMyProfileOnServer from '_@landing/server/auth';
 //RELATIVE MODULES
@@ -45,6 +46,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <Footer />
                 <ModalFeedback />
                 <BaseToast />
+                <DialogOptionMyItem />
               </body>
             </html>
             {/* </AnimationProvider> */}

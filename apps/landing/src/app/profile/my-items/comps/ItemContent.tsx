@@ -12,6 +12,7 @@ import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 import Show from '_@shared/components/Show';
 import NoData from '_@landing/components/NoData';
 import MyItemCard from '_@landing/components/card/MyItemCard';
+import { SkeCard } from '_@landing/components/skeleton/skeleton';
 import BasePagination from '_@shared/components/pagination/BasePagination';
 
 export default function ItemContent() {
@@ -19,19 +20,23 @@ export default function ItemContent() {
   const query = useSearchParams();
   const [data, setData] = useState<TItemStore>([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
   const { db } = useIndexedDBContext();
 
   const page = +(query.get('page') || 1);
 
   const _getData = useCallback(() => {
     if (!user?.profile.wallet || !db) return;
+    setIsLoading(true);
     getItemByOwner(db, user.profile.wallet, {
       page: page - 1,
       pageSize: pageSize,
-    }).then((res) => {
-      setData(res.data as TItemStore);
-      setTotalItems(res.total);
-    });
+    })
+      .then((res) => {
+        setData(res.data as TItemStore);
+        setTotalItems(res.total);
+      })
+      .finally(() => setIsLoading(false));
   }, [user, db, page]);
 
   useEffect(() => {
@@ -40,22 +45,30 @@ export default function ItemContent() {
 
   return (
     <>
-      <Show when={data.length > 0}>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
-          {data.map((item, index) => (
-            <React.Fragment key={index}>
-              <MyItemCard value={item} />
-              {/* <Show when={(index + 1) % 6 === 0}>
-                <HomeAdvHorizontal
-                  className={classcat(['col-span-full md:hidden'])}
-                  isHome={false}
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
+        {isLoading
+          ? Array(8)
+              .fill(0)
+              .map((_, index) => (
+                <SkeCard
+                  key={index}
+                  paragraph
+                  className="[&>div:first-child]:aspect-square [&>div:first-child]:h-auto"
                 />
-              </Show> */}
-            </React.Fragment>
-          ))}
-        </div>
-      </Show>
-      <Show when={data.length === 0}>
+              ))
+          : data.map((item, index) => (
+              <React.Fragment key={index}>
+                <MyItemCard value={item} />
+                <Show when={(index + 1) % 6 === 0}>
+                  <HomeAdvHorizontal
+                    className={classcat(['col-span-full md:hidden'])}
+                    isHome={false}
+                  />
+                </Show>
+              </React.Fragment>
+            ))}
+      </div>
+      <Show when={data.length === 0 && !isLoading}>
         <NoData />
       </Show>
       <Show when={totalItems > pageSize}>

@@ -26,12 +26,15 @@ export default function FormItem({
 
   return (
     <div className={classcat(['grid gap-1', className])}>
-      <label
-        htmlFor={id}
-        className={classcat(['cursor-pointer text-body1 font-medium text-text-80', labelClasses])}
-      >
-        {label}
-      </label>
+      {label ? (
+        <label
+          htmlFor={id}
+          className={classcat(['cursor-pointer text-body1 font-medium text-text-80', labelClasses])}
+        >
+          {label}
+        </label>
+      ) : null}
+
       {cloneElement(children, { id, name })}
       <ErrorMessage
         name={name}

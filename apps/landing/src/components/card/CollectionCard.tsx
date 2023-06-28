@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import Link from 'next/link';
 import classcat from 'classcat';
+import { cloneElement } from 'react';
 import { TCollectionCard } from '_@landing/utils/type';
 //HOOK
 import { useGetOwnerByWallet } from '_@landing/hooks/useGetOwnerByWallet';
@@ -9,21 +10,24 @@ export type CollectionCardProps = {
   view?: string;
   value: TCollectionCard;
   owner?: string;
+  isMyItem?: boolean;
 };
-export default function CollectionCard({ view, value }: CollectionCardProps) {
+export default function CollectionCard({ view, value, isMyItem = false }: CollectionCardProps) {
   const { owner } = useGetOwnerByWallet(value.owner);
 
-  if (view === 'list') return <ListView value={value} owner={owner} />;
-  return <GridView value={value} owner={owner} />;
+  if (view === 'list') return <ListView value={value} owner={owner} isMyItem={isMyItem} />;
+  return <GridView value={value} owner={owner} isMyItem={isMyItem} />;
 }
 
-function GridView({ value, owner, ...props }: CollectionCardProps) {
-  return (
-    <Link
-      href={'/marketplace/collection/' + value.address}
-      className="rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]"
-      {...props}
-    >
+function GridView({ value, owner, isMyItem = false, ...props }: CollectionCardProps) {
+  const Tag = renderElementTag(isMyItem, value.address);
+  return cloneElement(
+    Tag,
+    {
+      className: 'rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]',
+      ...props,
+    },
+    <>
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         <img
           src={value.metadata.image ? value.metadata.image : '/images/marketplace/collection.png'}
@@ -40,20 +44,23 @@ function GridView({ value, owner, ...props }: CollectionCardProps) {
         <span className="mr-2 w-12.5">Volume</span>
         <span>{value.volume} BUSD</span>
       </div>
-    </Link>
+    </>,
   );
 }
 
-function ListView({ value, owner, ...props }: CollectionCardProps) {
-  return (
-    <Link
-      href={'/marketplace/collection/' + value.address}
-      className={classcat([
+function ListView({ value, owner, isMyItem = false, ...props }: CollectionCardProps) {
+  const Tag = renderElementTag(isMyItem, value.address);
+
+  return cloneElement(
+    Tag,
+    {
+      className: classcat([
         'rounded-[10px] border border-[#303030] p-5 xlg:pb-5.5 xlg:pt-3.5',
         'md:flex',
-      ])}
-      {...props}
-    >
+      ]),
+      ...props,
+    },
+    <>
       <div
         className={classcat([
           'mx-auto rounded-[10px] border-[.5px] border-white/[.13] md:mx-0',
@@ -78,6 +85,11 @@ function ListView({ value, owner, ...props }: CollectionCardProps) {
           <span className="ml-1.25 text-subtitle2 font-normal text-text-50">${value.volume}</span>
         </div>
       </div>
-    </Link>
+    </>,
   );
+}
+
+function renderElementTag(isMyItem: boolean, address: string) {
+  if (isMyItem) return <div></div>;
+  return <Link href={address}></Link>;
 }

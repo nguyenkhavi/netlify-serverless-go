@@ -1,8 +1,8 @@
 //THIRD PARTY MODULES
-import Decimal from 'decimal.js';
-import { IDBPDatabase } from 'idb';
-import { queryItemFactory } from '_@landing/utils/queryFactory';
-import { Chains, dbIndex, dbOS } from '_@landing/utils/constants';
+import Decimal from 'decimal.js'
+import { IDBPDatabase } from 'idb'
+import { queryItemFactory } from '_@landing/utils/queryFactory'
+import { Chains, dbIndex, dbOS } from '_@landing/utils/constants'
 import {
   ActivityType,
   IAttribute,
@@ -140,13 +140,14 @@ export async function getAllRawMarketsByItem(
 
 export async function getAvailableMarketByItem(db: IDBPDatabase, itemId: string) {
   const market = await getAllRawMarketsByItem(db, itemId);
-  const availableMarket = market.filter(async (mk) => {
+  const marketStatus = await Promise.all(market.map(async (mk) => {
     const status = await getMarketStatusByListingId(db, mk.listingId);
-    if (status.isAvailable == 1) {
-      return true;
+    return {
+      ...mk,
+      status
     }
-    return false;
-  });
+  }));
+  const availableMarket = marketStatus.filter((mk) => mk.status?.isAvailable === 1);
   return Promise.all(
     availableMarket.map(async (mk) => {
       const token = await getTokenByAddress(db, mk.currency);

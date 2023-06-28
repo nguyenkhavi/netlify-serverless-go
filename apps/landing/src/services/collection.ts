@@ -1,12 +1,13 @@
 //THIRD PARTY MODULES
-import Decimal from 'decimal.js';
-import { IDBPDatabase } from 'idb';
-import { IMarketData } from '_@landing/utils/type';
-import { dbIndex, dbOS } from '_@landing/utils/constants';
-import { ActivityType, ICollection, IPaging } from '_@landing/utils/type';
+import Decimal from 'decimal.js'
+import { IDBPDatabase } from 'idb'
+import { IMarketData } from '_@landing/utils/type'
+import { dbIndex, dbOS } from '_@landing/utils/constants'
+import { ActivityType, ICollection, IPaging } from '_@landing/utils/type'
 //RELATIVE MODULES
-import { getItemById } from './item';
-import { getAllActivitiesByCollectionAddress } from './activity';
+import { getItemById } from './item'
+import { getAvailableMarketByItem } from './market'
+import { getAllActivitiesByCollectionAddress } from './activity'
 
 export async function addCollection(db: IDBPDatabase, data: ICollection) {
   try {
