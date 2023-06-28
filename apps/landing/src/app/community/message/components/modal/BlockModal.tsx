@@ -38,8 +38,8 @@ function BlockModal() {
       >
         <div className="grid justify-items-center gap-10 p-6">
           <p className={classcat(['text-body2 text-primary-700'])}>
-            Block {blockUser?.user?.name} will no longer be able to follow or message you, and you
-            will not see notifications from {blockUser?.user?.name}
+            Block @{blockUser?.user?.name} will no longer be able to follow or message you, and you
+            will not see notifications from @{blockUser?.user?.name}
           </p>
           <div className={classcat(['grid w-full gap-4'])}>
             <Button

@@ -1,9 +1,8 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { Avatar } from 'stream-chat-react';
-import { useChatContext } from 'stream-chat-react';
 import { ChannelMemberResponse } from 'stream-chat';
 import { useCallback, useEffect, useState } from 'react';
+import { Avatar, useChatContext } from 'stream-chat-react';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import { DefaultStreamChatGenerics } from 'stream-chat-react/dist/types/types';
 //LAYOUT, COMPONENTS
@@ -13,8 +12,6 @@ import { Modal } from '_@shared/components/dialog/Modal';
 import BaseSwitch from '_@shared/components/switch/BaseSwitch';
 //SHARED
 import ChevronLeftIcon from '_@shared/icons/ChevronLeftIcon';
-//HOOK
-import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import './popup.css';
 import FollowStatus from '../FollowStatus';
@@ -32,7 +29,6 @@ function ConversationInfoModal() {
   const [members, setMembers] = useState<ChannelMemberResponse<DefaultStreamChatGenerics>[]>([]);
   const [notify, setNotify] = useState(false);
   const { user } = useAuthStore();
-  const { client } = useGetFeedUser();
   const { channel } = useChatContext();
   const { openInfo, setOpenInfo } = useModalContext();
   const { setOpenBlock, setOpenLeave, setOpenReport, setBlockUser } = useModalContext();
@@ -131,9 +127,11 @@ function ConversationInfoModal() {
                       className={classcat(['grid grid-flow-col items-center justify-start gap-2'])}
                     >
                       <Avatar name={item.user?.name} image={item.user?.image} size={40} />
-                      <p className={classcat(['text-body2 text-primary-700'])}>{item.user?.name}</p>
+                      <p className={classcat(['text-body2 text-primary-700'])}>{`@${
+                        item.user?.name ?? ''
+                      }`}</p>
                     </div>
-                    <FollowStatus client={client} id={item.user_id} />
+                    <FollowStatus id={item.user_id ?? ''} />
                   </div>
                 ))}
               </div>
@@ -163,7 +161,7 @@ function ConversationInfoModal() {
                 'flex flex-col items-center justify-center space-y-6 p-4 md:p-6',
               ])}
             >
-              <Show when={members[0]}>
+              <Show when={false}>
                 <button
                   onClick={onBlock}
                   className={classcat(['w-fit text-error hover:drop-shadow-btn'])}
@@ -171,7 +169,7 @@ function ConversationInfoModal() {
                   Block {members[0]?.user?.name}
                 </button>
               </Show>
-              <Show when={members[0]}>
+              <Show when={false}>
                 <button
                   onClick={onReport}
                   className={classcat(['w-fit text-error hover:drop-shadow-btn'])}

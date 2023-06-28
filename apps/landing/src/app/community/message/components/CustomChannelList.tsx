@@ -90,8 +90,10 @@ function CustomChannelList({
           channel={props.channel}
           className={classcat([
             '[&>div>div>div>span]:text-body2 [&>div>div>div>span]:text-primary-700',
+            '[&>div>div>div>span]:indent-[-4px] [&>div>div>div>span]:first-letter:text-[0px]',
             '[&>div>div>p]:text-body3 [&>div>div>p]:text-text-30',
             '[&>div>div]:text-body3 [&>div>div]:text-text-30',
+            '[&>div>div>div]:h-6',
           ])}
           Preview={CustomChannelPreview}
         />

@@ -2,8 +2,9 @@ import {
   communitySearchUserOrPostSchema,
   communityCreatePostSchema,
   communityGetstreamIdSchema,
+  communityGetstreamIdOf2UserSchema,
 } from './community.schema';
-import { router, protectedRouter } from '_@rpc/config/router';
+import { router, protectedRouter, publicProcedure } from '_@rpc/config/router';
 import {
   communitySearchUserOrPost,
   communityCreatePost,
@@ -63,6 +64,11 @@ export const communityRouters = router({
     .input(communityGetstreamIdSchema)
     .query(({ input, ctx }) =>
       communityGetFollowingEachOtherInfo(ctx.profile.getstreamId, input.targetGetstreamId),
+    ),
+  communityGetFollowingEachOtherInfoOf2User: publicProcedure
+    .input(communityGetstreamIdOf2UserSchema)
+    .query(({ input }) =>
+      communityGetFollowingEachOtherInfo(input.getstreamId, input.targetGetstreamId),
     ),
 });
 

@@ -22,6 +22,7 @@ const migrateGetstream = async () => {
         'mute-channel',
         'delete-channel',
         'recreate-channel',
+        'add-links',
       ],
       guest: ['read-channel'],
       channel_moderator: [],

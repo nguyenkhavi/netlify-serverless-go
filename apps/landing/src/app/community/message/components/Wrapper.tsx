@@ -3,11 +3,11 @@ import classcat from 'classcat';
 import React, { Fragment, PropsWithChildren } from 'react';
 //RELATIVE MODULES
 
-type Props = PropsWithChildren & {
+type Props = {
   show: boolean;
 };
 
-function Wrapper({ show, children }: Props) {
+function Wrapper({ show, children }: PropsWithChildren<Props>) {
   if (show) {
     return (
       <div

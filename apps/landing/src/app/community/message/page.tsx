@@ -2,23 +2,19 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Channel, Chat, MessageInput, MessageList, Thread, Window } from 'stream-chat-react';
+import { Chat, MessageInput, MessageList, Thread, Window } from 'stream-chat-react';
 //LAYOUT, COMPONENTS
-import Loading from './components/Loading';
 import Wrapper from './components/Wrapper';
 import Show from '_@shared/components/Show';
 import MenuMobile from './components/MenuMobile';
 import CustomHeader from './components/CustomHeader';
 import RequestAbout from './components/RequestAbout';
+import CustomChannel from './components/CustomChannel';
 import BlockModal from './components/modal/BlockModal';
-import CustomMessage from './components/CustomMessage';
 import DeleteModal from './components/modal/DeleteModal';
 import ReportModal from './components/modal/ReportModal';
 import CustomSearchBar from './components/CustomSearchBar';
 import CustomChannelList from './components/CustomChannelList';
-import { CustomMessageInput } from './components/CustomMessageInput';
-import EmptyPlaceholderRequest from './components/EmptyPlaceholderRequest';
-import CustomMessageInputRequest from './components/CustomMessageInputRequest';
 //HOOK
 import useWindowSize from '_@landing/hooks/useWindowSize';
 import useDebounceValue from '_@landing/hooks/useDebounceValue';
@@ -129,21 +125,11 @@ export default function CommunityPage() {
           </div>
           <Show when={showChat}>
             <div ref={chatRef} id={tab}>
-              <Channel
-                key={`${refreshChannel}`}
-                Input={
-                  isRequest
-                    ? () => (
-                        <CustomMessageInputRequest
-                          onAccept={onAcceptChat}
-                          onReject={onRejectChat}
-                        />
-                      )
-                    : CustomMessageInput
-                }
-                Message={CustomMessage}
-                LoadingIndicator={Loading}
-                EmptyPlaceholder={isRequest ? <EmptyPlaceholderRequest /> : undefined}
+              <CustomChannel
+                refreshChannel={refreshChannel}
+                onAcceptChat={onAcceptChat}
+                onRejectChat={onRejectChat}
+                isRequest={isRequest}
               >
                 <Window>
                   <CustomHeader onShowChannel={onShowChannel} />
@@ -159,7 +145,7 @@ export default function CommunityPage() {
                   <ReportModal />
                 </Window>
                 <Thread />
-              </Channel>
+              </CustomChannel>
             </div>
           </Show>
         </div>

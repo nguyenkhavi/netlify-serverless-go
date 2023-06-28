@@ -35,7 +35,7 @@ function CustomHeader(props: CustomHeaderProps) {
         </button>
         <Avatar size={40} image={displayImage} name={displayTitle || 'Deleted'} />
         <p className={classcat(['text-body2 text-primary-700'])}>
-          {title || displayTitle || 'Deleted'}
+          {title || displayTitle ? `@${displayTitle}` : 'Deleted'}
         </p>
       </div>
       <button onClick={() => setOpenInfo(true)}>

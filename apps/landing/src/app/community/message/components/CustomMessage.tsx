@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import {
   Attachment,
   Avatar,
@@ -14,12 +15,20 @@ import Show from '_@shared/components/Show';
 import DoubleCheckIcon from '_@shared/icons/DoubleCheckIcon';
 //HOOK
 
-const CustomMessage = () => {
+const CustomMessage = ({ inviteUserIds }: { inviteUserIds: string[] }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [sameLine, setSameLine] = useState(true);
   const { message, isMyMessage, readBy } = useMessageContext();
+  const { user } = useAuthStore();
 
   const isMyMsg = useMemo(() => isMyMessage(), [isMyMessage]);
+  const readByExcludeInvitedUser = useMemo(
+    () =>
+      readBy?.filter((item) => {
+        return !inviteUserIds.includes(item.id) && user?.profile.getstreamId !== item.id;
+      }),
+    [inviteUserIds, readBy, user?.profile.getstreamId],
+  );
 
   const hasAttachments = useMemo(() => {
     return message.attachments && message.attachments.length > 0;
@@ -71,7 +80,7 @@ const CustomMessage = () => {
           ])}
         >
           <MessageTimestamp customClass="text-text-20 text-caption" format="hh:mm a" />
-          <Show when={isMyMsg && readBy && readBy.length > 1}>
+          <Show when={isMyMsg && readByExcludeInvitedUser && readByExcludeInvitedUser.length > 0}>
             <DoubleCheckIcon />
           </Show>
         </div>

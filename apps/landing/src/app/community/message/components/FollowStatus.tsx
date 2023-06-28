@@ -1,12 +1,10 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { StreamClient } from 'getstream';
-import { StreamType } from '_@rpc/services/getstream/type';
+import { nextApi } from '_@landing/utils/api';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 import Switch from '_@shared/components/conditions/Switch';
 //HOOK
-import { useCheckFollowUser } from '_@landing/hooks/useCheckFollowUser';
 
 const classBtnNotFollow = classcat([
   'ow:border-text-30 ow:bg-text-30 ow:text-primary-700',
@@ -14,32 +12,53 @@ const classBtnNotFollow = classcat([
   'hover:border-text-30 hover:bg-text-30 ow:hover:text-primary-700',
 ]);
 
-function FollowStatus({ id, client }: { client?: StreamClient<StreamType>; id?: string }) {
-  const { followed, loading } = useCheckFollowUser(client, id);
+function FollowStatus({ id }: { id: string }) {
+  const { data, isFetching, isLoading, refetch } =
+    nextApi.communityGetFollowingEachOtherInfo.useQuery(
+      {
+        targetGetstreamId: id,
+      },
+      {
+        refetchOnWindowFocus: false,
+      },
+    );
+
+  const { mutate: followUser, isLoading: isFollowing } = nextApi.communityFollowUser.useMutation({
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
+  const { mutate: unFollowUser, isLoading: isUnFollowing } =
+    nextApi.communityUnfollowUser.useMutation({
+      onSuccess: () => {
+        refetch();
+      },
+    });
 
   const onFollowUser = () => {
-    console.log('🚀 ~ followUser ~ followUser:');
+    followUser({ targetGetstreamId: id });
   };
 
   const onUnFollowUser = () => {
-    console.log('🚀 ~ unFollowUser ~ unFollowUser:');
+    unFollowUser({ targetGetstreamId: id });
   };
 
   return (
     <Switch.Root>
-      <Switch.Case when={followed}>
+      <Switch.Case when={data?.following}>
         <Button
           onClick={onUnFollowUser}
-          isLoading={loading}
+          isLoading={isLoading || isFetching || isUnFollowing}
           className={classcat(['ow:h-10 ow:w-29.25 ow:rounded-[theme(spacing.10)]'])}
         >
           Following
         </Button>
       </Switch.Case>
-      <Switch.Case when={!followed}>
+      <Switch.Case when={!data?.following}>
         <Button
           onClick={onFollowUser}
-          isLoading={loading}
+          isLoading={isLoading || isFetching || isFollowing}
           className={classcat([
             'ow:h-10 ow:w-29.25 ow:rounded-[theme(spacing.10)]',
             classBtnNotFollow,

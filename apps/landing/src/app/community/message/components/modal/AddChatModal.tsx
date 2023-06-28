@@ -29,15 +29,19 @@ type Props = {
 type UserState = {
   data: UserResponse<DefaultStreamChatGenerics>[];
   isLoading: boolean;
-  lastId: string;
+  offset: number;
+  limit: number;
   isHaveMore: boolean;
   query: string;
 };
 
+const LIMIT = 100;
+
 const defaultUserState = {
   data: [],
   isLoading: false,
-  lastId: '',
+  offset: 0,
+  limit: LIMIT,
   isHaveMore: true,
   query: '',
 };
@@ -57,7 +61,7 @@ function AddChatModal({ onSuccess }: Props) {
   const onScroll = (e: React.UIEvent<HTMLElement>) => {
     const { scrollTop, scrollHeight, offsetHeight } = e.currentTarget;
     if (!userState.isLoading && scrollTop + offsetHeight >= scrollHeight && userState.isHaveMore) {
-      setUserState((prev) => ({ ...prev, lastId: prev.data?.[prev.data.length - 1]?.id }));
+      setUserState((prev) => ({ ...prev, offset: prev.offset + LIMIT }));
     }
   };
 
@@ -87,9 +91,9 @@ function AddChatModal({ onSuccess }: Props) {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const _fetchData = useCallback(
-    debounce((open: boolean, query: string, lastId: string, userGetstreamId = '') => {
+    debounce((open: boolean, query: string, offset: number, userGetstreamId = '') => {
       if (!open) return;
-      setUserState((prev) => ({ ...prev, isLoading: true, data: [] }));
+      setUserState((prev) => ({ ...prev, isLoading: true }));
       client
         .queryUsers(
           {
@@ -105,11 +109,10 @@ function AddChatModal({ onSuccess }: Props) {
             },
           },
           {},
-          //stupid type
           {
-            limit: 100,
-            ...(lastId ? { id_lt: lastId } : {}),
-          } as any,
+            offset,
+            limit: LIMIT,
+          },
         )
         .then((rp) => {
           setUserState((prev) => ({
@@ -125,8 +128,8 @@ function AddChatModal({ onSuccess }: Props) {
   );
 
   useEffect(() => {
-    _fetchData(openAddChat, userState.query, userState.lastId, user?.profile.getstreamId);
-  }, [_fetchData, openAddChat, user?.profile.getstreamId, userState.lastId, userState.query]);
+    _fetchData(openAddChat, userState.query, userState.offset, user?.profile.getstreamId);
+  }, [_fetchData, openAddChat, user?.profile.getstreamId, userState.offset, userState.query]);
 
   return (
     <Modal.Root open={openAddChat}>
@@ -181,7 +184,6 @@ function AddChatModal({ onSuccess }: Props) {
                           setUserState((prev) => ({
                             ...prev,
                             ...defaultUserState,
-                            data: prev.data,
                             query: event.target.value,
                           }))
                         }
@@ -219,7 +221,7 @@ function AddChatModal({ onSuccess }: Props) {
                                     <span
                                       className={classcat(['truncate text-body2 text-primary-700'])}
                                     >
-                                      {item.name}
+                                      @{item.name}
                                     </span>
                                   </div>
                                   {selected ? (

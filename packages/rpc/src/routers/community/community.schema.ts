@@ -44,3 +44,10 @@ export const communityGetstreamIdSchema = z.object({
 });
 
 export type CommunityGetstreamIdInput = z.infer<typeof communityGetstreamIdSchema>;
+
+export const communityGetstreamIdOf2UserSchema = z.object({
+  targetGetstreamId: z.string(),
+  getstreamId: z.string(),
+});
+
+export type CommunityGetstreamIdOf2UserInput = z.infer<typeof communityGetstreamIdOf2UserSchema>;
