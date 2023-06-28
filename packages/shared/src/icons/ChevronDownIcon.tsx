@@ -16,3 +16,23 @@ export default function ChevronDownIcon(props: React.ComponentPropsWithoutRef<'s
     </svg>
   );
 }
+
+export function ChevronDownFillIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="25"
+      height="25"
+      fill="none"
+      viewBox="0 0 25 25"
+      {...props}
+    >
+      <g>
+        <path
+          fill="#B9BABD"
+          d="M11.367 15.117l-2.6-2.6c-.317-.316-.388-.679-.212-1.087.175-.408.487-.612.937-.613h5.15c.45 0 .762.205.938.613.175.409.104.771-.213 1.087l-2.6 2.6c-.1.1-.209.175-.325.225a.942.942 0 01-.375.075.941.941 0 01-.375-.075 1.038 1.038 0 01-.325-.225z"
+        ></path>
+      </g>
+    </svg>
+  );
+}
