@@ -16,6 +16,7 @@ import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
 import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import MainRight from './comps/MainRight';
+import HomeAdvHorizontal from '../comps/HomeAdvHorizontal';
 import ActivityCard, { ActivityType } from './comps/ActivityCard';
 
 export default function CommunityPage() {
@@ -125,7 +126,11 @@ export default function CommunityPage() {
           </div>
         </div>
         <div className="mt-6 grid gap-6">
-          {activities.map((activity) => (
+          {activities.slice(0, 2).map((activity) => (
+            <ActivityCard key={activity.id} activity={activity} />
+          ))}
+          <HomeAdvHorizontal />
+          {activities.slice(2).map((activity) => (
             <ActivityCard key={activity.id} activity={activity} />
           ))}
         </div>
