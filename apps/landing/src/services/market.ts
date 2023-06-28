@@ -222,7 +222,7 @@ const getFloorOfTrait = (
       ...obj,
       [getKeyOfTrait(attribute)]: markets
         .filter((market) =>
-          market.item?.metadata?.attributes.find(
+          market.item?.metadata?.attributes?.find(
             (item) => item.trait_type === attribute.trait_type && item.value === attribute.value,
           ),
         )
@@ -259,9 +259,7 @@ export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: nu
       }),
     },
   };
-  const chain = Object.values(Chains)
-    .map((chain) => chain)
-    .find((chain) => chain.chainId === item.chain);
+  const chain = Object.values(Chains).find((chain) => chain.chainId === item.chain);
 
   return {
     ...market,
