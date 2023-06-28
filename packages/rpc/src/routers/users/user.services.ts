@@ -74,6 +74,37 @@ export const setKYCInfo = async (input: TSetKYC, uid: string, requestClient: Req
   return true;
 };
 
+export const setAddressKYCInfo = async (
+  input: TSetKYC,
+  uid: string,
+  requestClient: RequestClient,
+) => {
+  await verifyInquiryId(input.inquiryId);
+  const ip = requestClient.ipAddress;
+  let location = '';
+  if (ip) {
+    const locationDetail = await getLocationDetail(ip);
+    if (locationDetail && 'city' in locationDetail) {
+      location = locationDetail.city;
+    }
+  }
+  await db.transaction(async (ctx) => {
+    await ctx
+      .update(userProfileTable)
+      .set({ personaAddressInquiryId: input.inquiryId })
+      .where(eq(userProfileTable.userId, uid));
+    await ctx.insert(userActivityTable).values({
+      userId: uid,
+      ipAddress: requestClient.ipAddress,
+      browser: requestClient.userAgent.browser.name,
+      action: ActivityAction.SUBMIT_ADDRESS_VERIFICATION,
+      location,
+    });
+  });
+
+  return true;
+};
+
 // export const connectWeb3Wallet = (input: TConnectWallet, uid: string) => {
 //   const message = generateSignedMessage(uid);
 //   const wallet = ethers.utils.verifyMessage(message, input.signature);

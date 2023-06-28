@@ -31,6 +31,7 @@ import {
   getPublicProfile,
   userGetAllShippingAddress,
   closeAccount,
+  setAddressKYCInfo,
 } from '_@rpc/routers/users/user.services';
 
 import { getQuery } from '_@rpc/config';
@@ -43,6 +44,11 @@ export const userRouters = router({
   userSetKYC: protectedRouter
     .input(setKYCSchema)
     .mutation(({ input, ctx }) => setKYCInfo(input, ctx.metadata.issuer || '', ctx.requestClient)),
+  userSetAddressKYC: protectedRouter
+    .input(setKYCSchema)
+    .mutation(({ input, ctx }) =>
+      setAddressKYCInfo(input, ctx.metadata.issuer || '', ctx.requestClient),
+    ),
 
   userTwitterRequestToken: protectedRouter.mutation(() => requestToken()),
 

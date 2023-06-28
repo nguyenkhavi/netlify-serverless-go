@@ -25,6 +25,7 @@ export const userProfileTable = mysqlTable(
     twitterUid: tinytext('twitter_uid'),
     instagramUid: tinytext('instagram_uid'),
     personaInquiryId: tinytext('persona_inquiry_id'),
+    personaAddressInquiryId: tinytext('persona_address_inquiry_id'),
   },
   (userProfile) => ({
     usernameIndex: index('username_idx').on(userProfile.username),

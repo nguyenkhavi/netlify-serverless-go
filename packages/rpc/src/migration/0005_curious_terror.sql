@@ -1,0 +1,1 @@
+ALTER TABLE `user_profile` ADD `persona_address_inquiry_id` tinytext;
