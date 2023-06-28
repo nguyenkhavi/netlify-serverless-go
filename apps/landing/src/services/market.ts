@@ -175,6 +175,29 @@ export async function getAvailableMarketByItem(db: IDBPDatabase, itemId: string)
   );
 }
 
+export async function getAvailableMarketByCollection(db: IDBPDatabase, collection: string) {
+  const market = await getAllRawMarketByCollection(db, collection);
+  const marketStatus = await Promise.all(
+    market.map(async (mk) => {
+      const status = await getMarketStatusByListingId(db, mk.listingId);
+      return {
+        ...mk,
+        status,
+      };
+    }),
+  );
+  const availableMarket = marketStatus.filter((mk) => mk.status?.isAvailable === 1);
+  return Promise.all(
+    availableMarket.map(async (mk) => {
+      const token = await getTokenByAddress(db, mk.currency);
+      return {
+        ...mk,
+        token,
+      };
+    }),
+  );
+}
+
 export async function getAllAvailableMarket(db: IDBPDatabase): Promise<IMarketStatusData[]> {
   return db.getAllFromIndex(dbOS.marketStatus, dbIndex.marketAvailableIndex, 1);
 }

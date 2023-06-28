@@ -46,3 +46,15 @@ export async function getAllActivitiesByItem(
 export async function getAllBuyActivities(db: IDBPDatabase): Promise<IActivity[]> {
   return db.getAllFromIndex(dbOS.activity, dbIndex.activityTypeIndex, ActivityType.BUY);
 }
+
+export async function getAllBuyActivitiesByCollectionAddress(
+  db: IDBPDatabase,
+  address: string,
+): Promise<IActivity[]> {
+  const activities: IActivity[] = await db.getAllFromIndex(
+    dbOS.activity,
+    dbIndex.activityAssetContractIndex,
+    address,
+  );
+  return activities.filter((act) => act.type == ActivityType.BUY);
+}

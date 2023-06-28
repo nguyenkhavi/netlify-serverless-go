@@ -60,6 +60,16 @@ export interface IItem {
   id: string;
 }
 
+export interface ICollectionPercent {
+  name: string;
+  percent: string;
+}
+
+export interface IUserPortfolio {
+  data: ICollectionPercent[];
+  total: number;
+}
+
 export interface ILastBlock {
   service: ListenerService;
   lastBlock: number;
