@@ -11,7 +11,7 @@ export default function LaunchVenture() {
     <section
       className={classcat([
         'mx-auto w-[--content-width] items-center xl:mt-10 xl:flex',
-        'border border-text-20 p-6 xl:rounded-[10px]',
+        'border border-text-20 p-4 xl:rounded-[10px]',
       ])}
     >
       <div className={classcat(['grid grow place-items-center xl:order-2'])}>
@@ -30,7 +30,7 @@ export default function LaunchVenture() {
 
         <div
           className={classcat([
-            'mt-6 text-center text-body1 text-text-60',
+            'mt-5 text-center text-body1 text-text-60',
             'xl:text-left xl:text-h5',
           ])}
         >
@@ -43,7 +43,7 @@ export default function LaunchVenture() {
           space. If you believe your project fits this description, apply below!.
         </div>
 
-        <Button as={Link} href="#" className="btnlg mt-10 lg:ow:w-62.5">
+        <Button as={Link} href="#" className="mt-10 lg:btnlg sm:w-62.5">
           Launch your venture
         </Button>
       </div>

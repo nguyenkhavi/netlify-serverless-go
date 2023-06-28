@@ -13,7 +13,7 @@ export default function Projects() {
           View All
         </Link>
       </div>
-      <div className={classcat(['mt-4 grid grid-cols-2 gap-4 xlg:mt-6 xlg:grid-cols-4'])}>
+      <div className={classcat(['mt-4 grid grid-cols-2 gap-6 xlg:mt-6 xlg:grid-cols-4'])}>
         {dataProjects.map((item) => (
           <ProjectCard key={item.id} value={item} />
         ))}

@@ -19,7 +19,7 @@ export default function WhatIsLive() {
 
 function WhatIsLiveCard({ value }: { value: TWhatIsLiveCard }) {
   return (
-    <div className="rounded bg-secondary-200 px-4 py-6">
+    <div className="grid gap-4 rounded bg-secondary-200 p-4">
       <div className="flex items-center justify-between">
         <p className="grid grid-cols-[auto_1fr] items-center justify-start gap-2">
           <img
@@ -34,7 +34,7 @@ function WhatIsLiveCard({ value }: { value: TWhatIsLiveCard }) {
           <p>{value.estApr}</p>
         </div>
       </div>
-      <div className="mt-6 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div>
           <span className="block text-subtitle2 text-text-60">Duration(day)</span>
           <div className="mt-1 grid grid-flow-col gap-3">
@@ -53,7 +53,7 @@ function WhatIsLiveCard({ value }: { value: TWhatIsLiveCard }) {
           <p>{`${value.prices} ${value.token}`}</p>
         </div>
       </div>
-      <div className="mt-4 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div className="grid items-start gap-1">
           <span className="block text-subtitle2 text-text-60">Minimum Buy-in Amount</span>
           <p>{`${value.prices} ${value.token}`}</p>
@@ -96,7 +96,7 @@ function TableWhatIsLive() {
                   <p
                     key={index}
                     className={classcat([
-                      'not-first:ml-2 place-items-center rounded',
+                      'place-items-center rounded not-first:ml-2',
                       'grid h-10 w-10 border-[0.5px] border-primary/[.69] text-btnmd',
                     ])}
                   >
