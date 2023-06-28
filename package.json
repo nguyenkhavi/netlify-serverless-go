@@ -48,6 +48,7 @@
     "ethers": "^5.7.2",
     "flagpack-core": "^2.0.0",
     "form-data": "^4.0.0",
+    "framer-motion": "^10.12.17",
     "getstream": "^8.1.5",
     "idb": "^7.1.1",
     "ip-to-location": "^1.0.1",

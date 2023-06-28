@@ -3,8 +3,16 @@ import Image from 'next/image';
 import classcat from 'classcat';
 //SHARED
 import CheckCircleIcon from '_@shared/icons/CheckCircleIcon';
+//RELATIVE MODULES
+import Countdown from './Countdown';
 
-export default function Banner() {
+async function getData() {
+  return '2023-06-30T00:00:00.000Z';
+}
+
+export default async function Banner() {
+  const endDate = await getData();
+
   return (
     <section
       className={classcat([
@@ -36,31 +44,9 @@ export default function Banner() {
           <CheckCircleIcon className="ml-2.5 inline-block h-3.5 w-3.5 xlg:h-5 xlg:w-5" />
         </h2>
         <p className="text-body1 text-text-80">12,000 items- 0.03 BUSD</p>
-        <ul className={classcat(['mt-2.5 grid grid-flow-col justify-start gap-2.5'])}>
-          <li className={classcat([timeItemClasses])}>
-            <p>1</p>
-            <p>day</p>
-          </li>
-          <li className={classcat([timeItemClasses])}>
-            <p>6</p>
-            <p>hrs</p>
-          </li>
-          <li className={classcat([timeItemClasses])}>
-            <p>20</p>
-            <p>mins</p>
-          </li>
-          <li className={classcat([timeItemClasses])}>
-            <p>5</p>
-            <p>secs</p>
-          </li>
-        </ul>
+
+        <Countdown endDate={endDate} />
       </div>
     </section>
   );
 }
-
-const timeItemClasses = [
-  'h-12.5 w-12.5 rounded bg-[#303030]',
-  'flex flex-col text-caption justify-center items-center',
-  '[&>p]:uppercase',
-];

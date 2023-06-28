@@ -1,16 +1,16 @@
-//LAYOUT, COMPONENTS
-import Banner from './components/Banner';
-import NavBar from './components/NavBar';
-import Projects from './components/Projects';
-import WhatIsLive from './components/WhatIsLive';
-import LaunchVenture from './components/LaunchVenture';
 //RELATIVE MODULES
+import Banner from './comps/Banner';
+import NavBar from './comps/NavBar';
+import Projects from './comps/Projects';
+import WhatIsLive from './comps/WhatIsLive';
+import LaunchVenture from './comps/LaunchVenture';
 import HomeAdvHorizontal from '../comps/HomeAdvHorizontal';
 
 export default function VenturePage() {
   return (
-    <main className='pb-10 xlg:pb-24'>
+    <main className="pb-10 xlg:pb-24">
       <NavBar />
+      {/* @ts-expect-error Server Component */}
       <Banner />
       <div className="px-[--px]">
         <HomeAdvHorizontal />
