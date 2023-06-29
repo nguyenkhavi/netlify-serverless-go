@@ -4,6 +4,6 @@
   publish = "public"
 
 [build.environment]
-  GO_IMPORT_PATH = "github.com/carlmjohnson/netlify-go-function-demo"
+  GO_IMPORT_PATH = "github.com/nguyenkhavi/netlify-serverless-go"
   GO111MODULE = "on"
 
