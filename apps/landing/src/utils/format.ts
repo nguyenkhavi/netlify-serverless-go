@@ -11,3 +11,7 @@ export const formatTokenId = (value: string) => {
 export const formatFullName = (firstName: string, lastName: string): string => {
   return [firstName, lastName].join(' ').trim();
 };
+
+export const camelToSnakeCase = (input: string): string => {
+  return input.replace(/(?:^|\.?)([A-Z])/g, (x, y) => '-' + y.toLowerCase()).replace(/^_/, '');
+};

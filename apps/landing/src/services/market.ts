@@ -12,7 +12,7 @@ import {
   IMarketStatusData,
   IPaging,
   ISorting,
-  IToken,
+  Token,
 } from '_@landing/utils/type';
 //RELATIVE MODULES
 import { getCategoryById } from './category';
@@ -36,8 +36,8 @@ export async function updateMarket(db: IDBPDatabase, data: IMarketData) {
 }
 
 export async function generateStandardMarketAvailable(db: IDBPDatabase, dataMarket: IMarketData[]) {
-  const tokenHashMap: Map<string, IToken> = new Map();
-  const token = await getAllToken(db);
+  const tokenHashMap: Map<string, Token> = new Map();
+  const token = await getAllToken();
   token.map((tokenItem) => tokenHashMap.set(tokenItem.address, tokenItem));
 
   const marketStatus = Promise.all(
@@ -166,7 +166,7 @@ export async function getAvailableMarketByItem(db: IDBPDatabase, itemId: string)
   const availableMarket = marketStatus.filter((mk) => mk.status?.isAvailable === 1);
   return Promise.all(
     availableMarket.map(async (mk) => {
-      const token = await getTokenByAddress(db, mk.currency);
+      const token = await getTokenByAddress(mk.currency);
       return {
         ...mk,
         token,
@@ -262,7 +262,7 @@ export async function getMarketDetailByListingId(db: IDBPDatabase, listingId: nu
   const activities = await getAllActivitiesByItem(db, market.itemId);
   const collection = await getCollectionByContract(db, market.assetContract);
   const category = await getCategoryById(db, collection.category);
-  const token = await getTokenByAddress(db, market.currency);
+  const token = await getTokenByAddress(market.currency);
   const itemsInCollection = await getAllRawItemByCollection(db, collection.address);
   const marketInCollection = await getAllRawMarketByCollection(db, collection.address);
   const rateOfTrailInCollection = await getRateOfTraitInCollection(itemsInCollection);
@@ -414,7 +414,7 @@ export async function getAllRawMarketByCollection(db: IDBPDatabase, address: str
   return Promise.all(
     availableMarket.map(async (mk) => {
       const item = await getItemById(db, mk.itemId);
-      const token = await getTokenByAddress(db, mk.currency);
+      const token = await getTokenByAddress(mk.currency);
       return {
         ...mk,
         item,

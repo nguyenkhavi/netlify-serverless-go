@@ -75,6 +75,20 @@ export async function getCollectionByContract(
   return db.getFromIndex(dbOS.collection, dbIndex.collectionAddressIndex, contract);
 }
 
+export async function getCollectionByName(
+  db: IDBPDatabase,
+  name: string,
+): Promise<ICollection | undefined> {
+  return db.getFromIndex(dbOS.collection, dbIndex.collectionNameIndex, name);
+}
+
+export async function getCollectionBySlug(
+  db: IDBPDatabase,
+  slug: string,
+): Promise<ICollection | undefined> {
+  return db.getFromIndex(dbOS.collection, dbIndex.collectionSlugIndex, slug);
+}
+
 export async function getAllCollectionByChain(
   db: IDBPDatabase,
   chain: string,

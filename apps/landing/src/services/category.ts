@@ -39,6 +39,6 @@ export async function insertSeedCategoryData(db: IDBPDatabase) {
       image: 'QmQVjK8e7aio1kRoNnATA9PgYttqdykjcH4mpwSfXMNtWx/6f0bfd671516dbae38edbfeb639797c1.jpeg',
     });
   } catch (e) {
-    //ignore this
+    console.log(e);
   }
 }

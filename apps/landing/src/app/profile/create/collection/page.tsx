@@ -5,6 +5,7 @@ import classcat from 'classcat';
 import { constants } from 'ethers';
 import { IDBPDatabase } from 'idb';
 import { useRouter } from 'next/navigation';
+import { db } from '_@rpc/services/drizzle';
 import { ICategory } from '_@landing/utils/type';
 import { Chains } from '_@landing/utils/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -17,6 +18,8 @@ import Select from '_@landing/app/profile/create/comps/Select';
 import { getAllCategories } from '_@landing/services/category';
 import Breadcrumb from '_@landing/app/profile/create/comps/Breadcrumb';
 import ProfileNavMobile from '_@landing/app/profile/comps/ProfileNavMobile';
+import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
+import { getCollectionByName, getCollectionBySlug } from '_@landing/services/collection';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
@@ -72,6 +75,7 @@ type Values = z.infer<typeof values>;
 const nameToSlug = (name: string) => name.toLowerCase().replace(/\s/g, '-');
 export default function CreateCollectionPage() {
   const router = useRouter();
+  const { db } = useIndexedDBContext();
   const queryClient = useQueryClient();
   const methods = useForm<Values>({
     mode: 'onChange',
@@ -113,8 +117,20 @@ export default function CreateCollectionPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      if (!db) return;
+      const existedCollection = await getCollectionByName(db, data.collectionName);
+      if (existedCollection) {
+        setError('collectionName', { message: 'This name is already taken' });
+        return;
+      }
+      const existedSlug = await getCollectionBySlug(db, data.url);
+      if (existedSlug) {
+        setError('url', { message: 'This name is already taken' });
+        return;
+      }
+
       setLoading(true);
-      const appUri = { app: 'Fleamint', category: data.category };
+      const appUri = { app: 'Fleamint', category: data.category, slug: data.url };
       await sdk?.deployer.deployNFTCollection({
         name: data.collectionName,
         description: data.description,

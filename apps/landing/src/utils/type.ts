@@ -39,7 +39,9 @@ export interface ICollection {
   address: string;
   chain: string;
   owner: string;
+  slug: string;
   category: number;
+  blockNumber: number;
   name: string;
   type: NFTType;
   metadata: IMetadata;
@@ -210,24 +212,39 @@ export interface IFilter {
   maxPrice?: number;
 }
 
-export interface IToken {
-  chain: string;
-  address: string;
-  name: string;
-  symbol: string;
-  decimal: number;
-  image: string;
-}
-
 export interface ICategory {
   id: number;
   name: string;
   description: string;
   image: string;
 }
+
+export type Chain = {
+  factoryContract: string;
+  marketContract: string;
+  nftImplementation: string;
+  name: string;
+  icon: string;
+  rpc: string;
+  networkName: string;
+  chainId: string;
+  genesisBlock: number;
+};
+
+export type Token = {
+  name: string;
+  symbol: string;
+  decimal: number;
+  isNative: boolean;
+  image: string;
+  address: string;
+  chainId: string;
+  isPaymentToken: boolean;
+};
+
 export type TItemCard = IMarketData & {
   item: IItem;
-  token: IToken | undefined;
+  token: Token | undefined;
   activities: IActivity[];
   status: IMarketStatusData;
   totalSale: number;

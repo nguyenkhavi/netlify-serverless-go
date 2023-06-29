@@ -6,14 +6,18 @@ import classcat from 'classcat';
 import { useState } from 'react';
 import { constants } from 'ethers';
 import { useQuery } from '@tanstack/react-query';
-import { Chains } from '_@landing/utils/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Chains, Tokens } from '_@landing/utils/constants';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import Breadcrumb from '_@landing/app/profile/create/comps/Breadcrumb';
 import ProfileNavMobile from '_@landing/app/profile/comps/ProfileNavMobile';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
-import { getCollectionByContract, getCollectionsByOwner } from '_@landing/services';
+import {
+  getCollectionByContract,
+  getCollectionByName,
+  getCollectionsByOwner,
+} from '_@landing/services';
 import {
   useAddress,
   useContract,
@@ -89,6 +93,7 @@ export default function CreateCollectionPage() {
   const {
     handleSubmit,
     setValue,
+    setError,
     formState: { errors },
     getValues,
     watch,
@@ -103,7 +108,6 @@ export default function CreateCollectionPage() {
   const chain = Object.values(Chains).find((chain) => chain.chainId == chainId?.toString());
   const { contract: marketContract } = useContract(chain?.marketContract, 'marketplace-v3');
   const { mutateAsync: createDirectListing } = useCreateDirectListing(marketContract);
-  const address = useAddress();
   const { data: collectionsByOwner } = useQuery({
     enabled: !!user?.profile.wallet && !!db,
     queryKey: ['collectionsByOwner', user?.profile.wallet],
@@ -142,38 +146,31 @@ export default function CreateCollectionPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
+      /// change token here
+      const token = Object.values(Tokens).find(
+        (token) => token.symbol == 'BUSD' && token.chainId == chainId?.toString(),
+      );
       setLoading(true);
       if (!sdk || !signer) return;
       const contract = await sdk.getContract(data.collection, 'nft-collection');
-      const metadata =
-        data.content.status == true
-          ? (data.content.value as string)
-          : {
-              name: data.name,
-              description: data.description,
-              image: data.image,
-              attributes: Object.values(data.properties || []).map((property) => {
-                return {
-                  trait_type: property.type,
-                  value: property.name,
-                };
-              }),
-            };
+      if (data.content.status == true) {
+        //// TO DO
+      }
+      const metadata = {
+        name: data.name,
+        description: data.description,
+        image: data.image,
+        attributes: Object.values(data.properties || []).map((property) => {
+          return {
+            trait_type: property.type,
+            value: property.name,
+          };
+        }),
+      };
       const tx = await contract.mint(metadata);
       const tokenId = tx.id; // the id of the NFT minted
 
       if (data.marketplace.status) {
-        const approved = await contract.isApproved(
-          address || constants.AddressZero,
-          chain?.marketContract || Chains.sepolia.marketContract,
-        );
-        console.log({ approved });
-        if (!approved) {
-          await contract.setApprovalForAll(
-            chain?.marketContract || Chains.sepolia.marketContract,
-            true,
-          );
-        }
         const expiration = data.listingExpiration
           ? dayjs().add(Number(data.listingExpiration), 'day').unix()
           : undefined;
@@ -182,6 +179,7 @@ export default function CreateCollectionPage() {
           /// pass decimal of currency here
           pricePerToken: data.price,
           assetContractAddress: data.collection,
+          currencyContractAddress: token?.address,
           quantity: 1,
           endTimestamp: expiration,
         });

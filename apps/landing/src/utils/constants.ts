@@ -1,6 +1,8 @@
 //THIRD PARTY MODULES
 import { BigNumber } from 'ethers';
 import { Decimal } from 'decimal.js';
+//RELATIVE MODULES
+import { Chain, Token } from './type';
 
 export const blockRange = 20000;
 
@@ -20,6 +22,8 @@ export const dbIndex = {
   collectionOwnerIndex: 'collection_owner_idx',
   collectionAddressIndex: 'collection_address_idx',
   collectionChainIndex: 'collection_chain_idx',
+  collectionNameIndex: 'collection_name_idx',
+  collectionSlugIndex: 'collection_slug_idx',
 
   //// activity indexes
 
@@ -57,16 +61,27 @@ export const dbOS = {
   category: 'category',
 };
 
-export type Chain = {
-  factoryContract: string;
-  marketContract: string;
-  nftImplementation: string;
-  name: string;
-  icon: string;
-  rpc: string;
-  networkName: string;
-  chainId: string;
-  genesisBlock: number;
+export const Tokens: Record<string, Token> = {
+  BUSD: {
+    name: 'BUSD',
+    symbol: 'BUSD',
+    decimal: 18,
+    address: '0x17fFbC8564E9E403eFC0abF55d93a313B3Fac316',
+    isNative: false,
+    chainId: '11155111',
+    image: 'QmdEpFzLA3hkTk2rTpfyLeQLrH97Sxb2U2LgLMcRYgN2Xh/BUSD.png',
+    isPaymentToken: true,
+  },
+  sETH: {
+    name: 'Sepolia ETH',
+    symbol: 'sETH',
+    decimal: 18,
+    address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+    isNative: true,
+    chainId: '11155111',
+    image: 'QmdEpFzLA3hkTk2rTpfyLeQLrH97Sxb2U2LgLMcRYgN2Xh/BUSD.png',
+    isPaymentToken: false,
+  },
 };
 
 export const Chains: Record<string, Chain> = {
@@ -79,7 +94,7 @@ export const Chains: Record<string, Chain> = {
     icon: 'https://s1.coincarp.com/logo/1/ethereum.png?style=36',
     networkName: 'Sepolia Testnet',
     chainId: '11155111',
-    genesisBlock: 3455696,
+    genesisBlock: 3788760,
   },
 };
 

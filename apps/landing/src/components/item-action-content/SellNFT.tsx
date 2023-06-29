@@ -3,10 +3,10 @@
 import { z } from 'zod';
 import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
-import { Chains } from '_@landing/utils/constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
+import { Chains, Tokens } from '_@landing/utils/constants';
 import { dialogMyItemCardStore } from '_@landing/stores/dialogStore';
 import {
   useAddress,
@@ -81,10 +81,12 @@ export default function SellItem({ tokenId, assetContract }: ListingProps) {
       !address;
     if (isReturn) return;
     try {
+      const busd = Object.values(Tokens).find((token) => token.symbol == 'BUSD');
       const tx = await createListing({
         tokenId: tokenId,
         pricePerToken: values.price,
         assetContractAddress: assetContract,
+        currencyContractAddress: busd?.address,
       });
       queryClient.invalidateQueries(['getItemByOwner']);
       toastAction.openToast('Listing NFT success', 'success');

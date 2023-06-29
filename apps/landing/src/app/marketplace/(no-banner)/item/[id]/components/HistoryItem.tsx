@@ -2,7 +2,7 @@
 import classcat from 'classcat';
 import dayjs, { Dayjs } from 'dayjs';
 import { useSDK } from '@thirdweb-dev/react';
-import { IActivity, IToken } from '_@landing/utils/type';
+import { IActivity, Token } from '_@landing/utils/type';
 import { useCallback, useEffect, useState } from 'react';
 //LAYOUT, COMPONENTS
 import Show from '_@shared/components/Show';
@@ -10,7 +10,7 @@ import Show from '_@shared/components/Show';
 import User from './User';
 import HistoryActivityType from './HistoryActivityType';
 
-function HistoryItem({ data, token }: { data: IActivity; token: IToken }) {
+function HistoryItem({ data, token }: { data: IActivity; token: Token }) {
   const sdk = useSDK();
   const [time, setTime] = useState<Dayjs>();
 

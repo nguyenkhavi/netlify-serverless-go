@@ -17,7 +17,6 @@ export default function ConnectWalletProvider({ children }: PropsWithChildren) {
       const magicLinkConfig = magicLink({
         apiKey: process.env.NEXT_PUBLIC_MAGIC_API_KEY || '',
       });
-
       await connect(magicLinkConfig, {
         phoneNumber: user.metadata.phoneNumber,
         chainId,

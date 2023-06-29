@@ -1,31 +1,19 @@
 //THIRD PARTY MODULES
-import { IDBPDatabase } from 'idb';
-import { IToken } from '_@landing/utils/type';
-import { dbIndex, dbOS } from '_@landing/utils/constants';
+import { Token } from '_@landing/utils/type';
+import { Tokens } from '_@landing/utils/constants';
 
-export async function getAllTokenByChain(db: IDBPDatabase, chainId: string): Promise<IToken[]> {
-  return db.getAllFromIndex(dbOS.token, dbIndex.tokenChainIndex, chainId);
+export async function getAllTokenByChain(chainId: string): Promise<Token[]> {
+  return Object.values(Tokens).filter((token) => token.chainId == chainId);
 }
 
-export async function getTokenByAddress(db: IDBPDatabase, address: string): Promise<IToken> {
-  return db.getFromIndex(dbOS.token, dbIndex.tokenAddressIndex, address);
+export async function getTokenByAddress(address: string): Promise<Token | undefined> {
+  return Object.values(Tokens).find((token) => token.address == address);
 }
 
-export async function getAllToken(db: IDBPDatabase): Promise<IToken[]> {
-  return db.getAll(dbOS.token);
+export async function getAllToken(): Promise<Token[]> {
+  return Object.values(Tokens);
 }
 
-export async function insertSeedTokenData(db: IDBPDatabase) {
-  try {
-    db.add(dbOS.token, {
-      chain: '11155111',
-      address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-      name: 'BUSD',
-      symbol: 'BUSD',
-      decimal: 18,
-      image: 'QmdEpFzLA3hkTk2rTpfyLeQLrH97Sxb2U2LgLMcRYgN2Xh/BUSD.png',
-    });
-  } catch (e) {
-    /// ignore this
-  }
+export async function getPaymentTokensByChain(chainId: string): Promise<Token[]> {
+  return Object.values(Tokens).filter((token) => token.chainId == chainId && token.isPaymentToken);
 }

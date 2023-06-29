@@ -1,17 +1,15 @@
 'use client';
 
 //THIRD PARTY MODULES
-import { IDBPDatabase, openDB } from 'idb';
 import NFTABI from '_@landing/utils/NFTABI';
 import { nextApi } from '_@landing/utils/api';
 import MarketABI from '_@landing/utils/NFTMarket';
+import { IDBPDatabase, deleteDB, openDB } from 'idb';
 import NFTFactoryABI from '_@landing/utils/NFTFactory';
 import { handleTransferItem } from '_@landing/listener/item';
-import { insertSeedTokenData } from '_@landing/services/token';
 import { handleNewCollections } from '_@landing/listener/collection';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAllCategories, insertSeedCategoryData } from '_@landing/services/category';
-import { ContractEvent, SmartContract, useSDK, useSDKChainId } from '@thirdweb-dev/react';
 import { getCollectionsEvents, getFactoryEvents, getMarketEvents } from '_@landing/listener';
 import { getAllCollectionByChain, getBestSeller, updateLastBlock } from '_@landing/services';
 import { Chains, ContractEventNames, dbIndex, dbOS, parseJson } from '_@landing/utils/constants';
@@ -21,6 +19,13 @@ import {
   handleListing,
   handleUpdateListing,
 } from '_@landing/listener/market';
+import {
+  ContractEvent,
+  SmartContract,
+  encodeConstructorParamsForImplementation,
+  useSDK,
+  useSDKChainId,
+} from '@thirdweb-dev/react';
 import {
   ICancelListingEventData,
   ICategory,
@@ -67,8 +72,7 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
   useEffect(() => {
     const connectDB = async () => {
       if (!window.indexedDB) return;
-      // await deleteDB('Fleamint');
-      const db = await openDB('Fleamint', 1, {
+      const db = await openDB('Fleamint', 2, {
         upgrade(db) {
           // Create a store of objects
           if (!db.objectStoreNames.contains(dbOS.market)) {
@@ -99,6 +103,8 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
             collection.createIndex(dbIndex.collectionOwnerIndex, 'owner');
             collection.createIndex(dbIndex.collectionAddressIndex, 'address');
             collection.createIndex(dbIndex.collectionChainIndex, 'chain');
+            collection.createIndex(dbIndex.collectionNameIndex, 'name');
+            collection.createIndex(dbIndex.collectionSlugIndex, 'slug');
           }
           if (!db.objectStoreNames.contains(dbOS.activity)) {
             const activity = db.createObjectStore(dbOS.activity, {
@@ -134,20 +140,12 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
             });
             market.createIndex(dbIndex.categoryIdIndex, 'id');
           }
-          if (!db.objectStoreNames.contains(dbOS.token)) {
-            const market = db.createObjectStore(dbOS.token, {
-              keyPath: ['address'],
-            });
-            market.createIndex(dbIndex.tokenAddressIndex, 'address');
-            market.createIndex(dbIndex.tokenChainIndex, 'chain');
-          }
         },
       });
 
       const category = await getAllCategories(db);
       if (category.length === 0) {
         insertSeedCategoryData(db);
-        insertSeedTokenData(db);
       }
       const seller = await getBestSeller(db);
 

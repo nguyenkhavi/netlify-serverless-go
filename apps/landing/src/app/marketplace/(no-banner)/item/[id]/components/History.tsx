@@ -1,6 +1,6 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
-import { IActivity, IToken } from '_@landing/utils/type';
+import { IActivity, Token } from '_@landing/utils/type';
 import * as ScrollArea from '@radix-ui/react-scroll-area';
 //SHARED
 import HistoryIcon from '_@shared/icons/HistoryIcon';
@@ -9,7 +9,7 @@ import HistoryItem from './HistoryItem';
 
 type Props = {
   activities: IActivity[];
-  token: IToken;
+  token: Token;
 };
 
 function History({ activities, token }: Props) {

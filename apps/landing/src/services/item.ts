@@ -77,7 +77,7 @@ export async function getItemDetailById(db: IDBPDatabase, id: string) {
     return status.isAvailable == 1;
   });
   const marketDetail = availableMarket.map(async (mk) => {
-    const token = await getTokenByAddress(db, mk.currency);
+    const token = await getTokenByAddress(mk.currency);
     return {
       ...mk,
       token,

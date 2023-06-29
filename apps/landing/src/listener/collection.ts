@@ -1,7 +1,9 @@
 //THIRD PARTY MODULES
+import dayjs from 'dayjs';
 import { constants } from 'ethers';
 import { IDBPDatabase } from 'idb';
 import { Decimal } from 'decimal.js';
+import { camelToSnakeCase } from '_@landing/utils/format';
 import { ContractEventNames, maxRetries } from '_@landing/utils/constants';
 import { ContractEvent, NFTCollection, ThirdwebSDK } from '@thirdweb-dev/react';
 import { IChain, ICollection, IMetadata, INewProxyDeployed, NFTType } from '_@landing/utils/type';
@@ -19,8 +21,10 @@ export async function handleNewCollections(
   try {
     const royalties = await fetchRoyalties(collectionContract);
     const data: ICollection = {
+      blockNumber: event.transaction.blockNumber,
       address: event.data.proxy,
       chain: chain.chainId,
+      slug: appURI?.slug || camelToSnakeCase(metadata?.name || dayjs().unix().toString()),
       owner: event.data.deployer,
       category: Number(appURI?.category) || 1,
       name: metadata?.name as string,
