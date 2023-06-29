@@ -30,7 +30,7 @@ export default function Search() {
   const searchParams = useSearchParams();
   const s = searchParams.get('s') || '';
   const { handleSubmit, register } = useForm<FormValues>({ defaultValues: { s } });
-  const onSubmit = handleSubmit(filter);
+  const onSubmit = handleSubmit((data) => filter(data));
 
   const params = useParams();
   const { db, category } = useIndexedDBContext();
