@@ -64,7 +64,7 @@ export default function ContentItems() {
       <Show when={data.length === 0 && isLoading === false}>
         <NoData />
       </Show>
-      <div className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-4 md:gap-x-7.5 xlg:gap-y-5">
+      <div className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 md:gap-6">
         {isLoading
           ? Array(8)
               .fill(0)
@@ -75,7 +75,7 @@ export default function ContentItems() {
                 {(index + 1) % 4 === 0 ? (
                   <HomeAdvHorizontal
                     className={classcat([
-                      'col-span-full',
+                      'col-span-full md:my-4',
                       (index + 1) % 8 === 0 ? '' : 'md:hidden',
                     ])}
                     isHome={false}

@@ -20,7 +20,7 @@ type IPropsComp = {
   categoryId: string;
 };
 
-const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 md:gap-4 md:gap-6'];
+const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 md:gap-6'];
 const listViewClasses = ['gap-4'];
 
 export default function TabContentArtItems({ view, categoryId }: IPropsComp) {
@@ -73,18 +73,21 @@ export default function TabContentArtItems({ view, categoryId }: IPropsComp) {
         {isLoading ? (
           <SkeletonByView view={view} />
         ) : (
-          data.map((item, index) => (
-            <React.Fragment key={index}>
-              <MainCard key={index} value={item} view={view} />
-              <Show when={(index + 1) % 8 === 0}>
-                <HomeAdvHorizontal className={classcat(['col-span-full'])} isHome={false} />
-              </Show>
-            </React.Fragment>
-          ))
+          data.map((item, index) => {
+            const isShowAdvList = (index + 1) % 2 === 0 && view === 'list';
+            return (
+              <React.Fragment key={index}>
+                <MainCard key={index} value={item} view={view} />
+                <Show when={(index + 1) % 8 === 0 || isShowAdvList}>
+                  <HomeAdvHorizontal className={classcat(['col-span-full'])} isHome={false} />
+                </Show>
+              </React.Fragment>
+            );
+          })
         )}
       </div>
       <Show when={totalItems > pageSize}>
-        <div className="flex justify-center">
+        <div className="mt-10 flex justify-center">
           <BasePagination perPage={pageSize} totalItems={totalItems} />
         </div>
       </Show>

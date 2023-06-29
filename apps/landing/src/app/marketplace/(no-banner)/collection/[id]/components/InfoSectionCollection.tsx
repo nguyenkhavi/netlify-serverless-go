@@ -9,6 +9,7 @@ import { getDetailCollectionByAddress } from '_@landing/services';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
+import NoImage from '_@landing/components/NoImage';
 import { SkeImage, SkeLine, SkeParagraph } from '_@landing/components/skeleton/skeleton';
 //SHARED
 import ShareIcon from '_@shared/icons/ShareIcon';
@@ -52,15 +53,19 @@ export default function InfoSectionCollection() {
         <div className="mb-4 -translate-y-1/2">
           {isLoading ? (
             <SkeImage className="rounded-full ow:h-30.5 ow:w-30.5" />
-          ) : (
+          ) : data?.metadata?.image ? (
             <img
               className={classcat([
                 'rounded-full border-2 border-solid border-primary',
                 'h-30.5 w-30.5 object-cover',
               ])}
-              src={data?.metadata.image || '/images/marketplace/collection.png'}
+              src={data.metadata.image}
               alt=""
             />
+          ) : (
+            <div className="h-30.5 w-30.5 overflow-hidden rounded-full border-2 border-solid border-primary">
+              <NoImage />
+            </div>
           )}
         </div>
         <div className="-mt-15.25 justify-between lg:flex">

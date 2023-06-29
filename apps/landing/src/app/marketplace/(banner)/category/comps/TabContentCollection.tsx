@@ -1,9 +1,8 @@
 //THIRD PARTY MODULES
 import classcat from 'classcat';
 import { useSearchParams } from 'next/navigation';
-import { pageSize } from '_@landing/utils/constants';
 import { TCollectionCard } from '_@landing/utils/type';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { getTrendingCollectionsByCategory } from '_@landing/services';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
 import { useIndexedDBContext } from '_@landing/app/provider/IndexedDBProvider';
@@ -16,7 +15,7 @@ import BasePagination from '_@shared/components/pagination/BasePagination';
 //RELATIVE MODULES
 import { SkeletonByView } from './SkeletonByView';
 
-const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 md:gap-4'];
+const gridViewClasses = ['grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6 md:gap-6'];
 
 export default function TabContentCollection({
   view,
@@ -30,6 +29,7 @@ export default function TabContentCollection({
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const { db } = useIndexedDBContext();
+  const pageSize = view === 'grid' ? 16 : 6;
 
   const _getData = useCallback(() => {
     if (!categoryId || !db) return;
@@ -57,7 +57,7 @@ export default function TabContentCollection({
         setTotalItems(res.total);
       })
       .finally(() => setIsLoading(false));
-  }, [categoryId, db, query]);
+  }, [categoryId, db, query, pageSize]);
 
   useEffect(() => {
     _getData();
@@ -72,13 +72,21 @@ export default function TabContentCollection({
         {isLoading ? (
           <SkeletonByView view={view} />
         ) : (
-          data.map((item, index) => <CollectionCard key={index} value={item} view={view} />)
+          data.map((item, index) => {
+            const isShowAdvList = (index + 1) % 2 === 0 && view === 'list';
+            return (
+              <React.Fragment key={index}>
+                <CollectionCard value={item} view={view} />
+                <Show when={(index + 1) % 8 === 0 || isShowAdvList}>
+                  <HomeAdvHorizontal className={classcat(['col-span-full'])} isHome={false} />
+                </Show>
+              </React.Fragment>
+            );
+          })
         )}
       </div>
-      <HomeAdvHorizontal className="my-6 md:my-10" isHome={false} />
-
       <Show when={totalItems > pageSize}>
-        <div className="flex justify-center">
+        <div className="mt-10 flex justify-center">
           <BasePagination perPage={pageSize} totalItems={totalItems} />
         </div>
       </Show>

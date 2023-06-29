@@ -53,7 +53,7 @@ export default function ExchangeSection() {
           data-sal-duration="800"
           data-sal-delay="100"
           as={Link}
-          href="/exchange"
+          href="/dex"
           className="btnlg mt-10 lg:ow:w-62.5"
         >
           Try Dex

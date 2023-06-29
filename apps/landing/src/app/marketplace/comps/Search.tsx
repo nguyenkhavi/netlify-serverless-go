@@ -70,7 +70,7 @@ export default function Search() {
               'ml-2 h-full w-26 xlg:hidden',
             ])}
           >
-            <span className="text-body3 text-primary">{label ? label : 'All'}</span>
+            <span className="text-body3 text-text-80">{label ? label : 'All'}</span>
             <ChevronBottomIcon className="ml-1" />
           </div>
         </PopoverTrigger>

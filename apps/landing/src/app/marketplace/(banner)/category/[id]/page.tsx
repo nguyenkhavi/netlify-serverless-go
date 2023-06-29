@@ -50,7 +50,7 @@ export default function FilterByCategory({ params }: { params: { id: string } })
       <Tab.Root value={tabActive} onValueChange={_handleTabChange}>
         <Tab.List>
           {TABS.map((tab, index) => (
-            <Tab.Trigger key={index} value={tab.value}>
+            <Tab.Trigger key={index} value={tab.value} className="px-1 lg:not-first:ml-15.5">
               {tab.label}
             </Tab.Trigger>
           ))}

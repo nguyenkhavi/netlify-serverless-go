@@ -104,7 +104,13 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           </button>
         </div>
       </Show>
-      <form onSubmit={onSubmit} className="ml-0 mt-6 flex grow md:ml-2 md:mt-0 md:justify-end">
+      <form
+        onSubmit={onSubmit}
+        className={classcat([
+          'ml-0 flex grow md:ml-2 md:mt-0 md:justify-end',
+          pathname.startsWith('/marketplace/collection') ? '' : ' mt-6',
+        ])}
+      >
         <SearchInput
           {...register('k')}
           type="text"
@@ -114,7 +120,7 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
             'ow:bg-secondary-200 ow:text-caption',
             'sm:h-11.25',
           ])}
-          boxClasses="max-w-[324px] md:w-full"
+          boxClasses="max-w-[324px] md:w-full grow ow:h-11.5 ow:md:h-11.75"
         />
         <Popover open={openFilter} onOpenChange={(open) => setOpenFilter(open)}>
           <PopoverTrigger>
@@ -123,7 +129,7 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
               onClick={() => setOpenFilter(true)}
             >
               <FilterIcon className="h-5" />
-              <span className="ml-1 whitespace-nowrap text-body3 text-text-50">Filter search</span>
+              <span className="ml-1 whitespace-nowrap text-body3 text-text-50">Filter items</span>
             </div>
           </PopoverTrigger>
           <PopoverContent className="rounded-[15px] ow:px-6 ow:py-8">
@@ -137,7 +143,7 @@ export default function FilterBar({ showOptionsLeft = true }: FilterItemProps) {
           </PopoverContent>
         </Popover>
         <Popover open={openFilterItems} onOpenChange={(open) => setOpenFilterItems(open)}>
-          <PopoverTrigger>
+          <PopoverTrigger className="h-11.5">
             <div
               className={classcat([buttonFilterClasses, 'hidden md:flex'])}
               onClick={() => setOpenFilterItems(true)}

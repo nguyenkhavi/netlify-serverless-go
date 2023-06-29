@@ -45,17 +45,23 @@ export default function RightOption({ view }: RightOptionProps) {
 
   const onSubmit = handleSubmit((value) => {
     if (value.minPrice || value.maxPrice) {
-      value.minMaxPrice = '';
+      value.minMaxPrice = undefined;
     }
-    filter({ ...value, page: 1 });
+    filter({ ...value, page: undefined });
   });
 
   const handleResetFilter = useCallback(() => {
-    filter({ minMaxPrice: '', minPrice: '', maxPrice: '', sort: '', page: '' });
+    filter({
+      minMaxPrice: undefined,
+      minPrice: undefined,
+      maxPrice: undefined,
+      sort: undefined,
+      page: undefined,
+    });
   }, [filter]);
 
   const _handleChangeView = (view: string) => {
-    filter({ view });
+    filter({ view, page: undefined });
   };
   return (
     <form className="ml-auto flex items-center lg:mb-2">
