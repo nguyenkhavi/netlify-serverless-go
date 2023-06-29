@@ -2,7 +2,6 @@
 //THIRD PARTY MODULES
 import { z } from 'zod';
 import classcat from 'classcat';
-import NFTABI from '_@landing/utils/NFTABI';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSDK, useSigner } from '@thirdweb-dev/react';

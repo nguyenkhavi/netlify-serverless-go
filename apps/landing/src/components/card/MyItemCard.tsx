@@ -63,7 +63,7 @@ export default function MyItemCard({ value, className }: Props) {
         <span>{value.market.length > 0 ? 'Price' : 'Not Listed'}</span>
 
         {value.market.length > 0 ? (
-          <span>{`${value.market[0].price} ${value.market[0].token.symbol}`}</span>
+          <span>{`${value.market[0].price} ${value.market[0].token?.symbol}`}</span>
         ) : null}
       </div>
     </div>

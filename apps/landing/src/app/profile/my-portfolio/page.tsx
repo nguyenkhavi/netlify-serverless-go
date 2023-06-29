@@ -30,7 +30,7 @@ export default function MyPortfolioPage() {
     queryKey: ['getUserPortfolio', db, user?.profile.wallet],
     queryFn: async () => {
       if (!db || !user?.profile.wallet) return undefined;
-      return getUserPortfolio(db, '0xcf9f977eBa70E819EAf6eD5eE8E2EF6860c0D646');
+      return getUserPortfolio(db, user?.profile.wallet || '');
     },
     staleTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,

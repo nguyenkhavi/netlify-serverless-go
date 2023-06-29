@@ -1,7 +1,9 @@
 'use client';
 //THIRD PARTY MODULES
+import React from 'react';
 import Link from 'next/link';
 import classcat from 'classcat';
+import { useRouter } from 'next/navigation';
 import { TItemCard } from '_@landing/utils/type';
 import { handleAddToCart } from '_@landing/utils/NFTItem';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
@@ -30,41 +32,40 @@ export default function MainCard({ view = 'grid', value, ...props }: MainCardPro
 function GridViewWithBuy({ value, ...props }: MainCardProps) {
   const { openToast } = toastStore();
   const { user } = useAuthStore();
+  const router = useRouter();
+
   const buyNowLink = user ? '/marketplace/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
     <div
-      className="flex flex-col rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]"
+      className="flex cursor-pointer flex-col rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]"
       {...props}
+      onClick={() => router.push(`/marketplace/item/${value.listingId}`)}
     >
-      <Link
-        prefetch={false}
-        href={`/marketplace/item/${value.listingId}`}
-        className="block aspect-square overflow-hidden"
-      >
+      <div className="block aspect-square overflow-hidden">
         {value.item && value.item.metadata.image ? (
           <img src={value.item.metadata.image} alt="image" className="h-full w-full object-cover" />
         ) : (
           <NoImage />
         )}
-      </Link>
-      <Link
-        prefetch={false}
-        href={`/marketplace/item/${value.listingId}`}
+      </div>
+      <p
         className="mt-3 line-clamp-2 text-body2 hover:underline"
         title={value.item ? value.item.name : ''}
       >
         {value.item ? value.item.name : '-'}
-      </Link>
+      </p>
       <span className="mb-auto mt-2 text-body3 text-text-80">{`${value.price} ${
         value.token?.symbol || ''
       }`}</span>
-      {!user || user.profile.wallet !== value.item.owner ? (
+      {!user || user.profile.wallet !== value.item?.owner ? (
         <div className="mt-4 flex">
           <Button
             as={Link}
             href={buyNowLink}
+            prefetch={false}
             className={classcat(['btnmd mr-1 h-10 p-0 ow:rounded-lg'])}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             Buy now
           </Button>
@@ -73,9 +74,11 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
               'h-10 border-none bg-white p-0 ow:w-12 ow:rounded-lg',
               'shrink-0',
             ])}
-            {...(!user
-              ? { as: Link, href: '/auth/sign-in' }
-              : { onClick: () => handleAddToCart(value, openToast) })}
+            onClick={(e: React.MouseEvent) => {
+              if (user) handleAddToCart(value, openToast);
+              e.stopPropagation();
+            }}
+            {...(!user ? { as: Link, href: '/auth/sign-in', prefetch: false } : {})}
           >
             <CartIcon className="h-5 w-5" color="#0A0A0E" />
           </Button>
@@ -89,6 +92,7 @@ function ListView({ value, ...props }: MainCardProps) {
   const { openToast } = toastStore();
   const { user } = useAuthStore();
   const { owner } = useGetOwnerByWallet(value.item.owner);
+  const router = useRouter();
   const buyNowLink = user ? '/marketplace/checkout?item=' + value.listingId : '/auth/sign-in';
 
   return (
@@ -98,10 +102,9 @@ function ListView({ value, ...props }: MainCardProps) {
         'md:flex',
       ])}
       {...props}
+      onClick={() => router.push(`/marketplace/item/${value.listingId}`)}
     >
-      <Link
-        prefetch={false}
-        href={`/marketplace/item/${value.listingId}`}
+      <div
         className={classcat([
           'mx-auto h-50 w-50 md:mx-0 md:h-51 md:w-51',
           'block aspect-square shrink-0 overflow-hidden md:mr-8',
@@ -112,16 +115,14 @@ function ListView({ value, ...props }: MainCardProps) {
         ) : (
           <NoImage />
         )}
-      </Link>
+      </div>
       <div className="grow text-center md:text-start">
-        <Link
-          prefetch={false}
-          href={`/marketplace/item/${value.listingId}`}
+        <p
           className="mt-4 block text-body2 hover:underline md:mt-0 xlg:text-h5-bold"
           title={value.item ? value.item.name : ''}
         >
           {value.item ? value.item.name : ''}
-        </Link>
+        </p>
         <p className="mt-1 line-clamp-2 text-body3 text-text-60">
           {value.item ? value.item.metadata.description : ''}
         </p>
@@ -134,7 +135,9 @@ function ListView({ value, ...props }: MainCardProps) {
           <Button
             as={Link}
             href={buyNowLink}
+            prefetch={false}
             className={classcat(['mr-1 h-10 p-0 ow:rounded-lg md:max-w-[9.375rem]'])}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             Buy now
           </Button>
@@ -143,9 +146,11 @@ function ListView({ value, ...props }: MainCardProps) {
               'h-10 border-none bg-white p-0 ow:w-12 ow:rounded-lg',
               'shrink-0',
             ])}
-            {...(!user
-              ? { as: Link, href: '/auth/sign-in' }
-              : { onClick: () => handleAddToCart(value, openToast) })}
+            onClick={(e: React.MouseEvent) => {
+              if (user) handleAddToCart(value, openToast);
+              e.stopPropagation();
+            }}
+            {...(!user ? { as: Link, href: '/auth/sign-in', prefetch: false } : {})}
           >
             <CartIcon className="h-5 w-5" color="#0A0A0E" />
           </Button>

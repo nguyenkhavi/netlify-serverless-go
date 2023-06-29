@@ -2,7 +2,6 @@
 import classcat from 'classcat';
 import { TItemCard } from '_@landing/utils/type';
 import { useSearchParams } from 'next/navigation';
-import { pageSize } from '_@landing/utils/constants';
 import React, { useCallback, useEffect, useState } from 'react';
 import { getTrendingMarketByCategory } from '_@landing/services';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
@@ -29,6 +28,7 @@ export default function TabContentArtItems({ view, categoryId }: IPropsComp) {
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const { db } = useIndexedDBContext();
+  const pageSize = view === 'grid' ? 16 : 6;
 
   const _getData = useCallback(() => {
     if (!categoryId || !db) return;
@@ -58,7 +58,7 @@ export default function TabContentArtItems({ view, categoryId }: IPropsComp) {
         setTotalItems(res.total);
       })
       .finally(() => setIsLoading(false));
-  }, [categoryId, db, query]);
+  }, [categoryId, db, query, pageSize]);
 
   useEffect(() => {
     _getData();

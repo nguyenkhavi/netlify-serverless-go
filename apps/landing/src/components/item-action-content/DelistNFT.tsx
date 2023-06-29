@@ -1,7 +1,5 @@
 //THIRD PARTY MODULES
-import Decimal from 'decimal.js';
 import { BigNumber } from 'ethers';
-import MarketABI from '_@landing/utils/NFTMarket';
 import { Chains } from '_@landing/utils/constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { dialogMyItemCardStore } from '_@landing/stores/dialogStore';

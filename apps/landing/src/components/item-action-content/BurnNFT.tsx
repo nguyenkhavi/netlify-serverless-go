@@ -1,5 +1,4 @@
 //THIRD PARTY MODULES
-import NFTABI from '_@landing/utils/NFTABI';
 import { useQueryClient } from '@tanstack/react-query';
 import { dialogMyItemCardStore } from '_@landing/stores/dialogStore';
 import { useBurnNFT, useContract, useSDK, useSigner } from '@thirdweb-dev/react';

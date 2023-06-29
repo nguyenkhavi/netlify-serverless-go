@@ -3,12 +3,14 @@
 import { z } from 'zod';
 import classcat from 'classcat';
 import Decimal from 'decimal.js';
-import { useEffect, useMemo, useState } from 'react';
+import { IDBPDatabase } from 'idb';
+import delay from '_@landing/utils/delay';
 import { nextApi } from '_@landing/utils/api';
 import { useQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import { Root } from '@radix-ui/react-radio-group';
 import { Chains } from '_@landing/utils/constants';
+import { useEffect, useMemo, useState } from 'react';
 import { TDataCheckout } from '_@landing/utils/type';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
@@ -22,14 +24,12 @@ import Button from '_@shared/components/Button';
 import RadioItem from '../components/RadioItem';
 import FormItem from '_@shared/components/FormItem';
 import FormInput from '_@shared/components/FormInput';
+import { SkeLine, SkeParagraph } from '_@landing/components/skeleton/skeleton';
 //SHARED
 import CardIcon from '_@shared/icons/CardIcon';
 import WalletIcon from '_@shared/icons/WalletIcon';
 import CheckCircleIcon from '_@shared/icons/CheckCircleIcon';
-import { SkeLine, SkeParagraph } from '_@landing/components/skeleton/skeleton';
 import { toastAction } from '_@shared/stores/toast/toastStore';
-import { IDBPDatabase } from 'idb';
-import delay from '_@landing/utils/delay';
 
 const schema = z.object({
   walletId: z.string().nonempty('This field is required'),
@@ -254,11 +254,11 @@ const itemClasses = [
 const SummarySke = () => {
   return (
     <div className="overflow-hidden rounded-lg bg-secondary-200">
-      <div className="p-6 h-82">
-        <SkeLine className="ow:w-44.5 mx-auto ow:h-9" />
+      <div className="h-82 p-6">
+        <SkeLine className="mx-auto ow:h-9 ow:w-44.5" />
         <div className="mt-8 text-body3 [&_span]:block">
           <SkeParagraph />
-          <SkeLine className="ow:w-[70%] mx-auto ow:my-10" />
+          <SkeLine className="mx-auto ow:my-10 ow:w-[70%]" />
           <SkeParagraph />
         </div>
       </div>
