@@ -12,6 +12,7 @@ export {
   TokenStandardEnum,
   SuggestionTypeEnum,
   GenderEnum,
+  OTPTypeEnum,
 } from './enum';
 export { item } from './item';
 export { KYCInfo } from './KYCInfo';
@@ -30,3 +31,4 @@ export { searchHistory } from './searchHistory';
 export { userPostTable } from './userPost';
 export { followTable } from './follow';
 export { closeAccountRequestTable } from './closeAccountRequest';
+export { otpPendingTable } from './otpPending';

@@ -6,6 +6,7 @@ import {
   sessionRouter,
   communityRouters,
   marketplaceRouters,
+  mfaRouters,
 } from './routers';
 import { db, subscriber } from './services/drizzle';
 
@@ -31,6 +32,7 @@ export const appRouter = mergeRouter(
   sessionRouter,
   communityRouters,
   marketplaceRouters,
+  mfaRouters,
 );
 
 export type AppRouter = typeof appRouter;

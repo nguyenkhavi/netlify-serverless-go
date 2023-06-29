@@ -309,3 +309,7 @@ export const closeAccount = (profile: TProfile, input: CloseAccountRequestInput)
     await tx.delete(addressTable).where(eq(addressTable.userId, profile.userId));
   });
 };
+
+export const setTOTPSecret = async (uid: string, totpSecret: string | null) => {
+  await db.update(userProfileTable).set({ totpSecret }).where(eq(userProfileTable.userId, uid));
+};

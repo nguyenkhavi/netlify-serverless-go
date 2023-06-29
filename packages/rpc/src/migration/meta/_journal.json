@@ -43,6 +43,27 @@
       "when": 1687936665982,
       "tag": "0005_curious_terror",
       "breakpoints": false
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1688021785231,
+      "tag": "0006_classy_dagger",
+      "breakpoints": false
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1688032776339,
+      "tag": "0007_amazing_kinsey_walden",
+      "breakpoints": false
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1688033450206,
+      "tag": "0008_boring_nextwave",
+      "breakpoints": false
     }
   ]
 }

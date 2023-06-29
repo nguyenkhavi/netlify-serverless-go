@@ -1,6 +1,14 @@
 import { GenderValues } from '_@rpc/drizzle/enum';
 import { InferModel, sql } from 'drizzle-orm';
-import { index, mysqlTable, serial, timestamp, tinytext, varchar } from 'drizzle-orm/mysql-core';
+import {
+  datetime,
+  index,
+  mysqlTable,
+  serial,
+  timestamp,
+  tinytext,
+  varchar,
+} from 'drizzle-orm/mysql-core';
 
 export const userProfileTable = mysqlTable(
   'user_profile',
@@ -13,7 +21,7 @@ export const userProfileTable = mysqlTable(
     lastName: varchar('last_name', { length: 255 }).notNull(),
     username: varchar('username', { length: 255 }).notNull(),
     email: varchar('email', { length: 255 }).notNull(),
-    dob: timestamp('dob').notNull(),
+    dob: datetime('dob').notNull(),
     gender: varchar('gender', { length: 8, enum: GenderValues }).notNull(),
     phoneCode: varchar('phone_code', { length: 8 }).notNull(),
     phoneNumber: varchar('phone_number', { length: 16 }).notNull(),
@@ -26,6 +34,7 @@ export const userProfileTable = mysqlTable(
     instagramUid: tinytext('instagram_uid'),
     personaInquiryId: tinytext('persona_inquiry_id'),
     personaAddressInquiryId: tinytext('persona_address_inquiry_id'),
+    totpSecret: tinytext('totp_secret'),
   },
   (userProfile) => ({
     usernameIndex: index('username_idx').on(userProfile.username),

@@ -65,3 +65,11 @@ export enum Gender {
 }
 export const GenderValues = Object.values(Gender) as any as ReadOnlyTuple;
 export const GenderEnum = mysqlEnum('gender', GenderValues);
+
+export enum OTPType {
+  PHONE = 'PHONE',
+  TIME = 'TIME',
+  EMAIL = 'EMAIL',
+}
+export const OTPTypeValues = Object.values(OTPType) as any as ReadOnlyTuple;
+export const OTPTypeEnum = mysqlEnum('otp-type', OTPTypeValues);
