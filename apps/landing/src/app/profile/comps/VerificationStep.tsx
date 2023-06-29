@@ -80,6 +80,7 @@ const VERIFICATION_STEPS = [
     isComplete: true,
     content: (
       <Link
+        prefetch={false}
         href="/profile/verify?t=address"
         className={classcat(['flex items-center rounded', 'h-14 bg-secondary-200 px-6'])}
       >
@@ -101,6 +102,7 @@ const VERIFICATION_STEPS = [
     isComplete: false,
     content: (
       <Link
+        prefetch={false}
         href="/profile/verify?t=address"
         className={classcat(['flex items-center rounded', 'h-14 bg-secondary-200 px-6'])}
       >

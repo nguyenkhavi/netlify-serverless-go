@@ -16,6 +16,7 @@ export default function NavBar() {
     >
       {navData.map((item, i) => (
         <Link
+          prefetch={false}
           href={item.href}
           key={i}
           className={classcat([

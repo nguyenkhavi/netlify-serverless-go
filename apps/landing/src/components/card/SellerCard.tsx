@@ -23,7 +23,7 @@ export default function SellerCard({ value, view, ...props }: SellerCardProps) {
 function ViewFull({ value, owner, showName, ...props }: SellerCardProps) {
   const avatar = urlWithIpfs(owner?.avatarUrl || '/images/profile/avatar-default.webp');
   return (
-    <Link href={'/marketplace/creator/' + value.seller} {...props}>
+    <Link prefetch={false} href={'/marketplace/creator/' + value.seller} {...props}>
       <div className="aspect-square overflow-hidden rounded-[10px]">
         <img src={avatar} alt="image" className="h-full w-full object-cover" />
       </div>
@@ -37,6 +37,7 @@ function ViewBox({ value, owner, showName, ...props }: SellerCardProps) {
 
   return (
     <Link
+      prefetch={false}
       href={'/marketplace/creator/' + value.seller}
       className="rounded-[10px] p-4 ring-1 ring-[#303030]"
       {...props}

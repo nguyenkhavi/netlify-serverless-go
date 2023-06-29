@@ -51,7 +51,11 @@ export default function ProfileInfoDetail() {
         <div className={classcat([boxClasses])}>
           <h2 className={classcat([titleClasses, 'flex items-center justify-between'])}>
             Shipping Information{' '}
-            <Link href="/profile/address" className="flex items-center text-sm text-primary">
+            <Link
+              prefetch={false}
+              href="/profile/address"
+              className="flex items-center text-sm text-primary"
+            >
               Edit <PenIcon className="ml-2" />
             </Link>
           </h2>

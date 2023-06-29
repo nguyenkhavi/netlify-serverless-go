@@ -1,4 +1,5 @@
 'use client';
+
 //THIRD PARTY MODULES
 import { z } from 'zod';
 import dayjs from 'dayjs';
@@ -122,6 +123,7 @@ export default function SearchPage() {
         <div className="border-b-[1px] border-solid border-text-10">
           {TAB_MENU.map((tab, idx) => (
             <Link
+              prefetch={false}
               key={idx}
               href={{
                 pathname,

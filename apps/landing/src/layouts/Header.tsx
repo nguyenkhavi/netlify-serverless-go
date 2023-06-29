@@ -1,21 +1,21 @@
 'use client';
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
-import { useMemo, useState } from 'react'
-import { usePathname } from 'next/navigation'
-import urlWithIpfs from '_@landing/utils/urlWithIpfs'
-import useAuthStore, { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore'
+import Link from 'next/link';
+import classcat from 'classcat';
+import { useMemo, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
+import useAuthStore, { useAuthStoreAction } from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
-import Show from '_@shared/components/Show'
-import Button from '_@shared/components/Button'
-import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover'
+import Show from '_@shared/components/Show';
+import Button from '_@shared/components/Button';
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
-import MenuIcon from '_@shared/icons/MenuIcon'
-import CartIcon from '_@shared/icons/CartIcon'
-import WalletIcon from '_@shared/icons/WalletIcon'
-import MenuCloseIcon from '_@shared/icons/MenuCloseIcon'
-import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon'
+import MenuIcon from '_@shared/icons/MenuIcon';
+import CartIcon from '_@shared/icons/CartIcon';
+import WalletIcon from '_@shared/icons/WalletIcon';
+import MenuCloseIcon from '_@shared/icons/MenuCloseIcon';
+import HeaderLogoIcon from '_@shared/icons/HeaderLogoIcon';
 
 export default function Header() {
   const { user } = useAuthStore();
@@ -59,7 +59,7 @@ export default function Header() {
         )}
       </button>
 
-      <Link href="/" className="grid h-8 w-8 place-items-center md:h-10 md:w-10">
+      <Link prefetch={false} href="/" className="grid h-8 w-8 place-items-center md:h-10 md:w-10">
         <HeaderLogoIcon className="h-full w-full" />
       </Link>
 
@@ -83,6 +83,7 @@ export default function Header() {
           {menuData.map((menu, i) => (
             <li key={i}>
               <Link
+                prefetch={false}
                 className="text-btndefault hover:text-primary data-[active=true]:text-primary"
                 data-active={menu.label === linkActive}
                 href={menu.path}
@@ -98,6 +99,7 @@ export default function Header() {
       <div className={classcat(['ml-auto grid grid-flow-col', user ? 'gap-6' : ''])}>
         <Show when={!user && !['/auth/sign-in', '/auth/sign-up'].includes(pathname)}>
           <Link
+            prefetch={false}
             href="/auth/sign-in"
             className={classcat([
               'flex shrink-0 items-center',
@@ -116,6 +118,7 @@ export default function Header() {
           </button>
           <Show when={isShowCart}>
             <Link
+              prefetch={false}
               href="/marketplace/cart"
               className="grid h-10 w-10 place-items-center rounded-full bg-[#1D1D1D]"
             >
@@ -137,6 +140,7 @@ export default function Header() {
             <PopoverContent align="end" className="min-w-[15rem] ow:z-dropdown ow:px-3 ow:py-4">
               <div className="grid gap-4">
                 <Link
+                  prefetch={false}
                   className={itemDropdownClasses}
                   href="/profile"
                   onClick={_handleCloseDropdown}
@@ -144,6 +148,7 @@ export default function Header() {
                   My Profile
                 </Link>
                 <Link
+                  prefetch={false}
                   className={itemDropdownClasses}
                   href="/profile/account-history"
                   onClick={_handleCloseDropdown}

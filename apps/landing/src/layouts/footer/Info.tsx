@@ -117,6 +117,7 @@ export default function Info() {
             <div className={classcat(['grid gap-3'])}>
               {linkList.links.map((link) => (
                 <Link
+                  prefetch={false}
                   key={link.title}
                   href={link.href}
                   className="pointer-events-none text-body3 text-text-50 hover:underline"
@@ -159,6 +160,7 @@ export default function Info() {
             const Icon = social.Icon;
             return (
               <Link
+                prefetch={false}
                 className="h-full w-full"
                 key={social.href}
                 href={social.href}

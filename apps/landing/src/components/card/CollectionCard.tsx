@@ -104,5 +104,5 @@ function ListView({ value, owner, isMyItem = false, className, ...props }: Colle
 
 function renderElementTag(isMyItem: boolean, address: string) {
   if (isMyItem) return <div></div>;
-  return <Link href={'/marketplace/collection/' + address}></Link>;
+  return <Link prefetch={false} href={'/marketplace/collection/' + address}></Link>;
 }

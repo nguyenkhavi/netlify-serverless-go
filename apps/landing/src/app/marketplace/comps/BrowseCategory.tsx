@@ -31,6 +31,7 @@ export default function BrowseCategory() {
         </Show>
         <Show when={!category.loading}>
           <Link
+            prefetch={false}
             className={classcat([
               'text-body2 hover:text-gradient-pr',
               categoryId === '' ? 'text-gradient-pr' : '',
@@ -41,6 +42,7 @@ export default function BrowseCategory() {
           </Link>
           {category.data.map((category, i) => (
             <Link
+              prefetch={false}
               className={classcat([
                 'text-body2 hover:text-gradient-pr',
                 categoryId === category.id.toString() ? 'text-gradient-pr' : '',
@@ -54,6 +56,7 @@ export default function BrowseCategory() {
         </Show>
       </div>
       <Link
+        prefetch={false}
         href="/marketplace/category"
         className="mx-auto mt-6 block cursor-pointer text-center text-underline text-text-80 underline"
       >

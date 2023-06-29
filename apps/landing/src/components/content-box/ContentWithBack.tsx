@@ -25,6 +25,7 @@ export default function ContentWithBack({
     <div className="px-[--px] pb-24 xlg:border-t-[0.5px] xlg:border-white/[.15] xlg:pt-10">
       <div className="mb-6 flex items-center md:mb-7 xlg:mb-10">
         <Link
+          prefetch={false}
           href={path}
           className="mr-2 grid h-6 w-6 place-items-center rounded hover:bg-secondary-400"
         >

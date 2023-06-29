@@ -147,10 +147,24 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
       if (category.length === 0) {
         insertSeedCategoryData(db);
       }
-      const seller = await getBestSeller(db);
 
       // Open a transaction on the object store
       setDB(db);
+    };
+
+    connectDB();
+  }, []);
+
+  useEffect(() => {
+    if (!db || isLoading) return;
+    (async () => {
+      const category = await getAllCategories(db);
+      if (category.length === 0) {
+        insertSeedCategoryData(db);
+        insertSeedTokenData(db);
+      }
+      const seller = await getBestSeller(db);
+
       setCategory({
         loading: false,
         data: category,
@@ -159,10 +173,8 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
         loading: false,
         data: seller,
       });
-    };
-
-    connectDB();
-  }, []);
+    })();
+  }, [db, isLoading]);
 
   useEffect(() => {
     if (contracts || isInitContract) return;
@@ -264,7 +276,7 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
     (async () => {
       setIsLoading(true);
       try {
-        await Promise.all([
+        Promise.all([
           getCollectionsEvents(sdk, db, chain),
           getMarketEvents(contracts.market, sdk, db, chain),
           getFactoryEvents(contracts.factory, sdk, db, chain, getUsersInFleamint),
@@ -273,7 +285,6 @@ export default function IndexedDBProvider({ children }: { children: React.ReactN
         setIsLoading(false);
       }
     })();
-    setIsLoading(false);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chain, db, contracts]);

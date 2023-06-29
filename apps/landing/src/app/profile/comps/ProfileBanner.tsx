@@ -68,12 +68,12 @@ export default function ProfileBanner() {
         </Show>
         <div className="grid grid-cols-[repeat(2,40px)] justify-center gap-2">
           <Show when={instagramUid}>
-            <Link href="#" target="_blank" rel="noopener noreferrer">
+            <Link prefetch={false} href="#" target="_blank" rel="noopener noreferrer">
               <InstagramIcon className="h-10 w-10" />
             </Link>
           </Show>
           <Show when={twitterUid}>
-            <Link href="#" target="_blank" rel="noopener noreferrer">
+            <Link prefetch={false} href="#" target="_blank" rel="noopener noreferrer">
               <TwitterIcon className="h-10 w-10" />
             </Link>
           </Show>

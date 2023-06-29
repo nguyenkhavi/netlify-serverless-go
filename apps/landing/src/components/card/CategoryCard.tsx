@@ -8,7 +8,7 @@ export type CategoryCardProps = {
 
 export default function CategoryCard({ value, ...props }: CategoryCardProps) {
   return (
-    <Link href={`/marketplace/category/${value.id}`} {...props}>
+    <Link prefetch={false} href={`/marketplace/category/${value.id}`} {...props}>
       <div className="aspect-square overflow-hidden rounded-[10px]">
         <img
           src={process.env.NEXT_PUBLIC_IPFS_GATE_WAY + value.image}

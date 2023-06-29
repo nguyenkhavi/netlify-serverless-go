@@ -23,6 +23,7 @@ export default function ItemStoreCard({ value }: Props) {
   return (
     <div className="flex flex-col rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]">
       <Link
+        prefetch={false}
         href={`/marketplace/item/${value.listingId}`}
         className="block aspect-square overflow-hidden"
       >
@@ -33,6 +34,7 @@ export default function ItemStoreCard({ value }: Props) {
         )}
       </Link>
       <Link
+        prefetch={false}
         href={`/marketplace/item/${value.listingId}`}
         className="mt-3 line-clamp-2 text-body2 hover:underline"
         title={value.item ? value.item.name : ''}

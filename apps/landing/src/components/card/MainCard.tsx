@@ -38,6 +38,7 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
       {...props}
     >
       <Link
+        prefetch={false}
         href={`/marketplace/item/${value.listingId}`}
         className="block aspect-square overflow-hidden"
       >
@@ -48,6 +49,7 @@ function GridViewWithBuy({ value, ...props }: MainCardProps) {
         )}
       </Link>
       <Link
+        prefetch={false}
         href={`/marketplace/item/${value.listingId}`}
         className="mt-3 line-clamp-2 text-body2 hover:underline"
         title={value.item ? value.item.name : ''}
@@ -98,6 +100,7 @@ function ListView({ value, ...props }: MainCardProps) {
       {...props}
     >
       <Link
+        prefetch={false}
         href={`/marketplace/item/${value.listingId}`}
         className={classcat([
           'mx-auto h-50 w-50 md:mx-0 md:h-51 md:w-51',
@@ -112,6 +115,7 @@ function ListView({ value, ...props }: MainCardProps) {
       </Link>
       <div className="grow text-center md:text-start">
         <Link
+          prefetch={false}
           href={`/marketplace/item/${value.listingId}`}
           className="mt-4 block text-body2 hover:underline md:mt-0 xlg:text-h5-bold"
           title={value.item ? value.item.name : ''}

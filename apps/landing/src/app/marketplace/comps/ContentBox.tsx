@@ -17,7 +17,11 @@ export default function ContentBox({ title, pathViewAll, children }: ContentBoxP
     <div>
       <div className="mb-6 flex h-9 w-[--content-width] items-center justify-between md:w-auto">
         <h2 className="text-h6 md:text-h4">{title}</h2>
-        <Link href={pathViewAll} className="text-caption text-text-60 hover:underline">
+        <Link
+          prefetch={false}
+          href={pathViewAll}
+          className="text-caption text-text-60 hover:underline"
+        >
           View All
         </Link>
       </div>

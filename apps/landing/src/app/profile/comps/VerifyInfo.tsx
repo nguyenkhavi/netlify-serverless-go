@@ -1,14 +1,14 @@
 //THIRD PARTY MODULES
-import Link from 'next/link'
-import classcat from 'classcat'
-import useAuthStore from '_@landing/stores/auth/useAuthStore'
+import Link from 'next/link';
+import classcat from 'classcat';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
-import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover'
+import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
-import VerifyIcon from '_@shared/icons/VerifyIcon'
-import QuestionCircleIcon from '_@shared/icons/QuestionCircleIcon'
+import VerifyIcon from '_@shared/icons/VerifyIcon';
+import QuestionCircleIcon from '_@shared/icons/QuestionCircleIcon';
 //RELATIVE MODULES
-import VerificationStep from './VerificationStep'
+import VerificationStep from './VerificationStep';
 
 export default function VerifyInfo() {
   const { user } = useAuthStore();
@@ -50,7 +50,11 @@ export default function VerifyInfo() {
           <p className="mb-[2px] text-body3 text-text-50">
             Enabling two-factor authentication is great way to secure your account
           </p>
-          <Link href="/profile/security" className="block text-subtitle2 text-primary">
+          <Link
+            prefetch={false}
+            href="/profile/security"
+            className="block text-subtitle2 text-primary"
+          >
             Setup 2FA Now
           </Link>
         </div>

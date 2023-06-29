@@ -60,6 +60,7 @@ export default function ProfileNav() {
           {PROFILE_NAV.map((nav, i) => (
             <li key={i} className="py-2">
               <Link
+                prefetch={false}
                 data-active={pathname === nav.path}
                 className={classcat([
                   'flex items-center text-btndefault text-text-60',

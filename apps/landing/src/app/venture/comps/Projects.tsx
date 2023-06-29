@@ -9,7 +9,11 @@ export default function Projects() {
     <section className="mt-10 px-[--px]">
       <div className="flex items-center justify-between">
         <h2 className="text-h4 xlg:text-h3">Current Projects</h2>
-        <Link href="#" className="hidden text-caption text-text-60 hover:underline xlg:block">
+        <Link
+          prefetch={false}
+          href="#"
+          className="hidden text-caption text-text-60 hover:underline xlg:block"
+        >
           View All
         </Link>
       </div>

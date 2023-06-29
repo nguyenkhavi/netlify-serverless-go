@@ -90,6 +90,7 @@ function ProfileDropdown() {
         {PROFILE_NAV.map((nav, i) => (
           <li key={i}>
             <Link
+              prefetch={false}
               data-active={pathname === nav.path}
               className={classcat([
                 'flex items-center text-btndefault text-text-50',
@@ -163,7 +164,7 @@ function AccountStatusDropdown() {
           <p className="text-body3 text-text-50">
             Enabling two-factor authentication is great way to secure your account
           </p>
-          <Link href="/profile/security" className="text-subtitle2 text-primary">
+          <Link prefetch={false} href="/profile/security" className="text-subtitle2 text-primary">
             Setup 2FA Now
           </Link>
         </div>

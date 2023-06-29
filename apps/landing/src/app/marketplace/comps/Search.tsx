@@ -77,6 +77,7 @@ export default function Search() {
         <PopoverContent className="min-w-[125px] ow:px-3 ow:py-4" align="end">
           <div className="grid gap-4">
             <Link
+              prefetch={false}
               className={classcat([
                 'text-body2 hover:text-primary',
                 categoryId === '' ? 'text-primary' : 'text-text-50',
@@ -88,6 +89,7 @@ export default function Search() {
             </Link>
             {category.data.map((category, i) => (
               <Link
+                prefetch={false}
                 className={classcat([
                   'text-body2 hover:text-primary',
                   categoryId === category.id.toString() ? 'text-primary' : 'text-text-50',
@@ -101,6 +103,7 @@ export default function Search() {
             ))}
           </div>
           <Link
+            prefetch={false}
             href="/marketplace/category"
             className="mx-auto mt-8 block cursor-pointer text-center text-underline text-text-80 underline"
           >

@@ -236,7 +236,11 @@ export default function SignIn() {
 
                 <p className="flex items-center justify-center space-x-1">
                   <span className="text-body3 text-text-80 md:text-body1">Already a member?</span>
-                  <Link href="/auth/sign-in" className="btn-link text-body2 text-primary ow:w-fit">
+                  <Link
+                    prefetch={false}
+                    href="/auth/sign-in"
+                    className="btn-link text-body2 text-primary ow:w-fit"
+                  >
                     Sign In
                   </Link>
                 </p>

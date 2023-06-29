@@ -136,6 +136,7 @@ const Button = forwardRef<HTMLAnchorElement | HTMLButtonElement, Props>(
           shapeClasses[shape],
           className,
         ])}
+        prefetch={false}
       >
         {isLoading ? (
           <LoadingIcon className={classcat([iconClasses])} />

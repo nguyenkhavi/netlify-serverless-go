@@ -23,6 +23,7 @@ export default function CommunityNav() {
           {menuData.map((menu, i) => (
             <li key={i}>
               <Link
+                prefetch={false}
                 href={menu.path}
                 className={classcat([
                   'flex items-center hover:text-primary',

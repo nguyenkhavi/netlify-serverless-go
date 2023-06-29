@@ -143,6 +143,7 @@ export default function ProfilePage() {
         <div className="mb-6.25 flex rounded-lg bg-secondary-300 p-2 lg:mb-6 lg:px-6 lg:py-3">
           {TABS.map((t, i) => (
             <Link
+              prefetch={false}
               key={i}
               href={{
                 pathname,

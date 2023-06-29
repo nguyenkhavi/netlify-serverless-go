@@ -122,6 +122,7 @@ export default function ActivityCard({ activity }: ActivityProps) {
 
         <div>
           <Link
+            prefetch={false}
             href={
               typeof activity?.actor === 'string'
                 ? '/community'
