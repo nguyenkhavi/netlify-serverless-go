@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import classcat from 'classcat';
 import { nextApi } from '_@landing/utils/api';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { formatAddress } from '_@landing/utils/format';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
@@ -23,7 +24,11 @@ function Seller({ address }: Props) {
           <div className="relative flex h-15 w-15 items-center justify-center rounded-full border border-solid border-primary-700 md:h-15 md:w-15">
             <img
               className="h-15 w-15 rounded-full object-cover md:h-15 md:w-15"
-              src={data?.[0]?.avatarUrl ?? '/images/profile/avatar-default.webp'}
+              src={
+                data?.[0]?.avatarUrl
+                  ? urlWithIpfs(data?.[0].avatarUrl)
+                  : '/images/profile/avatar-default.webp'
+              }
               alt={`avatar of ${data?.[0]?.avatarUrl}`}
             />
             <div className="absolute bottom-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary">

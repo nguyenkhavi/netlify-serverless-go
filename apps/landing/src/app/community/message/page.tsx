@@ -1,6 +1,7 @@
 'use client';
 //THIRD PARTY MODULES
 import classcat from 'classcat';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Chat, MessageInput, MessageList, Thread, Window } from 'stream-chat-react';
 //LAYOUT, COMPONENTS
@@ -35,6 +36,8 @@ export default function CommunityPage() {
   const chatRef = useRef<HTMLDivElement>(null);
   const { width } = useWindowSize();
   const debounceSearch = useDebounceValue(search, 500);
+  const searchParams = useSearchParams();
+  const channelId = searchParams.get('channelId');
 
   const { client } = useGetStreamUser();
   const isRequest = useMemo(() => tab === TAB_REQUEST, [tab]);
@@ -78,14 +81,14 @@ export default function CommunityPage() {
         setShowChat(true);
         setShowChannel(true);
       } else {
-        setShowChat(false);
-        setShowChannel(true);
+        setShowChat(!!channelId);
+        setShowChannel(!channelId);
       }
     };
     checkShowChat();
     window.addEventListener('resize', checkShowChat);
     return () => window.removeEventListener('resize', checkShowChat);
-  }, []);
+  }, [channelId]);
 
   useEffect(() => {
     if (showChat && typeof window !== 'undefined')

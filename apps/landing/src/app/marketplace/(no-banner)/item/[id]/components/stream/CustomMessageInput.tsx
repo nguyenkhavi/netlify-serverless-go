@@ -1,6 +1,7 @@
 //THIRD PARTY MODULES
 import { useRef } from 'react';
 import classcat from 'classcat';
+import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import {
   AttachmentPreviewList,
   Avatar,
@@ -61,7 +62,11 @@ export const CustomMessageInput = () => {
         ])}
       >
         <div className="h-6.5 w-6.5 rounded-full border border-solid border-primary-700 md:h-10.5 md:w-10.5">
-          <Avatar name={user?.name || user?.id} image={user?.image} size={width < 768 ? 24 : 40} />
+          <Avatar
+            name={user?.name || user?.id}
+            image={urlWithIpfs(user?.image)}
+            size={width < 768 ? 24 : 40}
+          />
         </div>
         <div className={classcat(['relative'])}>
           <ChatAutoComplete placeholder="Say something/ join conversation" />

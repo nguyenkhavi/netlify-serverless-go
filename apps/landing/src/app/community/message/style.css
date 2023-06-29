@@ -147,3 +147,52 @@
 .str-chat__avatar .str-chat__avatar-image {
   @apply rounded-full;
 }
+
+.str-chat__typing-indicator {
+  @apply bg-secondary-300 border-x-0 border-b-0 border-t border-solid border-text-10 text-text-50;
+}
+
+.str-chat__typing-indicator .str-chat__typing-indicator__dots .str-chat__typing-indicator__dot {
+  @apply bg-text-50;
+}
+
+.str-chat__suggestion-list-container {
+  @apply bg-secondary-300 w-[calc(100%-4.5rem)] z-dropdown;
+}
+
+.str-chat__suggestion-list .str-chat__suggestion-list-item .str-chat__user-item {
+  @apply bg-secondary-300 border border-solid border-text-10;
+}
+
+.str-chat__suggestion-list
+  .str-chat__suggestion-list-item
+  .str-chat__user-item
+  .str-chat__user-item--name,
+.str-chat__suggestion-list
+  .str-chat__suggestion-list-item
+  .str-chat__user-item
+  .str-chat__user-item-at {
+  @apply text-text-50;
+}
+
+.str-chat__attachment-list .str-chat__message-attachment {
+  @apply flex justify-start rounded-none bg-transparent;
+}
+
+.str-chat__attachment-list
+  .str-chat__message-attachment--image:not(.str-chat__message-attachment--card)
+  > img {
+  @apply w-auto object-contain rounded-md;
+}
+
+.str-chat__attachment-preview-file-name {
+  @apply text-text-50;
+}
+
+.str-chat__attachment-list .str-chat__message-attachment-file--item {
+  @apply bg-secondary-300 border border-solid border-text-10 text-text-50;
+}
+
+.str-chat__message-attachment-file--item-download .str-chat__message-attachment-download-icon {
+  @apply [&>path]:fill-text-50;
+}

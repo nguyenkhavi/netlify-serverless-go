@@ -4,6 +4,7 @@ import classcat from 'classcat';
 import { handleAddToCart } from '_@landing/utils/NFTItem';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
 import ShareIcon from '_@shared/icons/ShareIcon';
@@ -23,7 +24,7 @@ function ItemInfoCard({ data }: Props) {
   const buyNowLink = user ? '/marketplace/checkout?item=' + data.listingId : '/auth/sign-in';
   return (
     <div className={classcat(['flex flex-col justify-between space-y-6'])}>
-      <div className={classcat(['grid grow'])}>
+      <div className={classcat(['flex grow flex-col'])}>
         <div className={classcat(['grid grid-flow-row gap-4'])}>
           <div className={classcat(['grid grid-flow-row gap-2'])}>
             <h2 className={classcat(['truncate text-h3 text-primary-700', 'md:text-h2'])}>
@@ -37,6 +38,8 @@ function ItemInfoCard({ data }: Props) {
             </div>
             <div className={classcat(['grid grid-flow-col justify-start gap-2'])}>
               <Button
+                as={Link}
+                href={data.category.id ? `/marketplace/category/${data.category.id}` : '#'}
                 className={classcat([
                   'btnmd w-max border-none bg-secondary-300 ow:rounded-[theme(spacing.5)]',
                   'ow:h-9 ow:w-fit ow:px-4.5 [&>svg]:h-4 [&>svg]:w-4',
@@ -63,20 +66,22 @@ function ItemInfoCard({ data }: Props) {
       </div>
       <div className={classcat(['grid grid-flow-row gap-6'])}>
         <Seller address={data.item.owner} />
-        <div className={classcat(['grid grid-flow-row gap-4', 'md:grid-flow-col'])}>
-          <Button as={Link} href={buyNowLink} className={classcat(['btnlg'])}>
-            Buy Now
-          </Button>
-          <Button
-            className={classcat(['btnlg'])}
-            variant="outlined"
-            {...(!user
-              ? { as: Link, href: '/auth/sign-in' }
-              : { onClick: () => handleAddToCart(data, openToast) })}
-          >
-            Add to Cart
-          </Button>
-        </div>
+        <Show when={data.item.owner !== user?.profile.wallet}>
+          <div className={classcat(['grid grid-flow-row gap-4', 'md:grid-flow-col'])}>
+            <Button as={Link} href={buyNowLink} className={classcat(['btnlg'])}>
+              Buy Now
+            </Button>
+            <Button
+              className={classcat(['btnlg'])}
+              variant="outlined"
+              {...(!user
+                ? { as: Link, href: '/auth/sign-in' }
+                : { onClick: () => handleAddToCart(data, openToast) })}
+            >
+              Add to Cart
+            </Button>
+          </div>
+        </Show>
       </div>
     </div>
   );
