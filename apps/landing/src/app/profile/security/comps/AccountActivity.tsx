@@ -126,7 +126,10 @@ export default function AccountActivity() {
                     {table.getRowModel().rows.map((row) => (
                       <T.TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                         {row.getVisibleCells().map((cell) => (
-                          <T.TableCell key={cell.id}>
+                          <T.TableCell
+                            className="ow:min-w-[theme(spacing[49.5])] lg:ow:min-w-fit"
+                            key={cell.id}
+                          >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </T.TableCell>
                         ))}
@@ -134,16 +137,20 @@ export default function AccountActivity() {
                     ))}
                     <Show when={hasNextPage}>
                       <T.TableRow>
-                        <T.TableCell>
+                        <T.TableCell colSpan={columns.length} className="ow:py-6 ow:pl-12">
                           {isFetching ? (
-                            <p className="text-center">Loading...</p>
+                            <p className="flex items-center space-x-2 font-bold">
+                              <LoadingIcon />
+                              Loading...
+                            </p>
                           ) : (
                             <button onClick={() => fetchNextPage()}>
-                              <p className="cursor-pointer text-info underline">Show more</p>
+                              <p className="cursor-pointer font-bold text-info underline">
+                                Show more
+                              </p>
                             </button>
                           )}
                         </T.TableCell>
-                        <T.TableCell colSpan={columns.length - 1}></T.TableCell>
                       </T.TableRow>
                     </Show>
                   </>

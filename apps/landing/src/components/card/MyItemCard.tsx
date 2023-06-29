@@ -13,20 +13,20 @@ import NoImage from '../NoImage';
 import BurnNFT from '../item-action-content/BurnNFT';
 import SellNFT from '../item-action-content/SellNFT';
 import DelistNFT from '../item-action-content/DelistNFT';
-import ConfirmAddress from '../item-action-content/SellNFT';
-import TransferNFT from '../item-action-content/TransferNFT';
 import ChangePrice from '../item-action-content/ChangePrice';
+import TransferNFT from '../item-action-content/TransferNFT';
 
 type Props = {
   value: TItemStore[number];
+  className?: string;
 };
 
-export default function MyItemCard({ value }: Props) {
+export default function MyItemCard({ value, className }: Props) {
   const { user } = useAuthStore();
   const [openPopup, setOpenPopup] = useState(false);
 
   return (
-    <div className="rounded-[10px] border border-[#303030] p-4">
+    <div className={classcat(['rounded-[10px] border border-[#303030] p-4', className])}>
       <div className="aspect-square overflow-hidden rounded-[10px] border-[.5px] border-white/[.13]">
         {value.metadata.image ? (
           <img src={value.metadata.image} alt="image" className="h-full w-full object-cover" />

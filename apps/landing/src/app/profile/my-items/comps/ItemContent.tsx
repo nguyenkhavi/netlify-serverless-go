@@ -21,7 +21,7 @@ export default function ItemContent() {
   const { db } = useIndexedDBContext();
   const page = +(query.get('page') || 1);
 
-  const { data: itemByOwner, isLoading } = useQuery({
+  const { data: itemByOwner = { data: [], total: 0 }, isLoading } = useQuery({
     queryKey: ['getItemByOwner', user, db, page],
     queryFn: () => {
       if (!user?.profile.wallet || !db) return { data: [], total: 0 };
@@ -36,35 +36,37 @@ export default function ItemContent() {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
-        {isLoading
-          ? Array(8)
-              .fill(0)
-              .map((_, index) => (
-                <SkeCard
-                  key={index}
-                  paragraph
-                  className="[&>div:first-child]:aspect-square [&>div:first-child]:h-auto"
-                />
-              ))
-          : itemByOwner?.data.map((item, index) => (
-              <React.Fragment key={index}>
-                <MyItemCard value={item} />
-                <Show when={(index + 1) % 6 === 0}>
-                  <HomeAdvHorizontal
-                    className={classcat(['col-span-full md:hidden'])}
-                    isHome={false}
+      <div className="rounded-b-lg pt-6 lg:bg-secondary-200 lg:p-4 lg:pt-10">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
+          {isLoading
+            ? Array(8)
+                .fill(0)
+                .map((_, index) => (
+                  <SkeCard
+                    key={index}
+                    paragraph
+                    className="[&>div:first-child]:aspect-square [&>div:first-child]:h-auto"
                   />
-                </Show>
-              </React.Fragment>
-            ))}
+                ))
+            : itemByOwner.data.map((item, index) => (
+                <React.Fragment key={index}>
+                  <MyItemCard className="bg-secondary-300 lg:bg-transparent" value={item} />
+                  <Show when={(index + 1) % 6 === 0}>
+                    <HomeAdvHorizontal
+                      className={classcat(['col-span-full md:hidden'])}
+                      isHome={false}
+                    />
+                  </Show>
+                </React.Fragment>
+              ))}
+        </div>
       </div>
-      <Show when={itemByOwner?.data.length === 0 && !isLoading}>
+      <Show when={itemByOwner.data.length === 0 && !isLoading}>
         <NoData />
       </Show>
-      <Show when={(itemByOwner?.total || 0) > pageSize}>
-        <div className="mt-10 flex justify-center">
-          <BasePagination perPage={pageSize} totalItems={itemByOwner?.total || 0} />
+      <Show when={itemByOwner.total > pageSize}>
+        <div className="mt-6 flex justify-center md:mt-6 lg:mb-14">
+          <BasePagination perPage={pageSize} totalItems={itemByOwner.total} />
         </div>
       </Show>
     </>

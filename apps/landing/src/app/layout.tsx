@@ -2,9 +2,9 @@
 import classcat from 'classcat';
 import { Metadata } from 'next';
 import { Archivo } from 'next/font/google';
-// import AnimationProvider from './provider/AnimationProvider'
 import 'stream-chat-react/dist/css/v2/index.css';
 import AuthProvider from '_@landing/stores/auth/AuthProvider';
+// import AnimationProvider from './provider/AnimationProvider'
 import ClientProvider from '_@landing/app/provider/ClientProvider';
 //LAYOUT, COMPONENTS
 import Header from '_@landing/layouts/Header';

@@ -22,35 +22,41 @@ export default function MyItems() {
   };
 
   return (
-    <div className="rounded-lg lg:bg-secondary-200 lg:p-4">
+    <div className="rounded-lg">
       <ProfileNavMobile title="My Items" isBorder={false} />
       <Tab.Root value={tabActive} onValueChange={_handleTabChange}>
-        <Tab.List className="relative items-center pt-5.25 lg:pt-7.75">
-          {TABS.map((tab, index) => (
-            <Tab.Trigger key={index} value={tab.value} className="px-1 pb-2.75 pt-0.25">
-              {tab.label}
-            </Tab.Trigger>
-          ))}
-          {tabActive === '1' ? (
-            <Button
-              as={Link}
-              href="/profile/create/collection"
-              className="btnsm absolute bottom-2.75 right-0 ml-auto w-max px-2 lg:btnmd lg:px-5 lg:[&>span]:text-xs"
-            >
-              Create Collection
-            </Button>
-          ) : (
-            <Button
-              as={Link}
-              href="/profile/create/nft"
-              className="btnsm absolute bottom-2.75 right-0 ml-auto w-max px-2 lg:btnmd lg:px-5 lg:[&>span]:text-xs"
-            >
-              Create NFT
-            </Button>
-          )}
-        </Tab.List>
+        <div className="rounded-t-lg pt-4 lg:bg-secondary-200 lg:px-4">
+          <Tab.List className="flex items-end justify-between">
+            <div>
+              {TABS.map((tab, index) => (
+                <Tab.Trigger key={index} value={tab.value} className="px-1 pb-2.75 pt-0.25">
+                  {tab.label}
+                </Tab.Trigger>
+              ))}
+            </div>
+            <div className="pb-2.5">
+              {tabActive === '1' ? (
+                <Button
+                  as={Link}
+                  href="/profile/create/collection"
+                  className="lg:btnmd ow:w-29.25 ow:lg:w-34.5"
+                >
+                  Create Collection
+                </Button>
+              ) : (
+                <Button
+                  as={Link}
+                  href="/profile/create/nft"
+                  className="lg:btnmd ow:w-29.25 ow:lg:w-34.5"
+                >
+                  Create NFT
+                </Button>
+              )}
+            </div>
+          </Tab.List>
+        </div>
         {TABS.map((tab, index) => (
-          <Tab.Content key={index} value={tab.value}>
+          <Tab.Content key={index} value={tab.value} className="ow:mt-0 ow:lg:mt-0">
             {tab.content}
           </Tab.Content>
         ))}

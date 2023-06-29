@@ -78,6 +78,7 @@ const columns = [signInCol, browserCol, ipCol, locationCol, currentCol];
 export default function ActiveSection() {
   const { data: listSession, isFetching } = nextApi.listSession.useQuery(undefined, {
     refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
   });
   const { logout } = useAuthStoreAction();
   const [isLoading, setIsLoading] = useState(false);
@@ -129,23 +130,27 @@ export default function ActiveSection() {
                     {table.getRowModel().rows.map((row) => (
                       <T.TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
                         {row.getVisibleCells().map((cell) => (
-                          <T.TableCell key={cell.id}>
+                          <T.TableCell
+                            className="ow:min-w-[theme(spacing[49.5])] lg:ow:min-w-fit"
+                            key={cell.id}
+                          >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </T.TableCell>
                         ))}
                       </T.TableRow>
                     ))}
                     <T.TableRow>
-                      <T.TableCell>
+                      <T.TableCell colSpan={columns.length} className="ow:py-6 ow:pl-12">
                         <button onClick={onCloseSession}>
                           {isLoading ? (
-                            'Logout all sessions...'
+                            <LoadingIcon />
                           ) : (
-                            <p className="cursor-pointer text-info underline">Close all sessions</p>
+                            <p className="cursor-pointer font-bold text-info underline">
+                              Close all sessions
+                            </p>
                           )}
                         </button>
                       </T.TableCell>
-                      <T.TableCell colSpan={columns.length - 1}></T.TableCell>
                     </T.TableRow>
                   </>
                 ) : (

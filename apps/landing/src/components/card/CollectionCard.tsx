@@ -13,20 +13,30 @@ export type CollectionCardProps = {
   value: TCollectionCard;
   owner?: string;
   isMyItem?: boolean;
+  className?: string;
 };
-export default function CollectionCard({ view, value, isMyItem = false }: CollectionCardProps) {
+export default function CollectionCard({
+  view,
+  value,
+  isMyItem = false,
+  className,
+}: CollectionCardProps) {
   const { owner } = useGetOwnerByWallet(value.owner);
 
-  if (view === 'list') return <ListView value={value} owner={owner} isMyItem={isMyItem} />;
-  return <GridView value={value} owner={owner} isMyItem={isMyItem} />;
+  if (view === 'list')
+    return <ListView value={value} owner={owner} isMyItem={isMyItem} className={className} />;
+  return <GridView value={value} owner={owner} isMyItem={isMyItem} className={className} />;
 }
 
-function GridView({ value, owner, isMyItem = false, ...props }: CollectionCardProps) {
+function GridView({ value, owner, isMyItem = false, className, ...props }: CollectionCardProps) {
   const Tag = renderElementTag(isMyItem, value.address);
   return cloneElement(
     Tag,
     {
-      className: 'rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]',
+      className: classcat([
+        'rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]',
+        className,
+      ]),
       ...props,
     },
     <>
@@ -50,7 +60,7 @@ function GridView({ value, owner, isMyItem = false, ...props }: CollectionCardPr
   );
 }
 
-function ListView({ value, owner, isMyItem = false, ...props }: CollectionCardProps) {
+function ListView({ value, owner, isMyItem = false, className, ...props }: CollectionCardProps) {
   const Tag = renderElementTag(isMyItem, value.address);
 
   return cloneElement(
@@ -67,6 +77,7 @@ function ListView({ value, owner, isMyItem = false, ...props }: CollectionCardPr
         className={classcat([
           'mx-auto rounded-[10px] border-[.5px] border-white/[.13] md:mx-0',
           'aspect-square w-[12.5rem] shrink-0 overflow-hidden md:mr-8.75',
+          className,
         ])}
       >
         {value.metadata.image && value.metadata.image ? (

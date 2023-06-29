@@ -4,7 +4,8 @@ import * as React from 'react';
 import classcat from 'classcat';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 //SHARED
-import ChevronBottomIcon from '_@shared/icons/ChevronBottomIcon';
+import ChevronLeftIcon from '_@shared/icons/ChevronLeftIcon';
+import ChevronRightIcon from '_@shared/icons/ChevronRightIcon';
 //RELATIVE MODULES
 
 export interface IBasePaginationProps {
@@ -15,7 +16,7 @@ export interface IBasePaginationProps {
 
 const disableClasses = 'ow:cursor-not-allowed text-foundation-black-100 pointer-events-none';
 const buttonArrowClasses = [
-  'h-6 w-6 grid place-items-center',
+  'h-6 w-6 grid place-items-center shrink-0',
   'hover:bg-main-gradient rounded-lg [&>svg]:hover:text-black',
 ];
 
@@ -58,29 +59,27 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
   return (
     <div
       className={classcat([
-        'flex w-max items-center rounded-[27px] bg-secondary-300 py-2',
-        'px-6',
+        'flex h-14 w-max items-center space-x-2 rounded-[100px] bg-secondary-300',
+        'px-4',
         className,
       ])}
     >
-      <button
-        className={classcat([buttonArrowClasses, currentPage <= 1 ? disableClasses : '', 'mr-2'])}
-      >
-        <ChevronBottomIcon
-          className={classcat(['h-3 w-4 rotate-90 cursor-pointer text-primary'])}
+      <button className={classcat([buttonArrowClasses, currentPage <= 1 ? disableClasses : ''])}>
+        <ChevronLeftIcon
+          className={classcat(['cursor-pointer text-primary'])}
           onClick={changePageBy(-1)}
         />
       </button>
 
-      <div>
+      <div className="flex items-center [&>*]:shrink-0">
         {pages.map((item, index) =>
           item ? (
             <button
               className={classcat([
                 'h-8 w-8 rounded-lg hover:text-body3 md:h-10 md:w-10',
                 currentPage === item
-                  ? 'bg-main-gradient text-body3 text-secondary-100'
-                  : 'text-body2 hover:bg-main-gradient hover:text-secondary-100',
+                  ? 'bg-main-gradient text-body3 text-[#475467]'
+                  : 'text-body2 hover:bg-main-gradient hover:text-[#475467]',
               ])}
               key={index}
               onClick={handleChangePage(item)}
@@ -88,7 +87,7 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
               <span>{item}</span>
             </button>
           ) : (
-            <span className="mr-2 inline-block min-w-[22px] text-center" key={index}>
+            <span className="inline-block h-10 w-10 text-center leading-[40px]" key={index}>
               ...
             </span>
           ),
@@ -96,14 +95,10 @@ export default function BasePagination({ perPage, totalItems, className }: IBase
       </div>
 
       <button
-        className={classcat([
-          buttonArrowClasses,
-          currentPage >= totalPage ? disableClasses : '',
-          'ml-2',
-        ])}
+        className={classcat([buttonArrowClasses, currentPage >= totalPage ? disableClasses : ''])}
       >
-        <ChevronBottomIcon
-          className={classcat(['h-3 w-4 -rotate-90 cursor-pointer text-primary'])}
+        <ChevronRightIcon
+          className={classcat(['cursor-pointer text-primary'])}
           onClick={changePageBy(1)}
         />
       </button>

@@ -55,41 +55,51 @@ export default function ModalCloseAccount({
   };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="ow:bg-black ow:p-0" showClose={false}>
+      <DialogContent className="ow:bg-black ow:p-0 lg:max-w-[542px]" showClose={false}>
         <p className="bg-secondary-200 px-4 py-5 text-h6 md:px-9">Request to close account</p>
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="px-6 py-9 md:px-8">
-            <p className="mb-8">Tell us why you are leaving</p>
-            <FormItem label="" name="reason" className="[&>label]:text-text-100">
-              <FormRadioGroup options={OPTIONS} ariaLabel="Choose type" className="gap-3 pl-4.5" />
-            </FormItem>
-            <FormItem label="Tell us More" name="content" className="mt-5 [&>label]:text-text-100">
-              <FormInput tag="textarea" className="resize-none ow:h-40.5" />
-            </FormItem>
-            <p className="mt-2 flex items-center text-sm leading-[1.625rem] text-text-30">
-              <InfoIcon className="mr-1" />
-              100 character left
-            </p>
-            <div className="mt-4 flex rounded-[5px] bg-secondary-200 pb-6 pl-4 pr-1 pt-3">
-              <InfoIcon className="mr-2 mt-1 shrink-0 text-warning ow:h-3.75 ow:w-3.75" />
-              <p className="text-body3 text-text-50">
-                Closing your account will remove all your account -related information such as
-                transaction history from our records and you won’t be able access them anymore
+          <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 p-4 lg:gap-8 lg:p-6">
+            <div className="grid gap-4 lg:gap-8">
+              <p>Tell us why you are leaving</p>
+              <FormItem label="" name="reason" className="[&>label]:text-text-100">
+                <FormRadioGroup options={OPTIONS} ariaLabel="Choose type" className="gap-4" />
+              </FormItem>
+            </div>
+
+            <div className="grid gap-1">
+              <FormItem label="Tell us More" name="content" className="[&>label]:text-text-100">
+                <FormInput
+                  tag="textarea"
+                  className="h-full resize-none"
+                  containerClasses="ow:h-34"
+                />
+              </FormItem>
+              <p className="text-sm leading-[1.625rem] text-text-30">
+                <span>100 character left</span>
               </p>
             </div>
-            <FormItem label="" name="isAccept">
-              <FormCheckbox
-                className="mt-3"
-                label="I understand I will not be able to verify a new Fleamint account using the identification on this account"
-              />
-            </FormItem>
-            <div className="mt-5 flex justify-center">
-              <Button className="btnsm mr-3 w-max" onClick={() => setOpen(false)}>
+            <div className="grid gap-4">
+              <div className="flex space-x-2 rounded-[4px] bg-secondary-200 p-4">
+                <InfoIcon className="shrink-0" />
+                <p className="text-body3 text-text-50">
+                  Closing your account will remove all your account -related information such as
+                  transaction history from our records and you won’t be able access them anymore
+                </p>
+              </div>
+              <FormItem label="" name="isAccept">
+                <FormCheckbox
+                  rootClasses="ow:mt-0"
+                  label="I understand I will not be able to verify a new Fleamint account using the identification on this account"
+                />
+              </FormItem>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <Button className="btnmd" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
               <Button
                 isLoading={isCloseAccountLoading}
-                className="btnsm w-max"
+                className="btnmd"
                 color="error"
                 variant="outlined"
                 type="submit"

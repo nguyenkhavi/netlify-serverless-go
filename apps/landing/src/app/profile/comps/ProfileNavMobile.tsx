@@ -92,7 +92,7 @@ function ProfileDropdown() {
             <Link
               data-active={pathname === nav.path}
               className={classcat([
-                'flex items-center text-btnlg text-text-50',
+                'flex items-center text-btndefault text-text-50',
                 'hover:text-primary [&_svg]:hover:text-primary',
                 'data-[active=true]:text-primary [&_svg]:data-[active=true]:text-primary',
               ])}
