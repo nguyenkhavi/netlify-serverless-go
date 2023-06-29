@@ -18,7 +18,7 @@ import getMyProfileOnServer from '_@landing/server/auth';
 import './globals.css';
 import ThirdwebProvider from './provider/ThirdwebProvider';
 import IndexedDBProvider from './provider/IndexedDBProvider';
-// import ConnectWalletProvider from './provider/ConnectWalletProvider';
+import ConnectWalletProvider from './provider/ConnectWalletProvider';
 
 export const metadata: Metadata = {
   title: 'Fleamint',
@@ -37,20 +37,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <ThirdwebProvider>
         <IndexedDBProvider>
           <AuthProvider user={user}>
-            {/* <ConnectWalletProvider> */}
-            {/* <AnimationProvider> */}
-            <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
-              <body>
-                <Header />
-                {children}
-                <Footer />
-                <ModalFeedback />
-                <BaseToast />
-                <DialogOptionMyItem />
-              </body>
-            </html>
-            {/* </AnimationProvider> */}
-            {/* </ConnectWalletProvider> */}
+            <ConnectWalletProvider>
+              {/* <AnimationProvider> */}
+              <html lang="en" className={classcat([archivo.variable, 'hidden-scrollbar'])}>
+                <body>
+                  <Header />
+                  {children}
+                  <Footer />
+                  <ModalFeedback />
+                  <BaseToast />
+                  <DialogOptionMyItem />
+                </body>
+              </html>
+              {/* </AnimationProvider> */}
+            </ConnectWalletProvider>
           </AuthProvider>
         </IndexedDBProvider>
       </ThirdwebProvider>

@@ -9,16 +9,18 @@ export default function ConnectWalletProvider({ children }: PropsWithChildren) {
   const connect = useConnect();
   const { user } = useAuthStore();
   const chainId = useSDKChainId();
+
   useEffect(() => {
     (async () => {
-      if (signer || !user || !user.metadata.phoneNumber || !connect) return;
+      if (signer || !user || !user.metadata.phoneNumber) return;
+
       const magicLinkConfig = magicLink({
         apiKey: process.env.NEXT_PUBLIC_MAGIC_API_KEY || '',
       });
 
       await connect(magicLinkConfig, {
         phoneNumber: user.metadata.phoneNumber,
-        chainId: chainId,
+        chainId,
       });
     })();
   }, [signer, chainId, user, connect]);
