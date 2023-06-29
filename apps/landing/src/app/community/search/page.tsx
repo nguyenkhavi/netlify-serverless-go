@@ -30,18 +30,18 @@ import CalendarIcon from '_@shared/icons/CalendarIcon';
 import ActivityCard from '../comps/ActivityCard';
 import MobileSearchFilter from '../comps/MobileFilter';
 
-const schema = z.object({
+export const schema = z.object({
   people: z.union([z.literal('ANYONE'), z.literal('FOLLOWING')]),
 });
 
-const OPTIONS = [
+export const OPTIONS = [
   { value: 'ANYONE', label: 'From anyone' },
   { value: 'FOLLOWING', label: 'People you follow' },
 ];
 
-type FormValues = z.infer<typeof schema>;
+export type FormValues = z.infer<typeof schema>;
 
-type QueryType = 'ALL' | 'ACCOUNT' | 'POST';
+export type QueryType = 'ALL' | 'ACCOUNT' | 'POST';
 
 const DEFAULT_PAGESIZE = 4;
 

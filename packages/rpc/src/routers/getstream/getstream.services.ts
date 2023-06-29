@@ -1,17 +1,7 @@
-import { getstreamClient } from '_@rpc/services/getstream/getstream-client';
+import { getstreamChatClient, getstreamClient } from '_@rpc/services/getstream/getstream-client';
 
 export const generateGetstreamUserToken = async (getstreamId: string) => {
+  // Create 2 token to create chatUser and feedUser, return 1 token cuz chatUser and feedUser use the same one
+  getstreamChatClient.createToken(getstreamId);
   return getstreamClient.createUserToken(getstreamId);
 };
-
-// !BE-use: Call on an auction created
-// export const upsertChannel = async (listingId: string, userId: string) => {
-//   const channel = getstreamClient.channel('messaging', listingId, {
-//     name: listingId,
-//     created_by_id: userId,
-//   });
-
-//   await channel.create();
-
-//   return channel;
-// };

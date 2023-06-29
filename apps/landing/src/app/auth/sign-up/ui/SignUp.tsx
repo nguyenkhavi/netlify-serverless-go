@@ -111,7 +111,7 @@ export default function SignIn() {
       const digitalCode = data.phone.digitalCode as Country['code'];
       const digital = countryMapping[digitalCode];
       await signUp({
-        email: data.email,
+        email: data.email.toLowerCase(),
         dob: new Date(
           `${data.birthday.year}-${data.birthday.month}-${data.birthday.day}`,
         ).toISOString(),

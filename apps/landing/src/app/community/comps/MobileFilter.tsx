@@ -27,7 +27,7 @@ export default function MobileSearchFilter() {
   });
   const methods = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { people: 'anyone' },
+    defaultValues: { people: 'ANYONE' },
   });
 
   const { handleSubmit } = methods;

@@ -110,7 +110,7 @@ export const signUp = async (input: SignUpInput) => {
     .where(
       and(
         or(
-          eq(userProfileTable.email, email),
+          sql`lower(${userProfileTable.email}) = lower(${email.toLowerCase()})`,
           and(
             eq(userProfileTable.phoneCode, phoneCode),
             eq(userProfileTable.phoneNumber, phoneNumber),
@@ -121,9 +121,10 @@ export const signUp = async (input: SignUpInput) => {
     )
     .limit(1)
     .execute();
+
   if (conflictUsers.length) {
     const user = conflictUsers[0];
-    if (user.email === email) {
+    if (user.email.toLowerCase() === email.toLowerCase()) {
       throw new TRPCError({
         code: 'CONFLICT',
         message: 'CONFLICT_EMAIL',

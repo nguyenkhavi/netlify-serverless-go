@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { StreamClient, FlatActivityEnriched } from 'getstream';
 
-type File = {
+export type File = {
   url: string;
   alt: string;
 };

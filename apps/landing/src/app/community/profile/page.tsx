@@ -7,25 +7,25 @@ import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
+import { getstreamStore, FlatActivityEnrichedType } from '_@landing/stores/getstreamStore';
 //LAYOUT, COMPONENTS
 import NoData from '_@landing/components/NoData';
 import Switch from '_@shared/components/conditions/Switch';
-//HOOK
-import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
-import ActivityCard, { ActivityType } from '../comps/ActivityCard';
+import ActivityCard from '../comps/ActivityCard';
 
 export default function ProfilePage() {
-  const { client } = useGetFeedUser();
+  const { feedClient } = getstreamStore();
+
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const type = searchParams.get('type') || 'post';
-  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [activities, setActivities] = useState<FlatActivityEnrichedType[]>([]);
 
   // const timelineFeed = useMemo(() => client?.feed('timeline'), [client]);
-  const userFeed = useMemo(() => client?.feed('user'), [client]);
+  const userFeed = useMemo(() => feedClient?.feed('user'), [feedClient]);
   const { data: userInfo } = nextApi.getGetstreamUserInfo.useQuery({
-    targetGetstreamId: client?.userId || '',
+    targetGetstreamId: feedClient?.userId || '',
   });
 
   const getPost = useCallback(() => {
@@ -33,7 +33,7 @@ export default function ProfilePage() {
     userFeed
       .get({ limit: 20 })
       .then((response) => {
-        setActivities(response.results as ActivityType[]);
+        setActivities(response.results as FlatActivityEnrichedType[]);
       })
       .catch((err) => {
         console.log('Failed to get feed', err);

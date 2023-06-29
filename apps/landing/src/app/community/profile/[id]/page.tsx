@@ -9,6 +9,7 @@ import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import { createRequestChannel1vs1 } from '_@landing/utils/roomChat1vs1';
 import { useParams, usePathname, useSearchParams } from 'next/navigation';
+import { getstreamStore, FlatActivityEnrichedType } from '_@landing/stores/getstreamStore';
 //LAYOUT, COMPONENTS
 import NoData from '_@landing/components/NoData';
 import Switch from '_@shared/components/conditions/Switch';
@@ -17,18 +18,17 @@ import MessageIcon from '_@shared/icons/MessageIcon';
 import FollowedIcon from '_@shared/icons/FollowedIcon';
 import { BareShareIcon } from '_@shared/icons/ShareIcon';
 //HOOK
-import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 import { useGetStreamUser } from '_@landing/hooks/useGetStreamUser';
 import useFilterQueryString from '_@landing/hooks/useFilterQueryString';
 //RELATIVE MODULES
-import ActivityCard, { ActivityType } from '../../comps/ActivityCard';
+import ActivityCard from '../../comps/ActivityCard';
 
 export default function ProfilePage() {
   const filter = useFilterQueryString();
   const [isFollow, setIsFollow] = useState(false);
-  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [activities, setActivities] = useState<FlatActivityEnrichedType[]>([]);
 
-  const { client } = useGetFeedUser();
+  const { feedClient } = getstreamStore();
   const { client: clientMessage } = useGetStreamUser();
 
   const searchParams = useSearchParams();
@@ -77,11 +77,11 @@ export default function ProfilePage() {
   };
 
   useEffect(() => {
-    client
+    feedClient
       ?.feed('user', id)
       .get({ enrich: true, limit: 10, offset: 1 })
-      .then((res) => setActivities(res.results as ActivityType[]));
-  }, [client, id]);
+      .then((res) => setActivities(res.results as FlatActivityEnrichedType[]));
+  }, [feedClient, id]);
 
   return (
     <div className="grid gap-6 2xl:grid-cols-[1fr_17.5rem]">
