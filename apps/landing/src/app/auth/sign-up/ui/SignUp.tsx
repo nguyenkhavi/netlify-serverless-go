@@ -112,9 +112,11 @@ export default function SignIn() {
       const digital = countryMapping[digitalCode];
       await signUp({
         email: data.email.toLowerCase(),
-        dob: new Date(
-          `${data.birthday.year}-${data.birthday.month}-${data.birthday.day}`,
-        ).toISOString(),
+        dob: dayjs()
+          .year(parseFloat(data.birthday.year))
+          .month(parseFloat(data.birthday.month))
+          .date(parseFloat(data.birthday.day))
+          .toISOString(),
         firstName: data.firstName,
         lastName: data.lastName,
         username: data.username,
