@@ -1,4 +1,4 @@
-import { mysqlTable, varchar, datetime, boolean, serial } from 'drizzle-orm/mysql-core';
+import { mysqlTable, varchar, datetime, boolean, serial, text } from 'drizzle-orm/mysql-core';
 import { sql } from 'drizzle-orm';
 
 export const addressTable = mysqlTable('address', {
@@ -8,7 +8,7 @@ export const addressTable = mysqlTable('address', {
   state: varchar('state', { length: 64 }).notNull(),
   street: varchar('street', { length: 64 }).notNull(),
   secondStreet: varchar('second_street', { length: 64 }).notNull(),
-  apartmentNumber: varchar('apartment_number', { length: 10 }).notNull(),
+  apartmentNumber: text('apartment_number').notNull(),
   postalCode: varchar('postal_code', { length: 10 }).notNull(),
   contactNumber: varchar('contact_number', { length: 20 }).notNull(),
   dialCode: varchar('dial_code', { length: 10 }).notNull(),

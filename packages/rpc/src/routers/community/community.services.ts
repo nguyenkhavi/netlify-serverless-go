@@ -30,7 +30,7 @@ export const communitySearchUserOrPost = async (
   storeSearchHistory(input.keyword, userId);
 
   switch (input.type) {
-    case 'USER':
+    case 'ACCOUNT':
       return {
         users: await searchUser(input, getstreamUserId),
         posts: null,
@@ -117,16 +117,16 @@ const searchUser = async (input: CommunitySearchUserOrPostInput, getstreamUserId
 };
 
 const searchPost = async (input: CommunitySearchUserOrPostInput, getstreamUserId: string) => {
-  const { keyword, paging, peopleFilter, startDate, endDate } = input;
+  const { keyword, paging, peopleFilter, from, to } = input;
 
   const qb = db.select({ postId: userPostTable.postId }).from(userPostTable);
 
-  if (startDate) {
-    qb.where(gte(userPostTable.createdAt, startDate));
+  if (from) {
+    qb.where(gte(userPostTable.createdAt, from));
   }
 
-  if (endDate) {
-    qb.where(lte(userPostTable.createdAt, endDate));
+  if (to) {
+    qb.where(lte(userPostTable.createdAt, to));
   }
 
   if (peopleFilter === 'FOLLOWING') {

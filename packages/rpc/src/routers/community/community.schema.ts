@@ -7,7 +7,7 @@ const PEOPLE_OPTION = {
 
 const SEARCH_TYPE = {
   ALL: 'ALL',
-  USER: 'USER',
+  ACCOUNT: 'ACCOUNT',
   POST: 'POST',
 } as const;
 
@@ -25,8 +25,8 @@ export const communitySearchUserOrPostSchema = z.object({
   keyword: z.string(),
   type: z.nativeEnum(SEARCH_TYPE),
   peopleFilter: z.nativeEnum(PEOPLE_OPTION),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  from: z.string().pipe(z.coerce.date()).optional(),
+  to: z.string().pipe(z.coerce.date()).optional(),
   paging,
 });
 

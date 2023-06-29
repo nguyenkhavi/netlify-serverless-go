@@ -4,17 +4,18 @@ import { z } from 'zod';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 import classcat from 'classcat';
-import { Avatar } from 'react-activity-feed';
+import querystring from 'query-string';
+import { useRef, useState } from 'react';
 import { DateRange } from 'react-day-picker';
-import { useMemo, useRef, useState } from 'react';
+import { nextApi } from '_@landing/utils/api';
 import { zodResolver } from '@hookform/resolvers/zod';
-import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { FormProvider, useForm } from 'react-hook-form';
-import { api, RouterOutputs } from '_@landing/utils/api';
-import { usePathname, useSearchParams } from 'next/navigation';
 import HomeAdvVertical from '_@landing/app/comps/HomeAdvVertical';
 import HomeAdvHorizontal from '_@landing/app/comps/HomeAdvHorizontal';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { FlatActivityEnrichedType } from '_@landing/stores/getstreamStore';
 //LAYOUT, COMPONENTS
+import Account from './components/Account';
 import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 import NoData from '_@landing/components/NoData';
@@ -25,21 +26,24 @@ import FormRadioGroup from '_@shared/components/radio/FormRadioGroup';
 import { Popover, PopoverContent, PopoverTrigger } from '_@shared/components/popover/Popover';
 //SHARED
 import CalendarIcon from '_@shared/icons/CalendarIcon';
-//HOOK
-import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import ActivityCard from '../comps/ActivityCard';
 import MobileSearchFilter from '../comps/MobileFilter';
 
-export const schema = z.object({
-  people: z.string().trim(),
+const schema = z.object({
+  people: z.union([z.literal('ANYONE'), z.literal('FOLLOWING')]),
 });
 
-export const OPTIONS = [
-  { value: 'anyone', label: 'From anyone' },
-  { value: 'peopleYouFollow', label: 'People you follow' },
+const OPTIONS = [
+  { value: 'ANYONE', label: 'From anyone' },
+  { value: 'FOLLOWING', label: 'People you follow' },
 ];
-export type FormValues = z.infer<typeof schema>;
+
+type FormValues = z.infer<typeof schema>;
+
+type QueryType = 'ALL' | 'ACCOUNT' | 'POST';
+
+const DEFAULT_PAGESIZE = 4;
 
 export default function SearchPage() {
   const [date, setDate] = useState<DateRange | undefined>({
@@ -48,53 +52,47 @@ export default function SearchPage() {
   });
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const query = searchParams.get('type') || 'all';
+  const { push } = useRouter();
+  const type = searchParams.get('type') || 'ALL';
+  const keyword = searchParams.get('keyword') || '';
+  const people = searchParams.get('people') || 'ANYONE';
+  const from = searchParams.get('from') || undefined;
+  const to = searchParams.get('to') || undefined;
+
+  const { data } = nextApi.communitySearchUserOrPost.useQuery(
+    {
+      type: type as QueryType,
+      keyword: keyword,
+      paging: { page: 1, pageSize: DEFAULT_PAGESIZE },
+      peopleFilter: people as FormValues['people'],
+      from: from,
+      to: to,
+    },
+    { staleTime: 30 * 1000, refetchOnWindowFocus: false, retry: 0 },
+  );
 
   const methods = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { people: 'anyone' },
+    defaultValues: { people: people as FormValues['people'] },
   });
 
-  const { handleSubmit } = methods;
-
-  const [searchedUsers, setSearchedUsers] = useState<
-    RouterOutputs['communitySearchUserOrPost']['users']
-  >([]);
-
-  const [searchedPosts, setSearchedPosts] = useState<
-    RouterOutputs['communitySearchUserOrPost']['posts']
-  >([]);
+  const { handleSubmit, getValues } = methods;
 
   const searchText = useRef<HTMLInputElement>(null);
-  // const router = useRouter();
 
-  const _handleSearch = () => {
-    // router.push(`/community/search?k=${searchText.current?.value}`);
+  const _handleSearch = async () => {
+    const filterValues = getValues('people');
+
     if (!searchText.current) return;
+    const queryString = querystring.stringify({
+      type: type,
+      keyword: searchText.current.value,
+      from: date?.from?.toISOString(),
+      to: date?.to?.toISOString(),
+      people: filterValues,
+    });
 
-    // FE use this api to integrate
-    api.communitySearchUserOrPost
-      .query({
-        type: 'ALL',
-        keyword: searchText.current.value,
-        paging: { page: 1, pageSize: 4 },
-        peopleFilter: 'ANYONE',
-      })
-      .then((data) => {
-        console.log({ data });
-        if (data?.users?.length) {
-          setSearchedUsers(data?.users);
-        }
-
-        if (data?.posts?.length) {
-          setSearchedPosts(data.posts);
-        }
-      });
-  };
-
-  const onFilter = (values: FormValues) => {
-    console.log(values);
-    console.log({ date });
+    push(`${pathname}?${queryString}`);
   };
 
   return (
@@ -104,6 +102,7 @@ export default function SearchPage() {
           <div className="mr-2 flex-1 lg:mr-0">
             <SearchInput
               ref={searchText}
+              defaultValue={keyword}
               name="search"
               type="text"
               placeholder="Search"
@@ -130,7 +129,7 @@ export default function SearchPage() {
               }}
               className={classcat([
                 'inline-block w-[92px] pb-[11px] pt-[1px] text-center text-body1 text-text-50 lg:w-[134px] lg:text-body1',
-                tab.key === query
+                tab.key === type
                   ? 'relative bg-main-gradient bg-clip-text text-transparent before:absolute before:bottom-0 before:left-0 before:h-[3px] before:w-full before:bg-main-gradient'
                   : '',
               ])}
@@ -140,11 +139,11 @@ export default function SearchPage() {
           ))}
         </div>
         <section className="my-6 bg-secondary-200 p-6">
-          <Show when={query !== 'post'}>
+          <Show when={type !== 'post'}>
             <div>
-              {searchedUsers &&
-                searchedUsers.map((user) => (
-                  <AccountComp
+              {data?.users &&
+                data.users.map((user) => (
+                  <Account
                     key={user.userId}
                     name={user.username}
                     aboutMe={user.aboutMe}
@@ -155,29 +154,31 @@ export default function SearchPage() {
                 ))}
             </div>
           </Show>
-          <Show when={searchedUsers && searchedUsers.length > 4}>
+          <Show when={data?.users && data.users.length > 4}>
             <button className="text-gradient-pr relative left-1/2 -translate-x-1/2 before:absolute before:bottom-0 before:h-[1px] before:w-full before:bg-main-gradient">
               View All
             </button>
           </Show>
           <Show
             when={
-              (query === 'account' && searchedUsers?.length === 0) ||
-              (query === 'post' && searchedPosts?.length === 0) ||
-              (query === 'all' && searchedUsers?.length === 0 && searchedPosts?.length === 0)
+              (type === 'ACCOUNT' && data?.users?.length === 0) ||
+              (type === 'POST' && data?.posts?.length === 0) ||
+              (type === 'ALL' && data?.users?.length === 0 && data.posts?.length === 0)
             }
           >
             <NoData />
           </Show>
         </section>
 
-        <Show when={query === 'all' || query === 'post'}>
+        <Show when={type === 'ALL' || type === 'POST'}>
           <HomeAdvHorizontal />
         </Show>
-        <Show when={query !== 'post'}>
+        <Show when={type !== 'POST'}>
           <div className="mt-6 grid gap-6">
-            {searchedPosts &&
-              searchedPosts.map((post) => <ActivityCard key={post.id} activity={post} />)}
+            {data?.posts &&
+              (data.posts as FlatActivityEnrichedType[]).map((post) => (
+                <ActivityCard key={post.id} activity={post} />
+              ))}
           </div>
         </Show>
       </div>
@@ -188,7 +189,7 @@ export default function SearchPage() {
           <h3 className="mb-1.25 text-base">People</h3>
 
           <FormProvider {...methods}>
-            <form onSubmit={handleSubmit(onFilter)} className="mb-4">
+            <form onSubmit={handleSubmit(_handleSearch)} className="mb-4">
               <FormItem label="" name="people" className="mb-4">
                 <FormRadioGroup options={OPTIONS} className="gap-2" />
               </FormItem>
@@ -246,73 +247,8 @@ export default function SearchPage() {
   );
 }
 
-type AccountCompProps = {
-  name: string;
-  getstreamId: string;
-  aboutMe: string | null;
-  avatar: string | null;
-  following: boolean;
-};
-
-function AccountComp({ name, aboutMe, avatar, following, getstreamId }: AccountCompProps) {
-  const { client } = useGetFeedUser();
-  const [follow, setFollow] = useState(following);
-
-  const timelineFeed = useMemo(() => client?.feed('timeline'), [client]);
-
-  const avtUrl = avatar ?? 'https://getstream.imgix.net/images/random_svg/A.png';
-
-  const followUser = () => {
-    if (!timelineFeed) return;
-
-    api.communityFollowUser.mutate({ targetGetstreamId: getstreamId }).then((data) => {
-      if (data.success) {
-        setFollow(true);
-      }
-    });
-  };
-
-  const unfollowUser = () => {
-    if (!timelineFeed) return;
-
-    api.communityUnfollowUser.mutate({ targetGetstreamId: getstreamId }).then((data) => {
-      if (data.success) {
-        setFollow(false);
-      }
-    });
-  };
-
-  const toggleFollow = (follow: boolean) => () => {
-    if (follow) return unfollowUser();
-    return followUser();
-  };
-
-  return (
-    <div className="mb-6 flex items-start border-b-[1px] border-solid border-text-10 pb-8">
-      <Avatar image={urlWithIpfs(avtUrl)} size={46} circle className="mr-2 rounded-full" />
-      <div className="flex grow flex-col justify-between md:flex-row">
-        <div className=" mb-8 md:mb-0">
-          <Link href={`/community/profile/${getstreamId}`} className="mb-2 text-lg">
-            @{name}
-          </Link>
-          <p className="text-sm text-text-50">{aboutMe ?? ''}</p>
-        </div>
-        <button
-          className={classcat([
-            'border-green-gradient relative z-[1] mr-auto h-fit rounded-full px-[33.5px] py-[9.5px] text-body1 font-bold md:ml-auto md:mr-0',
-          ])}
-        >
-          <span onClick={toggleFollow(follow)} className="text-gradient-pr">
-            {follow ? 'Following' : 'Follow'}
-          </span>
-        </button>
-      </div>
-    </div>
-  );
-}
-
 const TAB_MENU = [
-  { label: 'All', key: 'all' },
-  { label: 'Account', key: 'account' },
-  { label: 'Post', key: 'post' },
+  { label: 'All', key: 'ALL' },
+  { label: 'Account', key: 'ACCOUNT' },
+  { label: 'Post', key: 'POST' },
 ];

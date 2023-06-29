@@ -5,19 +5,13 @@ import { nextApi } from '_@landing/utils/api';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
 
 export const useGetStreamUser = () => {
-  const [token, setToken] = useState<string>();
-
-  const { mutate: getStreamToken } = nextApi.getstreamGetUserToken.useMutation({
-    onSuccess: (data: string) => {
-      setToken(data);
-    },
+  const { data: token } = nextApi.getstreamGetUserToken.useQuery(undefined, {
+    staleTime: 30000,
   });
 
   const [client, setClient] = useState<StreamChat>();
 
   const { user } = useAuthStore();
-
-  useEffect(getStreamToken, [getStreamToken]);
 
   useEffect(() => {
     if (!token) return;

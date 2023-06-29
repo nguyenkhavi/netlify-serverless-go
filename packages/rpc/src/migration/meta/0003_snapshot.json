@@ -110,16 +110,12 @@
       "indexes": {
         "kyc_id_idx": {
           "name": "kyc_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": true
         },
         "kyc_persona_id_idx": {
           "name": "kyc_persona_id_idx",
-          "columns": [
-            "persona_inquiry_id"
-          ],
+          "columns": ["persona_inquiry_id"],
           "isUnique": true
         }
       },
@@ -183,9 +179,7 @@
       "indexes": {
         "suggestion_user_id_idx": {
           "name": "suggestion_user_id_idx",
-          "columns": [
-            "project"
-          ],
+          "columns": ["project"],
           "isUnique": false
         }
       },
@@ -284,9 +278,7 @@
       "indexes": {
         "collection_id_idx": {
           "name": "collection_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": false
         }
       },
@@ -340,7 +332,7 @@
         },
         "apartment_number": {
           "name": "apartment_number",
-          "type": "varchar(10)",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -457,9 +449,7 @@
       "indexes": {
         "bid_id_idx": {
           "name": "bid_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": false
         }
       },
@@ -494,9 +484,7 @@
       "indexes": {
         "kyc_id_idx": {
           "name": "kyc_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": true
         }
       },
@@ -546,9 +534,7 @@
       "indexes": {
         "close_account_wallet_id_idx": {
           "name": "close_account_wallet_id_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -640,9 +626,7 @@
       "indexes": {
         "collection_id_idx": {
           "name": "collection_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": false
         }
       },
@@ -672,10 +656,7 @@
       "compositePrimaryKeys": {
         "follow_followed_user_id_following_user_id": {
           "name": "follow_followed_user_id_following_user_id",
-          "columns": [
-            "followed_user_id",
-            "following_user_id"
-          ]
+          "columns": ["followed_user_id", "following_user_id"]
         }
       }
     },
@@ -757,16 +738,12 @@
       "indexes": {
         "item_id_idx": {
           "name": "item_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": false
         },
         "item_user_id_idx": {
           "name": "item_user_id_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -886,9 +863,7 @@
       "indexes": {
         "market_listing_id_idx": {
           "name": "market_listing_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": false
         }
       },
@@ -1191,9 +1166,7 @@
       "indexes": {
         "email_idx": {
           "name": "email_idx",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": false
         }
       },
@@ -1243,9 +1216,7 @@
       "indexes": {
         "suggestion_user_id_idx": {
           "name": "suggestion_user_id_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         }
       },
@@ -1316,9 +1287,7 @@
       "indexes": {
         "token_id_idx": {
           "name": "token_id_idx",
-          "columns": [
-            "id"
-          ],
+          "columns": ["id"],
           "isUnique": false
         }
       },
@@ -1382,16 +1351,12 @@
       "indexes": {
         "activity_user_id_idx": {
           "name": "activity_user_id_idx",
-          "columns": [
-            "user_id"
-          ],
+          "columns": ["user_id"],
           "isUnique": false
         },
         "activity_action_idx": {
           "name": "activity_action_idx",
-          "columns": [
-            "action"
-          ],
+          "columns": ["action"],
           "isUnique": false
         }
       },
@@ -1450,10 +1415,7 @@
       "compositePrimaryKeys": {
         "user_answer_question_id_user_id": {
           "name": "user_answer_question_id_user_id",
-          "columns": [
-            "question_id",
-            "user_id"
-          ]
+          "columns": ["question_id", "user_id"]
         }
       }
     },
@@ -1507,9 +1469,7 @@
       "indexes": {
         "getstream_id_idx": {
           "name": "getstream_id_idx",
-          "columns": [
-            "getstream_id"
-          ],
+          "columns": ["getstream_id"],
           "isUnique": false
         }
       },
@@ -1664,38 +1624,27 @@
       "indexes": {
         "username_idx": {
           "name": "username_idx",
-          "columns": [
-            "username"
-          ],
+          "columns": ["username"],
           "isUnique": false
         },
         "email_idx": {
           "name": "email_idx",
-          "columns": [
-            "email"
-          ],
+          "columns": ["email"],
           "isUnique": false
         },
         "phone_idx": {
           "name": "phone_idx",
-          "columns": [
-            "phone_code",
-            "phone_number"
-          ],
+          "columns": ["phone_code", "phone_number"],
           "isUnique": false
         },
         "wallet_idx": {
           "name": "wallet_idx",
-          "columns": [
-            "wallet"
-          ],
+          "columns": ["wallet"],
           "isUnique": false
         },
         "getstream_id_idx": {
           "name": "getstream_id_idx",
-          "columns": [
-            "getstream_id"
-          ],
+          "columns": ["getstream_id"],
           "isUnique": false
         }
       },

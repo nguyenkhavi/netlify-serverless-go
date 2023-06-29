@@ -7,7 +7,9 @@ import { nextApi } from '_@landing/utils/api';
 import * as Popover from '@radix-ui/react-popover';
 import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
+import useAuthStore from '_@landing/stores/auth/useAuthStore';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { getstreamStore, FlatActivityEnrichedType } from '_@landing/stores/getstreamStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
 //SHARED
@@ -17,35 +19,35 @@ import ImageArtIcon from '_@shared/icons/ImageArtIcon';
 import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
 import FollowersIcon from '_@shared/icons/FollowersIcon';
 import { ChevronFillGradientIcon } from '_@shared/icons/ChevronDownIcon';
-//HOOK
-import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
 import MainRight from './comps/MainRight';
+import ActivityCard from './comps/ActivityCard';
+import { DEFAULT_AVATAR } from './constants/constants';
 import HomeAdvHorizontal from '../comps/HomeAdvHorizontal';
-import ActivityCard, { ActivityType } from './comps/ActivityCard';
 
 export default function CommunityPage() {
-  const { client } = useGetFeedUser();
-
+  const { feedClient } = getstreamStore();
+  const { user } = useAuthStore();
+  const avatar = user?.profile?.avatarUrl || DEFAULT_AVATAR;
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [open, setOpen] = useState(false);
   const [hoverDropdown, setHoverDropdown] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
-  const [activities, setActivities] = useState<ActivityType[]>([]);
+  const [activities, setActivities] = useState<FlatActivityEnrichedType[]>([]);
 
-  const userFeed = useMemo(() => client?.feed('user'), [client]);
-  const userTimeline = useMemo(() => client?.feed('timeline'), [client]);
+  const userFeed = useMemo(() => feedClient?.feed('user'), [feedClient]);
+  const timelineFeed = useMemo(() => feedClient?.feed('timeline'), [feedClient]);
 
   const { mutate: createPost } = nextApi.communityCreatePost.useMutation();
 
   const _handleCreatePost = async () => {
-    if (!userFeed || !userFeed?.userId || !client?.currentUser) return;
+    if (!userFeed || !userFeed?.userId || !feedClient?.currentUser) return;
 
     userFeed
       .addActivity({
         // @ts-ignore
-        actor: client.currentUser,
+        actor: feedClient.currentUser,
         verb: 'tweet',
         object: inputRef.current?.value || '',
         content: inputRef.current?.value || '',
@@ -53,7 +55,6 @@ export default function CommunityPage() {
         // to: isPublic ? [] : [],//change later
       })
       .then((response) => {
-        console.log('success', response);
         if (inputRef.current) inputRef.current.value = '';
         createPost({ content: response.content, postId: response.id });
         if (activities.length) {
@@ -68,18 +69,21 @@ export default function CommunityPage() {
   };
 
   const _getData = useCallback(() => {
-    if (!userTimeline) return;
+    if (!timelineFeed) return;
 
-    userTimeline
-      .get({ limit: 20 })
+    timelineFeed
+      .get({
+        limit: 10,
+        withReactionCounts: true,
+        reactionKindsFilter: 'like',
+      })
       .then((response) => {
-        console.log({ response });
-        setActivities(response.results as ActivityType[]);
+        setActivities(response.results as FlatActivityEnrichedType[]);
       })
       .catch((err) => {
         console.log('Failed to get feed', err);
       });
-  }, [userTimeline]);
+  }, [timelineFeed]);
 
   useEffect(() => {
     _getData();
@@ -95,15 +99,7 @@ export default function CommunityPage() {
               className="absolute right-4 top-6 cursor-pointer"
             />
             <div className="flex">
-              <Avatar
-                image={
-                  urlWithIpfs(client?.currentUser?.data?.avatar) ||
-                  'https://getstream.imgix.net/images/random_svg/A.png'
-                }
-                size={40}
-                circle
-                className="mr-2"
-              />
+              <Avatar image={urlWithIpfs(avatar)} size={40} circle className="mr-2" />
 
               <Popover.Root open={open}>
                 <Popover.Trigger
@@ -213,14 +209,7 @@ export default function CommunityPage() {
           </div>
         ) : (
           <div className="flex rounded-[10px] bg-secondary-200 p-6">
-            <Avatar
-              image={
-                urlWithIpfs(client?.currentUser?.data?.avatar) ||
-                'https://getstream.imgix.net/images/random_svg/A.png'
-              }
-              size={40}
-              circle
-            />
+            <Avatar image={urlWithIpfs(avatar)} size={40} circle />
 
             <div className="ml-2 grow">
               <form>

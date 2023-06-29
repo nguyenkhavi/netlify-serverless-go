@@ -12,7 +12,7 @@ export default function MainRight() {
   const router = useRouter();
 
   const _handleSearch = () => {
-    router.push(`/community/search?k=${searchText.current?.value}`);
+    router.push(`/community/search?keyword=${searchText.current?.value}`);
   };
   return (
     <div>

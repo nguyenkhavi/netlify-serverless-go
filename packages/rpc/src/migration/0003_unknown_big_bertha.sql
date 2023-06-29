@@ -1,0 +1,1 @@
+ALTER TABLE `address` MODIFY COLUMN `apartment_number` text NOT NULL;
