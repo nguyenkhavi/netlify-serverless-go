@@ -17,6 +17,7 @@ import FormInput from '_@shared/components/FormInput';
 import FormSelect from '_@shared/components/FormSelect';
 import FormPhoneInput from '_@shared/components/input/phone-input/FormPhoneInput';
 //SHARED
+import { CloseBigIcon } from '_@shared/icons/CloseIcon';
 import { toastAction } from '_@shared/stores/toast/toastStore';
 import { enterNumberOnly } from '_@shared/utils/checkNumberInputOnly';
 
@@ -119,14 +120,15 @@ export default function CreateEditAddress({ id, type, defaultData }: CreateEditA
     <FormProvider {...form}>
       <form onSubmit={onSubmit} className="bg-secondary-200">
         <div className="rounded-[10px]">
-          <h2
-            className={classcat([
-              'border-b border-text-10 text-h6 lg:text-h5-bold',
-              'p-4 py-5.25 lg:p-6',
-            ])}
-          >
-            {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
-          </h2>
+          <div className="flex items-center border-b border-text-10 p-4 py-5.25 lg:p-6">
+            <h2 className={classcat(['grow text-h6 lg:text-h5-bold'])}>
+              {type === 'create' ? 'Add New Shipping Address' : 'Edit Shipping Address'}
+            </h2>
+            <button type="button" onClick={_handleCancel} className="lg:hidden">
+              <CloseBigIcon />
+            </button>
+          </div>
+
           <div className="grid gap-8 p-4 lg:p-6">
             <div className="grid gap-4 lg:grid-cols-2 lg:gap-8 ">
               <FormItemWithSchema label="Country" name="country" className="auto-rows-min">

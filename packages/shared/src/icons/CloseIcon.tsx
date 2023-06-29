@@ -16,3 +16,23 @@ export default function CloseIcon(props: React.ComponentPropsWithoutRef<'svg'>) 
     </svg>
   );
 }
+
+export function CloseBigIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+  return (
+    <svg
+      height="40"
+      width="40"
+      fill="none"
+      viewBox="0 0 40 40"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="m14.11 25.89 11.786-11.783m-11.787 0 11.787 11.784"
+        stroke="#D0D2D3"
+        strokeLinecap="round"
+        strokeWidth="1.5"
+      />
+    </svg>
+  );
+}
