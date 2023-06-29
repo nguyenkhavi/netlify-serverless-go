@@ -42,7 +42,7 @@ export default function ProfileBanner() {
       >
         <img
           className="h-full w-full object-cover"
-          src={urlWithIpfs(user.profile.avatarUrl ?? '/images/profile/avatar-default.webp')}
+          src={urlWithIpfs(user?.profile?.avatarUrl ?? '/images/profile/avatar-default.webp')}
           alt=""
         />
       </div>

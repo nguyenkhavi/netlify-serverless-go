@@ -130,7 +130,7 @@ export default function Header() {
               <div className="h-10 w-10 overflow-auto rounded-full">
                 <img
                   src={urlWithIpfs(
-                    user?.profile.avatarUrl || '/images/profile/avatar-default.webp',
+                    user?.profile?.avatarUrl || '/images/profile/avatar-default.webp',
                   )}
                   alt=""
                   className="h-full w-full object-cover"
