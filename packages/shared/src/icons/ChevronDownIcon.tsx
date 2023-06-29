@@ -48,7 +48,7 @@ export function ChevronFillGradientIcon(props: React.ComponentPropsWithoutRef<'s
       {...props}
     >
       <path
-        fill="url(#paint0_linear_6226_109358)"
+        fill={props.fill || '#B9BABD'}
         d="M11.296 14.8l-2.6-2.6c-.316-.317-.387-.679-.212-1.087.176-.408.488-.612.937-.613h5.15c.45 0 .763.204.938.613.176.409.105.771-.213 1.087l-2.6 2.6c-.1.1-.208.175-.325.225a.942.942 0 01-.375.075.941.941 0 01-.375-.075 1.038 1.038 0 01-.325-.225z"
       ></path>
       <defs>

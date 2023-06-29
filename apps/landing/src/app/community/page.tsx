@@ -9,15 +9,14 @@ import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 //LAYOUT, COMPONENTS
-import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
 import CloseIcon from '_@shared/icons/CloseIcon';
+import GlobalIcon from '_@shared/icons/GlobalIcon';
 import ImageArtIcon from '_@shared/icons/ImageArtIcon';
 import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
-import GlobalIcon, { GlobalActiveIcon } from '_@shared/icons/GlobalIcon';
-import FollowersIcon, { FollowersActiveIcon } from '_@shared/icons/FollowersIcon';
-import { ChevronDownFillIcon, ChevronFillGradientIcon } from '_@shared/icons/ChevronDownIcon';
+import FollowersIcon from '_@shared/icons/FollowersIcon';
+import { ChevronFillGradientIcon } from '_@shared/icons/ChevronDownIcon';
 //HOOK
 import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
@@ -116,28 +115,24 @@ export default function CommunityPage() {
                     className="group cursor-pointer rounded-[5px] border border-solid border-text-20 px-3.25 py-2"
                     onClick={() => setOpen(true)}
                   >
-                    <Show when={!hoverDropdown}>
-                      {isPublic ? (
-                        <GlobalIcon className="mr-0.5 inline-block" />
-                      ) : (
-                        <FollowersIcon className="mr-0.5 inline-block" />
-                      )}
-                    </Show>
-                    <Show when={hoverDropdown}>
-                      {isPublic ? (
-                        <GlobalActiveIcon className="mr-0.5 inline-block" />
-                      ) : (
-                        <FollowersActiveIcon className="mr-0.5 inline-block" />
-                      )}
-                    </Show>
+                    {isPublic ? (
+                      <GlobalIcon
+                        className="mr-0.5 inline-block"
+                        fill={hoverDropdown ? 'url(#paint0_linear_6226_109370)' : '#B9BABD'}
+                      />
+                    ) : (
+                      <FollowersIcon
+                        className="mr-0.5 inline-block"
+                        fill={hoverDropdown ? 'url(#paint0_linear_6226_109381)' : '#B9BABD'}
+                      />
+                    )}
                     <span className="mr-0.5 text-sm text-text-70 group-hover:text-gradient-pr">
                       {isPublic ? 'Public' : 'My followers'}
                     </span>
-                    {hoverDropdown ? (
-                      <ChevronFillGradientIcon className="inline-block" />
-                    ) : (
-                      <ChevronDownFillIcon className="inline-block" />
-                    )}
+                    <ChevronFillGradientIcon
+                      className="inline-block"
+                      fill={hoverDropdown ? 'url(#paint0_linear_6226_109358)' : '#B9BABD'}
+                    />
                   </div>
                 </Popover.Trigger>
                 <Popover.Portal>
