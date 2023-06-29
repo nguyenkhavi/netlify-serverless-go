@@ -115,7 +115,7 @@ export async function getAllAvailableMarketByCategory(
       };
     }),
   );
-  return marketWithCollection.filter((mk) => mk.collection.category == category);
+  return marketWithCollection.filter((mk) => mk.collection?.category == category);
 }
 
 export async function getSearchMarket(db: IDBPDatabase, search: string): Promise<IMarketData[]> {
