@@ -9,13 +9,15 @@ import urlWithIpfs from '_@landing/utils/urlWithIpfs';
 import { Avatar, EmojiPicker } from 'react-activity-feed';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 //LAYOUT, COMPONENTS
+import Show from '_@shared/components/Show';
 import Button from '_@shared/components/Button';
 //SHARED
 import CloseIcon from '_@shared/icons/CloseIcon';
-import GlobalIcon from '_@shared/icons/GlobalIcon';
 import ImageArtIcon from '_@shared/icons/ImageArtIcon';
 import SmileFaceIcon from '_@shared/icons/SmileFaceIcon';
-import { ChevronDownFillIcon } from '_@shared/icons/ChevronDownIcon';
+import GlobalIcon, { GlobalActiveIcon } from '_@shared/icons/GlobalIcon';
+import FollowersIcon, { FollowersActiveIcon } from '_@shared/icons/FollowersIcon';
+import { ChevronDownFillIcon, ChevronFillGradientIcon } from '_@shared/icons/ChevronDownIcon';
 //HOOK
 import { useGetFeedUser } from '_@landing/hooks/useGetFeedUser';
 //RELATIVE MODULES
@@ -29,6 +31,7 @@ export default function CommunityPage() {
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [open, setOpen] = useState(false);
+  const [hoverDropdown, setHoverDropdown] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [activities, setActivities] = useState<ActivityType[]>([]);
 
@@ -104,20 +107,37 @@ export default function CommunityPage() {
               />
 
               <Popover.Root open={open}>
-                <Popover.Trigger asChild>
+                <Popover.Trigger
+                  asChild
+                  onMouseOver={() => setHoverDropdown(true)}
+                  onMouseOut={() => setHoverDropdown(false)}
+                >
                   <div
-                    className="cursor-pointer rounded-[5px] border border-solid border-text-20 px-3.25 py-2"
+                    className="group cursor-pointer rounded-[5px] border border-solid border-text-20 px-3.25 py-2"
                     onClick={() => setOpen(true)}
                   >
-                    {isPublic ? (
-                      <GlobalIcon className="inline-block" />
-                    ) : (
-                      <GlobalIcon className="inline-block" />
-                    )}
-                    <span className="mr-0.25 text-sm text-text-70">
-                      {isPublic ? 'Public' : 'Private'}
+                    <Show when={!hoverDropdown}>
+                      {isPublic ? (
+                        <GlobalIcon className="mr-0.5 inline-block" />
+                      ) : (
+                        <FollowersIcon className="mr-0.5 inline-block" />
+                      )}
+                    </Show>
+                    <Show when={hoverDropdown}>
+                      {isPublic ? (
+                        <GlobalActiveIcon className="mr-0.5 inline-block" />
+                      ) : (
+                        <FollowersActiveIcon className="mr-0.5 inline-block" />
+                      )}
+                    </Show>
+                    <span className="mr-0.5 text-sm text-text-70 group-hover:text-gradient-pr">
+                      {isPublic ? 'Public' : 'My followers'}
                     </span>
-                    <ChevronDownFillIcon className="inline-block" />
+                    {hoverDropdown ? (
+                      <ChevronFillGradientIcon className="inline-block" />
+                    ) : (
+                      <ChevronDownFillIcon className="inline-block" />
+                    )}
                   </div>
                 </Popover.Trigger>
                 <Popover.Portal>
@@ -125,7 +145,7 @@ export default function CommunityPage() {
                     align="start"
                     className={classcat([
                       'relative border border-solid border-text-20 bg-secondary will-change-[transform,opacity]',
-                      'top-13 w-[115px] rounded-[4px] p-2',
+                      'top-13 w-35 rounded-[4px] p-2',
                     ])}
                     sideOffset={-56}
                     onPointerDownOutside={() => {
@@ -140,6 +160,7 @@ export default function CommunityPage() {
                           setIsPublic(true);
                         }}
                       >
+                        <GlobalIcon className="mr-2 inline-block" />
                         Public
                       </p>
                       <p
@@ -149,7 +170,8 @@ export default function CommunityPage() {
                           setIsPublic(false);
                         }}
                       >
-                        Private
+                        <FollowersIcon className="mr-2 inline-block" />
+                        My followers
                       </p>
                     </div>
                   </Popover.Content>
