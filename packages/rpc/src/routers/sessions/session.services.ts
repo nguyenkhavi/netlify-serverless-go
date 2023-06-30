@@ -226,7 +226,11 @@ export const validateLogin = async (input: ValidateLoginInput) => {
     .select()
     .from(userProfileTable)
     .where(
-      and(eq(userProfileTable.phoneCode, phoneCode), eq(userProfileTable.phoneNumber, phoneNumber)),
+      and(
+        eq(userProfileTable.phoneCode, phoneCode),
+        eq(userProfileTable.phoneNumber, phoneNumber),
+        isNotNull(userProfileTable.userId),
+      ),
     )
     .limit(1)
     .execute();
