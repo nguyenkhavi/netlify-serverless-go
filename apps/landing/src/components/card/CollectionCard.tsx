@@ -33,10 +33,7 @@ function GridView({ value, owner, isMyItem = false, className, ...props }: Colle
   return cloneElement(
     Tag,
     {
-      className: classcat([
-        'rounded-[10px] p-4 ring-1 ring-text-20 ring-offset-[-0.5px]',
-        className,
-      ]),
+      className: classcat(['rounded-[10px] border border-text-10 p-4', className]),
       ...props,
     },
     <>
