@@ -6,8 +6,9 @@ import 'react-activity-feed/dist/index.css';
 import { nextApi } from '_@landing/utils/api';
 import * as Popover from '@radix-ui/react-popover';
 import urlWithIpfs from '_@landing/utils/urlWithIpfs';
-import { Avatar, EmojiPicker } from 'react-activity-feed';
+import { File } from '_@landing/stores/getstreamStore';
 import useAuthStore from '_@landing/stores/auth/useAuthStore';
+import { Avatar, EmojiPicker, Gallery } from 'react-activity-feed';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getstreamStore, FlatActivityEnrichedType } from '_@landing/stores/getstreamStore';
 //LAYOUT, COMPONENTS
@@ -35,6 +36,7 @@ export default function CommunityPage() {
   const [hoverDropdown, setHoverDropdown] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
   const [activities, setActivities] = useState<FlatActivityEnrichedType[]>([]);
+  const [images, setImages] = useState<File[]>([]);
 
   const userFeed = useMemo(() => feedClient?.feed('user'), [feedClient]);
   const timelineFeed = useMemo(() => feedClient?.feed('timeline'), [feedClient]);
@@ -52,6 +54,7 @@ export default function CommunityPage() {
         object: inputRef.current?.value || '',
         content: inputRef.current?.value || '',
         time: new Date().toISOString(),
+        attachments: images,
         // to: isPublic ? [] : [],//change later
       })
       .then((response) => {
@@ -62,6 +65,7 @@ export default function CommunityPage() {
         } else {
           setActivities((prev) => [{ ...response, actor: prev[0]?.actor }, ...prev]);
         }
+        setImages([]);
       })
       .catch((err) => {
         console.log('error', err);
@@ -84,6 +88,15 @@ export default function CommunityPage() {
         console.log('Failed to get feed', err);
       });
   }, [timelineFeed]);
+
+  const handleUploadImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) return;
+    const file = e.target.files[0];
+    const imgUrl = await feedClient?.images.upload(file);
+    if (!imgUrl) return;
+
+    setImages((prev) => [...prev, { url: imgUrl?.file, alt: file.name }]);
+  };
 
   useEffect(() => {
     _getData();
@@ -181,29 +194,38 @@ export default function CommunityPage() {
                   onClick={() => setIsCreatingPost(true)}
                 />
               </form>
-              <div className="mt-2.5 flex items-center border-t-[1px] border-solid border-text-30 pt-4">
-                <div className="flex items-start">
-                  <button className="mr-[15px]">
-                    <ImageArtIcon className="h-[15px] w-[15px]" />
-                  </button>
-                  <button className="relative">
-                    <SmileFaceIcon className="h-[15px] w-[15px]" />
-                    <div className="absolute left-0 top-0 h-[15px] w-[15px]">
-                      <EmojiPicker
-                        className="[&>div:last-of-type]:opacity-0"
-                        onSelect={(emoji) => {
-                          if (!inputRef.current) return;
-                          if ('native' in emoji) {
-                            inputRef.current.value += emoji.native;
-                          }
-                        }}
+              <div className="border-t-[1px] border-solid border-text-30">
+                {images.length > 0 && <Gallery images={images.map((img) => img.url)} />}
+                <div className="mt-2.5 flex items-center pt-4">
+                  <div className="flex items-start">
+                    <div className="relative mr-3.75 w-[15px]">
+                      <input
+                        type="file"
+                        multiple
+                        onChange={handleUploadImages}
+                        className="absolute top-0 z-[1] h-[15px] w-[15px] opacity-0"
                       />
+                      <ImageArtIcon className="absolute top-0 h-[15px] w-[15px]" />
                     </div>
-                  </button>
+                    <button className="relative">
+                      <SmileFaceIcon className="h-[15px] w-[15px]" />
+                      <div className="absolute left-0 top-0 h-[15px] w-[15px]">
+                        <EmojiPicker
+                          className="[&>div:last-of-type]:opacity-0"
+                          onSelect={(emoji) => {
+                            if (!inputRef.current) return;
+                            if ('native' in emoji) {
+                              inputRef.current.value += emoji.native;
+                            }
+                          }}
+                        />
+                      </div>
+                    </button>
+                  </div>
+                  <Button className={classcat(['btnsm ml-auto w-max'])} onClick={_handleCreatePost}>
+                    Post
+                  </Button>
                 </div>
-                <Button className={classcat(['btnsm ml-auto w-max'])} onClick={_handleCreatePost}>
-                  Post
-                </Button>
               </div>
             </div>
           </div>

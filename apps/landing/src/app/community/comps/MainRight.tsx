@@ -34,7 +34,7 @@ export default function MainRight() {
         />
       </div>
       <HomeAdvVertical
-        className="relative h-auto w-full py-37 ow:top-4 ow:px-15 xl:grid"
+        className="relative h-auto w-full py-37 ow:top-4 ow:px-15 lg:grid"
         btnClasses="ow:static mt-2.5"
       />
     </div>

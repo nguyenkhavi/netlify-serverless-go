@@ -1,7 +1,8 @@
 //THIRD PARTY MODULES
-import React from 'react';
 import classcat from 'classcat';
+import React, { useState } from 'react';
 import { EmojiPicker } from 'react-activity-feed';
+import { File } from '_@landing/stores/getstreamStore';
 import { getstreamStore } from '_@landing/stores/getstreamStore';
 //LAYOUT, COMPONENTS
 import Button from '_@shared/components/Button';
@@ -18,6 +19,16 @@ const CommentForm = ({
 }) => {
   const { feedClient } = getstreamStore();
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
+  const [images, setImages] = useState<File[]>([]);
+
+  const handleUploadImages = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files?.length) return;
+    const file = e.target.files[0];
+    const imgUrl = await feedClient?.images.upload(file);
+    if (!imgUrl) return;
+
+    setImages((prev) => [...prev, { url: imgUrl?.file, alt: file.name }]);
+  };
 
   const handleComment = async () => {
     if (!inputRef.current) return;
@@ -45,9 +56,15 @@ const CommentForm = ({
           ])}
         />
         <div className="mb-6 flex items-start">
-          <button className="mr-[15px]">
-            <ImageArtIcon className="h-[15px] w-[15px]" />
-          </button>
+          <div className="relative mr-3.75 w-[15px]">
+            <input
+              type="file"
+              multiple
+              onChange={handleUploadImages}
+              className="absolute top-0 z-[1] h-[15px] w-[15px] opacity-0"
+            />
+            <ImageArtIcon className="absolute top-0 h-[15px] w-[15px]" />
+          </div>
           <button className="relative" type="button">
             <SmileFaceIcon className="h-[15px] w-[15px]" />
             <div className="absolute left-0 top-0 h-[15px] w-[15px]">

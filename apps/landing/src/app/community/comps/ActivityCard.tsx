@@ -143,6 +143,25 @@ export default function ActivityCard({ activity }: ActivityProps) {
         </div>
       </div>
       <div className="mb-3 mt-6 whitespace-pre-line text-sm text-text-70">{_contentRender()}</div>
+      <div
+        className={classcat([
+          'mb-3 grid gap-3 lg:gap-x-6',
+          activity.attachments?.length === 2
+            ? 'grid-cols-2'
+            : (activity.attachments?.length || 0) > 2
+            ? 'grid-cols-2 lg:grid-cols-3'
+            : '',
+        ])}
+      >
+        {activity.attachments?.map((attach, idx) => (
+          <img
+            key={idx}
+            className="aspect-square rounded-[10px] object-cover lg:aspect-video"
+            src={attach.url}
+            alt={attach.alt}
+          />
+        ))}
+      </div>
       <div className="flex [&>*:not(:last-child)]:mr-8">
         <button className="flex items-center" onClick={handleToggleLikeActivity}>
           {selfLikeId ? (
