@@ -1,0 +1,10 @@
+[build]
+  command = "chmod a+x ./build.sh && ./build.sh"
+  functions = "functions"
+
+[build.environment]
+  GO_IMPORT_PATH = "github.com/nguyenkhavi/netlify-serverless-go"
+  GO111MODULE = "on"
+
+[functions."cron-delete-otp"]
+schedule = "@daily"
