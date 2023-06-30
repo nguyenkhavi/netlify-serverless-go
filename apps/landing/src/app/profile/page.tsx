@@ -36,8 +36,8 @@ export default function Page() {
       </Show>
 
       <Show when={!isEdit}>
-        <div className="mt-6 flex justify-center lg:mt-8 lg:justify-end">
-          <Button className="btnsm w-full lg:btnmd lg:w-max" onClick={() => setIsEdit(true)}>
+        <div className="mt-6 flex justify-center sm:justify-end lg:mt-8">
+          <Button className="sm:btnmd sm:w-fit" onClick={() => setIsEdit(true)}>
             Edit
           </Button>
         </div>
